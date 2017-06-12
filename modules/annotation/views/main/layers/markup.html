@@ -1,0 +1,119 @@
+<div id="layersPane" class="easyui-panel" title="Layers Pane"
+     style="width:100%; height:100%;padding:10px;background:#fafafa;">
+    <table id="layers" style="width:100%;height: 100%">
+    </table>
+</div>
+
+<form id="formLayers" method="post" action={{$manager->getURL('annotation/main/putLayers')}}>
+    <input type="hidden" id="type" name="type" value=""/>
+    <input type="hidden" id="dataLayers" name="dataLayers" value=""/>
+</form>
+
+<div id="dlgValidation" title="Disapprove: Send Feedback" style="width:280px;height:200px;padding:0px">
+    <form id="formValidation" method="post" action={{$manager->getURL('annotation/main/validation')}}>
+        <input type="hidden" id="validation" name="validation" value=""/>
+        <input type="hidden" id="annotationSets" name="annotationSets" value=""/>
+        <div class="mFormContainer">
+            <div class="mFormRow">
+                <span>Message (optional):</span>
+            </div>
+            <div class="mFormRow">
+                <input type="text" id="feedback" name="feedback" value=""/>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="dlgNI" title="Instantiation Type" style="width:280px;height:200px;padding:0px">
+    <div id="dlgNI_tools">
+        <a href='#' name="dlgNIClose" id="dlgNIClose" >
+            Close
+        </a>
+        <a href='#' name="dlgNISave" id="dlgNISave" >
+            Set NI
+        </a>
+    </div>
+    <table id="pg" style="width:100%;height: 100%"></table>
+</div>
+
+<div id="dlgMWE" title="MultiWord Expression (MWE)" style="width:280px;height:200px;padding:0px">
+    <div>MWE - Choose words</div>
+    <input type="hidden" id="mweIdLU" name="mweIdLU" value=""/>
+    <input type="hidden" id="mweIdSentence" name="mweIdSentence" value=""/>
+    <table id="mwe">
+        <thead>
+        <tr>
+            <th field="ck" checkbox="true"></th>
+            <th field="startChar" hidden="true"></th>
+            <th field="endChar" hidden="true"></th>
+            <th field="word" width="180">Word</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<div id="dlgASComments" title="Annotation Set Comments" style="width:550px;height:400px;padding:0px">
+    <div id="dlgASComments_tools">
+        <a href='#' name="dlgASCommentsClose" id="dlgASCommentsClose" >
+            Close
+        </a>
+        <a href='#' name="dlgASCommentsSave" id="dlgASCommentsSave" >
+            Save
+        </a>
+    </div>
+</div>
+
+
+{{if ($data->isMaster)}}
+<div id="dlgAS" title="Hide Annotation Sets" style="width:280px;height:200px;padding:0px">
+    <div id="dlgAS_tools">
+        <a href='#' name="dlgASClose" id="dlgASClose" >
+            Close
+        </a>
+        <a href='#' name="dlgASSave" id="dlgASSave" >
+            Hide AS
+        </a>
+    </div>
+    <table id="asGrid" style="width:100%;height: 100%">
+        <thead>
+        <tr>
+            <th field="ck" checkbox="true"></th>
+            <th field="idAnnotationSet" hidden="true"></th>
+            <th field="name" width="200">AnnotationSet</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<div id="dlgASRemove" title="Remove Annotation Sets" style="width:280px;height:200px;padding:0px">
+    <div id="dlgASRemove_tools">
+        <a href='#' name="dlgASRemoveClose" id="dlgASRemoveClose" >
+            Close
+        </a>
+        <a href='#' name="dlgASRemoveSave" id="dlgASRemoveSave" >
+            Remove AS
+        </a>
+    </div>
+    <table id="asGridRemove" style="width:100%;height: 100%">
+        <thead>
+        <tr>
+            <th field="ck" checkbox="true"></th>
+            <th field="idAnnotationSet" hidden="true"></th>
+            <th field="name" width="200">AnnotationSet</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<div id="dlgCxn" title="Add Construction" style="width:280px;height:200px;padding:0px">
+    <table id="cxnGrid" style="width:100%;height: 100%" >
+        <thead>
+        <tr>
+            <th field="idConstruction" hidden="true"></th>
+            <th field="name" width="200">Construction</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+{{/if}}
+

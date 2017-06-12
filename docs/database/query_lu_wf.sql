@@ -1,0 +1,15 @@
+select Y.name, LU.name LU, X.name Lexeme, W.form Wordform
+from Wordform W join lexeme X on (W.idLexeme = X.idLexeme)
+join LexemeEntry E on (X.idLexeme = E.idLexeme)
+join Lemma L on (E.idLemma = L.idLemma)
+join View_LU LU on (L.idLemma = LU.idLemma)
+join Frame F on (LU.idFrame = F.idFrame)
+join Entry Y on (F.entry = Y.entry)
+join View_Domain D on (F.idEntity = D.idEntityRel)
+where (L.idLanguage = 1)
+and (Y.idLanguage = 1)
+and (X.idLanguage = 1)
+and (X.idPOS = 83)
+and (D.idDomain = 5)
+and (D.idLanguage = 1)
+order by Y.Name,Lu.name

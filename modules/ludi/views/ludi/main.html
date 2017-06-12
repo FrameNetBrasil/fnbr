@@ -1,0 +1,119 @@
+<div id="ludiLayout" style="width:100%;height:100%;">
+    <div id="ludiCenterPane" data-options="region:'center',title:'LUDI'" style="width:100%;height:100%;">
+        <div style="height: 50px; padding:5px">
+                <div style="float:left">
+                    <div style="float:left">
+                        <input id="sentence" name="sentence" type="text" style="width:200px; padding:5px" value="">
+                    </div>
+                </div>
+                <div>
+                    <a id="btnPostFull" href="#" class="easyui-linkbutton">Full Net</a>
+                    <a id="btnPostActive" href="#" class="easyui-linkbutton">Activated Net</a>
+                    <a id="btnPostTarget" href="#" class="easyui-linkbutton">Target Net</a>
+                </div>
+        </div>
+        <div id="ludiPanel" style="height: 95%">
+            <div id="ludiArea" style="width:100%; height:100%;"></div>
+        </div>
+    </div>
+</div>
+<style>
+    {{include ludi.css}}
+</style>
+<script type="text/javascript">
+
+    $(function () {
+
+        grapher = new D3Graph({
+            isMaster: {{$data->isMaster|noescape}},
+            element: "ludiArea"
+        });
+
+        $('#ludiLayout').layout();
+
+        grapher.reload = function () {
+            $('#ludiArea').html('');
+        }
+
+        $('#sentence').textbox({
+            iconAlign:'right',
+            prompt: {{_'Sentence'}},
+        });
+
+        $('#btnPostFull').linkbutton({
+            onClick: function() {
+                //grapher.reload();
+                var win = $.messager.progress({
+                    title: 'Loading analysis',
+                    msg: 'Wait...'
+                });
+                var sentence = $('#sentence').textbox('getText');
+                manager.doAjax({{$manager->getURL('service/ludi/processSentence')}}, function(data) {
+                    $.messager.progress('close');
+                    console.log(data);
+                    var struct = JSON.parse(data);
+                    console.log(struct);
+                    grapher.clear();
+                    grapher.loadNodesStruct(struct);
+                }, {sentence: sentence});
+            }
+        });
+
+        $('#btnPostActive').linkbutton({
+            onClick: function() {
+                //grapher.reload();
+                var win = $.messager.progress({
+                    title: 'Loading analysis',
+                    msg: 'Wait...'
+                });
+                var sentence = $('#sentence').textbox('getText');
+                manager.doAjax({{$manager->getURL('service/ludi/processSentence')}}, function(data) {
+                    $.messager.progress('close');
+                    console.log(data);
+                    var struct = JSON.parse(data);
+                    console.log(struct);
+                    grapher.clear();
+                    grapher.loadNodesStruct(struct);
+                }, {sentence: sentence, activated: 1});
+            }
+        });
+
+        $('#btnPostTarget').linkbutton({
+            onClick: function() {
+                //grapher.reload();
+                var win = $.messager.progress({
+                    title: 'Loading analysis',
+                    msg: 'Wait...'
+                });
+                var sentence = $('#sentence').textbox('getText');
+                manager.doAjax({{$manager->getURL('service/ludi/processSentence')}}, function(data) {
+                    $.messager.progress('close');
+                    console.log(data);
+                    var struct = JSON.parse(data);
+                    console.log(struct);
+                    $('#ludiArea').html('');
+                    grapherTree = new D3GraphTree({
+                        isMaster: {{$data->isMaster|noescape}},
+                        element: "ludiArea"
+                    });
+                    grapherTree.clear();
+                    grapherTree.loadNodesStruct(struct);
+                }, {sentence: sentence, target: 1});
+            }
+        });
+
+        $('#ludiPanel').panel({
+            height:'100%',
+            width:'100%',
+        });
+
+        $('#btnReload').linkbutton({
+            iconCls: 'icon-reload',
+            plain: true,
+            onClick: function() {
+                grapher.show();
+            }
+        });
+
+    });
+</script>

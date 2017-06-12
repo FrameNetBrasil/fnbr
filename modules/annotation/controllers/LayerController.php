@@ -1,0 +1,43 @@
+<?php
+
+use Maestro\MVC\MApp;
+
+
+
+class LayerController extends MController
+{
+
+    private $idLanguage;
+
+    public function init()
+    {
+        parent::init();
+        $this->idLanguage = Manager::getConf('mfn.lang');
+    }
+
+    public function formManager()
+    {
+        $this->data->query = Manager::getAppURL('', 'annotation/layer/gridData');
+        $this->data->action = "@annotation/layer/save|formManager";
+        $mfnLayers = Manager::getSession()->mfnLayers;
+        $this->data->layersToShow = \Maestro\Services\MJSON::encode($mfnLayers ?: []);
+        $this->render();
+    }
+    
+    public function gridData()
+    {
+        $model = new mfn\models\LayerType();
+        $criteria = $model->listByGroup();
+        $this->renderJSON($model->gridDataAsJSON($criteria));
+    }
+    
+    public function save() {
+        $layers = $this->data->gridManager->data->checked;
+        Manager::getSession()->mfnLayers = $layers;
+        $user = Manager::getLogin()->getUser();
+        $user->setConfigData('mfnLayers', $layers);
+        $this->renderPrompt('information', 'OK');
+    }
+    
+
+}

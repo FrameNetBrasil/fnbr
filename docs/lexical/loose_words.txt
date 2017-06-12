@@ -1,0 +1,5 @@
+// 
+// Loose words - PtBr
+// Wordform POS Lexeme 
+//
+menina N menino

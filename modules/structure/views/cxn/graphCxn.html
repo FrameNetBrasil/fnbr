@@ -1,0 +1,47 @@
+<div id="grapherLayout" style="width:100%;height:100%;">
+    <div id="grapherCenterPane" data-options="region:'center'" style="width: 100%; height:100%">
+        <div id="grapherPanel" style="height: 95%">
+            <div id="grapherArea" style="width:100%; height:95%;"></div>
+        </div>
+    </div>
+</div>
+<style>
+    {{include grapher.css}}
+</style>
+<script type="text/javascript">
+    {{include grapher.js}}
+
+    $(function () {
+        $('#grapherPanel').panel({
+            height:'100%',
+            title: {{$data->cxnName}} + ' Graph',
+                width:'100%'
+        });
+
+        grapher.instance = new grapher.graph("grapherArea", grapher.relations);
+
+        grapher.reload = function () {
+            $('#grapherCenterPane').html('');
+        }
+        /*
+        grapher = new D3Graph({
+            element: "grapherArea"
+        });
+
+        grapher.reload = function () {
+            $('#grapherCenterPane').html('');
+        }
+        */
+
+        manager.doAjax({{$manager->getURL('mfn/service/grapher/getCxnStructure')}}, function(data) {
+            console.log(data);
+            var links = JSON.parse(data);
+            grapher.instance.clearLink();
+            grapher.instance.clearNode();
+            $.each(links, function(index, link) {
+                console.log(link);
+                grapher.instance.addLink(link);
+            });
+        }, {idCxn: {{$data->id}} });
+    });
+</script>

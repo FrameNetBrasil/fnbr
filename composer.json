@@ -1,0 +1,16 @@
+{
+  "name": "FNBr",
+  "description": "FrameNet Brasil Web Annotation Tool",
+  "require": {
+  },
+  "autoload": {
+    "psr-4": {
+      "fnbr\\": "",
+      "auth\\": "modules/auth/"
+    },
+    "classmap": [
+      "ui",
+      "modules/auth/models"
+    ]
+  }
+}
