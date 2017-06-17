@@ -11,6 +11,13 @@
       "fnbr\\auth\\": "modules/auth/"
     },
     "classmap": [
+      "../../core/classes/manager.php"
+    ]
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "Manager::createFileMap"
     ]
   }
+
 }
