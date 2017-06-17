@@ -20,7 +20,7 @@ class LabelController extends MController {
     }
 
     public function formFind() {
-        $Label= new mfn\models\Label($this->data->id);
+        $Label= new fnbr\models\Label($this->data->id);
         $filter->idLabel = $this->data->idLabel;
         $this->data->query = $Label->listByFilter($filter)->asQuery();
         $this->render();
@@ -37,7 +37,7 @@ class LabelController extends MController {
     }
 
     public function formUpdate() {
-        $Label= new mfn\models\Label($this->data->id);
+        $Label= new fnbr\models\Label($this->data->id);
         $this->data->Label = $Label->getData();
         
         $this->data->action = '@Label/save/' .  $this->data->id;
@@ -45,28 +45,28 @@ class LabelController extends MController {
     }
 
     public function formDelete() {
-        $Label = new mfn\models\Label($this->data->id);
+        $Label = new fnbr\models\Label($this->data->id);
         $ok = '>Label/delete/' . $Label->getId();
         $cancelar = '>Label/formObject/' . $Label->getId();
         $this->renderPrompt('confirmation', "Confirma remoção do Label [{$model->getDescription()}] ?", $ok, $cancelar);
     }
 
     public function lookup() {
-        $model = new mfn\models\Label();
+        $model = new fnbr\models\Label();
         $filter->idLabel = $this->data->idLabel;
         $this->data->query = $model->listByFilter($filter)->asQuery();
         $this->render();
     }
 
     public function save() {
-            $Label = new mfn\models\Label($this->data->Label);
+            $Label = new fnbr\models\Label($this->data->Label);
             $Label->save();
             $go = '>Label/formObject/' . $Label->getId();
             $this->renderPrompt('information','OK',$go);
     }
 
     public function delete() {
-            $Label = new mfn\models\Label($this->data->id);
+            $Label = new fnbr\models\Label($this->data->id);
             $Label->delete();
             $go = '>Label/formFind';
             $this->renderPrompt('information',"Label [{$this->data->idLabel}] removido.", $go);

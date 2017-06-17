@@ -20,7 +20,7 @@ class EntityRelationController extends MController {
     }
 
     public function formFind() {
-        $EntityRelation= new mfn\models\EntityRelation($this->data->id);
+        $EntityRelation= new fnbr\models\EntityRelation($this->data->id);
         $filter->idEntityRelation = $this->data->idEntityRelation;
         $this->data->query = $EntityRelation->listByFilter($filter)->asQuery();
         $this->render();
@@ -37,7 +37,7 @@ class EntityRelationController extends MController {
     }
 
     public function formUpdate() {
-        $EntityRelation= new mfn\models\EntityRelation($this->data->id);
+        $EntityRelation= new fnbr\models\EntityRelation($this->data->id);
         $this->data->EntityRelation = $EntityRelation->getData();
         
         $this->data->action = '@EntityRelation/save/' .  $this->data->id;
@@ -45,28 +45,28 @@ class EntityRelationController extends MController {
     }
 
     public function formDelete() {
-        $EntityRelation = new mfn\models\EntityRelation($this->data->id);
+        $EntityRelation = new fnbr\models\EntityRelation($this->data->id);
         $ok = '>EntityRelation/delete/' . $EntityRelation->getId();
         $cancelar = '>EntityRelation/formObject/' . $EntityRelation->getId();
         $this->renderPrompt('confirmation', "Confirma remoção do EntityRelation [{$model->getDescription()}] ?", $ok, $cancelar);
     }
 
     public function lookup() {
-        $model = new mfn\models\EntityRelation();
+        $model = new fnbr\models\EntityRelation();
         $filter->idEntityRelation = $this->data->idEntityRelation;
         $this->data->query = $model->listByFilter($filter)->asQuery();
         $this->render();
     }
 
     public function save() {
-            $EntityRelation = new mfn\models\EntityRelation($this->data->EntityRelation);
+            $EntityRelation = new fnbr\models\EntityRelation($this->data->EntityRelation);
             $EntityRelation->save();
             $go = '>EntityRelation/formObject/' . $EntityRelation->getId();
             $this->renderPrompt('information','OK',$go);
     }
 
     public function delete() {
-            $EntityRelation = new mfn\models\EntityRelation($this->data->id);
+            $EntityRelation = new fnbr\models\EntityRelation($this->data->id);
             $EntityRelation->delete();
             $go = '>EntityRelation/formFind';
             $this->renderPrompt('information',"EntityRelation [{$this->data->idEntityRelation}] removido.", $go);

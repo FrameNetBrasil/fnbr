@@ -20,7 +20,7 @@ class WordFormController extends MController {
     }
 
     public function formFind() {
-        $WordForm= new mfn\models\WordForm($this->data->id);
+        $WordForm= new fnbr\models\WordForm($this->data->id);
         $filter->idWordForm = $this->data->idWordForm;
         $this->data->query = $WordForm->listByFilter($filter)->asQuery();
         $this->render();
@@ -37,7 +37,7 @@ class WordFormController extends MController {
     }
 
     public function formUpdate() {
-        $WordForm= new mfn\models\WordForm($this->data->id);
+        $WordForm= new fnbr\models\WordForm($this->data->id);
         $this->data->WordForm = $WordForm->getData();
         
         $this->data->action = '@WordForm/save/' .  $this->data->id;
@@ -45,28 +45,28 @@ class WordFormController extends MController {
     }
 
     public function formDelete() {
-        $WordForm = new mfn\models\WordForm($this->data->id);
+        $WordForm = new fnbr\models\WordForm($this->data->id);
         $ok = '>WordForm/delete/' . $WordForm->getId();
         $cancelar = '>WordForm/formObject/' . $WordForm->getId();
         $this->renderPrompt('confirmation', "Confirma remoção do WordForm [{$model->getDescription()}] ?", $ok, $cancelar);
     }
 
     public function lookup() {
-        $model = new mfn\models\WordForm();
+        $model = new fnbr\models\WordForm();
         $filter->idWordForm = $this->data->idWordForm;
         $this->data->query = $model->listByFilter($filter)->asQuery();
         $this->render();
     }
 
     public function save() {
-            $WordForm = new mfn\models\WordForm($this->data->WordForm);
+            $WordForm = new fnbr\models\WordForm($this->data->WordForm);
             $WordForm->save();
             $go = '>WordForm/formObject/' . $WordForm->getId();
             $this->renderPrompt('information','OK',$go);
     }
 
     public function delete() {
-            $WordForm = new mfn\models\WordForm($this->data->id);
+            $WordForm = new fnbr\models\WordForm($this->data->id);
             $WordForm->delete();
             $go = '>WordForm/formFind';
             $this->renderPrompt('information',"WordForm [{$this->data->idWordForm}] removido.", $go);

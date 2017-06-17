@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -22,7 +22,7 @@ class FrameController extends MController
     {
         $this->data->isMaster = Manager::checkAccess('MASTER', A_EXECUTE) ? 'true' : 'false';
         
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         $this->data->relationData = $editor->getRelationData();
         $this->data->relationEntry = json_encode($this->data->relationData);
         $this->render();
@@ -30,7 +30,7 @@ class FrameController extends MController
 
     public function frameTree()
     {
-        $grapher = MApp::getService('', '', 'grapher');
+        $grapher = Manager::getAppService('grapher');
         if ($this->data->id == '') {
             $children = $grapher->listFrames($this->data, $this->idLanguage);
             $data = (object)[

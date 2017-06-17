@@ -5,15 +5,16 @@ class SessionFilter extends MFilter
 
     public function preProcess()
     {
+        $context = $this->frontController->getContext();
         // alteração da configuração dependendo do modulo sendo executado
-        $module = $this->frontController->getContext()->getModule();
-        if (($module == 'report') || ($module == 'grapher')) {
+        $module = $context->getModule();
+        if (($module == 'report') || ($module == 'grapher') || ($module == 'carma')) {
             Manager::setConf('session.check', false);
             Manager::setConf('login.check', false);
         }
         // alteração da configuração dependendo do controller sendo executado
-        $controller = $this->frontController->getContext()->getController();
-        if (($controller == 'grapher') || ($controller == 'reports') || ($controller == 'report') || ($controller == 'actions')) {
+        $controller = $context->getController();
+        if (($controller == 'grapher') || ($controller == 'reports') || ($controller == 'report') || ($controller == 'actions') || ($controller == 'carma')) {
             Manager::setConf('session.check', false);
             Manager::setConf('login.check', false);
         }

@@ -1,58 +1,49 @@
 <?php
-/**
- * @category   Maestro
- * @package    UFJF
- * @subpackage mfn
- * @copyright  Copyright (c) 2003-2013 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version
- * @since
- */
 
-// wizard - code section created by Wizard Module
+namespace fnbr\auth\models\map;
 
-namespace auth\models\map;
+class AccessMap extends \MBusinessModel
+{
 
-class AccessMap extends \MBusinessModel {
 
-    
-    public static function ORMMap() {
+    public static function ORMMap()
+    {
 
         return array(
             'class' => \get_called_class(),
             'database' => \Manager::getConf('fnbr.db'),
             'table' => 'auth_access',
             'attributes' => array(
-                'idAccess' => array('column' => 'idAccess','key' => 'primary','idgenerator' => 'identity','type' => 'integer'),
-                'rights' => array('column' => 'rights','type' => 'integer'),
-                'idGroup' => array('column' => 'idGroup','type' => 'integer'),
-                'idTransaction' => array('column' => 'idTransaction','type' => 'integer'),
+                'idAccess' => array('column' => 'idAccess', 'key' => 'primary', 'idgenerator' => 'identity', 'type' => 'integer'),
+                'rights' => array('column' => 'rights', 'type' => 'integer'),
+                'idGroup' => array('column' => 'idGroup', 'type' => 'integer'),
+                'idTransaction' => array('column' => 'idTransaction', 'type' => 'integer'),
             ),
             'associations' => array(
-                'group' => array('toClass' => 'auth\models\Group', 'cardinality' => 'oneToOne' , 'keys' => 'idGroup:idGroup'), 
-                'transaction' => array('toClass' => 'auth\models\Transaction', 'cardinality' => 'oneToOne' , 'keys' => 'idTransaction:idTransaction'), 
+                'group' => array('toClass' => 'fnbr\auth\models\Group', 'cardinality' => 'oneToOne', 'keys' => 'idGroup:idGroup'),
+                'transaction' => array('toClass' => 'fnbr\auth\models\Transaction', 'cardinality' => 'oneToOne', 'keys' => 'idTransaction:idTransaction'),
             )
         );
     }
-    
+
     /**
-     * 
-     * @var integer 
+     *
+     * @var integer
      */
     protected $idAccess;
     /**
-     * 
-     * @var integer 
+     *
+     * @var integer
      */
     protected $rights;
     /**
-     * 
-     * @var integer 
+     *
+     * @var integer
      */
     protected $idGroup;
     /**
-     * 
-     * @var integer 
+     *
+     * @var integer
      */
     protected $idTransaction;
 
@@ -61,94 +52,109 @@ class AccessMap extends \MBusinessModel {
      */
     protected $group;
     protected $transaction;
-    
+
 
     /**
      * Getters/Setters
      */
-    public function getIdAccess() {
+    public function getIdAccess()
+    {
         return $this->idAccess;
     }
 
-    public function setIdAccess($value) {
+    public function setIdAccess($value)
+    {
         $this->idAccess = $value;
     }
 
-    public function getRights() {
+    public function getRights()
+    {
         return $this->rights;
     }
 
-    public function setRights($value) {
+    public function setRights($value)
+    {
         $this->rights = $value;
     }
 
-    public function getIdGroup() {
+    public function getIdGroup()
+    {
         return $this->idGroup;
     }
 
-    public function setIdGroup($value) {
+    public function setIdGroup($value)
+    {
         $this->idGroup = $value;
     }
 
-    public function getIdTransaction() {
+    public function getIdTransaction()
+    {
         return $this->idTransaction;
     }
 
-    public function setIdTransaction($value) {
+    public function setIdTransaction($value)
+    {
         $this->idTransaction = $value;
     }
+
     /**
      *
      * @return Association
      */
-    public function getGroup() {
-        if (is_null($this->group)){
+    public function getGroup()
+    {
+        if (is_null($this->group)) {
             $this->retrieveAssociation("group");
         }
-        return  $this->group;
+        return $this->group;
     }
+
     /**
      *
      * @param Association $value
      */
-    public function setGroup($value) {
+    public function setGroup($value)
+    {
         $this->group = $value;
     }
+
     /**
      *
      * @return Association
      */
-    public function getAssociationGroup() {
+    public function getAssociationGroup()
+    {
         $this->retrieveAssociation("group");
     }
+
     /**
      *
      * @return Association
      */
-    public function getTransaction() {
-        if (is_null($this->transaction)){
+    public function getTransaction()
+    {
+        if (is_null($this->transaction)) {
             $this->retrieveAssociation("transaction");
         }
-        return  $this->transaction;
+        return $this->transaction;
     }
+
     /**
      *
      * @param Association $value
      */
-    public function setTransaction($value) {
+    public function setTransaction($value)
+    {
         $this->transaction = $value;
     }
+
     /**
      *
      * @return Association
      */
-    public function getAssociationTransaction() {
+    public function getAssociationTransaction()
+    {
         $this->retrieveAssociation("transaction");
     }
 
-    
-
 }
-// end - wizard
-
-?>

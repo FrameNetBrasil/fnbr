@@ -7,7 +7,7 @@ class StructureLayerTypeService extends MService
 
     public function listAll($data = '', $idLanguage = '')
     {
-        $lt = new mfn\models\LayerType();
+        $lt = new fnbr\models\LayerType();
         $rows = $lt->listAll()->asQuery()->getResult();
         $result = array();
         foreach ($rows as $row) {
@@ -24,7 +24,7 @@ class StructureLayerTypeService extends MService
     public function listGLByLayer($idLayerType, $idLanguage)
     {
         $result = array();
-        $genericLabel = new mfn\models\GenericLabel();
+        $genericLabel = new fnbr\models\GenericLabel();
         $gls = $genericLabel->listByLayerType($idLayerType, $idLanguage)->asQuery()->getResult();
         foreach ($gls as $gl) {
             $node = array();

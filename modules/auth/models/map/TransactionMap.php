@@ -1,51 +1,42 @@
 <?php
-/**
- * @category   Maestro
- * @package    UFJF
- * @subpackage mfn
- * @copyright  Copyright (c) 2003-2013 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version
- * @since
- */
 
-// wizard - code section created by Wizard Module
+namespace fnbr\auth\models\map;
 
-namespace auth\models\map;
+class TransactionMap extends \MBusinessModel
+{
 
-class TransactionMap extends \MBusinessModel {
 
-    
-    public static function ORMMap() {
+    public static function ORMMap()
+    {
 
         return array(
             'class' => \get_called_class(),
             'database' => \Manager::getConf('fnbr.db'),
             'table' => 'auth_transaction',
             'attributes' => array(
-                'idTransaction' => array('column' => 'idTransaction','key' => 'primary','idgenerator' => 'identity','type' => 'integer'),
-                'name' => array('column' => 'name','type' => 'string'),
-                'description' => array('column' => 'description','type' => 'string'),
+                'idTransaction' => array('column' => 'idTransaction', 'key' => 'primary', 'idgenerator' => 'identity', 'type' => 'integer'),
+                'name' => array('column' => 'name', 'type' => 'string'),
+                'description' => array('column' => 'description', 'type' => 'string'),
             ),
             'associations' => array(
-                'accesss' => array('toClass' => 'auth\models\Access', 'cardinality' => 'oneToMany' , 'keys' => 'idTransaction:idTransaction'), 
+                'accesss' => array('toClass' => 'fnbr\auth\models\Access', 'cardinality' => 'oneToMany', 'keys' => 'idTransaction:idTransaction'),
             )
         );
     }
-    
+
     /**
-     * 
-     * @var integer 
+     *
+     * @var integer
      */
     protected $idTransaction;
     /**
-     * 
-     * @var string 
+     *
+     * @var string
      */
     protected $name;
     /**
-     * 
-     * @var string 
+     *
+     * @var string
      */
     protected $description;
 
@@ -53,62 +44,70 @@ class TransactionMap extends \MBusinessModel {
      * Associations
      */
     protected $accesss;
-    
+
 
     /**
      * Getters/Setters
      */
-    public function getIdTransaction() {
+    public function getIdTransaction()
+    {
         return $this->idTransaction;
     }
 
-    public function setIdTransaction($value) {
+    public function setIdTransaction($value)
+    {
         $this->idTransaction = $value;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function setName($value) {
+    public function setName($value)
+    {
         $this->name = $value;
     }
 
-    public function getDescription() {
+    public function getDescription()
+    {
         return $this->description;
     }
 
-    public function setDescription($value) {
+    public function setDescription($value)
+    {
         $this->description = $value;
     }
+
     /**
      *
      * @return Association
      */
-    public function getAccesss() {
-        if (is_null($this->accesss)){
+    public function getAccesss()
+    {
+        if (is_null($this->accesss)) {
             $this->retrieveAssociation("accesss");
         }
-        return  $this->accesss;
+        return $this->accesss;
     }
+
     /**
      *
      * @param Association $value
      */
-    public function setAccesss($value) {
+    public function setAccesss($value)
+    {
         $this->accesss = $value;
     }
+
     /**
      *
      * @return Association
      */
-    public function getAssociationAccesss() {
+    public function getAssociationAccesss()
+    {
         $this->retrieveAssociation("accesss");
     }
 
-    
 
 }
-// end - wizard
-
-?>

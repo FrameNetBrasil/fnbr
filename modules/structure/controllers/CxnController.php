@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -23,7 +23,7 @@ class CxnController extends MController
 
     public function cxnTree()
     {
-        $structure = MApp::getService('', '', 'structurecxn');
+        $structure = Manager::getAppService('structurecxn');
         if ($this->data->id == '') {
             $children = $structure->listCxns($this->data, $this->idLanguage);
             $data = (object) [
@@ -48,13 +48,13 @@ class CxnController extends MController
 
     public function formNewCxn()
     {
-        $this->data->title = _M('new mfn\models\Construction');
+        $this->data->title = _M('new fnbr\models\Construction');
         $this->render();
     }
 
     public function formUpdateCxn()
     {
-        $model = new mfn\models\Construction($this->data->id);
+        $model = new fnbr\models\Construction($this->data->id);
         $this->data->object = $model->getData();
         $this->data->title = 'Construction: ' . $model->getEntry() . '  [' . $model->getName() . ']';
         $this->render();
@@ -69,17 +69,17 @@ class CxnController extends MController
     public function formNewCxnElement()
     {
         $this->data->idConstruction = $this->data->id;
-        $model = new mfn\models\Construction($this->data->idConstruction);
+        $model = new fnbr\models\Construction($this->data->idConstruction);
         $this->data->cxn = $model->getEntry() . '  [' . $model->getName() . ']';
         $this->data->save = "@structure/cxn/newCxnElement|formNewCxnElement";
         $this->data->close = "!$('#formNewCxnElement_dialog').dialog('close');";
-        $this->data->title = _M('new mfn\models\CxnElement');
+        $this->data->title = _M('new fnbr\models\CxnElement');
         $this->render();
     }
 
     public function formUpdateCxnElement()
     {
-        $model = new mfn\models\ConstructionElement($this->data->id);
+        $model = new fnbr\models\ConstructionElement($this->data->id);
         $this->data->object = $model->getData();
         mdump($this->data);
         $this->data->save = "@structure/cxn/updateCxnElement|formUpdateCxnElement";
@@ -97,7 +97,7 @@ class CxnController extends MController
     public function newCxn()
     {
         try {
-            $model = new mfn\models\Construction();
+            $model = new fnbr\models\Construction();
             $this->data->cxn->entry = 'cxn_' . strtolower(str_replace('cxn_','',$this->data->cxn->entry));
             $model->setData($this->data->cxn);
             $model->createNew($this->data->cxn);
@@ -110,7 +110,7 @@ class CxnController extends MController
     public function updateCxn()
     {
         try {
-            $model = new mfn\models\Construction($this->data->cxn->idConstruction);
+            $model = new fnbr\models\Construction($this->data->cxn->idConstruction);
             $model->setData($this->data->cxn);
             $model->updateEntry($this->data->cxn->entry);
             $this->renderResponse('information', 'OK');
@@ -122,7 +122,7 @@ class CxnController extends MController
 
     public function deleteCxn() {
         try {
-            $structure = MApp::getService('', '', 'structurecxn');
+            $structure = Manager::getAppService('structurecxn');
             $structure->deleteCxn($this->data->id);
             $this->renderPrompt('information', 'Cxn deleted.');
         } catch (\Exception $e) {
@@ -134,7 +134,7 @@ class CxnController extends MController
     public function newCxnElement()
     {
         try {
-            $model = new mfn\models\ConstructionElement();
+            $model = new fnbr\models\ConstructionElement();
             $this->data->cxnelement->entry = 'ce_' . strtolower(str_replace('ce_', '', $this->data->cxnelement->entry));
             $model->setData($this->data->cxnelement);
             $model->save($this->data->cxnelement);
@@ -147,7 +147,7 @@ class CxnController extends MController
     public function updateCxnElement()
     {
         try {
-            $model = new mfn\models\ConstructionElement($this->data->cxnelement->idConstructionElement);
+            $model = new fnbr\models\ConstructionElement($this->data->cxnelement->idConstructionElement);
             $model->updateEntry($this->data->cxnelement->entry);
             $model->setData($this->data->cxnelement);
             $model->save($this->data->cxnelement);
@@ -159,7 +159,7 @@ class CxnController extends MController
 
     public function deleteCxnElement() {
         try {
-            $structure = MApp::getService('', '', 'structurecxn');
+            $structure = Manager::getAppService('structurecxn');
             $structure->deleteCxnElement($this->data->id);
             $this->renderPrompt('information', 'CxnElement deleted.',"!structure.reloadCxnParent();");
         } catch (\Exception $e) {
@@ -170,7 +170,7 @@ class CxnController extends MController
 
     public function formImportTxt()
     {
-        $model = new mfn\models\Construction($this->data->id);
+        $model = new fnbr\models\Construction($this->data->id);
         $this->data->cxn = $model->getEntry() . '  [' . $model->getName() . ']';
         $this->data->languages = Base::languages();
         $this->data->message = _M("Importação de arquivo de texto simples (uma sentença por linha).");
@@ -183,7 +183,7 @@ class CxnController extends MController
     {
         try {
             $files = \Maestro\Utils\Mutil::parseFiles('uploadFile');
-            $model = new mfn\models\Corpus();
+            $model = new fnbr\models\Corpus();
             $result = $model->uploadCxnSimpleText($this->data, $files[0]);
             $this->renderPrompt('information', 'OK');
         } catch (EMException $e) {
@@ -194,7 +194,7 @@ class CxnController extends MController
     public function formAddConstraintCX()
     {
         $this->data->idConstruction = $this->data->id;
-        $cxn = new mfn\models\Construction($this->data->idConstruction);
+        $cxn = new fnbr\models\Construction($this->data->idConstruction);
         $this->data->cxn = 'Cxn: ' . $cxn->getName();
         $this->data->ces = $cxn->listCEConstraints();
         mdump($this->data->ces);
@@ -209,7 +209,7 @@ class CxnController extends MController
     public function formAddConstraintCE()
     {
         $this->data->idConstructionElement = $this->data->id;
-        $model = new mfn\models\ConstructionElement($this->data->idConstructionElement);
+        $model = new fnbr\models\ConstructionElement($this->data->idConstructionElement);
         $cxn = $model->getConstruction();
         $this->data->ce = 'CE: ' . $cxn->getName() . '.' . $model->getName();
         $this->data->siblingsCE = $model->listSiblingsCE()->chunkResult('idConstructionElement', 'name');
@@ -222,13 +222,13 @@ class CxnController extends MController
     public function formAddConstraintCN()
     {
         $this->data->idConstraint = $this->data->id;
-        $model = new mfn\models\Constraint($this->data->idConstraint);
+        $model = new fnbr\models\Constraint($this->data->idConstraint);
         $constraintData = $model->getConstraintData();
         mdump($constraintData);
         $this->data->showCxnCE = $this->data->showCE = false;
         if ($constraintData->constrainedByType == 'CX') {
             $this->data->showCxnCE = true;
-            $ce = new mfn\models\ViewConstructionElement();
+            $ce = new fnbr\models\ViewConstructionElement();
             $this->data->cxnCE =  $ce->listCEByConstructionEntity($constraintData->idConstrainedBy)->chunkResult('idConstructionElement', 'name');;
         }
         if ($constraintData->constrainedByType == 'CE') {
@@ -242,7 +242,7 @@ class CxnController extends MController
 
     public function formDeleteConstraint()
     {
-        $structure = MApp::getService('', '', 'structureconstraints');
+        $structure = Manager::getAppService('structureconstraints');
         $hasChild = $structure->constraintHasChild($this->data->id);
         if (!$hasChild) {
             $ok = "^structure/cxn/deleteConstraint/" . $this->data->id;
@@ -255,7 +255,7 @@ class CxnController extends MController
     public function addConstraintCX() {
         mdump($this->data);
         try {
-            $structure = MApp::getService('', '', 'structurecxn');
+            $structure = Manager::getAppService('structurecxn');
             $structure->addConstraintsCX($this->data);
             $this->renderPrompt('information', 'Constraint added.');
         } catch (\Exception $e) {
@@ -266,7 +266,7 @@ class CxnController extends MController
     public function addConstraintCE() {
         mdump($this->data);
         try {
-            $structure = MApp::getService('', '', 'structurecxn');
+            $structure = Manager::getAppService('structurecxn');
             $structure->addConstraintsCE($this->data);
             $this->renderPrompt('information', 'Constraint added.');
         } catch (\Exception $e) {
@@ -277,7 +277,7 @@ class CxnController extends MController
     public function addConstraintCN() {
         mdump($this->data);
         try {
-            $structure = MApp::getService('', '', 'structurecxn');
+            $structure = Manager::getAppService('structurecxn');
             $structure->addConstraintsCN($this->data);
             $this->renderPrompt('information', 'Constraint added.');
         } catch (\Exception $e) {
@@ -298,7 +298,7 @@ class CxnController extends MController
     public function graphCxn() {
         $cxn = Construction::create($this->data->id);
         $this->data->cxnName = $cxn->getName();
-        $grapher = MApp::getService('', '', 'grapher');
+        $grapher = Manager::getAppService('grapher');
         $this->data->relationData = $grapher->getRelationData();
         $this->render();
     }

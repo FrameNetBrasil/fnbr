@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -26,7 +26,7 @@ class CxnController extends MController
 
     public function cxnTree()
     {
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         if ($this->data->id == '') {
             $children = $editor->listCxns($this->data, $this->idLanguage);
             $data = (object)[
@@ -42,33 +42,33 @@ class CxnController extends MController
     
     public function workingArea() {
         $this->data->isMaster = Manager::checkAccess('MASTER', A_EXECUTE);
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         $this->data->cxns = $editor->getCxns();
         $this->data->relationEntry = $editor->getCxnRelationEntry();
         $this->render();
     }
     
     public function getCxnRelations(){
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         $this->data->relations = $editor->getCxnRelations($this->data->id);
         $this->renderJSON($this->data->relations);
     }
 
     public function getCE(){
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         $this->data->ces = $editor->getCEs($this->data->id);
         $this->renderJSON($this->data->ces);
     }
 
     public function getCERelations(){
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         $this->data->relations = $editor->getCERelations($this->data->idCxn1,$this->data->idCxn2,$this->data->idType);
         $this->renderJSON($this->data->relations);
     }
     
     public function saveCxnRelation(){
         $isMaster = Manager::checkAccess('MASTER', A_EXECUTE);
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         if ($isMaster) {
             $editor->updateCxnRelation($this->data->graphJson);
             $editor->deleteCxnRelation($this->data->linksRemoved);
@@ -80,7 +80,7 @@ class CxnController extends MController
 
     public function saveCERelation(){
         $isMaster = Manager::checkAccess('MASTER', A_EXECUTE);
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         if ($isMaster) {
             $editor->updateCERelation($this->data->graphceJson);
             $editor->deleteCERelation($this->data->linksceRemoved);

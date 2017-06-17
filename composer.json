@@ -1,16 +1,16 @@
 {
-  "name": "FNBr",
+  "name": "FrameNet Brasil WebTool",
   "description": "FrameNet Brasil Web Annotation Tool",
   "require": {
+    "easyrdf/easyrdf": "*",
+    "ml/json-ld" : "~1.0"
   },
   "autoload": {
     "psr-4": {
       "fnbr\\": "",
-      "auth\\": "modules/auth/"
+      "fnbr\\auth\\": "modules/auth/"
     },
     "classmap": [
-      "ui",
-      "modules/auth/models"
     ]
   }
 }

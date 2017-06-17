@@ -20,7 +20,7 @@ class GenreController extends MController {
     }
 
     public function formFind() {
-        $Genre= new mfn\models\Genre($this->data->id);
+        $Genre= new fnbr\models\Genre($this->data->id);
         $filter->idGenre = $this->data->idGenre;
         $this->data->query = $Genre->listByFilter($filter)->asQuery();
         $this->render();
@@ -37,7 +37,7 @@ class GenreController extends MController {
     }
 
     public function formUpdate() {
-        $Genre= new mfn\models\Genre($this->data->id);
+        $Genre= new fnbr\models\Genre($this->data->id);
         $this->data->Genre = $Genre->getData();
         
         $this->data->action = '@Genre/save/' .  $this->data->id;
@@ -45,28 +45,28 @@ class GenreController extends MController {
     }
 
     public function formDelete() {
-        $Genre = new mfn\models\Genre($this->data->id);
+        $Genre = new fnbr\models\Genre($this->data->id);
         $ok = '>Genre/delete/' . $Genre->getId();
         $cancelar = '>Genre/formObject/' . $Genre->getId();
         $this->renderPrompt('confirmation', "Confirma remoção do Genre [{$model->getDescription()}] ?", $ok, $cancelar);
     }
 
     public function lookup() {
-        $model = new mfn\models\Genre();
+        $model = new fnbr\models\Genre();
         $filter->idGenre = $this->data->idGenre;
         $this->data->query = $model->listByFilter($filter)->asQuery();
         $this->render();
     }
 
     public function save() {
-            $Genre = new mfn\models\Genre($this->data->Genre);
+            $Genre = new fnbr\models\Genre($this->data->Genre);
             $Genre->save();
             $go = '>Genre/formObject/' . $Genre->getId();
             $this->renderPrompt('information','OK',$go);
     }
 
     public function delete() {
-            $Genre = new mfn\models\Genre($this->data->id);
+            $Genre = new fnbr\models\Genre($this->data->id);
             $Genre->delete();
             $go = '>Genre/formFind';
             $this->renderPrompt('information',"Genre [{$this->data->idGenre}] removido.", $go);

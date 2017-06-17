@@ -31,7 +31,7 @@ class ASCommentsMap extends \MBusinessModel {
                 'idAnnotationSet' => array('column' => 'idAnnotationSet','key' => 'foreign','type' => 'integer')
             ),
             'associations' => array(
-                'annotationset' => array('toClass' => 'mfn\models\AnnotationSet', 'cardinality' => 'oneToOne' , 'keys' => 'idAnnotationSet:idAnnotationSet')
+                'annotationset' => array('toClass' => 'fnbr\models\AnnotationSet', 'cardinality' => 'oneToOne' , 'keys' => 'idAnnotationSet:idAnnotationSet')
             )
         );
     }

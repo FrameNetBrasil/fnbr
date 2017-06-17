@@ -16,7 +16,7 @@
  * 02110-1301, USA.
  */
 
-class MXMLControls extends MComponent
+class MXMLControls extends MBase
 {
 
     public $root;
@@ -154,6 +154,7 @@ class MXMLControls extends MComponent
         if ($this->ignoreElement($node)) {
             return NULL;
         }
+        mdump('==='.$fieldClass);
         if ($this->painter->hasMethod($fieldClass)) {
             $control = new $fieldClass();
         } else {

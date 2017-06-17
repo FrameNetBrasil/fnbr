@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -33,7 +33,7 @@ class FrameController extends MController
     
     public function frameTree()
     {
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         if ($this->data->id == '') {
             $children = $editor->listFrames($this->data, $this->idLanguage);
             $data = (object)[
@@ -51,7 +51,7 @@ class FrameController extends MController
     
     public function workingArea() {
         $this->data->isMaster = Manager::checkAccess('MASTER', A_EXECUTE);
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         $this->data->frames = $editor->getFrames();
         $this->data->relationEntry = $editor->getRelationEntry();
         $this->render();
@@ -59,38 +59,38 @@ class FrameController extends MController
     
     public function wacoreness() {
         $this->data->isMaster = Manager::checkAccess('MASTER', A_EXECUTE);
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         $this->data->frames = $editor->getFrames();
         $this->data->relationEntry = $editor->getFECoreRelationEntry();
         $this->render();
     }
 
     public function getFrameRelations(){
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         $this->data->relations = $editor->getRelations($this->data->id);
         $this->renderJSON($this->data->relations);
     }
 
     public function getFE(){
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         $this->data->fes = $editor->getFEs($this->data->id);
         $this->renderJSON($this->data->fes);
     }
 
     public function getFERelations(){
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         $this->data->relations = $editor->getFERelations($this->data->idFrame1,$this->data->idFrame2,$this->data->idType);
         $this->renderJSON($this->data->relations);
     }
     
     public function getFECore(){
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         $this->data->fes = $editor->getFECore($this->data->id);
         $this->renderJSON($this->data->fes);
     }
 
     public function getFECoreRelations(){
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         $this->data->relations = $editor->getFECoreRelations($this->data->id);
         $this->renderJSON($this->data->relations);
     }
@@ -101,7 +101,7 @@ class FrameController extends MController
 
     public function saveFrameRelation(){
         $isMaster = Manager::checkAccess('MASTER', A_EXECUTE);
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         if ($isMaster) {
             $editor->updateFrameRelation($this->data->graphJson);
             $editor->deleteFrameRelation($this->data->linksRemoved);
@@ -113,7 +113,7 @@ class FrameController extends MController
 
     public function saveFERelation(){
         $isMaster = Manager::checkAccess('MASTER', A_EXECUTE);
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         if ($isMaster) {
             $editor->updateFERelation($this->data->graphfeJson);
             $editor->deleteFERelation($this->data->linksfeRemoved);
@@ -125,7 +125,7 @@ class FrameController extends MController
 
     public function saveFECoreRelation(){
         $isMaster = Manager::checkAccess('MASTER', A_EXECUTE);
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         if ($isMaster) {
             $editor->updateFECoreRelation($this->data->graphJson);
             $editor->deleteFECoreRelation($this->data->linksRemoved);

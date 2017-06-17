@@ -23,7 +23,7 @@ class LemmaController extends MController {
         if (strlen($this->data->q) < 3) {
             $json = json_encode([]);
         } else {
-            $model = new mfn\models\Lemma();
+            $model = new fnbr\models\Lemma();
             $criteria = $model->listForLookup($this->data->q);
             $json = $model->gridDataAsJSON($criteria);
         }
@@ -31,7 +31,7 @@ class LemmaController extends MController {
     }
     
     public function formFind() {
-        $Lemma= new mfn\models\Lemma($this->data->id);
+        $Lemma= new fnbr\models\Lemma($this->data->id);
         $filter->idLemma = $this->data->idLemma;
         $this->data->query = $Lemma->listByFilter($filter)->asQuery();
         $this->render();
@@ -48,7 +48,7 @@ class LemmaController extends MController {
     }
 
     public function formUpdate() {
-        $Lemma= new mfn\models\Lemma($this->data->id);
+        $Lemma= new fnbr\models\Lemma($this->data->id);
         $this->data->Lemma = $Lemma->getData();
         
         $this->data->action = '@Lemma/save/' .  $this->data->id;
@@ -56,28 +56,28 @@ class LemmaController extends MController {
     }
 
     public function formDelete() {
-        $Lemma = new mfn\models\Lemma($this->data->id);
+        $Lemma = new fnbr\models\Lemma($this->data->id);
         $ok = '>Lemma/delete/' . $Lemma->getId();
         $cancelar = '>Lemma/formObject/' . $Lemma->getId();
         $this->renderPrompt('confirmation', "Confirma remoção do Lemma [{$model->getDescription()}] ?", $ok, $cancelar);
     }
 
     public function lookup() {
-        $model = new mfn\models\Lemma();
+        $model = new fnbr\models\Lemma();
         $filter->idLemma = $this->data->idLemma;
         $this->data->query = $model->listByFilter($filter)->asQuery();
         $this->render();
     }
 
     public function save() {
-            $Lemma = new mfn\models\Lemma($this->data->Lemma);
+            $Lemma = new fnbr\models\Lemma($this->data->Lemma);
             $Lemma->save();
             $go = '>Lemma/formObject/' . $Lemma->getId();
             $this->renderPrompt('information','OK',$go);
     }
 
     public function delete() {
-            $Lemma = new mfn\models\Lemma($this->data->id);
+            $Lemma = new fnbr\models\Lemma($this->data->id);
             $Lemma->delete();
             $go = '>Lemma/formFind';
             $this->renderPrompt('information',"Lemma [{$this->data->idLemma}] removido.", $go);

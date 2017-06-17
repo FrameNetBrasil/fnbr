@@ -7,7 +7,7 @@ class StructureFrameService extends MService
 
     public function listFrames($data, $idLanguage = '')
     {
-        $frame = new mfn\models\ViewFrame();
+        $frame = new fnbr\models\ViewFrame();
         $filter = (object) ['idDomain' => $data->idDomain, 'lu' => $data->lu, 'fe' => $data->fe, 'frame' => $data->frame, 'idLanguage' => $idLanguage];
         $frames = $frame->listByFilter($filter)->asQuery()->getResult(\FETCH_ASSOC);
         $result = array();
@@ -31,7 +31,7 @@ class StructureFrameService extends MService
             "cty_extra-thematic" => "fa fa-circle-o",
             "cty_core-unexpressed" => "fa fa-circle-o"
         ];
-        $frame = new mfn\models\Frame($idFrame);
+        $frame = new fnbr\models\Frame($idFrame);
         $fes = $frame->listFE()->asQuery()->getResult();
         foreach ($fes as $fe) {
             $node = array();
@@ -43,7 +43,7 @@ class StructureFrameService extends MService
             $node['iconCls'] = 'icon-blank fa-icon ' . $icon[$fe['coreType']];
             $result[] = $node;
         }
-        $lu = new mfn\models\ViewLU();
+        $lu = new fnbr\models\ViewLU();
         $lus = $lu->listByFrame($idFrame, $idLanguage)->asQuery()->chunkResult('idLU', 'name');
         foreach ($lus as $idLU => $name) {
             $node = array();
@@ -57,7 +57,7 @@ class StructureFrameService extends MService
 
     public function listSubCorpus($idLU)
     {
-        $sc = new mfn\models\ViewSubCorpusLU();
+        $sc = new fnbr\models\ViewSubCorpusLU();
         $scs = $sc->listByLU($idLU)->asQuery()->getResult();
         foreach ($scs as $sc) {
             $node = array();
@@ -72,7 +72,7 @@ class StructureFrameService extends MService
 
     public function listLUSubCorpusConstraints($idLU)
     {
-        $sc = new mfn\models\ViewSubCorpusLU();
+        $sc = new fnbr\models\ViewSubCorpusLU();
         $scs = $sc->listByLU($idLU)->asQuery()->getResult();
         foreach ($scs as $sc) {
             $node = array();
@@ -81,7 +81,7 @@ class StructureFrameService extends MService
             $node['state'] = 'open';
             $result[] = $node;
         }
-        $service = MApp::getService('', '', 'structureconstraints');
+        $service = Manager::getAppService('structureconstraints');
         $constraints = $service->listConstraintsLU($idLU);
         foreach ($constraints as $constraint) {
             $result[] = $constraint;
@@ -92,21 +92,21 @@ class StructureFrameService extends MService
 
     public function listConstraintsFE($idFrameElement, $idLanguage)
     {
-        $service = MApp::getService('', '', 'structureconstraints');
+        $service = Manager::getAppService('structureconstraints');
         $result = $service->listConstraintsFE($idFrameElement);
         return $result;
     }
 
     public function getSubCorpusTitle($idSubCorpus, $idLanguage, $isCxn)
     {
-        $sc = $isCxn ? new mfn\models\ViewSubCorpusCxn() : new mfn\models\ViewSubCorpusLU();
+        $sc = $isCxn ? new fnbr\models\ViewSubCorpusCxn() : new fnbr\models\ViewSubCorpusLU();
         $title = $sc->getTitle($idSubCorpus, $idLanguage);
         return $title;
     }
 
     public function getDocumentTitle($idDocument, $idLanguage)
     {
-        $doc = new mfn\models\Document();
+        $doc = new fnbr\models\Document();
         $filter = (object) ['idDocument' => $idDocument];
         $result = $doc->listByFilter($filter)->asQuery()->getResult();
         return 'Document:' . $result[1];
@@ -134,7 +134,7 @@ class StructureFrameService extends MService
 
     public function listAnnotationSet($idSubCorpus)
     {
-        $as = new mfn\models\ViewAnnotationSet();
+        $as = new fnbr\models\ViewAnnotationSet();
         $sentences = $as->listBySubCorpus($idSubCorpus)->asQuery()->getResult();
         $annotation = $as->listFECEBySubCorpus($idSubCorpus);
         $result = array();
@@ -168,7 +168,7 @@ class StructureFrameService extends MService
             "nis" => NULL,
         );
 
-        $as = new mfn\models\AnnotationSet($idAnnotationSet);
+        $as = new fnbr\models\AnnotationSet($idAnnotationSet);
 
         // get words/chars
         $wordsChars = $as->getWordsChars($idSentence);
@@ -313,7 +313,7 @@ class StructureFrameService extends MService
         $idSentence = $params->idSentence;
         $idAnnotationSet = $params->idAnnotationSet;
 
-        $as = new mfn\models\AnnotationSet($idAnnotationSet);
+        $as = new fnbr\models\AnnotationSet($idAnnotationSet);
         $result = array();
         $queryLayersData = $as->getLayersData($idSentence);
         $unorderedRows = $queryLayersData->getResult();
@@ -408,27 +408,27 @@ class StructureFrameService extends MService
 
     public function putLayers($layers)
     {
-        $annotationSet = new mfn\models\AnnotationSet();
+        $annotationSet = new fnbr\models\AnnotationSet();
         $annotationSet->putLayers($layers);
     }
 
     public function addFELayer($idAnnotationSet)
     {
-        $annotationSet = new mfn\models\AnnotationSet($idAnnotationSet);
+        $annotationSet = new fnbr\models\AnnotationSet($idAnnotationSet);
         $annotationSet->addFELayer();
         $this->render();
     }
 
     public function delFELayer($idAnnotationSet)
     {
-        $annotationSet = new mfn\models\AnnotationSet($idAnnotationSet);
+        $annotationSet = new fnbr\models\AnnotationSet($idAnnotationSet);
         $annotationSet->delFELayer();
         $this->render();
     }
 
     public function listCnx($cnx = '', $idLanguage = '')
     {
-        $construction = new mfn\models\Construction();
+        $construction = new fnbr\models\Construction();
         $filter = (object) ['cnx' => $cnx, 'idLanguage' => $idLanguage];
         $constructions = $construction->listByFilter($filter)->asQuery()->chunkResult('idConstruction', 'name');
         $result = array();
@@ -444,7 +444,7 @@ class StructureFrameService extends MService
 
     public function listSubCorpusCnx($idCnx)
     {
-        $sc = new mfn\models\SubCorpus();
+        $sc = new fnbr\models\SubCorpus();
         $scs = $sc->listByCnx($idCnx)->asQuery()->getResult();
         foreach ($scs as $sc) {
             $node = array();
@@ -458,14 +458,14 @@ class StructureFrameService extends MService
 
     public function headerMenu($wordform)
     {
-        $wf = new mfn\models\WordForm();
+        $wf = new fnbr\models\WordForm();
         $lus = $wf->listLUByWordForm($wordform);
         return json_encode($lus);
     }
 
     public function addManualSubcorpus($data)
     {
-        $sc = new mfn\models\SubCorpus();
+        $sc = new fnbr\models\SubCorpus();
         if ($data->idLU != '') {
             $sc->addManualSubcorpusLU($data);
         } else {
@@ -475,7 +475,7 @@ class StructureFrameService extends MService
 
     public function cnxGridData()
     {
-        $cnx = new mfn\models\Construction();
+        $cnx = new fnbr\models\Construction();
         $criteria = $cnx->listAll();
         $data = $cnx->gridDataAsJSON($criteria);
         return $data;
@@ -483,7 +483,7 @@ class StructureFrameService extends MService
 
     public function listCorpus($corpus = '', $idLanguage = '')
     {
-        $corpus = new mfn\models\Corpus();
+        $corpus = new fnbr\models\Corpus();
         $filter = (object) ['corpus' => $cnx, 'idLanguage' => $idLanguage];
         $corpora = $corpus->listByFilter($filter)->asQuery()->chunkResult('idCorpus', 'name');
         $result = array();
@@ -499,7 +499,7 @@ class StructureFrameService extends MService
 
     public function listCorpusDocument($idCorpus)
     {
-        $doc = new mfn\models\Document();
+        $doc = new fnbr\models\Document();
         $docs = $doc->listByCorpus($idCorpus)->asQuery()->getResult();
         foreach ($docs as $doc) {
             if ($doc[0]) {
@@ -516,10 +516,10 @@ class StructureFrameService extends MService
     public function deleteFrame($idFrame)
     {
         mdump('deleteFrame ' . $idFrame);
-        $frame = new mfn\models\Frame($idFrame);
+        $frame = new fnbr\models\Frame($idFrame);
         $transaction = $frame->beginTransaction();
         try {
-            $frameElement = new mfn\models\FrameElement();
+            $frameElement = new fnbr\models\FrameElement();
             $filter = (object) ['idFrame' => $idFrame];
             $fes = $frameElement->listByFilter($filter)->asQuery()->getResult();
             foreach ($fes as $fe) {
@@ -540,19 +540,19 @@ class StructureFrameService extends MService
             $transaction = Manager::getDatabase(Manager::getConf('mfn.db'))->beginTransaction();
             if ($data->idFrame != '') {
                 $constraint = Base::createEntity('CN', 'con');
-                $cf = new mfn\models\FrameElement($data->idFrameElement);
-                $frame = new mfn\models\Frame($data->idFrame);
+                $cf = new fnbr\models\FrameElement($data->idFrameElement);
+                $frame = new fnbr\models\Frame($data->idFrame);
                 Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_frame', $cf->getIdEntity(), $frame->getIdEntity());
             }
             if ($data->idSemanticType != '') {
                 $constraint = Base::createEntity('CN', 'con');
-                $cf = new mfn\models\FrameElement($data->idFrameElement);
-                $st = new mfn\models\SemanticType($data->idSemanticType);
+                $cf = new fnbr\models\FrameElement($data->idFrameElement);
+                $st = new fnbr\models\SemanticType($data->idSemanticType);
                 Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_semtype', $cf->getIdEntity(), $st->getIdEntity());
             }
             if ($data->idFEQualia != '') {
-                $fe = new mfn\models\FrameElement($data->idFrameElement);
-                $feQualia = new mfn\models\FrameElement($data->idFEQualia);
+                $fe = new fnbr\models\FrameElement($data->idFrameElement);
+                $feQualia = new fnbr\models\FrameElement($data->idFEQualia);
                 Base::createEntityRelation($fe->getIdEntity(), $data->relation, $feQualia->getIdEntity());
             }
             $transaction->commit();
@@ -567,18 +567,18 @@ class StructureFrameService extends MService
         try {
             $transaction = Manager::getDatabase(Manager::getConf('mfn.db'))->beginTransaction();
             if ($data->idLUQualia != '') {
-                $lu = new mfn\models\LU($data->idLU);
-                $luQualia = new mfn\models\LU($data->idLUQualia);
+                $lu = new fnbr\models\LU($data->idLU);
+                $luQualia = new fnbr\models\LU($data->idLUQualia);
                 Base::createEntityRelation($lu->getIdEntity(), $data->relation, $luQualia->getIdEntity());
             }
             if ($data->idSemanticType != '') {
-                $lu = new mfn\models\LU($data->idLU);
-                $st = new mfn\models\SemanticType($data->idSemanticType);
+                $lu = new fnbr\models\LU($data->idLU);
+                $st = new fnbr\models\SemanticType($data->idSemanticType);
                 Base::createEntityRelation($lu->getIdEntity(), 'rel_hassemtype', $st->getIdEntity());
             }
             if ($data->idLUEquivalent != '') {
-                $lu = new mfn\models\LU($data->idLU);
-                $luEquivalent = new mfn\models\LU($data->idLUEquivalent);
+                $lu = new fnbr\models\LU($data->idLU);
+                $luEquivalent = new fnbr\models\LU($data->idLUEquivalent);
                 Base::createEntityRelation($lu->getIdEntity(), 'rel_luequivalence', $luEquivalent->getIdEntity());
             }
             $transaction->commit();

@@ -16,7 +16,7 @@ class EmailService extends MService {
         $mailer = MMailer::getMailer($params);
         if (!$mailer->send()) {
             $msg = 'Message could not be sent.' . 'Mailer Error: ' . $mailer->ErrorInfo;
-            throw new mfn\models\ERuntimeException($msg);
+            throw new fnbr\models\ERuntimeException($msg);
         }
     }
 
@@ -29,7 +29,7 @@ class EmailService extends MService {
         $mailer = MMailer::getMailer($params);
         if (!$mailer->send()) {
             $msg = 'Message could not be sent.' . 'Mailer Error: ' . $mailer->ErrorInfo;
-            throw new mfn\models\ERuntimeException($msg);
+            throw new fnbr\models\ERuntimeException($msg);
         }
     }
 

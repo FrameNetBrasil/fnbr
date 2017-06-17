@@ -20,13 +20,13 @@ class TemplateController extends MController {
     }
 
     public function lookupData(){
-        $model = new mfn\models\Template();
+        $model = new fnbr\models\Template();
         $criteria = $model->listForLookup($this->data->id);
         $this->renderJSON($model->gridDataAsJSON($criteria));
     }
 
     public function formFind() {
-        $Template= new mfn\models\Template($this->data->id);
+        $Template= new fnbr\models\Template($this->data->id);
         $filter->idTemplate = $this->data->idTemplate;
         $this->data->query = $Template->listByFilter($filter)->asQuery();
         $this->render();
@@ -43,7 +43,7 @@ class TemplateController extends MController {
     }
 
     public function formUpdate() {
-        $Template= new mfn\models\Template($this->data->id);
+        $Template= new fnbr\models\Template($this->data->id);
         $this->data->Template = $Template->getData();
         
         $this->data->action = '@Template/save/' .  $this->data->id;
@@ -51,28 +51,28 @@ class TemplateController extends MController {
     }
 
     public function formDelete() {
-        $Template = new mfn\models\Template($this->data->id);
+        $Template = new fnbr\models\Template($this->data->id);
         $ok = '>Template/delete/' . $Template->getId();
         $cancelar = '>Template/formObject/' . $Template->getId();
         $this->renderPrompt('confirmation', "Confirma remoção do Template [{$model->getDescription()}] ?", $ok, $cancelar);
     }
 
     public function lookup() {
-        $model = new mfn\models\Template();
+        $model = new fnbr\models\Template();
         $filter->idTemplate = $this->data->idTemplate;
         $this->data->query = $model->listByFilter($filter)->asQuery();
         $this->render();
     }
 
     public function save() {
-            $Template = new mfn\models\Template($this->data->Template);
+            $Template = new fnbr\models\Template($this->data->Template);
             $Template->save();
             $go = '>Template/formObject/' . $Template->getId();
             $this->renderPrompt('information','OK',$go);
     }
 
     public function delete() {
-            $Template = new mfn\models\Template($this->data->id);
+            $Template = new fnbr\models\Template($this->data->id);
             $Template->delete();
             $go = '>Template/formFind';
             $this->renderPrompt('information',"Template [{$this->data->idTemplate}] removido.", $go);

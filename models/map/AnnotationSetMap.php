@@ -30,11 +30,11 @@ class AnnotationSetMap extends \MBusinessModel {
                 'idAnnotationStatus' => array('column' => 'idAnnotationStatus','type' => 'integer'),
             ),
             'associations' => array(
-                'subcorpus' => array('toClass' => 'mfn\models\SubCorpus', 'cardinality' => 'oneToOne' , 'keys' => 'idSubCorpus:idSubCorpus'), 
-                'sentence' => array('toClass' => 'mfn\models\Sentence', 'cardinality' => 'oneToOne' , 'keys' => 'idSentence:idSentence'), 
-                'annotationStatus' => array('toClass' => 'mfn\models\TypeInstance', 'cardinality' => 'oneToOne' , 'keys' => 'idAnnotationStatus:idTypeInstance'), 
-                'layers' => array('toClass' => 'mfn\models\Layer', 'cardinality' => 'oneToMany' , 'keys' => 'idAnnotationSet:idAnnotationSet'), 
-                'timelines' => array('toClass' => 'mfn\models\Timeline', 'cardinality' => 'oneToMany' , 'keys' => 'timeline:timeline'), 
+                'subcorpus' => array('toClass' => 'fnbr\models\SubCorpus', 'cardinality' => 'oneToOne' , 'keys' => 'idSubCorpus:idSubCorpus'), 
+                'sentence' => array('toClass' => 'fnbr\models\Sentence', 'cardinality' => 'oneToOne' , 'keys' => 'idSentence:idSentence'), 
+                'annotationStatus' => array('toClass' => 'fnbr\models\TypeInstance', 'cardinality' => 'oneToOne' , 'keys' => 'idAnnotationStatus:idTypeInstance'), 
+                'layers' => array('toClass' => 'fnbr\models\Layer', 'cardinality' => 'oneToMany' , 'keys' => 'idAnnotationSet:idAnnotationSet'), 
+                'timelines' => array('toClass' => 'fnbr\models\Timeline', 'cardinality' => 'oneToMany' , 'keys' => 'timeline:timeline'), 
             )
         );
     }

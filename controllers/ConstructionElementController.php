@@ -20,7 +20,7 @@ class ConstructionElementController extends MController {
     }
 
     public function formFind() {
-        $ConstructionElement= new mfn\models\ConstructionElement($this->data->id);
+        $ConstructionElement= new fnbr\models\ConstructionElement($this->data->id);
         $filter->idConstructionElement = $this->data->idConstructionElement;
         $this->data->query = $ConstructionElement->listByFilter($filter)->asQuery();
         $this->render();
@@ -37,7 +37,7 @@ class ConstructionElementController extends MController {
     }
 
     public function formUpdate() {
-        $ConstructionElement= new mfn\models\ConstructionElement($this->data->id);
+        $ConstructionElement= new fnbr\models\ConstructionElement($this->data->id);
         $this->data->ConstructionElement = $ConstructionElement->getData();
         
         $this->data->action = '@ConstructionElement/save/' .  $this->data->id;
@@ -45,28 +45,28 @@ class ConstructionElementController extends MController {
     }
 
     public function formDelete() {
-        $ConstructionElement = new mfn\models\ConstructionElement($this->data->id);
+        $ConstructionElement = new fnbr\models\ConstructionElement($this->data->id);
         $ok = '>ConstructionElement/delete/' . $ConstructionElement->getId();
         $cancelar = '>ConstructionElement/formObject/' . $ConstructionElement->getId();
         $this->renderPrompt('confirmation', "Confirma remoção do ConstructionElement [{$model->getDescription()}] ?", $ok, $cancelar);
     }
 
     public function lookup() {
-        $model = new mfn\models\ConstructionElement();
+        $model = new fnbr\models\ConstructionElement();
         $filter->idConstructionElement = $this->data->idConstructionElement;
         $this->data->query = $model->listByFilter($filter)->asQuery();
         $this->render();
     }
 
     public function save() {
-            $ConstructionElement = new mfn\models\ConstructionElement($this->data->ConstructionElement);
+            $ConstructionElement = new fnbr\models\ConstructionElement($this->data->ConstructionElement);
             $ConstructionElement->save();
             $go = '>ConstructionElement/formObject/' . $ConstructionElement->getId();
             $this->renderPrompt('information','OK',$go);
     }
 
     public function delete() {
-            $ConstructionElement = new mfn\models\ConstructionElement($this->data->id);
+            $ConstructionElement = new fnbr\models\ConstructionElement($this->data->id);
             $ConstructionElement->delete();
             $go = '>ConstructionElement/formFind';
             $this->renderPrompt('information',"ConstructionElement [{$this->data->idConstructionElement}] removido.", $go);

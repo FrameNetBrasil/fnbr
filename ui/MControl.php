@@ -4,11 +4,6 @@ class MControl extends MBaseControl
 {
     public $plugin;
     
-    public function __contruct()
-    {
-        parent::__construct();
-    }
-
     public function addTool($object)
     {
         if ($this->toolbar == NULL) {

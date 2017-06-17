@@ -1,57 +1,48 @@
 <?php
-/**
- * @category   Maestro
- * @package    UFJF
- * @subpackage mfn
- * @copyright  Copyright (c) 2003-2013 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version
- * @since
- */
 
-// wizard - code section created by Wizard Module
+namespace fnbr\auth\models\map;
 
-namespace auth\models\map;
+class LogMap extends \MBusinessModel
+{
 
-class LogMap extends \MBusinessModel {
 
-    
-    public static function ORMMap() {
+    public static function ORMMap()
+    {
 
         return array(
             'class' => \get_called_class(),
             'database' => \Manager::getConf('fnbr.db'),
             'table' => 'auth_log',
             'attributes' => array(
-                'idLog' => array('column' => 'idLog','key' => 'primary','idgenerator' => 'identity','type' => 'integer'),
-                'ts' => array('column' => 'ts','type' => 'timestamp'),
-                'operation' => array('column' => 'operation','type' => 'string'),
-                'idUser' => array('column' => 'idUser','type' => 'integer'),
+                'idLog' => array('column' => 'idLog', 'key' => 'primary', 'idgenerator' => 'identity', 'type' => 'integer'),
+                'ts' => array('column' => 'ts', 'type' => 'timestamp'),
+                'operation' => array('column' => 'operation', 'type' => 'string'),
+                'idUser' => array('column' => 'idUser', 'type' => 'integer'),
             ),
             'associations' => array(
-                'user' => array('toClass' => 'auth\models\User', 'cardinality' => 'oneToOne' , 'keys' => 'idUser:idUser'), 
+                'user' => array('toClass' => 'fnbr\auth\models\User', 'cardinality' => 'oneToOne', 'keys' => 'idUser:idUser'),
             )
         );
     }
-    
+
     /**
-     * 
-     * @var integer 
+     *
+     * @var integer
      */
     protected $idLog;
     /**
-     * 
-     * @var timestamp 
+     *
+     * @var timestamp
      */
     protected $ts;
     /**
-     * 
-     * @var string 
+     *
+     * @var string
      */
     protected $operation;
     /**
-     * 
-     * @var integer 
+     *
+     * @var integer
      */
     protected $idUser;
 
@@ -59,73 +50,83 @@ class LogMap extends \MBusinessModel {
      * Associations
      */
     protected $user;
-    
+
 
     /**
      * Getters/Setters
      */
-    public function getIdLog() {
+    public function getIdLog()
+    {
         return $this->idLog;
     }
 
-    public function setIdLog($value) {
+    public function setIdLog($value)
+    {
         $this->idLog = $value;
     }
 
-    public function getTs() {
+    public function getTs()
+    {
         return $this->ts;
     }
 
-    public function setTs($value) {
+    public function setTs($value)
+    {
         if (!($value instanceof \MTimeStamp)) {
             $value = new \MTimeStamp($value);
         }
         $this->ts = $value;
     }
 
-    public function getOperation() {
+    public function getOperation()
+    {
         return $this->operation;
     }
 
-    public function setOperation($value) {
+    public function setOperation($value)
+    {
         $this->operation = $value;
     }
 
-    public function getIdUser() {
+    public function getIdUser()
+    {
         return $this->idUser;
     }
 
-    public function setIdUser($value) {
+    public function setIdUser($value)
+    {
         $this->idUser = $value;
     }
+
     /**
      *
      * @return Association
      */
-    public function getUser() {
-        if (is_null($this->user)){
+    public function getUser()
+    {
+        if (is_null($this->user)) {
             $this->retrieveAssociation("user");
         }
-        return  $this->user;
+        return $this->user;
     }
+
     /**
      *
      * @param Association $value
      */
-    public function setUser($value) {
+    public function setUser($value)
+    {
         $this->user = $value;
     }
+
     /**
      *
      * @return Association
      */
-    public function getAssociationUser() {
+    public function getAssociationUser()
+    {
         $this->retrieveAssociation("user");
     }
 
-    
 
 }
-// end - wizard
-
-?>

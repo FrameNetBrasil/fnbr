@@ -31,11 +31,11 @@ class DocumentMap extends \MBusinessModel {
                 'idCorpus' => array('column' => 'idCorpus','type' => 'integer'),
             ),
             'associations' => array(
-                'genre' => array('toClass' => 'mfn\models\Genre', 'cardinality' => 'oneToOne' , 'keys' => 'idGenre:idGenre'), 
-                'corpus' => array('toClass' => 'mfn\models\Corpus', 'cardinality' => 'oneToOne' , 'keys' => 'idCorpus:idCorpus'), 
-                'paragraphs' => array('toClass' => 'mfn\models\Paragraph', 'cardinality' => 'oneToMany' , 'keys' => 'idDocument:idDocument'), 
-                'timelines' => array('toClass' => 'mfn\models\Timeline', 'cardinality' => 'oneToMany' , 'keys' => 'timeline:timeline'), 
-                'entries' => array('toClass' => 'mfn\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
+                'genre' => array('toClass' => 'fnbr\models\Genre', 'cardinality' => 'oneToOne' , 'keys' => 'idGenre:idGenre'), 
+                'corpus' => array('toClass' => 'fnbr\models\Corpus', 'cardinality' => 'oneToOne' , 'keys' => 'idCorpus:idCorpus'), 
+                'paragraphs' => array('toClass' => 'fnbr\models\Paragraph', 'cardinality' => 'oneToMany' , 'keys' => 'idDocument:idDocument'), 
+                'timelines' => array('toClass' => 'fnbr\models\Timeline', 'cardinality' => 'oneToMany' , 'keys' => 'timeline:timeline'), 
+                'entries' => array('toClass' => 'fnbr\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
             )
         );
     }

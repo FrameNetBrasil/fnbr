@@ -27,8 +27,8 @@ class GenreMap extends \MBusinessModel {
                 'entry' => array('column' => 'entry','type' => 'string'),
             ),
             'associations' => array(
-                'documents' => array('toClass' => 'mfn\models\Document', 'cardinality' => 'oneToMany' , 'keys' => 'idGenre:idGenre'), 
-                'entries' => array('toClass' => 'mfn\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
+                'documents' => array('toClass' => 'fnbr\models\Document', 'cardinality' => 'oneToMany' , 'keys' => 'idGenre:idGenre'), 
+                'entries' => array('toClass' => 'fnbr\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
             )
         );
     }

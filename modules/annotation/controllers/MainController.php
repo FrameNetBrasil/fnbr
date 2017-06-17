@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -22,7 +22,7 @@ class MainController extends MController
 
     public function formLexicalAnnotation()
     {
-        $annotation = MApp::getService('', '', 'annotation');
+        $annotation = Manager::getAppService('annotation');
         $this->data->isMaster = Manager::checkAccess('MASTER', A_EXECUTE) ? 'true' : 'false';
         $this->data->isSenior = Manager::checkAccess('SENIOR', A_EXECUTE) ? 'true' : 'false';
         $this->data->colors = $annotation->getColor();
@@ -35,7 +35,7 @@ class MainController extends MController
 
     public function frameTree()
     {
-        $annotation = MApp::getService('', '', 'annotation');
+        $annotation = Manager::getAppService('annotation');
         if ($this->data->id == '') {
             $json = $annotation->listFrames($this->data->lu, $this->idLanguage);
         } elseif ($this->data->id{0} == 'f') {
@@ -48,12 +48,12 @@ class MainController extends MController
 
     public function sentences()
     {
-        $annotation = MApp::getService('', '', 'annotation');
+        $annotation = Manager::getAppService('annotation');
         $type = $this->data->id{0};
         if ($type == 'd') {
             $idDocument = substr($this->data->id, 1);
             $this->data->title = $annotation->getDocumentTitle($idDocument, $this->idLanguage);
-            $document = new mfn\models\Document($idDocument);
+            $document = new fnbr\models\Document($idDocument);
             $this->data->idSubCorpus = $document->getRelatedSubCorpus();
         } else {
             $this->data->idSubCorpus = $this->data->id;
@@ -73,7 +73,7 @@ class MainController extends MController
 
     public function annotationSet()
     {
-        $annotation = MApp::getService('', '', 'annotation');
+        $annotation = Manager::getAppService('annotation');
         if ($this->data->sort) {
             $sortable = (object)[
                 'field' => $this->data->sort,
@@ -86,7 +86,7 @@ class MainController extends MController
 
     public function layers()
     {
-        $annotation = MApp::getService('', '', 'annotation');
+        $annotation = Manager::getAppService('annotation');
         $this->data->isMaster = Manager::checkAccess('MASTER', A_EXECUTE) ? 'true' : 'false';
         $this->data->isSenior = Manager::checkAccess('SENIOR', A_EXECUTE) ? 'true' : 'false';
         $this->data->sessionTimeout = Manager::getConf('session.timeout');
@@ -101,14 +101,14 @@ class MainController extends MController
         $this->data->instantiationTypeObj = $it['obj'];
 
         $this->data->idSentence = $this->data->id;
-        $sentence = new mfn\models\Sentence($this->data->idSentence);
+        $sentence = new fnbr\models\Sentence($this->data->idSentence);
         $idLanguage = $sentence->getIdLanguage();
         $userIdLanguage = mfn\models\Base::getCurrentUser()->getConfigData('mfnIdLanguage');
         $canSave = ($idLanguage == $userIdLanguage);
         $this->data->canSave = $canSave && Manager::checkAccess('BEGINNER', A_EXECUTE);
         $this->data->idAnnotationSet = Manager::getContext()->get(1);
         $this->data->type = Manager::getContext()->get(2);
-        $annotation = MApp::getService('', '', 'annotation');
+        $annotation = Manager::getAppService('annotation');
         $this->data->layers = $annotation->getLayers($this->data, $this->idLanguage);
 
         $language = mfn\models\Base::languages()[$idLanguage];
@@ -126,7 +126,7 @@ class MainController extends MController
     {
         $this->data->idSentence = $this->data->id;
         $this->data->idAnnotationSet = Manager::getContext()->get(1);
-        $annotation = MApp::getService('', '', 'annotation');
+        $annotation = Manager::getAppService('annotation');
         $this->data->idSentence = $this->data->id;
         $this->data->layersData = $annotation->getLayersData($this->data, $this->idLanguage);
         $this->renderJson($this->data->layersData);
@@ -135,7 +135,7 @@ class MainController extends MController
     public function validation()
     {
         try {
-            $annotation = MApp::getService('', '', 'annotation');
+            $annotation = Manager::getAppService('annotation');
             $as = json_decode($this->data->annotationSets);
             $annotation->validation($as, $this->data->validation, $this->data->feedback);
             $this->renderPrompt('information', 'ok', "!annotation.showSubCorpus(annotation.idSubCorpus)");
@@ -147,7 +147,7 @@ class MainController extends MController
     public function notifySupervisor()
     {
         try {
-            $annotation = MApp::getService('', '', 'annotation');
+            $annotation = Manager::getAppService('annotation');
             $as = json_decode($this->data->asForSupervisor);
             $annotation->notifySupervisor($as);
             $this->renderPrompt('information', 'ok');
@@ -160,7 +160,7 @@ class MainController extends MController
     {
         try {
             $this->data->sessionTimeout = Manager::getConf('session.timeout');
-            $annotation = MApp::getService('', '', 'annotation');
+            $annotation = Manager::getAppService('annotation');
             $layers = json_decode($this->data->dataLayers);
             $annotation->putLayers($layers);
             $action = ($this->data->type == 'l' ? "!annotation.showSubCorpus(annotation.idSubCorpus)" : '');
@@ -173,28 +173,28 @@ class MainController extends MController
 
     public function addFELayer()
     {
-        $annotation = MApp::getService('', '', 'annotation');
+        $annotation = Manager::getAppService('annotation');
         $layer = $annotation->addFELayer($this->data->idAnnotationSet);
         $this->renderJSON(json_encode($layer));
     }
 
     public function getFELabels()
     {
-        $annotation = MApp::getService('', '', 'annotation');
+        $annotation = Manager::getAppService('annotation');
         $labels = $annotation->getFELabels($this->data->idAnnotationSet, $this->data->idSentence);
         $this->renderJSON(json_encode($labels));
     }
 
     public function delFELayer()
     {
-        $annotation = MApp::getService('', '', 'annotation');
+        $annotation = Manager::getAppService('annotation');
         $annotation->delFELayer($this->data->idAnnotationSet);
         $this->render();
     }
 
     public function formConstructionalAnnotation()
     {
-        $annotation = MApp::getService('', '', 'annotation');
+        $annotation = Manager::getAppService('annotation');
         $this->data->isMaster = Manager::checkAccess('MASTER', A_EXECUTE) ? 'true' : 'false';
         $this->data->isSenior = Manager::checkAccess('SENIOR', A_EXECUTE) ? 'true' : 'false';
         $this->data->colors = $annotation->getColor();
@@ -207,7 +207,7 @@ class MainController extends MController
 
     public function cxnTree()
     {
-        $annotation = MApp::getService('', '', 'annotation');
+        $annotation = Manager::getAppService('annotation');
         if ($this->data->id == '') {
             $json = $annotation->listCxn($this->data->cxn, $this->idLanguage);
         } elseif ($this->data->id{0} == 'c') {
@@ -218,7 +218,7 @@ class MainController extends MController
 
     public function headerMenu()
     {
-        $annotation = MApp::getService('', '', 'annotation');
+        $annotation = Manager::getAppService('annotation');
         $json = $annotation->headerMenu($this->data->wordform);
         $this->renderJson($json);
     }
@@ -226,7 +226,7 @@ class MainController extends MController
     public function addManualSubcorpus()
     {
         try {
-            $annotation = MApp::getService('', '', 'annotation');
+            $annotation = Manager::getAppService('annotation');
             $annotation->addManualSubcorpus($this->data);
             $this->renderPrompt('info', 'OK');
         } catch (\Exception $e) {
@@ -236,14 +236,14 @@ class MainController extends MController
 
     public function cxnGridData()
     {
-        $annotation = MApp::getService('', '', 'annotation');
+        $annotation = Manager::getAppService('annotation');
         $data = $annotation->cxnGridData();
         $this->renderJSON($data);
     }
 
     public function formCorpusAnnotation()
     {
-        $annotation = MApp::getService('', '', 'annotation');
+        $annotation = Manager::getAppService('annotation');
         $this->data->isMaster = Manager::checkAccess('MASTER', A_EXECUTE) ? 'true' : 'false';
         $this->data->isSenior = Manager::checkAccess('SENIOR', A_EXECUTE) ? 'true' : 'false';
         $this->data->colors = $annotation->getColor();
@@ -256,7 +256,7 @@ class MainController extends MController
 
     public function corpusTree()
     {
-        $annotation = MApp::getService('', '', 'annotation');
+        $annotation = Manager::getAppService('annotation');
         if ($this->data->id == '') {
             $json = $annotation->listCorpus($this->data->corpus, $this->idLanguage);
         } elseif ($this->data->id{0} == 'c') {
@@ -268,7 +268,7 @@ class MainController extends MController
     public function changeStatusAS()
     {
         try {
-            $annotation = MApp::getService('', '', 'annotation');
+            $annotation = Manager::getAppService('annotation');
             $as = json_decode($this->data->asToChange);
             $annotation->changeStatusAS($as, $this->data->asNewStatus);
             $this->renderPrompt('information', 'ok', "!annotation.showSubCorpus(annotation.idSubCorpus)");
@@ -280,7 +280,7 @@ class MainController extends MController
     public function deleteAS()
     {
         try {
-            $annotation = MApp::getService('', '', 'annotation');
+            $annotation = Manager::getAppService('annotation');
             $annotation->deleteAS($this->data->AStoDelete);
             $this->renderPrompt('information', 'ok');
         } catch (\Exception $e) {
@@ -290,20 +290,20 @@ class MainController extends MController
 
     public function labelHelp()
     {
-        $annotation = MApp::getService('', '', 'annotation');
+        $annotation = Manager::getAppService('annotation');
         $this->data->labels = $annotation->getLabelHelp($this->idLanguage);
         $this->render();
     }
 
     public function formASComments() {
-        $annotation = MApp::getService('', '', 'annotation');
+        $annotation = Manager::getAppService('annotation');
         $this->data->object->asc = $annotation->getASComments($this->data->id);
         $this->render();
     }
 
     public function saveASComments() {
         try {
-            $annotation = MApp::getService('', '', 'annotation');
+            $annotation = Manager::getAppService('annotation');
             $annotation->saveASComments($this->data->asc);
             $this->renderPrompt('information', 'ok');
         } catch (\Exception $e) {

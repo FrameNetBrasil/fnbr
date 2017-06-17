@@ -29,8 +29,8 @@ class ViewSubCorpusLUMap extends \MBusinessModel {
                 'idLU' => array('column' => 'idLU','type' => 'integer'),
             ),
             'associations' => array(
-                'annotationsets' => array('toClass' => 'mfn\models\ViewAnnotationSet', 'cardinality' => 'oneToMany' , 'keys' => 'idSubCorpus:idSubCorpus'),
-                'lu' => array('toClass' => 'mfn\models\ViewLU', 'cardinality' => 'oneToOne' , 'keys' => 'idLU:idLU'),
+                'annotationsets' => array('toClass' => 'fnbr\models\ViewAnnotationSet', 'cardinality' => 'oneToMany' , 'keys' => 'idSubCorpus:idSubCorpus'),
+                'lu' => array('toClass' => 'fnbr\models\ViewLU', 'cardinality' => 'oneToOne' , 'keys' => 'idLU:idLU'),
             )
         );
     }

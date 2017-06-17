@@ -1,23 +1,14 @@
 <?php
-/**
- * 
- *
- * @category   Maestro
- * @package    UFJF
- * @subpackage mfn
- * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version    
- * @since      
- */
 
-namespace auth\models;
+namespace fnbr\auth\models;
 
-class Transaction extends map\TransactionMap {
+class Transaction extends map\TransactionMap
+{
 
-    public static function config() {
+    public static function config()
+    {
         return array(
-            'log' => array(  ),
+            'log' => array(),
             'validators' => array(
                 'name' => array('notnull'),
                 'description' => array('notnull'),
@@ -25,20 +16,23 @@ class Transaction extends map\TransactionMap {
             'converters' => array()
         );
     }
-    
-    public function getDescription(){
+
+    public function getDescription()
+    {
         return $this->getIdTransaction();
     }
 
-    public function listByFilter($filter){
+    public function listByFilter($filter)
+    {
         $criteria = $this->getCriteria()->select('*')->orderBy('idTransaction');
-        if ($filter->idTransaction){
+        if ($filter->idTransaction) {
             $criteria->where("idTransaction LIKE '{$filter->idTransaction}%'");
         }
         return $criteria;
     }
 
-    public function listGroups() {
+    public function listGroups()
+    {
         $criteria = $this->getCriteria()->select("access.idAccess,access.group.idGroup,access.group.name,access.rights")->orderBy("access.group.name");
         if ($this->idTransaction) {
             $criteria->where("idTransaction = {$this->idTransaction}");
@@ -46,7 +40,8 @@ class Transaction extends map\TransactionMap {
         return $criteria;
     }
 
-    public function deleteAcesso($delete) {
+    public function deleteAcesso($delete)
+    {
         try {
             $transaction = $this->beginTransaction();
             if (is_array($delete)) {
@@ -62,9 +57,4 @@ class Transaction extends map\TransactionMap {
             throw new EModelException('Error');
         }
     }
-
-
-    
 }
-
-?>

@@ -7,7 +7,7 @@ class StructureRelationTypeService extends MService
 
     public function listAll($data = '', $idLanguage = '')
     {
-        $rt = new mfn\models\RelationType();
+        $rt = new fnbr\models\RelationType();
         $rows = $rt->listAll()->asQuery()->getResult();
         $result = array();
         foreach ($rows as $row) {
@@ -23,7 +23,7 @@ class StructureRelationTypeService extends MService
     }
 
     public function lookupDataQualiaRelation(){
-        $model = new mfn\models\RelationType();
+        $model = new fnbr\models\RelationType();
         $filter = (object)[
             'group' => 'rgp_qualia'
         ];

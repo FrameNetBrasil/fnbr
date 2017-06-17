@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -14,14 +14,14 @@ class WFLexController extends MController
     
     public function gridData()
     {
-        $model = new mfn\models\ViewWfLexemeLemma();
+        $model = new fnbr\models\ViewWfLexemeLemma();
         $criteria = $model->listByFilter($this->data->filter);
         $this->renderJSON($model->gridDataAsJSON($criteria));
     }
     
     public function formObject()
     {
-        $model = new mfn\models\ViewWfLexemeLemma($this->data->id);
+        $model = new fnbr\models\ViewWfLexemeLemma($this->data->id);
         $this->data->forUpdate = ($this->data->id != '');
         $this->data->object = $model->getData();
         $this->data->title = $this->data->forUpdate ? $model->getDescription() : _M("New");
@@ -33,7 +33,7 @@ class WFLexController extends MController
     public function save()
     {
         try {
-            $model = new mfn\models\ViewWfLexemeLemma();
+            $model = new fnbr\models\ViewWfLexemeLemma();
             //$this->data->genre->entry = 'gen_' . $this->data->genre->entry;
             $model->setData($this->data->genre);
             $model->save();

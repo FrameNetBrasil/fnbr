@@ -38,7 +38,7 @@ class ViewLUMap extends \MBusinessModel {
                 'idLanguage' => array('column' => 'idLanguage','type' => 'integer'),
             ),
             'associations' => array(
-                'frame' => array('toClass' => 'mfn\models\ViewFrame', 'cardinality' => 'oneToOne' , 'keys' => 'idFrame:idFrame'),
+                'frame' => array('toClass' => 'fnbr\models\ViewFrame', 'cardinality' => 'oneToOne' , 'keys' => 'idFrame:idFrame'),
             )
         );
     }

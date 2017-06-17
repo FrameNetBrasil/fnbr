@@ -28,9 +28,9 @@ class CorpusMap extends \MBusinessModel {
                 'timeline' => array('column' => 'timeline','type' => 'string'),
             ),
             'associations' => array(
-                'documents' => array('toClass' => 'mfn\models\Document', 'cardinality' => 'oneToMany' , 'keys' => 'idCorpus:idCorpus'), 
-                'timelines' => array('toClass' => 'mfn\models\Timeline', 'cardinality' => 'oneToMany' , 'keys' => 'timeline:timeline'), 
-                'entries' => array('toClass' => 'mfn\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
+                'documents' => array('toClass' => 'fnbr\models\Document', 'cardinality' => 'oneToMany' , 'keys' => 'idCorpus:idCorpus'), 
+                'timelines' => array('toClass' => 'fnbr\models\Timeline', 'cardinality' => 'oneToMany' , 'keys' => 'timeline:timeline'), 
+                'entries' => array('toClass' => 'fnbr\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
             )
         );
     }

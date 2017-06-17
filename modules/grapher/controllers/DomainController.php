@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -21,8 +21,8 @@ class DomainController extends MController
     public function main()
     {
         $this->data->isMaster = Manager::checkAccess('MASTER', A_EXECUTE) ? 'true' : 'false';
-        $grapher = MApp::getService('', '', 'grapher');
-        $domain = new mfn\models\Domain();
+        $grapher = Manager::getAppService('grapher');
+        $domain = new fnbr\models\Domain();
         $this->data->domain = $domain->gridDataAsJson($domain->listForSelection(), true);
         $this->data->relationData = $grapher->getDomainRelationData();
         $this->data->relationEntry = json_encode($this->data->relationData);
@@ -32,7 +32,7 @@ class DomainController extends MController
     public function frameTree()
     {
         //$this->data->idDomain = Manager::getSession()->idDomain;
-        $grapher = MApp::getService('', '', 'grapher');
+        $grapher = Manager::getAppService('grapher');
         if ($this->data->id == '') {
             $children = $grapher->listFrames($this->data, $this->idLanguage);
             $data = (object)[
@@ -48,7 +48,7 @@ class DomainController extends MController
     
     public function cxnTree()
     {
-        $grapher = MApp::getService('', '', 'grapher');
+        $grapher = Manager::getAppService('grapher');
         if ($this->data->id == '') {
             $children = $grapher->listCxns($this->data, $this->idLanguage);
             $data = (object)[

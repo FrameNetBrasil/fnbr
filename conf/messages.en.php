@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 	"repFrames" => "Frames",
 	"repFrameReport" => "Frame Report",
 	"repCnx" => "Constructions",
@@ -31,4 +31,4 @@ return array(
     "repAnnotation" => "Annotation",
     "repStatus" => "Status",
     "repCE" => "Construction Elements",
-);
+];

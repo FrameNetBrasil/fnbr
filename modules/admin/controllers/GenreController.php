@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -14,17 +14,17 @@ class GenreController extends MController
     
     public function gridData()
     {
-        $model = new mfn\models\Genre();
+        $model = new fnbr\models\Genre();
         $criteria = $model->listByFilter($this->data->filter);
         $this->renderJSON($model->gridDataAsJSON($criteria));
     }
     
     public function formObject()
     {
-        $model = new mfn\models\Genre($this->data->id);
+        $model = new fnbr\models\Genre($this->data->id);
         $this->data->forUpdate = ($this->data->id != '');
         $this->data->object = $model->getData();
-        $this->data->title = $this->data->forUpdate ? $model->getDescription() : _M("new mfn\models\Genre");
+        $this->data->title = $this->data->forUpdate ? $model->getDescription() : _M("new fnbr\models\Genre");
         $this->data->save = "@admin/genre/save/" . $model->getId() . '|formObject';
         $this->data->delete = "@admin/genre/delete/" . $model->getId() . '|formObject';
         $this->render();
@@ -33,7 +33,7 @@ class GenreController extends MController
     public function save()
     {
         try {
-            $model = new mfn\models\Genre();
+            $model = new fnbr\models\Genre();
             $this->data->genre->entry = 'gen_' . $this->data->genre->entry;
             $model->setData($this->data->genre);
             $model->save();

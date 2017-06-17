@@ -29,8 +29,8 @@ class ViewSubCorpusCxnMap extends \MBusinessModel {
                 'idConstruction' => array('column' => 'idConstruction','type' => 'integer'),
             ),
             'associations' => array(
-                'annotationsets' => array('toClass' => 'mfn\models\ViewAnnotationSet', 'cardinality' => 'oneToMany' , 'keys' => 'idSubCorpus:idSubCorpus'),
-                'construction' => array('toClass' => 'mfn\models\ViewConstruction', 'cardinality' => 'oneToOne' , 'keys' => 'idConstruction:idConstruction'),
+                'annotationsets' => array('toClass' => 'fnbr\models\ViewAnnotationSet', 'cardinality' => 'oneToMany' , 'keys' => 'idSubCorpus:idSubCorpus'),
+                'construction' => array('toClass' => 'fnbr\models\ViewConstruction', 'cardinality' => 'oneToOne' , 'keys' => 'idConstruction:idConstruction'),
             )
         );
     }

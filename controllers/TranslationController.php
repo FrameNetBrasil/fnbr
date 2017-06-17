@@ -23,17 +23,17 @@ class TranslationController extends MController {
 
     public function gridData()
     {
-        $model = new mfn\models\Transalation($this->data->id);
+        $model = new fnbr\models\Transalation($this->data->id);
         $criteria = $model->listByFilter($this->data->filter);
         $this->renderJSON($model->gridDataAsJSON($criteria));
     }
 
     public function formObject()
     {
-        $model = new mfn\models\Entry($this->data->id);
+        $model = new fnbr\models\Entry($this->data->id);
         $this->data->forUpdate = ($this->data->id != '');
         $this->data->object = $model->getData();
-        $this->data->title = $this->data->forUpdate ? $model->getDescription() : _M("new mfn\models\Entry");
+        $this->data->title = $this->data->forUpdate ? $model->getDescription() : _M("new fnbr\models\Entry");
         $this->data->save = "@entry/save/" . $model->getId() . '|formObject';
         $this->data->delete = "@entry/delete/" . $model->getId() . '|formObject';
         $this->render();
@@ -48,7 +48,7 @@ class TranslationController extends MController {
 
     public function gridUpdateData()
     {
-        $model = new mfn\models\Translation();
+        $model = new fnbr\models\Translation();
         $filter = (object)[
             'resource' => $this->data->id
         ];
@@ -58,7 +58,7 @@ class TranslationController extends MController {
     
     public function formUpdateTranslation()
     {
-        $model = new mfn\models\Translation($this->data->id);
+        $model = new fnbr\models\Translation($this->data->id);
         $this->data->object = $model->getData();
         $this->data->title = $model->getResource();
         $this->data->language = $model->getLanguage()->getLanguage();
@@ -70,7 +70,7 @@ class TranslationController extends MController {
     public function save()
     {
         try {
-            $model = new mfn\models\Translation($this->data->id);
+            $model = new fnbr\models\Translation($this->data->id);
             $model->setData($this->data->translation);
             $model->save();
             $this->renderPrompt('information', 'OK');
@@ -82,7 +82,7 @@ class TranslationController extends MController {
     public function delete()
     {
         try {
-            $model = new mfn\models\Translation($this->data->id);
+            $model = new fnbr\models\Translation($this->data->id);
             $model->delete();
             $go = "!$('#formObject_dialog').dialog('close');";
             $this->renderPrompt('information', _M("Record [%s] removed.", $model->getDescription()), $go);

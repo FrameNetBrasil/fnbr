@@ -9,7 +9,7 @@ class StructureTemplateService extends MService
 
     public function listTemplates($data, $idLanguage = '')
     {
-        $template = new mfn\models\Template();
+        $template = new fnbr\models\Template();
         $filter = (object) ['fe' => $data->fe, 'template' => $data->template, 'idLanguage' => $idLanguage];
         $templates = $template->listByFilter($filter)->asQuery()->getResult(\FETCH_ASSOC);
         $result = array();
@@ -33,7 +33,7 @@ class StructureTemplateService extends MService
             "cty_extra-thematic" => "fa fa-circle-o",
             "cty_core-unexpressed" => "fa fa-circle-o"
         ];
-        $template = new mfn\models\Template($idTemplate);
+        $template = new fnbr\models\Template($idTemplate);
         $fes = $template->listFE()->asQuery()->getResult();
         foreach ($fes as $fe) {
             $node = array();
@@ -50,11 +50,11 @@ class StructureTemplateService extends MService
     
     public function deleteTemplate($idTemplate) {
         // template has relations?
-        $template = new mfn\models\Template($idTemplate);
+        $template = new fnbr\models\Template($idTemplate);
         $n = $template->listTemplatedFrames()->asQuery()->count();
         $m = $template->getBaseFrame()->asQuery()->count();
         if (($n + $m) > 0) {
-            throw new mfn\models\ERunTimeException("Template has relations. Deletion denied.");
+            throw new fnbr\models\ERunTimeException("Template has relations. Deletion denied.");
         } else {
             $template->delete();
         }

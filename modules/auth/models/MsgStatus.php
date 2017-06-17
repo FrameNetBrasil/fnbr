@@ -1,17 +1,6 @@
 <?php
-/**
- * 
- *
- * @category   Maestro
- * @package    UFJF
- * @subpackage mfn
- * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version    
- * @since      
- */
 
-namespace auth\models;
+namespace fnbr\auth\models;
 
 class MsgStatus extends map\MsgStatusMap {
 
@@ -37,4 +26,3 @@ class MsgStatus extends map\MsgStatusMap {
     }
 }
 
-?>

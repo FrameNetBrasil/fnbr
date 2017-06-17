@@ -33,10 +33,10 @@ class ViewFrameElementMap extends \MBusinessModel {
                 'frameIdEntity' => array('column' => 'frameIdEntity','type' => 'integer'),
             ),
             'associations' => array(
-                'entries' => array('toClass' => 'mfn\models\ViewEntryLanguage', 'cardinality' => 'oneToOne' , 'keys' => 'entry:entry'),
-                'frame' => array('toClass' => 'mfn\models\ViewFrame', 'cardinality' => 'oneToOne' , 'keys' => 'idFrame:idFrame'),
-                'color' => array('toClass' => 'mfn\models\Color', 'cardinality' => 'oneToOne' , 'keys' => 'idColor:idColor'),
-                'labels' => array('toClass' => 'mfn\models\Label', 'cardinality' => 'oneToMany' , 'keys' => 'idFrameElement:idLabelType'),
+                'entries' => array('toClass' => 'fnbr\models\ViewEntryLanguage', 'cardinality' => 'oneToOne' , 'keys' => 'entry:entry'),
+                'frame' => array('toClass' => 'fnbr\models\ViewFrame', 'cardinality' => 'oneToOne' , 'keys' => 'idFrame:idFrame'),
+                'color' => array('toClass' => 'fnbr\models\Color', 'cardinality' => 'oneToOne' , 'keys' => 'idColor:idColor'),
+                'labels' => array('toClass' => 'fnbr\models\Label', 'cardinality' => 'oneToMany' , 'keys' => 'idFrameElement:idLabelType'),
             )
         );
     }

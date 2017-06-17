@@ -7,7 +7,7 @@ class StructureLayerGroupService extends MService
 
     public function listAll($data = '', $idLanguage = '')
     {
-        $lg = new mfn\models\LayerGroup();
+        $lg = new fnbr\models\LayerGroup();
         $rows = $lg->listAll()->asQuery()->getResult();
         $result = array();
         foreach ($rows as $row) {

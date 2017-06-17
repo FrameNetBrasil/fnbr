@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -26,7 +26,7 @@ class CxnController extends MController
 
     public function cxnTree()
     {
-        $report = MApp::getService('', '', 'reportcxn');
+        $report = Manager::getAppService('reportcxn');
         if ($this->data->id == '') {
             $children = $report->listCxns($this->data, $this->idLanguage);
             $data = (object)[
@@ -44,8 +44,8 @@ class CxnController extends MController
     
     public function showCxn() {
         $idConstruction = $this->data->id;
-        $report = MApp::getService('', '', 'reportcxn');
-        $cxn = new mfn\models\Construction($idConstruction);
+        $report = Manager::getAppService('reportcxn');
+        $cxn = new fnbr\models\Construction($idConstruction);
         $this->data->cxn->entry = $cxn->getEntryObject();
         $this->data->ce = $report->getCEData($idConstruction);
         $this->data->cxn->entry->description = $report->decorate($this->data->cxn->entry->description, $this->data->ce['styles']);

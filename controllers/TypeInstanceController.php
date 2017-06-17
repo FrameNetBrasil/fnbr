@@ -20,26 +20,26 @@ class TypeInstanceController extends MController {
     }
     
     public function lookupCoreType() {
-        $model = new mfn\models\TypeInstance();
+        $model = new fnbr\models\TypeInstance();
         $result = $model->listCoreType()->asQuery()->getResult(\FETCH_ASSOC);
         $this->renderJSON($model->gridDataAsJSON($result));
     }
 
     public function lookupStatusType() {
-        $model = new mfn\models\TypeInstance();
+        $model = new fnbr\models\TypeInstance();
         $result = $model->listStatusType()->asQuery()->getResult(\FETCH_ASSOC);
         mdump($result);
         $this->renderJSON($model->gridDataAsJSON($result));
     }
 
     public function lookupBFF() {
-        $model = new mfn\models\TypeInstance();
+        $model = new fnbr\models\TypeInstance();
         $result = $model->listBFF()->asQuery()->getResult(\FETCH_ASSOC);
         $this->renderJSON($model->gridDataAsJSON($result));
     }
 
     public function formFind() {
-        $TypeInstance= new mfn\models\TypeInstance($this->data->id);
+        $TypeInstance= new fnbr\models\TypeInstance($this->data->id);
         $filter->idTypeInstance = $this->data->idTypeInstance;
         $this->data->query = $TypeInstance->listByFilter($filter)->asQuery();
         $this->render();
@@ -56,7 +56,7 @@ class TypeInstanceController extends MController {
     }
 
     public function formUpdate() {
-        $TypeInstance= new mfn\models\TypeInstance($this->data->id);
+        $TypeInstance= new fnbr\models\TypeInstance($this->data->id);
         $this->data->TypeInstance = $TypeInstance->getData();
         
         $this->data->action = '@TypeInstance/save/' .  $this->data->id;
@@ -64,28 +64,28 @@ class TypeInstanceController extends MController {
     }
 
     public function formDelete() {
-        $TypeInstance = new mfn\models\TypeInstance($this->data->id);
+        $TypeInstance = new fnbr\models\TypeInstance($this->data->id);
         $ok = '>TypeInstance/delete/' . $TypeInstance->getId();
         $cancelar = '>TypeInstance/formObject/' . $TypeInstance->getId();
         $this->renderPrompt('confirmation', "Confirma remoção do TypeInstance [{$model->getDescription()}] ?", $ok, $cancelar);
     }
 
     public function lookup() {
-        $model = new mfn\models\TypeInstance();
+        $model = new fnbr\models\TypeInstance();
         $filter->idTypeInstance = $this->data->idTypeInstance;
         $this->data->query = $model->listByFilter($filter)->asQuery();
         $this->render();
     }
 
     public function save() {
-            $TypeInstance = new mfn\models\TypeInstance($this->data->TypeInstance);
+            $TypeInstance = new fnbr\models\TypeInstance($this->data->TypeInstance);
             $TypeInstance->save();
             $go = '>TypeInstance/formObject/' . $TypeInstance->getId();
             $this->renderPrompt('information','OK',$go);
     }
 
     public function delete() {
-            $TypeInstance = new mfn\models\TypeInstance($this->data->id);
+            $TypeInstance = new fnbr\models\TypeInstance($this->data->id);
             $TypeInstance->delete();
             $go = '>TypeInstance/formFind';
             $this->renderPrompt('information',"TypeInstance [{$this->data->idTypeInstance}] removido.", $go);

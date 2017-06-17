@@ -20,7 +20,7 @@ class PropertyController extends MController {
     }
 
     public function formFind() {
-        $property= new mfn\models\Property($this->data->id);
+        $property= new fnbr\models\Property($this->data->id);
         $filter->idProperty = $this->data->idProperty;
         $this->data->query = $property->listByFilter($filter)->asQuery();
         $this->render();
@@ -37,7 +37,7 @@ class PropertyController extends MController {
     }
 
     public function formUpdate() {
-        $property= new mfn\models\Property($this->data->id);
+        $property= new fnbr\models\Property($this->data->id);
         $this->data->property = $property->getData();
         
         $this->data->action = '@property/save/' .  $this->data->id;
@@ -45,28 +45,28 @@ class PropertyController extends MController {
     }
 
     public function formDelete() {
-        $property = new mfn\models\Property($this->data->id);
+        $property = new fnbr\models\Property($this->data->id);
         $ok = '>property/delete/' . $property->getId();
         $cancelar = '>property/formObject/' . $property->getId();
         $this->renderPrompt('confirmation', "Confirma remoção do Property [{$model->getDescription()}] ?", $ok, $cancelar);
     }
 
     public function lookup() {
-        $model = new mfn\models\Property();
+        $model = new fnbr\models\Property();
         $filter->idProperty = $this->data->idProperty;
         $this->data->query = $model->listByFilter($filter)->asQuery();
         $this->render();
     }
 
     public function save() {
-            $property = new mfn\models\Property($this->data->property);
+            $property = new fnbr\models\Property($this->data->property);
             $property->save();
             $go = '>property/formObject/' . $property->getId();
             $this->renderPrompt('information','OK',$go);
     }
 
     public function delete() {
-            $property = new mfn\models\Property($this->data->id);
+            $property = new fnbr\models\Property($this->data->id);
             $property->delete();
             $go = '>property/formFind';
             $this->renderPrompt('information',"Property [{$this->data->idProperty}] removido.", $go);

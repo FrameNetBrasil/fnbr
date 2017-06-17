@@ -7,7 +7,7 @@ class ReportFrameService extends MService
 
     public function listFrames($data, $idLanguage = '')
     {
-        $frame = new mfn\models\ViewFrame();
+        $frame = new fnbr\models\ViewFrame();
         $filter = (object) ['lu' => $data->lu, 'fe' => $data->fe, 'frame' => $data->frame, 'idDomain' => $data->idDomain, 'idLanguage' => $idLanguage];
         $frames = $frame->listByFilter($filter)->asQuery()->getResult(\FETCH_ASSOC);
         $result = array();
@@ -27,7 +27,7 @@ class ReportFrameService extends MService
     public function listLUs($idFrame, $idLanguage)
     {
         $result = array();
-        $lu = new mfn\models\ViewLU();
+        $lu = new fnbr\models\ViewLU();
         $lus = $lu->listByFrame($idFrame, $idLanguage)->asQuery()->chunkResult('idLU', 'name');
         foreach ($lus as $idLU => $name) {
             $node = array();
@@ -67,7 +67,7 @@ class ReportFrameService extends MService
 
     public function getFEData($idFrame)
     {
-        $frameElement = new mfn\models\FrameElement();
+        $frameElement = new fnbr\models\FrameElement();
         $styles = $frameElement->getStylesByFrame($idFrame);
         $fes = $frameElement->listForReport($idFrame)->asQuery()->getResult();
         $core = [];

@@ -30,7 +30,7 @@ class EntityMap extends \MBusinessModel {
                 'idOld' => array('column' => 'idOld','type' => 'integer'),
             ),
             'associations' => array(
-                'timelines' => array('toClass' => 'mfn\models\Timeline', 'cardinality' => 'oneToMany' , 'keys' => 'timeline:timeline'), 
+                'timelines' => array('toClass' => 'fnbr\models\Timeline', 'cardinality' => 'oneToMany' , 'keys' => 'timeline:timeline'), 
             )
         );
     }

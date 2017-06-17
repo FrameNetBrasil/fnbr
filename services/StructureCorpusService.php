@@ -7,7 +7,7 @@ class StructureCorpusService extends MService
 
     public function listCorpus($data = '', $idLanguage = '')
     {
-        $corpus = new mfn\models\Corpus();
+        $corpus = new fnbr\models\Corpus();
         $filter = (object) ['corpus' => $data->corpus, 'document' => $data->document, 'idLanguage' => $idLanguage];
         $corpora = $corpus->listByFilter($filter)->asQuery()->getResult();
         $result = array();
@@ -24,7 +24,7 @@ class StructureCorpusService extends MService
 
     public function listDocuments($idCorpus)
     {
-        $document = new mfn\models\Document();
+        $document = new fnbr\models\Document();
         $docs = $document->listByCorpus($idCorpus)->asQuery()->getResult();
         foreach ($docs as $row) {
             if ($row['idDocument']) {

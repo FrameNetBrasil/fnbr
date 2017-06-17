@@ -106,7 +106,7 @@ class MBasePainter {
      */
 
     public function setTemplate() {
-        $path = Manager::getThemePath() . '/templates';
+        $path = Manager::getAppPath('/ui/templates');
         $this->template = new MTemplate($path);
         $this->template->context('manager', Manager::getInstance());
         $this->template->context('page', $this->page);

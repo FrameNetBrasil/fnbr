@@ -30,11 +30,11 @@ class ViewAnnotationSetMap extends \MBusinessModel {
                 'idSubCorpus' => array('column' => 'idSubCorpus','key' => 'foreign','type' => 'integer'),
             ),
             'associations' => array(
-                'entries' => array('toClass' => 'mfn\models\ViewEntryLanguage', 'cardinality' => 'oneToOne' , 'keys' => 'entry:entry'),
-                'subcorpuslu' => array('toClass' => 'mfn\models\ViewSubCorpusLU', 'cardinality' => 'oneToOne' , 'keys' => 'idSubCorpus:idSubCorpus'),
-                'subcorpuscxn' => array('toClass' => 'mfn\models\ViewSubCorpusCxn', 'cardinality' => 'oneToOne' , 'keys' => 'idSubCorpus:idSubCorpus'),
-                'sentence' => array('toClass' => 'mfn\models\Sentence', 'cardinality' => 'oneToOne' , 'keys' => 'idSentence:idSentence'),
-                'annotationstatustype' => array('toClass' => 'mfn\models\ViewAnnotationStatusType', 'cardinality' => 'oneToOne' , 'keys' => 'entry:entry'),
+                'entries' => array('toClass' => 'fnbr\models\ViewEntryLanguage', 'cardinality' => 'oneToOne' , 'keys' => 'entry:entry'),
+                'subcorpuslu' => array('toClass' => 'fnbr\models\ViewSubCorpusLU', 'cardinality' => 'oneToOne' , 'keys' => 'idSubCorpus:idSubCorpus'),
+                'subcorpuscxn' => array('toClass' => 'fnbr\models\ViewSubCorpusCxn', 'cardinality' => 'oneToOne' , 'keys' => 'idSubCorpus:idSubCorpus'),
+                'sentence' => array('toClass' => 'fnbr\models\Sentence', 'cardinality' => 'oneToOne' , 'keys' => 'idSentence:idSentence'),
+                'annotationstatustype' => array('toClass' => 'fnbr\models\ViewAnnotationStatusType', 'cardinality' => 'oneToOne' , 'keys' => 'entry:entry'),
             )
         );
     }

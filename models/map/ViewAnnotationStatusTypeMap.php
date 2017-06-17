@@ -30,8 +30,8 @@ class ViewAnnotationStatusTypeMap extends \MBusinessModel {
                 'idEntity' => array('column' => 'idEntity','key' => 'foreign','type' => 'integer'),
             ),
             'associations' => array(
-                'entries' => array('toClass' => 'mfn\models\ViewEntryLanguage', 'cardinality' => 'oneToOne' , 'keys' => 'entry:entry'),
-                'color' => array('toClass' => 'mfn\models\Color', 'cardinality' => 'oneToOne' , 'keys' => 'idColor:idColor'),
+                'entries' => array('toClass' => 'fnbr\models\ViewEntryLanguage', 'cardinality' => 'oneToOne' , 'keys' => 'entry:entry'),
+                'color' => array('toClass' => 'fnbr\models\Color', 'cardinality' => 'oneToOne' , 'keys' => 'idColor:idColor'),
             )
         );
     }

@@ -7,7 +7,7 @@ class ReportCxnService extends MService
 
     public function listCxns($data, $idLanguage = '')
     {
-        $cxn = new mfn\models\Construction();
+        $cxn = new fnbr\models\Construction();
         $filter = (object) ['ce' => $data->ce, 'cxn' => $data->cxn, 'idLanguage' => $idLanguage];
         $cxns = $cxn->listByFilter($filter)->asQuery()->getResult();
         $result = array();
@@ -27,7 +27,7 @@ class ReportCxnService extends MService
     public function listCEs($idCxn, $idLanguage)
     {
         $result = array();
-        $vce = new mfn\models\ViewConstructionElement();
+        $vce = new fnbr\models\ViewConstructionElement();
         $ces = $vce->listByFrame($idCxn, $idLanguage)->asQuery()->chunkResult('idConstructionElement', 'name');
         foreach ($ces as $idConstructionElement => $name) {
             $node = array();
@@ -67,7 +67,7 @@ class ReportCxnService extends MService
 
     public function getCEData($idCxn)
     {
-        $constructionElement = new mfn\models\ConstructionElement();
+        $constructionElement = new fnbr\models\ConstructionElement();
         $styles = $constructionElement->getStylesByCxn($idCxn);
         $ces = $constructionElement->listForReport($idCxn)->asQuery()->getResult();
         $core = [];

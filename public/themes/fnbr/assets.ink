@@ -7,8 +7,6 @@ scripts/lib/trumbowyg/ui/trumbowyg.css
 style.css
 
 ;Carrega os scripts externos usados pelo tema
-scripts/lib/jquery-manager/jquery.manager.core.js
-scripts/lib/bootstrap-3.2.0-dist/js/bootstrap.min.js
 scripts/lib/bootstrap-3.2.0-dist/js/bootstrap.min.js
 scripts/lib/jquery-easyui-1.4.4/jquery.easyui.min.js
 ;scripts/lib/jquery-easyui-1.4.4/locale/easyui-lang-pt_BR.js

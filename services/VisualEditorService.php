@@ -7,7 +7,7 @@ class VisualEditorService extends MService
 
     public function listFrames($data, $idLanguage = '')
     {
-        $frame = new mfn\models\Frame();
+        $frame = new fnbr\models\Frame();
         $filter = (object) ['lu' => $data->lu, 'fe' => $data->fe, 'frame' => $data->frame, 'idLanguage' => $idLanguage];
         $frames = $frame->listByFilter($filter)->asQuery()->getResult(\FETCH_ASSOC);
         $result = array();
@@ -24,7 +24,7 @@ class VisualEditorService extends MService
     }
 
     public function getFrames() {
-        $frame = new mfn\models\Frame();
+        $frame = new fnbr\models\Frame();
         $frames = $frame->listByFilter($filter)->asQuery()->getResult();
         $result = new \stdclass;
         foreach ($frames as $row) {
@@ -39,7 +39,7 @@ class VisualEditorService extends MService
     }
 
     public function getCxns() {
-        $cxn = new mfn\models\Construction();
+        $cxn = new fnbr\models\Construction();
         $cxns = $cxn->listByFilter($filter)->asQuery()->getResult();
         $result = new \stdclass;
         foreach ($cxns as $row) {
@@ -55,7 +55,7 @@ class VisualEditorService extends MService
 
     public function listCxns($data, $idLanguage = '')
     {
-        $cxn = new mfn\models\Construction();
+        $cxn = new fnbr\models\Construction();
         $filter = (object) ['cxn' => $data->cxn, 'idLanguage' => $idLanguage];
         $cxns = $cxn->listByFilter($filter)->asQuery()->getResult(\FETCH_ASSOC);
         $result = array();
@@ -74,7 +74,7 @@ class VisualEditorService extends MService
 
     public function getCxnFrames() {
         $result = new \stdclass;
-        $frame = new mfn\models\Frame();
+        $frame = new fnbr\models\Frame();
         $frames = $frame->listByFilter($filter)->asQuery()->getResult();
         foreach ($frames as $row) {
             $id = $row['idEntity'];
@@ -84,7 +84,7 @@ class VisualEditorService extends MService
             $node['idType'] = 'f';
             $result->$id = $node;
         }
-        $cxn = new mfn\models\Construction();
+        $cxn = new fnbr\models\Construction();
         $cxns = $cxn->listByFilter($filter)->asQuery()->getResult();
         foreach ($cxns as $row) {
             $id = $row['idEntity'];
@@ -98,21 +98,21 @@ class VisualEditorService extends MService
     }
     
     public function getCxnRelations($idEntityCxn = '') {
-        $er = new mfn\models\EntityRelation();
+        $er = new fnbr\models\EntityRelation();
         $criteria = $er->listCxnRelations($idEntityCxn);
         $relations = $er->gridDataAsJSON($criteria, true);
         return $relations;
     }
 
     public function getRelations($idEntityFrame = '') {
-        $er = new mfn\models\EntityRelation();
+        $er = new fnbr\models\EntityRelation();
         $criteria = $er->listFrameRelations($idEntityFrame);
         $relations = $er->gridDataAsJSON($criteria, true);
         return $relations;
     }
     
     public function getRelationData() {
-        $relation = new mfn\models\RelationType();
+        $relation = new fnbr\models\RelationType();
         $relations = $relation->listByFilter((object)['group'=>'rgp_frame_relations'])->asQuery()->getResult();
         $result = new \stdclass;
         foreach ($relations as $row) {
@@ -132,7 +132,7 @@ class VisualEditorService extends MService
     }
     
     public function getCxnRelationData() {
-        $relation = new mfn\models\RelationType();
+        $relation = new fnbr\models\RelationType();
         $relations = $relation->listByFilter((object)['group'=>'rgp_cxn_relations'])->asQuery()->getResult();
         $result = new \stdclass;
         foreach ($relations as $row) {
@@ -153,14 +153,14 @@ class VisualEditorService extends MService
     
 
     public function getCxnFrameRelations($idEntityCxn = '') {
-        $er = new mfn\models\EntityRelation();
+        $er = new fnbr\models\EntityRelation();
         $criteria = $er->listCxnFrameRelations($idEntityCxn);
         $relations = $er->gridDataAsJSON($criteria, true);
         return $relations;
     }
 
     public function getCxnFrameRelationData() {
-        $relation = new mfn\models\RelationType();
+        $relation = new fnbr\models\RelationType();
         $relations = $relation->listByFilter((object)['entry'=>'rel_evokes'])->asQuery()->getResult();
         $result = new \stdclass;
         foreach ($relations as $row) {
@@ -193,35 +193,35 @@ class VisualEditorService extends MService
     }
 
     public function getFEs() {
-        $fe = new mfn\models\FrameElement();
+        $fe = new fnbr\models\FrameElement();
         $criteria = $fe->listForEditor($this->data->id);
         $fes = $fe->gridDataAsJSON($criteria, true);
         return $fes;
     }
 
     public function getCEs() {
-        $ce = new mfn\models\ConstructionElement();
+        $ce = new fnbr\models\ConstructionElement();
         $criteria = $ce->listForEditor($this->data->id);
         $ces = $ce->gridDataAsJSON($criteria, true);
         return $ces;
     }
 
     public function getFERelations($idEntityFrame1,$idEntityFrame2, $relationEntry) {
-        $er = new mfn\models\EntityRelation();
+        $er = new fnbr\models\EntityRelation();
         $criteria = $er->listFrameElementRelations($idEntityFrame1,$idEntityFrame2, $relationEntry);
         $relations = $er->gridDataAsJSON($criteria, true);
         return $relations;
     }
 
     public function getFECore() {
-        $fe = new mfn\models\FrameElement();
+        $fe = new fnbr\models\FrameElement();
         $criteria = $fe->listCoreForEditor($this->data->id);
         $fes = $fe->gridDataAsJSON($criteria, true);
         return $fes;
     }
 
     public function getFECoreRelationData() {
-        $relation = new mfn\models\RelationType();
+        $relation = new fnbr\models\RelationType();
         $relations = $relation->listByFilter((object)['group'=>'rgp_fe_relations'])->asQuery()->getResult();
         $result = new \stdclass;
         foreach ($relations as $row) {
@@ -241,21 +241,21 @@ class VisualEditorService extends MService
     }
     
     public function getFECoreRelations($idEntityFrame) {
-        $er = new mfn\models\EntityRelation();
+        $er = new fnbr\models\EntityRelation();
         $criteria = $er->listFrameElementCoreRelations($idEntityFrame);
         $relations = $er->gridDataAsJSON($criteria, true);
         return $relations;
     }
 
     public function getCERelations($idEntityCxn1,$idEntityCxn2, $relationEntry) {
-        $er = new mfn\models\EntityRelation();
+        $er = new fnbr\models\EntityRelation();
         $criteria = $er->listCERelations($idEntityCxn1,$idEntityCxn2, $relationEntry);
         $relations = $er->gridDataAsJSON($criteria, true);
         return $relations;
     }
     
     public function getCEFERelations($idEntity1,$idEntity2, $relationEntry) {
-        $er = new mfn\models\EntityRelation();
+        $er = new fnbr\models\EntityRelation();
         $criteria = $er->listCEFERelations($idEntity1,$idEntity2, $relationEntry);
         $relations = $er->gridDataAsJSON($criteria, true);
         return $relations;
@@ -263,78 +263,78 @@ class VisualEditorService extends MService
 
     public function updateFrameRelation($graph) {
         $relations = $graph->relations;
-        $er = new mfn\models\EntityRelation();
+        $er = new fnbr\models\EntityRelation();
         $er->saveFrameRelations($relations);
     }
     
     public function deleteFrameRelation($links) {
-        $er = new mfn\models\EntityRelation();
+        $er = new fnbr\models\EntityRelation();
         $er->deleteFrameRelations($links);
     }
     
     public function updateFERelation($graph) {
         $relations = $graph->relations;
-        $er = new mfn\models\EntityRelation();
+        $er = new fnbr\models\EntityRelation();
         $er->saveFERelations($relations);
     }
     
     public function deleteFERelation($links) {
-        $er = new mfn\models\EntityRelation();
+        $er = new fnbr\models\EntityRelation();
         $er->deleteFERelations($links);
     }
 
     public function updateFECoreRelation($graph) {
         $relations = $graph->relations;
-        $er = new mfn\models\EntityRelation();
+        $er = new fnbr\models\EntityRelation();
         $er->saveFECoreRelations($relations);
     }
 
     public function deleteFECoreRelation($links) {
-        $er = new mfn\models\EntityRelation();
+        $er = new fnbr\models\EntityRelation();
         $er->deleteFECoreRelations($links);
     }
 
     public function updateCxnRelation($graph) {
         $relations = $graph->relations;
-        $er = new mfn\models\EntityRelation();
+        $er = new fnbr\models\EntityRelation();
         $er->saveCxnRelations($relations);
     }
     
     public function deleteCxnRelation($links) {
-        $er = new mfn\models\EntityRelation();
+        $er = new fnbr\models\EntityRelation();
         $er->deleteCxnRelations($links);
     }
     
     public function updateCERelation($graph) {
         $relations = $graph->relations;
-        $er = new mfn\models\EntityRelation();
+        $er = new fnbr\models\EntityRelation();
         $er->saveCERelations($relations);
     }
     
     public function deleteCERelation($links) {
-        $er = new mfn\models\EntityRelation();
+        $er = new fnbr\models\EntityRelation();
         $er->deleteCERelations($links);
     }
 
     public function updateCxnFrameRelation($graph) {
         $relations = $graph->relations;
-        $er = new mfn\models\EntityRelation();
+        $er = new fnbr\models\EntityRelation();
         $er->saveCxnFrameRelations($relations);
     }
     
     public function deleteCxnFrameRelation($links) {
-        $er = new mfn\models\EntityRelation();
+        $er = new fnbr\models\EntityRelation();
         $er->deleteCxnFrameRelations($links);
     }
     
     public function updateCEFERelation($graph) {
         $relations = $graph->relations;
-        $er = new mfn\models\EntityRelation();
+        $er = new fnbr\models\EntityRelation();
         $er->saveCEFERelations($relations);
     }
     
     public function deleteCEFERelation($links) {
-        $er = new mfn\models\EntityRelation();
+        $er = new fnbr\models\EntityRelation();
         $er->deleteCEFERelations($links);
     }
 

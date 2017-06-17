@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -26,7 +26,7 @@ class CxnFrameController extends MController
 
     public function frameTree()
     {
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         if ($this->data->id == '') {
             $children = $editor->listFrames($this->data, $this->idLanguage);
             $data = (object)[
@@ -42,7 +42,7 @@ class CxnFrameController extends MController
     
     public function cxnTree()
     {
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         if ($this->data->id == '') {
             $children = $editor->listCxns($this->data, $this->idLanguage);
             $data = (object)[
@@ -58,32 +58,32 @@ class CxnFrameController extends MController
 
     public function workingArea() {
         $this->data->isMaster = Manager::checkAccess('MASTER', A_EXECUTE);
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         $this->data->entities = $editor->getCxnFrames();
         $this->data->relationEntry = $editor->getCxnFrameRelationEntry();
         $this->render();
     }
     
     public function getCxnFrameRelations(){
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         $this->data->relations = $editor->getCxnFrameRelations($this->data->id);
         $this->renderJSON($this->data->relations);
     }
 
     public function getCE(){
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         $this->data->ces = $editor->getCEs($this->data->id);
         $this->renderJSON($this->data->ces);
     }
 
     public function getFE(){
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         $this->data->fes = $editor->getFEs($this->data->id);
         $this->renderJSON($this->data->fes);
     }
 
     public function getCEFERelations(){
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         $this->data->relations = $editor->getCEFERelations($this->data->idEntity1,$this->data->idEntity2,$this->data->idType);
         $this->renderJSON($this->data->relations);
     }
@@ -94,7 +94,7 @@ class CxnFrameController extends MController
 
     public function saveCxnFrameRelation(){
         $isMaster = Manager::checkAccess('MASTER', A_EXECUTE);
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         if ($isMaster) {
             $editor->updateCxnFrameRelation($this->data->graphJson);
             $editor->deleteCxnFrameRelation($this->data->linksRemoved);
@@ -106,7 +106,7 @@ class CxnFrameController extends MController
 
     public function saveCEFERelation(){
         $isMaster = Manager::checkAccess('MASTER', A_EXECUTE);
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         if ($isMaster) {
             $editor->updateCEFERelation($this->data->graphcefeJson);
             $editor->deleteCEFERelation($this->data->linkscefeRemoved);

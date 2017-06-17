@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -26,7 +26,7 @@ class LayerController extends MController
     
     public function gridData()
     {
-        $model = new mfn\models\LayerType();
+        $model = new fnbr\models\LayerType();
         $criteria = $model->listByGroup();
         $this->renderJSON($model->gridDataAsJSON($criteria));
     }

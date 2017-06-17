@@ -31,11 +31,11 @@ class LemmaMap extends \MBusinessModel
                 'idLanguage' => array('column' => 'idLanguage', 'type' => 'integer'),
             ),
             'associations' => array(
-                'pos' => array('toClass' => 'mfn\models\POS', 'cardinality' => 'oneToOne', 'keys' => 'idPOS:idPOS'),
-                'lus' => array('toClass' => 'mfn\models\LU', 'cardinality' => 'oneToMany', 'keys' => 'idLemma:idLemma'),
-                'lexemeentries' => array('toClass' => 'mfn\models\LexemeEntry', 'cardinality' => 'oneToMany', 'keys' => 'idLemma:idLemma'),
-                'language' => array('toClass' => 'mfn\models\Language', 'cardinality' => 'oneToOne' , 'keys' => 'idLanguage:idLanguage'), 
-                'timelines' => array('toClass' => 'mfn\models\Timeline', 'cardinality' => 'oneToMany', 'keys' => 'timeline:timeline'),
+                'pos' => array('toClass' => 'fnbr\models\POS', 'cardinality' => 'oneToOne', 'keys' => 'idPOS:idPOS'),
+                'lus' => array('toClass' => 'fnbr\models\LU', 'cardinality' => 'oneToMany', 'keys' => 'idLemma:idLemma'),
+                'lexemeentries' => array('toClass' => 'fnbr\models\LexemeEntry', 'cardinality' => 'oneToMany', 'keys' => 'idLemma:idLemma'),
+                'language' => array('toClass' => 'fnbr\models\Language', 'cardinality' => 'oneToOne' , 'keys' => 'idLanguage:idLanguage'), 
+                'timelines' => array('toClass' => 'fnbr\models\Timeline', 'cardinality' => 'oneToMany', 'keys' => 'timeline:timeline'),
             )
         );
     }

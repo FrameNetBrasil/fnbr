@@ -30,10 +30,10 @@ class LayerMap extends \MBusinessModel {
                 'idLayerType' => array('column' => 'idLayerType','type' => 'integer'),
             ),
             'associations' => array(
-                'annotationset' => array('toClass' => 'mfn\models\AnnotationSet', 'cardinality' => 'oneToOne' , 'keys' => 'idAnnotationSet:idAnnotationSet'), 
-                'layertype' => array('toClass' => 'mfn\models\LayerType', 'cardinality' => 'oneToOne' , 'keys' => 'idLayerType:idLayerType'), 
-                'labels' => array('toClass' => 'mfn\models\Label', 'cardinality' => 'oneToMany' , 'keys' => 'idLayer:idLayer'), 
-                'timelines' => array('toClass' => 'mfn\models\Timeline', 'cardinality' => 'oneToMany' , 'keys' => 'timeline:timeline'), 
+                'annotationset' => array('toClass' => 'fnbr\models\AnnotationSet', 'cardinality' => 'oneToOne' , 'keys' => 'idAnnotationSet:idAnnotationSet'), 
+                'layertype' => array('toClass' => 'fnbr\models\LayerType', 'cardinality' => 'oneToOne' , 'keys' => 'idLayerType:idLayerType'), 
+                'labels' => array('toClass' => 'fnbr\models\Label', 'cardinality' => 'oneToMany' , 'keys' => 'idLayer:idLayer'), 
+                'timelines' => array('toClass' => 'fnbr\models\Timeline', 'cardinality' => 'oneToMany' , 'keys' => 'timeline:timeline'), 
             )
         );
     }

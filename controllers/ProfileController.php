@@ -29,7 +29,7 @@ class ProfileController extends MController {
     public function myProfile()
     {
         try {
-            $user = new auth\models\User($this->data->idUser);
+            $user = new fnbr\auth\models\User($this->data->idUser);
             $user->setConfigData('mfnLangPref', $this->data->languagePreference);
             $this->renderPrompt('information', 'Ok');
         } catch (\Exception $e) {
@@ -40,7 +40,7 @@ class ProfileController extends MController {
     
     public function changePassword() {
         try {
-            $user = new auth\models\User($this->data->idUser);
+            $user = new fnbr\auth\models\User($this->data->idUser);
             if (!$user->validatePassword($this->data->current)) {
                 throw new ESecurityException('Wrong password!');
             }

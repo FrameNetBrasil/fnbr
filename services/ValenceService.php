@@ -42,14 +42,14 @@ class ValenceService extends MService
 
     public function getFrames()
     {
-        $v = new mfn\models\ViewFrame();
+        $v = new fnbr\models\ViewFrame();
         $frames = $v->listByFilter((object)[])->asQuery()->chunkResult('idFrame', 'idFrame');
         return $frames;
     }
 
     public function getLUs($idFrame, $idLanguage)
     {
-        $v = new mfn\models\ViewLU();
+        $v = new fnbr\models\ViewLU();
         $lus = $v->listByFrame($idFrame, $idLanguage)->asQuery()->chunkResult('idLU', 'name');
         asort($lus);
         return $lus;
@@ -77,7 +77,7 @@ and (l.entry in ('lty_fe','lty_gf','lty_pt'))
 where (lu.idLU = {$idLU}) and ((v3.glName is null) or (v3.glName <> 'Target'))
 order by lu.name, v2.idAnnotationSet, v3.startChar, v3.endChar,v3.layerEntry
 ";
-        $lu = new mfn\models\LU();
+        $lu = new fnbr\models\LU();
         $query = $lu->getDb()->getQueryCommand($query);
         $result = $query->getResult();
 
@@ -187,7 +187,7 @@ order by lu.name, v2.idAnnotationSet, v3.startChar, v3.endChar,v3.layerEntry
         $this->lang = ['pt' => 1, 'en' => 2, 'es' => 3];
         $this->setGFEquivalence();
         $this->setPTEquivalence();
-        $v = new mfn\models\ViewFrame();
+        $v = new fnbr\models\ViewFrame();
         $db = $v->getDb();
         $query = "
 SELECT f.idFrame
@@ -228,7 +228,7 @@ where (d.iddomain = {$this->idDomain}) and (d.idLanguage = 1)
     }
 
     public function clearValence($idFrame, $idLanguage) {
-        $v = new mfn\models\ViewFrame();
+        $v = new fnbr\models\ViewFrame();
         $db = $v->getDb();
         $command = "delete from ValenceValent where idValencePattern IN (select idValencePattern from ValencePattern where idValenceLU in (select idValenceLU from ValenceLU where (idFrame = {$idFrame}) and (idLanguage = {$idLanguage})))";
         $db->executeCommand($command);
@@ -294,7 +294,7 @@ where (d.iddomain = {$this->idDomain}) and (d.idLanguage = 1)
 
     public function setGFEquivalence()
     {
-        $v = new mfn\models\ViewLU();
+        $v = new fnbr\models\ViewLU();
         $query = "
 SELECT langSource, langDest, labelSource, labelDest
 from gfequivalence
@@ -310,7 +310,7 @@ from gfequivalence
 
     public function setPTEquivalence()
     {
-        $v = new mfn\models\ViewLU();
+        $v = new fnbr\models\ViewLU();
         $query = "
 SELECT langSource, langDest, labelSource, labelDest
 from ptequivalence
@@ -327,7 +327,7 @@ from ptequivalence
 
     public function getValenciaFromTable($idLU, $idLanguage)
     {
-        $v = new mfn\models\ViewFrame();
+        $v = new fnbr\models\ViewFrame();
         $db = $v->getDb();
         $query = "
 SELECT v.idPattern, v.idFrameElement, v.GF, v.GFSource, v.PT, e.name feName
@@ -369,7 +369,7 @@ order by v.idPattern, v.idFrameElement
     public function getCombinatorialScore($idFrame, $idLanguageSource, $idLanguageTarget)
     {
         if (substr($idFrame, 0, 1) == 'f') {
-            $frame = new mfn\models\ViewFrame();
+            $frame = new fnbr\models\ViewFrame();
             $idFrame = $frame->listByFilter((object)['idEntity' => substr($idFrame, 1)])->asQuery()->getResult()[0]['idFrame'];
         }
         $this->lang = ['pt' => 1, 'en' => 2, 'es' => 3];
@@ -398,7 +398,7 @@ order by v.idPattern, v.idFrameElement
     public function getMaximumScore($idFrame, $idLanguageSource, $idLanguageTarget, $byId = false)
     {
         if (substr($idFrame, 0, 1) == 'f') {
-            $frame = new mfn\models\ViewFrame();
+            $frame = new fnbr\models\ViewFrame();
             $idFrame = $frame->listByFilter((object)['idEntity' => substr($idFrame, 1)])->asQuery()->getResult()[0]['idFrame'];
         }
         $this->lang = ['pt' => 1, 'en' => 2, 'es' => 3];
@@ -431,7 +431,7 @@ order by v.idPattern, v.idFrameElement
 
     public function updateMaximumScore()
     {
-        $v = new mfn\models\ViewFrame();
+        $v = new fnbr\models\ViewFrame();
         $db = $v->getDb();
         $transaction = $db->beginTransaction();
         try {

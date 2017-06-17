@@ -1,52 +1,42 @@
 <?php
-/**
- * @category   Maestro
- * @package    UFJF
- * @subpackage mfn
- * @copyright  Copyright (c) 2003-2013 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version
- * @since
- */
 
-// wizard - code section created by Wizard Module
+namespace fnbr\auth\models\map;
 
-namespace auth\models\map;
+class GroupMap extends \MBusinessModel
+{
 
-class GroupMap extends \MBusinessModel {
-
-    
-    public static function ORMMap() {
+    public static function ORMMap()
+    {
 
         return array(
             'class' => \get_called_class(),
             'database' => \Manager::getConf('fnbr.db'),
             'table' => 'auth_group',
             'attributes' => array(
-                'idGroup' => array('column' => 'idGroup','key' => 'primary','idgenerator' => 'identity','type' => 'integer'),
-                'name' => array('column' => 'name','type' => 'string'),
-                'description' => array('column' => 'description','type' => 'string'),
+                'idGroup' => array('column' => 'idGroup', 'key' => 'primary', 'idgenerator' => 'identity', 'type' => 'integer'),
+                'name' => array('column' => 'name', 'type' => 'string'),
+                'description' => array('column' => 'description', 'type' => 'string'),
             ),
             'associations' => array(
-                'access' => array('toClass' => 'auth\models\Access', 'cardinality' => 'oneToMany' , 'keys' => 'idGroup:idGroup'), 
-                'users' => array('toClass' => 'auth\models\User', 'cardinality' => 'manyToMany' , 'associative' => 'auth_user_group'), 
+                'access' => array('toClass' => 'fnbr\auth\models\Access', 'cardinality' => 'oneToMany', 'keys' => 'idGroup:idGroup'),
+                'users' => array('toClass' => 'fnbr\auth\models\User', 'cardinality' => 'manyToMany', 'associative' => 'auth_user_group'),
             )
         );
     }
-    
+
     /**
-     * 
-     * @var integer 
+     *
+     * @var integer
      */
     protected $idGroup;
     /**
-     * 
-     * @var string 
+     *
+     * @var string
      */
     protected $name;
     /**
-     * 
-     * @var string 
+     *
+     * @var string
      */
     protected $description;
 
@@ -55,86 +45,100 @@ class GroupMap extends \MBusinessModel {
      */
     protected $access;
     protected $users;
-    
+
 
     /**
      * Getters/Setters
      */
-    public function getIdGroup() {
+    public function getIdGroup()
+    {
         return $this->idGroup;
     }
 
-    public function setIdGroup($value) {
+    public function setIdGroup($value)
+    {
         $this->idGroup = $value;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function setName($value) {
+    public function setName($value)
+    {
         $this->name = $value;
     }
 
-    public function getDescription() {
+    public function getDescription()
+    {
         return $this->description;
     }
 
-    public function setDescription($value) {
+    public function setDescription($value)
+    {
         $this->description = $value;
     }
+
     /**
      *
      * @return Association
      */
-    public function getAccess() {
-        if (is_null($this->access)){
+    public function getAccess()
+    {
+        if (is_null($this->access)) {
             $this->retrieveAssociation("access");
         }
-        return  $this->access;
+        return $this->access;
     }
+
     /**
      *
      * @param Association $value
      */
-    public function setAccess($value) {
+    public function setAccess($value)
+    {
         $this->access = $value;
     }
+
     /**
      *
      * @return Association
      */
-    public function getAssociationAccess() {
+    public function getAssociationAccess()
+    {
         $this->retrieveAssociation("access");
     }
+
     /**
      *
      * @return Association
      */
-    public function getUsers() {
-        if (is_null($this->users)){
+    public function getUsers()
+    {
+        if (is_null($this->users)) {
             $this->retrieveAssociation("users");
         }
-        return  $this->users;
+        return $this->users;
     }
+
     /**
      *
      * @param Association $value
      */
-    public function setUsers($value) {
+    public function setUsers($value)
+    {
         $this->users = $value;
     }
+
     /**
      *
      * @return Association
      */
-    public function getAssociationUsers() {
+    public function getAssociationUsers()
+    {
         $this->retrieveAssociation("users");
     }
 
-    
 
 }
-// end - wizard
-
-?>

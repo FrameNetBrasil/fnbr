@@ -1,78 +1,69 @@
 <?php
-/**
- * @category   Maestro
- * @package    UFJF
- * @subpackage mfn
- * @copyright  Copyright (c) 2003-2013 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version
- * @since
- */
 
-// wizard - code section created by Wizard Module
+namespace fnbr\auth\models\map;
 
-namespace auth\models\map;
+class UserMap extends \MBusinessModel
+{
 
-class UserMap extends \MBusinessModel {
 
-    
-    public static function ORMMap() {
+    public static function ORMMap()
+    {
 
         return array(
             'class' => \get_called_class(),
             'database' => \Manager::getConf('fnbr.db'),
             'table' => 'auth_user',
             'attributes' => array(
-                'idUser' => array('column' => 'idUser','key' => 'primary','idgenerator' => 'identity','type' => 'integer'),
-                'login' => array('column' => 'login','type' => 'string'),
-                'pwd' => array('column' => 'pwd','type' => 'string'),
-                'passMD5' => array('column' => 'passMD5','type' => 'string'),
-                'theme' => array('column' => 'theme','type' => 'string'),
-                'config' => array('column' => 'config','type' => 'string'),
-                'active' => array('column' => 'active','type' => 'integer'),
-                'idPerson' => array('column' => 'idPerson','type' => 'integer'),
+                'idUser' => array('column' => 'idUser', 'key' => 'primary', 'idgenerator' => 'identity', 'type' => 'integer'),
+                'login' => array('column' => 'login', 'type' => 'string'),
+                'pwd' => array('column' => 'pwd', 'type' => 'string'),
+                'passMD5' => array('column' => 'passMD5', 'type' => 'string'),
+                'theme' => array('column' => 'theme', 'type' => 'string'),
+                'config' => array('column' => 'config', 'type' => 'string'),
+                'active' => array('column' => 'active', 'type' => 'integer'),
+                'idPerson' => array('column' => 'idPerson', 'type' => 'integer'),
             ),
             'associations' => array(
-                'person' => array('toClass' => 'auth\models\Person', 'cardinality' => 'oneToOne' , 'keys' => 'idPerson:idPerson'), 
-                'logs' => array('toClass' => 'auth\models\Log', 'cardinality' => 'oneToMany' , 'keys' => 'idUser:idUser'), 
-                'groups' => array('toClass' => 'auth\models\Group', 'cardinality' => 'manyToMany' , 'associative' => 'auth_user_group'), 
+                'person' => array('toClass' => 'fnbr\auth\models\Person', 'cardinality' => 'oneToOne', 'keys' => 'idPerson:idPerson'),
+                'logs' => array('toClass' => 'fnbr\auth\models\Log', 'cardinality' => 'oneToMany', 'keys' => 'idUser:idUser'),
+                'groups' => array('toClass' => 'fnbr\auth\models\Group', 'cardinality' => 'manyToMany', 'associative' => 'auth_user_group'),
             )
         );
     }
-    
+
     /**
-     * 
-     * @var integer 
+     *
+     * @var integer
      */
     protected $idUser;
     /**
-     * 
-     * @var string 
+     *
+     * @var string
      */
     protected $login;
     /**
-     * 
-     * @var string 
+     *
+     * @var string
      */
     protected $pwd;
     /**
-     * 
-     * @var string 
+     *
+     * @var string
      */
     protected $passMD5;
     /**
-     * 
-     * @var string 
+     *
+     * @var string
      */
     protected $theme;
     /**
-     * 
-     * @var integer 
+     *
+     * @var integer
      */
     protected $active;
     /**
-     * 
-     * @var integer 
+     *
+     * @var integer
      */
     protected $idPerson;
 
@@ -82,150 +73,180 @@ class UserMap extends \MBusinessModel {
     protected $person;
     protected $logs;
     protected $groups;
-    
+
 
     /**
      * Getters/Setters
      */
-    public function getIdUser() {
+    public function getIdUser()
+    {
         return $this->idUser;
     }
 
-    public function setIdUser($value) {
+    public function setIdUser($value)
+    {
         $this->idUser = $value;
     }
 
-    public function getLogin() {
+    public function getLogin()
+    {
         return $this->login;
     }
 
-    public function setLogin($value) {
+    public function setLogin($value)
+    {
         $this->login = $value;
     }
 
-    public function getPwd() {
+    public function getPwd()
+    {
         return $this->pwd;
     }
 
-    public function setPwd($value) {
+    public function setPwd($value)
+    {
         $this->pwd = $value;
     }
 
-    public function getPassMD5() {
+    public function getPassMD5()
+    {
         return $this->passMD5;
     }
 
-    public function setPassMD5($value) {
+    public function setPassMD5($value)
+    {
         $this->passMD5 = $value;
     }
 
-    public function getTheme() {
+    public function getTheme()
+    {
         return $this->theme;
     }
 
-    public function setTheme($value) {
+    public function setTheme($value)
+    {
         $this->theme = $value;
     }
 
-    public function getConfig() {
+    public function getConfig()
+    {
         return $this->config;
     }
 
-    public function setConfig($value) {
+    public function setConfig($value)
+    {
         $this->config = $value;
     }
 
-    public function getActive() {
+    public function getActive()
+    {
         return $this->active;
     }
 
-    public function setActive($value) {
+    public function setActive($value)
+    {
         $this->active = $value;
     }
 
-    public function getIdPerson() {
+    public function getIdPerson()
+    {
         return $this->idPerson;
     }
 
-    public function setIdPerson($value) {
+    public function setIdPerson($value)
+    {
         $this->idPerson = $value;
     }
+
     /**
      *
      * @return Association
      */
-    public function getPerson() {
-        if (is_null($this->person)){
+    public function getPerson()
+    {
+        if (is_null($this->person)) {
             $this->retrieveAssociation("person");
         }
-        return  $this->person;
+        return $this->person;
     }
+
     /**
      *
      * @param Association $value
      */
-    public function setPerson($value) {
+    public function setPerson($value)
+    {
         $this->person = $value;
     }
+
     /**
      *
      * @return Association
      */
-    public function getAssociationPerson() {
+    public function getAssociationPerson()
+    {
         $this->retrieveAssociation("person");
     }
+
     /**
      *
      * @return Association
      */
-    public function getLogs() {
-        if (is_null($this->logs)){
+    public function getLogs()
+    {
+        if (is_null($this->logs)) {
             $this->retrieveAssociation("logs");
         }
-        return  $this->logs;
+        return $this->logs;
     }
+
     /**
      *
      * @param Association $value
      */
-    public function setLogs($value) {
+    public function setLogs($value)
+    {
         $this->logs = $value;
     }
+
     /**
      *
      * @return Association
      */
-    public function getAssociationLogs() {
+    public function getAssociationLogs()
+    {
         $this->retrieveAssociation("logs");
     }
+
     /**
      *
      * @return Association
      */
-    public function getGroups() {
-        if (is_null($this->groups)){
+    public function getGroups()
+    {
+        if (is_null($this->groups)) {
             $this->retrieveAssociation("groups");
         }
-        return  $this->groups;
+        return $this->groups;
     }
+
     /**
      *
      * @param Association $value
      */
-    public function setGroups($value) {
+    public function setGroups($value)
+    {
         $this->groups = $value;
     }
+
     /**
      *
      * @return Association
      */
-    public function getAssociationGroups() {
+    public function getAssociationGroups()
+    {
         $this->retrieveAssociation("groups");
     }
 
-    
 
 }
-// end - wizard
-
-?>

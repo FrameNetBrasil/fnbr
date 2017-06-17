@@ -30,10 +30,10 @@ class EntityRelationMap extends \MBusinessModel {
                 'idEntity3' => array('column' => 'idEntity3','type' => 'integer'),
             ),
             'associations' => array(
-                'relationtype' => array('toClass' => 'mfn\models\RelationType', 'cardinality' => 'oneToOne' , 'keys' => 'idRelationType:idRelationType'), 
-                'entity1' => array('toClass' => 'mfn\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity1:idEntity'), 
-                'entity2' => array('toClass' => 'mfn\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity2:idEntity'), 
-                'entity3' => array('toClass' => 'mfn\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity3:idEntity'), 
+                'relationtype' => array('toClass' => 'fnbr\models\RelationType', 'cardinality' => 'oneToOne' , 'keys' => 'idRelationType:idRelationType'), 
+                'entity1' => array('toClass' => 'fnbr\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity1:idEntity'), 
+                'entity2' => array('toClass' => 'fnbr\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity2:idEntity'), 
+                'entity3' => array('toClass' => 'fnbr\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity3:idEntity'), 
             )
         );
     }

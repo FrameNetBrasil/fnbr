@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -22,14 +22,14 @@ class RelationGroupController extends MController
     }
     
     public function lookupData(){
-        $model = new mfn\models\RelationGroup();
+        $model = new fnbr\models\RelationGroup();
         $criteria = $model->listAll();
         $this->renderJSON($model->gridDataAsJSON($criteria));
     }
 
     public function modelTree()
     {
-        $structure = MApp::getService('', '', 'structurerelationgroup');
+        $structure = Manager::getAppService('structurerelationgroup');
         if ($this->data->id == '') {
             $children = $structure->listAll($this->data, $this->idLanguage);
             $data = (object)[
@@ -50,12 +50,12 @@ class RelationGroupController extends MController
         }
         $this->data->save = "@structure/relationgroup/newRelationGroup|formNewRelationGroup";
         $this->data->close = "!$('#formNew_dialog').dialog('close');";
-        $this->data->title = _M('new mfn\models\Relation Group');
+        $this->data->title = _M('new fnbr\models\Relation Group');
         $this->render();
     }
     
     public function formUpdateRelationGroup(){
-        $model = new mfn\models\RelationGroup($this->data->id);
+        $model = new fnbr\models\RelationGroup($this->data->id);
         $this->data->object = $model->getData();
         $this->data->save = "@structure/relationgroup/updateRelationGroup|formUpdateRelationGroup";
         $this->data->close = "!$('#formUpdate_dialog').dialog('close');";
@@ -66,7 +66,7 @@ class RelationGroupController extends MController
     public function newRelationGroup()
     {
         try {
-            $model = new mfn\models\RelationGroup();
+            $model = new fnbr\models\RelationGroup();
             $this->data->relationgroup->entry = 'rgp_' . $this->data->relationgroup->entry;
             $model->setData($this->data->relationgroup);
             $model->save();
@@ -79,7 +79,7 @@ class RelationGroupController extends MController
     public function updateRelationGroup()
     {
         try {
-            $model = new mfn\models\RelationGroup($this->data->relationgroup->idRelationGroup);
+            $model = new fnbr\models\RelationGroup($this->data->relationgroup->idRelationGroup);
             $model->updateEntry($this->data->relationgroup->entry);
             $this->renderPrompt('information', 'OK', "structure.editEntry('{$this->data->relationgroup->entry}');");
         } catch (\Exception $e) {

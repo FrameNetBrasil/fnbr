@@ -1,13 +1,13 @@
 <?php
 
-use \mfn\models\Base;
+use fnbr\models\Base;
 
 class UserData extends MMenuBar {
 
     public function __construct() {
         $login = Manager::getLogin();
         parent::__construct('mmenu');
-        $this->setId('mfnUserData');
+        $this->setId('fnbrUserData');
         
         $user = $login->getUser();
         $menuBarItem = new MMenuBarItem(array("id" => "menuLevel", "label" => $user->getUserLevel(), "iconCls" => 'fa fa-user fa16px'));
@@ -21,7 +21,7 @@ class UserData extends MMenuBar {
         $menuBarItem->addControl($menu);
         $this->addControl($menuBarItem);
         
-        $actions = Manager::getActions('mfn');
+        $actions = Manager::getActions('fnbr');
         $menuBarItem = [];
         foreach ($actions as $i => $group) {
             if (($i != 'profile') && ($i != 'language')) {
@@ -39,7 +39,7 @@ class UserData extends MMenuBar {
             $menu = new MMenu(array("id" => "mmenu{$i}"));
             foreach ($groupActions as $j => $action) {
                 if (Manager::checkAccess($action[ACTION_TRANSACTION], $action[ACTION_ACCESS])) {
-                    $handler = Maestro\UI\MAction::isAction($action[ACTION_PATH]) ? $action[ACTION_PATH] : '>' . $action[ACTION_PATH];
+                    $handler = MAction::isAction($action[ACTION_PATH]) ? $action[ACTION_PATH] : '>' . $action[ACTION_PATH];
                     $menuItem = new MMenuItem(array("id" => "menu{$i}{$j}", "text" => _M($action[ACTION_CAPTION]), "action" => $handler, "iconCls" => $action[ACTION_ICON]));
                     $menu->addControl($menuItem);
                 }

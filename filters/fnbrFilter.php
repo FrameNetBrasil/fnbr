@@ -8,7 +8,7 @@ class fnbrFilter extends MFilter {
         $data = Manager::getData();
         if (Manager::isLogged()) {
             $login = Manager::getLogin();
-            $userIdLanguage = $login->getUser()->getConfigData('fnbrIdLanguage');
+            $userIdLanguage = $login->getUser()->getConfigData('mfnIdLanguage');
         }        
         $idLanguage = $data->lang;
         if ($idLanguage == '') {

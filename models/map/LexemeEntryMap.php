@@ -31,8 +31,8 @@ class LexemeEntryMap extends \MBusinessModel {
                 'idLemma' => array('column' => 'idLemma','type' => 'integer'),
             ),
             'associations' => array(
-                'lexeme' => array('toClass' => 'mfn\models\Lexeme', 'cardinality' => 'oneToOne' , 'keys' => 'idLexeme:idLexeme'), 
-                'lemma' => array('toClass' => 'mfn\models\Lemma', 'cardinality' => 'oneToOne' , 'keys' => 'idLemma:idLemma'), 
+                'lexeme' => array('toClass' => 'fnbr\models\Lexeme', 'cardinality' => 'oneToOne' , 'keys' => 'idLexeme:idLexeme'), 
+                'lemma' => array('toClass' => 'fnbr\models\Lemma', 'cardinality' => 'oneToOne' , 'keys' => 'idLemma:idLemma'), 
             )
         );
     }

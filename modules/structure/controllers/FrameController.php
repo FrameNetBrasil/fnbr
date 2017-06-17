@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -19,14 +19,14 @@ class FrameController extends MController
     {
         $this->data->isMaster = Manager::checkAccess('MASTER', A_EXECUTE) ? 'true' : 'false';
         $this->data->isAnno = Manager::checkAccess('ANNO', A_EXECUTE) ? 'true' : 'false';
-        $domain = new mfn\models\Domain();
+        $domain = new fnbr\models\Domain();
         $this->data->domain = $domain->gridDataAsJson($domain->listForSelection(), true);
         $this->render();
     }
 
     public function frameTree()
     {
-        $structure = MApp::getService('', '', 'structureframe');
+        $structure = Manager::getAppService('structureframe');
         if ($this->data->id == '') {
             $children = $structure->listFrames($this->data, $this->idLanguage);
             $data = (object)[
@@ -55,7 +55,7 @@ class FrameController extends MController
     public function newFrame()
     {
         try {
-            $model = new mfn\models\Frame();
+            $model = new fnbr\models\Frame();
             $this->data->frame->entry = 'frm_' . strtolower(str_replace('frm_', '', $this->data->frame->entry));
             $model->setData($this->data->frame);
             $inheritsFromBase = ($this->data->inheritsFromBase == 'on');
@@ -68,7 +68,7 @@ class FrameController extends MController
 
     public function formUpdateFrame()
     {
-        $model = new mfn\models\Frame($this->data->id);
+        $model = new fnbr\models\Frame($this->data->id);
         $this->data->object = $model->getData();
         $this->data->title = 'Frame: ' . $model->getEntry() . '  [' . $model->getName() . ']';
         $this->render();
@@ -77,7 +77,7 @@ class FrameController extends MController
     public function updateFrame()
     {
         try {
-            $model = new mfn\models\Frame($this->data->frame->idFrame);
+            $model = new fnbr\models\Frame($this->data->frame->idFrame);
             $model->updateEntry($this->data->frame->entry);
             $this->renderResponse('ok', 'Frame updated.');
         } catch (\Exception $e) {
@@ -94,7 +94,7 @@ class FrameController extends MController
     public function deleteFrame()
     {
         try {
-            $structure = MApp::getService('', '', 'structureframe');
+            $structure = Manager::getAppService('structureframe');
             $structure->deleteFrame($this->data->id);
             $this->renderResponse('information', 'OK', "!structure.reloadFrame();");
         } catch (\Exception $e) {
@@ -105,7 +105,7 @@ class FrameController extends MController
 
     public function formFrameSemanticType()
     {
-        $model = new mfn\models\Frame($this->data->id);
+        $model = new fnbr\models\Frame($this->data->id);
         $this->data->object = $model->getData();
         $this->data->idEntity = $model->getIdEntity();
         $this->data->form = "formFrameSemanticType";
@@ -116,7 +116,7 @@ class FrameController extends MController
 
     public function formFrameDomain()
     {
-        $model = new mfn\models\Frame($this->data->id);
+        $model = new fnbr\models\Frame($this->data->id);
         $this->data->object = $model->getData();
         $this->data->idFrame = $model->getIdFrame();
         $this->data->form = "formFrameDomain";
@@ -127,7 +127,7 @@ class FrameController extends MController
 
     public function formFrameStatus()
     {
-        $model = new mfn\models\Frame($this->data->id);
+        $model = new fnbr\models\Frame($this->data->id);
         $this->data->object = $model->getData();
         $this->data->idFrame = $model->getIdFrame();
         $this->data->form = "formFrameStatus";
@@ -148,7 +148,7 @@ class FrameController extends MController
     public function formNewFrameElement()
     {
         $this->data->idFrame = $this->data->id;
-        $model = new mfn\models\Frame($this->data->idFrame);
+        $model = new fnbr\models\Frame($this->data->idFrame);
         $this->data->frame = $model->getEntry() . '  [' . $model->getName() . ']';
         $this->data->save = "@structure/frame/newFrameElement|formNewFrameElement";
         $this->data->close = "!$('#formNewFrameElement_dialog').dialog('close');";
@@ -159,7 +159,7 @@ class FrameController extends MController
     public function newFrameElement()
     {
         try {
-            $model = new mfn\models\FrameElement();
+            $model = new fnbr\models\FrameElement();
             $this->data->frameelement->entry = 'fe_' . $this->data->frameelement->entry;
             $model->setData($this->data->frameelement);
             $model->save($this->data->frameelement);
@@ -172,7 +172,7 @@ class FrameController extends MController
 
     public function formUpdateFrameElement()
     {
-        $model = new mfn\models\FrameElement($this->data->id);
+        $model = new fnbr\models\FrameElement($this->data->id);
         $this->data->object = $model->getData();
         $this->data->save = "@structure/frame/updateFrameElement|formUpdateFrameElement";
         $this->data->close = "!$('#formUpdateFrameElement_dialog').dialog('close');";
@@ -183,7 +183,7 @@ class FrameController extends MController
     public function updateFrameElement()
     {
         try {
-            $model = new mfn\models\FrameElement($this->data->frameelement->idFrameElement);
+            $model = new fnbr\models\FrameElement($this->data->frameelement->idFrameElement);
             $model->updateEntry($this->data->frameelement->entry);
             $model->setData($this->data->frameelement);
             $model->save($this->data->frameelement);
@@ -202,7 +202,7 @@ class FrameController extends MController
     public function deleteFrameElement()
     {
         try {
-            $model = new mfn\models\FrameElement($this->data->id);
+            $model = new fnbr\models\FrameElement($this->data->id);
             $model->safeDelete();
             $this->renderPrompt('information', 'FrameElement removed.', "!structure.reloadFrame();");
         } catch (\Exception $e) {
@@ -213,7 +213,7 @@ class FrameController extends MController
     public function formAddConstraintFE()
     {
         $this->data->idFrameElement = $this->data->id;
-        $model = new mfn\models\FrameElement($this->data->idFrameElement);
+        $model = new fnbr\models\FrameElement($this->data->idFrameElement);
         $frame = $model->getFrame();
         $this->data->idFrame = $frame->getIdFrame();
         $this->data->fe = 'FE: ' . $frame->getName() . '.' . $model->getName();
@@ -226,7 +226,7 @@ class FrameController extends MController
     public function addConstraintFE()
     {
         try {
-            $structure = MApp::getService('', '', 'structureframe');
+            $structure = Manager::getAppService('structureframe');
             $structure->addConstraintsFE($this->data);
             $this->renderPrompt('information', 'Constraint added.');
         } catch (\Exception $e) {
@@ -236,7 +236,7 @@ class FrameController extends MController
 
     public function formDeleteConstraintFE()
     {
-        $structure = MApp::getService('', '', 'structureconstraints');
+        $structure = Manager::getAppService('structureconstraints');
         $hasChild = $structure->constraintHasChild($this->data->id);
         if (!$hasChild) {
             $ok = "^structure/frame/deleteConstraintFE/" . $this->data->id;
@@ -260,9 +260,9 @@ class FrameController extends MController
     public function formNewLU()
     {
         $this->data->idFrame = $this->data->id;
-        $model = new mfn\models\Frame($this->data->idFrame);
+        $model = new fnbr\models\Frame($this->data->idFrame);
         $this->data->frame = 'Frame:  ' . $model->getEntry() . '  [' . $model->getName() . ']';
-        //$model = new mfn\models\Lemma();
+        //$model = new fnbr\models\Lemma();
         //$this->data->query = Manager::getAppURL('', 'structure/frame/gridSearchLemmaData');
         $this->data->save = "@structure/frame/newLU|formNewLU";
         $this->data->close = "!$('#formNewLU_dialog').dialog('close');";
@@ -279,14 +279,14 @@ class FrameController extends MController
             if ($this->data->idLanguage == '') {
                 throw new \Exception('Language not informed.');
             }
-            $lemma = new mfn\models\Lemma();
+            $lemma = new fnbr\models\Lemma();
             $result = $lemma->getByNameIdLanguage(mb_strtolower($this->data->lemma), $this->data->idLanguage)->asQuery()->getResult();
             mdump($result);
             if (count($result) == 0) {
                 $createLemma = "!manager.doAction('@" . Manager::getApp() . "/structure/frame/formNewLemma|formNewLU');$('#formNewLU_dialog').dialog('close');";
                 $this->renderPrompt('confirmation', "Lemma [{$this->data->lemma}] doesn't exist. Create it?", $createLemma, "!$('#formNewLU_dialog').dialog('close');");
             } else {
-                $lu = new mfn\models\LU();
+                $lu = new fnbr\models\LU();
                 $this->data->lu->idLemma = $result[0]['idLemma'];
                 $this->data->lu->active = '1';
                 $this->data->lu->name = $this->data->lemma;
@@ -305,7 +305,7 @@ class FrameController extends MController
 
     public function formUpdateLU()
     {
-        $model = new mfn\models\LU($this->data->id);
+        $model = new fnbr\models\LU($this->data->id);
         $this->data->object = $model->getData();
         $this->data->idFrame = $this->data->object->idFrame; // for lookupFE
         $this->data->save = "@structure/frame/updateLU|formUpdateLU";
@@ -318,7 +318,7 @@ class FrameController extends MController
     public function updateLU()
     {
         try {
-            $model = new mfn\models\LU($this->data->lu->idLU);
+            $model = new fnbr\models\LU($this->data->lu->idLU);
             //$model->setData();
             $model->save($this->data->lu);
             $this->renderPrompt('information', 'OK');
@@ -336,7 +336,7 @@ class FrameController extends MController
     public function deleteLU()
     {
         try {
-            $model = new mfn\models\LU($this->data->id);
+            $model = new fnbr\models\LU($this->data->id);
             $model->delete();
             $this->renderPrompt('information', 'LU removed.', "!structure.reloadFrameParent();");
         } catch (\Exception $e) {
@@ -355,7 +355,7 @@ class FrameController extends MController
     public function deleteSubCorpus()
     {
         try {
-            $model = new mfn\models\SubCorpus($this->data->id);
+            $model = new fnbr\models\SubCorpus($this->data->id);
             if ($model->hasAnnotationSet()) {
                 $ok = "^structure/frame/confDeleteSubCorpus/" . $this->data->id;
                 $this->renderPrompt('confirmation', 'Warning: Related AnnotationSets will be removed! Continue?', $ok);
@@ -371,7 +371,7 @@ class FrameController extends MController
     public function confDeleteSubCorpus()
     {
         try {
-            $model = new mfn\models\SubCorpus($this->data->id);
+            $model = new fnbr\models\SubCorpus($this->data->id);
             $model->deleteForced();
             $this->renderPrompt('information', 'SubCorpus removed.', "!structure.reloadFrameParent();");
         } catch (\Exception $e) {
@@ -382,7 +382,7 @@ class FrameController extends MController
     public function formAddConstraintLU()
     {
         $this->data->idLU = $this->data->id;
-        $model = new mfn\models\LU($this->data->idLU);
+        $model = new fnbr\models\LU($this->data->idLU);
         $this->data->lu = 'LU: ' . $model->getName();
         $this->data->save = "@structure/frame/addConstraintLU|formAddConstraintLU";
         $this->data->close = "!$('#formAddConstraintLU_dialog').dialog('close');";
@@ -393,7 +393,7 @@ class FrameController extends MController
     public function addConstraintLU()
     {
         try {
-            $structure = MApp::getService('', '', 'structureframe');
+            $structure = Manager::getAppService('structureframe');
             $structure->addConstraintsLU($this->data);
             $this->renderPrompt('information', 'Constraint added.');
         } catch (\Exception $e) {
@@ -403,7 +403,7 @@ class FrameController extends MController
 
     public function formDeleteConstraintLU()
     {
-        $structure = MApp::getService('', '', 'structureconstraints');
+        $structure = Manager::getAppService('structureconstraints');
         $ok = "^structure/frame/deleteConstraintLU/" . $this->data->id;
         $this->renderPrompt('confirmation', 'Warning: Constraint will be deleted! Continue?', $ok);
     }
@@ -412,7 +412,7 @@ class FrameController extends MController
     {
         try {
             list($idLU, $idEntityConstraint) = explode('_', $this->data->id);
-            $model = new mfn\models\Constraint();
+            $model = new fnbr\models\Constraint();
             $model->deleteConstraintLU($idLU, $idEntityConstraint);
             $this->renderPrompt('information', 'Constraint deleted.', "!structure.reloadFrameParent();");
         } catch (\Exception $e) {
@@ -422,7 +422,7 @@ class FrameController extends MController
 
     public function gridSearchLemmaData()
     {
-        $model = new mfn\models\Lemma();
+        $model = new fnbr\models\Lemma();
         $lemma = str_replace('+', ' ', $this->data->lemma);
         $criteria = $model->listForSearch($lemma);
         $this->renderJSON($model->gridDataAsJSON($criteria));
@@ -439,7 +439,7 @@ class FrameController extends MController
         } else {
             $this->data->save = "!saveLemma();";
             $this->data->close = "!$('#formNewLemma_dialog').dialog('close')";
-            $dataService = MApp::getService('', '', 'data');
+            $dataService = Manager::getAppService('data');
             $this->data->POS = $dataService->getPOS();
             $lemmaPOS = strtoupper(substr($this->data->lemma, strpos($this->data->lemma, '.') + 1));
             $this->data->idPOS = array_search($lemmaPOS, $this->data->POS);
@@ -451,9 +451,9 @@ class FrameController extends MController
     public function newLemma()
     {
         try {
-            $dataService = MApp::getService('', '', 'data');
+            $dataService = Manager::getAppService('data');
             $this->data->POS = $dataService->getPOS();
-            $model = new mfn\models\Lemma();
+            $model = new fnbr\models\Lemma();
             $idLU = $model->saveForLU($this->data);
             $url = Manager::getURL("structure/frame/formUpdateLU") . "/" . $idLU;
             $this->renderPrompt('information', 'OK', "!$('#formNewLemma_dialog').dialog('close'); structure.reloadFrame();manager.doGet('{$url}','structureCenterPane');");
@@ -473,7 +473,7 @@ class FrameController extends MController
         } else {
             $this->data->save = "@structure/frame/newLexeme|formNewLexeme";
             $this->data->close = "!$('#formNewLexeme_dialog').dialog('close')";
-            $dataService = MApp::getService('', '', 'data');
+            $dataService = Manager::getAppService('data');
             $this->data->language = $dataService->getLanguage()[$this->data->lemma->idLanguage];
             $this->data->pos = $dataService->getPOS();
             $this->render();
@@ -486,7 +486,7 @@ class FrameController extends MController
             if ($this->data->lexeme->idPOS == '') {
                 throw new \Exception('No POS informed.');
             } else {
-                $model = new mfn\models\Lexeme();
+                $model = new fnbr\models\Lexeme();
                 $model->save($this->data->lexeme);
                 $this->renderPrompt('information', 'OK', "!$('#formNewLexeme_dialog').dialog('close'); $('#gridLexema{$this->data->lexeme->name}').datagrid('reload');");
             }
@@ -500,7 +500,7 @@ class FrameController extends MController
     {
         try {
             $this->data->idFrame = $this->data->id;
-            $model = new mfn\models\Template();
+            $model = new fnbr\models\Template();
             $model->createFromFrame($this->data->idFrame);
             $this->renderPrompt('information', 'Template [' . $model->getName() . '] was created.');
         } catch (\Exception $e) {
@@ -511,7 +511,7 @@ class FrameController extends MController
     public function newFrameRelations()
     {
         try {
-            $model = new mfn\models\Frame();
+            $model = new fnbr\models\Frame();
             $this->data->frame->entry = 'frm_' . strtolower(str_replace('frm_', '', $this->data->frame->entry));
             $model->setData($this->data->frame);
             $inheritsFromBase = ($this->data->inheritsFromBase == 'on');
@@ -543,7 +543,7 @@ class FrameController extends MController
     {
         try {
             $files = \Maestro\Utils\Mutil::parseFiles('uploadFile');
-            $model = new mfn\models\Corpus($this->data->idCorpus);
+            $model = new fnbr\models\Corpus($this->data->idCorpus);
             if ($this->data->tags == 'N') {
                 $result = $model->uploadSentences($this->data, $files[0]);
             } else {

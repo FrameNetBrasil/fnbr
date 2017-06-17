@@ -20,7 +20,7 @@ class FrameElementController extends MController {
     }
 
     public function lookupData(){
-        $model = new mfn\models\FrameElement();
+        $model = new fnbr\models\FrameElement();
         $criteria = $model->listForLookup($this->data->id);
         $this->renderJSON($model->gridDataAsJSON($criteria));
     }
@@ -62,7 +62,7 @@ class FrameElementController extends MController {
     }
 
     public function formFind() {
-        $FrameElement= new mfn\models\FrameElement($this->data->id);
+        $FrameElement= new fnbr\models\FrameElement($this->data->id);
         $filter->idFrameElement = $this->data->idFrameElement;
         $this->data->query = $FrameElement->listByFilter($filter)->asQuery();
         $this->render();
@@ -79,7 +79,7 @@ class FrameElementController extends MController {
     }
 
     public function formUpdate() {
-        $FrameElement= new mfn\models\FrameElement($this->data->id);
+        $FrameElement= new fnbr\models\FrameElement($this->data->id);
         $this->data->FrameElement = $FrameElement->getData();
         
         $this->data->action = '@FrameElement/save/' .  $this->data->id;
@@ -87,28 +87,28 @@ class FrameElementController extends MController {
     }
 
     public function formDelete() {
-        $FrameElement = new mfn\models\FrameElement($this->data->id);
+        $FrameElement = new fnbr\models\FrameElement($this->data->id);
         $ok = '>FrameElement/delete/' . $FrameElement->getId();
         $cancelar = '>FrameElement/formObject/' . $FrameElement->getId();
         $this->renderPrompt('confirmation', "Confirma remoção do FrameElement [{$model->getDescription()}] ?", $ok, $cancelar);
     }
 
     public function lookup() {
-        $model = new mfn\models\FrameElement();
+        $model = new fnbr\models\FrameElement();
         $filter->idFrameElement = $this->data->idFrameElement;
         $this->data->query = $model->listByFilter($filter)->asQuery();
         $this->render();
     }
 
     public function save() {
-            $FrameElement = new mfn\models\FrameElement($this->data->FrameElement);
+            $FrameElement = new fnbr\models\FrameElement($this->data->FrameElement);
             $FrameElement->save();
             $go = '>FrameElement/formObject/' . $FrameElement->getId();
             $this->renderPrompt('information','OK',$go);
     }
 
     public function delete() {
-            $FrameElement = new mfn\models\FrameElement($this->data->id);
+            $FrameElement = new fnbr\models\FrameElement($this->data->id);
             $FrameElement->delete();
             $go = '>FrameElement/formFind';
             $this->renderPrompt('information',"FrameElement [{$this->data->idFrameElement}] removido.", $go);

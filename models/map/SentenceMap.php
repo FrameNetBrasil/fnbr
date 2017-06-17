@@ -31,10 +31,10 @@ class SentenceMap extends \MBusinessModel {
                 'idLanguage' => array('column' => 'idLanguage','type' => 'integer'),
             ),
             'associations' => array(
-                'paragraph' => array('toClass' => 'mfn\models\Paragraph', 'cardinality' => 'oneToOne' , 'keys' => 'idParagraph:idParagraph'), 
-                'language' => array('toClass' => 'mfn\models\Language', 'cardinality' => 'oneToOne' , 'keys' => 'idLanguage:idLanguage'), 
-                'annotationsets' => array('toClass' => 'mfn\models\AnnotationSet', 'cardinality' => 'oneToMany' , 'keys' => 'idSentence:idSentence'), 
-                'timelines' => array('toClass' => 'mfn\models\Timeline', 'cardinality' => 'oneToMany' , 'keys' => 'timeline:timeline'), 
+                'paragraph' => array('toClass' => 'fnbr\models\Paragraph', 'cardinality' => 'oneToOne' , 'keys' => 'idParagraph:idParagraph'), 
+                'language' => array('toClass' => 'fnbr\models\Language', 'cardinality' => 'oneToOne' , 'keys' => 'idLanguage:idLanguage'), 
+                'annotationsets' => array('toClass' => 'fnbr\models\AnnotationSet', 'cardinality' => 'oneToMany' , 'keys' => 'idSentence:idSentence'), 
+                'timelines' => array('toClass' => 'fnbr\models\Timeline', 'cardinality' => 'oneToMany' , 'keys' => 'timeline:timeline'), 
             )
         );
     }

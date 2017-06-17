@@ -31,9 +31,9 @@ class ConstructionElementMap extends \MBusinessModel {
                 'idColor' => array('column' => 'idColor','type' => 'integer'),
             ),
             'associations' => array(
-                'entity' => array('toClass' => 'mfn\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity:idEntity'), 
-                'color' => array('toClass' => 'mfn\models\Color', 'cardinality' => 'oneToOne' , 'keys' => 'idColor:idColor'),
-                'entries' => array('toClass' => 'mfn\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'),
+                'entity' => array('toClass' => 'fnbr\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity:idEntity'), 
+                'color' => array('toClass' => 'fnbr\models\Color', 'cardinality' => 'oneToOne' , 'keys' => 'idColor:idColor'),
+                'entries' => array('toClass' => 'fnbr\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'),
             )
         );
     }

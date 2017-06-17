@@ -7,7 +7,7 @@ class StructureCxnService extends MService
 
     public function listCxns($data, $idLanguage = '')
     {
-        $cxn = new mfn\models\Construction();
+        $cxn = new fnbr\models\Construction();
         $filter = (object)['ce' => $data->ce, 'cxn' => $data->cxn, 'active' => $data->active, 'idLanguage' => $idLanguage];
         $cxns = $cxn->listByFilter($filter)->asQuery()->getResult(\FETCH_ASSOC);
         $result = array();
@@ -25,7 +25,7 @@ class StructureCxnService extends MService
     public function listCEs($idCxn, $idLanguage)
     {
         $result = array();
-        $cxn = new mfn\models\Construction($idCxn);
+        $cxn = new fnbr\models\Construction($idCxn);
         $ces = $cxn->listCE()->asQuery()->getResult();
         foreach ($ces as $ce) {
             $node = array();
@@ -56,35 +56,35 @@ class StructureCxnService extends MService
 
     public function listConstraintsCE($idConstructionElement, $idLanguage)
     {
-        $service = MApp::getService('', '', 'structureconstraints');
+        $service = Manager::getAppService('structureconstraints');
         $result = $service->listConstraintsCE($idConstructionElement);
         return $result;
     }
 
     public function listConstraintsCN($idConstraint, $idLanguage)
     {
-        $service = MApp::getService('', '', 'structureconstraints');
+        $service = Manager::getAppService('structureconstraints');
         $result = $service->listConstraintsCN($idConstraint);
         return $result;
     }
 
     public function listConstraintsCNCN($idConstraint, $idLanguage)
     {
-        $service = MApp::getService('', '', 'structureconstraints');
+        $service = Manager::getAppService('structureconstraints');
         $result = $service->listConstraintsCNCN($idConstraint);
         return $result;
     }
 
     public function listConstraintsCX($idConstruction, $idLanguage)
     {
-        $service = MApp::getService('', '', 'structureconstraints');
+        $service = Manager::getAppService('structureconstraints');
         $result = $service->listConstraintsCX($idConstruction);
         return $result;
     }
 
     public function listSubCorpus($idLU)
     {
-        $sc = new mfn\models\ViewSubCorpusLU();
+        $sc = new fnbr\models\ViewSubCorpusLU();
         $scs = $sc->listByLU($idLU)->asQuery()->getResult();
         foreach ($scs as $sc) {
             $node = array();
@@ -99,14 +99,14 @@ class StructureCxnService extends MService
 
     public function getSubCorpusTitle($idSubCorpus, $idLanguage, $isCxn)
     {
-        $sc = $isCxn ? new mfn\models\ViewSubCorpusCxn() : new mfn\models\ViewSubCorpusLU();
+        $sc = $isCxn ? new fnbr\models\ViewSubCorpusCxn() : new fnbr\models\ViewSubCorpusLU();
         $title = $sc->getTitle($idSubCorpus, $idLanguage);
         return $title;
     }
 
     public function getDocumentTitle($idDocument, $idLanguage)
     {
-        $doc = new mfn\models\Document();
+        $doc = new fnbr\models\Document();
         $filter = (object)['idDocument' => $idDocument];
         $result = $doc->listByFilter($filter)->asQuery()->getResult();
         return 'Document:' . $result[1];
@@ -134,7 +134,7 @@ class StructureCxnService extends MService
 
     public function listAnnotationSet($idSubCorpus)
     {
-        $as = new mfn\models\ViewAnnotationSet();
+        $as = new fnbr\models\ViewAnnotationSet();
         $sentences = $as->listBySubCorpus($idSubCorpus)->asQuery()->getResult();
         $annotation = $as->listFECEBySubCorpus($idSubCorpus);
         $result = array();
@@ -168,7 +168,7 @@ class StructureCxnService extends MService
             "nis" => NULL,
         );
 
-        $as = new mfn\models\AnnotationSet($idAnnotationSet);
+        $as = new fnbr\models\AnnotationSet($idAnnotationSet);
 
         // get words/chars
         $wordsChars = $as->getWordsChars($idSentence);
@@ -313,7 +313,7 @@ class StructureCxnService extends MService
         $idSentence = $params->idSentence;
         $idAnnotationSet = $params->idAnnotationSet;
 
-        $as = new mfn\models\AnnotationSet($idAnnotationSet);
+        $as = new fnbr\models\AnnotationSet($idAnnotationSet);
         $result = array();
         $queryLayersData = $as->getLayersData($idSentence);
         $unorderedRows = $queryLayersData->getResult();
@@ -408,27 +408,27 @@ class StructureCxnService extends MService
 
     public function putLayers($layers)
     {
-        $annotationSet = new mfn\models\AnnotationSet();
+        $annotationSet = new fnbr\models\AnnotationSet();
         $annotationSet->putLayers($layers);
     }
 
     public function addFELayer($idAnnotationSet)
     {
-        $annotationSet = new mfn\models\AnnotationSet($idAnnotationSet);
+        $annotationSet = new fnbr\models\AnnotationSet($idAnnotationSet);
         $annotationSet->addFELayer();
         $this->render();
     }
 
     public function delFELayer($idAnnotationSet)
     {
-        $annotationSet = new mfn\models\AnnotationSet($idAnnotationSet);
+        $annotationSet = new fnbr\models\AnnotationSet($idAnnotationSet);
         $annotationSet->delFELayer();
         $this->render();
     }
 
     public function listCnx($cnx = '', $idLanguage = '')
     {
-        $construction = new mfn\models\Construction();
+        $construction = new fnbr\models\Construction();
         $filter = (object)['cnx' => $cnx, 'idLanguage' => $idLanguage];
         $constructions = $construction->listByFilter($filter)->asQuery()->chunkResult('idConstruction', 'name');
         $result = array();
@@ -444,7 +444,7 @@ class StructureCxnService extends MService
 
     public function listSubCorpusCnx($idCnx)
     {
-        $sc = new mfn\models\SubCorpus();
+        $sc = new fnbr\models\SubCorpus();
         $scs = $sc->listByCnx($idCnx)->asQuery()->getResult();
         foreach ($scs as $sc) {
             $node = array();
@@ -458,14 +458,14 @@ class StructureCxnService extends MService
 
     public function headerMenu($wordform)
     {
-        $wf = new mfn\models\WordForm();
+        $wf = new fnbr\models\WordForm();
         $lus = $wf->listLUByWordForm($wordform);
         return json_encode($lus);
     }
 
     public function addManualSubcorpus($data)
     {
-        $sc = new mfn\models\SubCorpus();
+        $sc = new fnbr\models\SubCorpus();
         if ($data->idLU != '') {
             $sc->addManualSubcorpusLU($data);
         } else {
@@ -475,7 +475,7 @@ class StructureCxnService extends MService
 
     public function cnxGridData()
     {
-        $cnx = new mfn\models\Construction();
+        $cnx = new fnbr\models\Construction();
         $criteria = $cnx->listAll();
         $data = $cnx->gridDataAsJSON($criteria);
         return $data;
@@ -483,7 +483,7 @@ class StructureCxnService extends MService
 
     public function listCorpus($corpus = '', $idLanguage = '')
     {
-        $corpus = new mfn\models\Corpus();
+        $corpus = new fnbr\models\Corpus();
         $filter = (object)['corpus' => $corpus, 'idLanguage' => $idLanguage];
         $corpora = $corpus->listByFilter($filter)->asQuery()->chunkResult('idCorpus', 'name');
         $result = array();
@@ -499,7 +499,7 @@ class StructureCxnService extends MService
 
     public function listCorpusDocument($idCorpus)
     {
-        $doc = new mfn\models\Document();
+        $doc = new fnbr\models\Document();
         $docs = $doc->listByCorpus($idCorpus)->asQuery()->getResult();
         foreach ($docs as $doc) {
             if ($doc[0]) {
@@ -516,10 +516,10 @@ class StructureCxnService extends MService
     public function deleteCxn($idCxn)
     {
         mdump('deleteCxn ' . $idCxn);
-        $cxn = new mfn\models\Construction($idCxn);
+        $cxn = new fnbr\models\Construction($idCxn);
         $transaction = $cxn->beginTransaction();
         try {
-            $cxnElement = new mfn\models\ConstructionElement();
+            $cxnElement = new fnbr\models\ConstructionElement();
             $filter = (object)['idConstruction' => $idCxn];
             $ces = $cxnElement->listByFilter($filter)->asQuery()->getResult();
             foreach ($ces as $ce) {
@@ -537,7 +537,7 @@ class StructureCxnService extends MService
     public function deleteCxnElement($idCE)
     {
         mdump('deleteCE ' . $idCE);
-        $ce = new mfn\models\ConstructionElement($idCE);
+        $ce = new fnbr\models\ConstructionElement($idCE);
         $transaction = $ce->beginTransaction();
         try {
             $ce->delete();
@@ -556,15 +556,15 @@ class StructureCxnService extends MService
                 $constraint = Base::createEntity('CN', 'con');
                 Base::createEntityRelation($constraint->getIdEntity(), $data->relation, $data->idEntityA1, $data->idEntityA2);
                 $constraint2 = Base::createEntity('CN', 'con');
-                $cxn = new mfn\models\Construction($data->idConstruction);
+                $cxn = new fnbr\models\Construction($data->idConstruction);
                 Base::createEntityRelation($constraint2->getIdEntity(), 'rel_constraint_constraint', $cxn->getIdEntity(), $constraint->getIdEntity());
             }
             if ($data->idEntityCE != '') {
                 $constraint = Base::createEntity('CN', 'con');
-                $frame = new mfn\models\Frame($data->idFrame);
+                $frame = new fnbr\models\Frame($data->idFrame);
                 Base::createEntityRelation($constraint->getIdEntity(), $data->relationCEFrame, $data->idEntityCE, $frame->getIdEntity());
                 $constraint2 = Base::createEntity('CN', 'con');
-                $cxn = new mfn\models\Construction($data->idConstruction);
+                $cxn = new fnbr\models\Construction($data->idConstruction);
                 Base::createEntityRelation($constraint2->getIdEntity(), 'rel_constraint_constraint', $cxn->getIdEntity(), $constraint->getIdEntity());
             }
             $transaction->commit();
@@ -580,32 +580,32 @@ class StructureCxnService extends MService
             $transaction = Manager::getDatabase(Manager::getConf('mfn.db'))->beginTransaction();
             if ($data->idConstruction != '') {
                 $constraint = Base::createEntity('CN', 'con');
-                $ce = new mfn\models\ConstructionElement($data->idConstructionElement);
-                $cxn = new mfn\models\Construction($data->idConstruction);
+                $ce = new fnbr\models\ConstructionElement($data->idConstructionElement);
+                $cxn = new fnbr\models\Construction($data->idConstruction);
                 Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_cxn', $ce->getIdEntity(), $cxn->getIdEntity());
             }
             if ($data->idFrame != '') {
                 $constraint = Base::createEntity('CN', 'con');
-                $ce = new mfn\models\ConstructionElement($data->idConstructionElement);
-                $frame = new mfn\models\Frame($data->idFrame);
+                $ce = new fnbr\models\ConstructionElement($data->idConstructionElement);
+                $frame = new fnbr\models\Frame($data->idFrame);
                 Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_frame', $ce->getIdEntity(), $frame->getIdEntity());
             }
             if ($data->idFrameFamily != '') {
                 $constraint = Base::createEntity('CN', 'con');
-                $ce = new mfn\models\ConstructionElement($data->idConstructionElement);
-                $frame = new mfn\models\Frame($data->idFrameFamily);
+                $ce = new fnbr\models\ConstructionElement($data->idConstructionElement);
+                $frame = new fnbr\models\Frame($data->idFrameFamily);
                 Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_framefamily', $ce->getIdEntity(), $frame->getIdEntity());
             }
             if ($data->idConstructionBefore != '') {
                 $constraint = Base::createEntity('CN', 'con');
-                $ce = new mfn\models\ConstructionElement($data->idConstructionElement);
-                $ceBefore = new mfn\models\ConstructionElement($data->idConstructionBefore);
+                $ce = new fnbr\models\ConstructionElement($data->idConstructionElement);
+                $ceBefore = new fnbr\models\ConstructionElement($data->idConstructionBefore);
                 Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_before', $ce->getIdEntity(), $ceBefore->getIdEntity());
             }
             if ($data->idConstructionMeets != '') {
                 $constraint = Base::createEntity('CN', 'con');
-                $ce = new mfn\models\ConstructionElement($data->idConstructionElement);
-                $ceMeets = new mfn\models\ConstructionElement($data->idConstructionMeets);
+                $ce = new fnbr\models\ConstructionElement($data->idConstructionElement);
+                $ceMeets = new fnbr\models\ConstructionElement($data->idConstructionMeets);
                 Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_meets', $ce->getIdEntity(), $ceMeets->getIdEntity());
             }
             $transaction->commit();
@@ -622,27 +622,27 @@ class StructureCxnService extends MService
             $transaction = Manager::getDatabase(Manager::getConf('mfn.db'))->beginTransaction();
             if ($data->idConstructionElement != '') {
                 $constraint = Base::createEntity('CN', 'con');
-                $cn = new mfn\models\Constraint($data->idConstraint);
-                $ce = new mfn\models\ConstructionElement($data->idConstructionElement);
+                $cn = new fnbr\models\Constraint($data->idConstraint);
+                $ce = new fnbr\models\ConstructionElement($data->idConstructionElement);
                 Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_element', $cn->getId(), $ce->getIdEntity());
             }
             if ($data->idConstruction != '') {
                 $constraint = Base::createEntity('CN', 'con');
-                $cn = new mfn\models\Constraint($data->idConstraint);
-                $cxn = new mfn\models\Construction($data->idConstruction);
+                $cn = new fnbr\models\Constraint($data->idConstraint);
+                $cxn = new fnbr\models\Construction($data->idConstruction);
                 Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_cxn', $cn->getId(), $cxn->getIdEntity());
             }
             if ($data->idFrame != '') {
                 $constraint = Base::createEntity('CN', 'con');
-                $cn = new mfn\models\Constraint($data->idConstraint);
-                $frame = new mfn\models\Frame($data->idFrame);
+                $cn = new fnbr\models\Constraint($data->idConstraint);
+                $frame = new fnbr\models\Frame($data->idFrame);
                 //Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_frame', $cn->getId(), $frame->getIdEntity());
                 Base::createEntityRelation($constraint->getIdEntity(), 'rel_evokes', $cn->getId(), $frame->getIdEntity());
             }
             if ($data->idFrameFamily != '') {
                 $constraint = Base::createEntity('CN', 'con');
-                $cn = new mfn\models\Constraint($data->idConstraint);
-                $frame = new mfn\models\Frame($data->idFrameFamily);
+                $cn = new fnbr\models\Constraint($data->idConstraint);
+                $frame = new fnbr\models\Frame($data->idFrameFamily);
                 Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_framefamily', $cn->getId(), $frame->getIdEntity());
             }
             $transaction->commit();

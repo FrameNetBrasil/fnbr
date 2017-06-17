@@ -1,19 +1,8 @@
 <?php
 
-/**
- * $_comment
- *
- * @category   Maestro
- * @package    UFJF
- * @subpackage $_package
- * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version    
- * @since      
- */
 use fnbr\models\Base,
-    mfn\models\LU,
-    auth\models\User;
+    fnbr\models\LU,
+    fnbr\auth\models\User;
 
 class UserController extends MController {
 
@@ -23,17 +12,17 @@ class UserController extends MController {
     }
 
     public function gridData() {
-        $model = new auth\models\User();
+        $model = new fnbr\auth\models\User();
         $criteria = $model->listForGrid($this->data->filter);
         $this->renderJSON($model->gridDataAsJSON($criteria));
     }
 
     public function formObject() {
-        $model = new auth\models\User($this->data->id);
+        $model = new fnbr\auth\models\User($this->data->id);
         $this->data->forUpdate = ($this->data->id != '');
         $this->data->object = $model->getData();
         $this->data->object->userLevel = $model->getUserLevel();
-        $this->data->title = $this->data->forUpdate ? $model->getDescription() : _M("new auth\models\User");
+        $this->data->title = $this->data->forUpdate ? $model->getDescription() : _M("new fnbr\auth\models\User");
         $this->data->userLevel = Base::userLevel();
         $this->data->save = "@auth/user/save/" . $model->getId() . '|formObject';
         $this->data->delete = "@auth/user/delete/" . $model->getId() . '|formObject';
@@ -41,14 +30,14 @@ class UserController extends MController {
     }
 
     public function formConstraintsLU() {
-        $model = new auth\models\User($this->data->id);
+        $model = new fnbr\auth\models\User($this->data->id);
         $this->data->title = $model->getLogin() . ' :: Constraints_LU';
         $this->data->save = "@auth/user/saveConstraintsLU/" . $model->getId() . '|formConstraintsLU';
         $this->render();
     }
 
     public function formPreferences() {
-        $user = new auth\models\User($this->data->id);
+        $user = new fnbr\auth\models\User($this->data->id);
         $this->data->title = $user->getLogin() . ' :: Preferences';
         $this->data->save = "@auth/user/savePreferences|formPreferences";
         $userLevel = $user->getUserLevel();
@@ -81,7 +70,7 @@ class UserController extends MController {
 
     public function save() {
         try {
-            $model = new auth\models\User($this->data->id);
+            $model = new fnbr\auth\models\User($this->data->id);
             $model->setData($this->data->user);
             $model->save();
             $model->setUserLevel($this->data->user->userLevel);
@@ -93,7 +82,7 @@ class UserController extends MController {
 
     public function delete() {
         try {
-            $model = new auth\models\User($this->data->id);
+            $model = new fnbr\auth\models\User($this->data->id);
             $model->delete();
             $go = "!$('#formObject_dialog').dialog('close');";
             $this->renderPrompt('information', _M("Record [%s] removed.", $model->getDescription()), $go);
@@ -104,9 +93,9 @@ class UserController extends MController {
 
     public function getConstraintsLU() {
         $idUser = $this->data->id;
-        $user = new auth\models\User($idUser);
+        $user = new fnbr\auth\models\User($idUser);
         $lus = $user->getConfigData('mfnConstraintsLU');
-        $lu = new mfn\models\LU();
+        $lu = new fnbr\models\LU();
         if (is_array($lus) && count($lus)) {
             $result = $lu->listForConstraint($lus)->asQuery()->getResult();
             foreach ($result as $row) {
@@ -121,7 +110,7 @@ class UserController extends MController {
 
     public function saveConstraintsLU() {
         try {
-            $user = new auth\models\User($this->data->user->idUser);
+            $user = new fnbr\auth\models\User($this->data->user->idUser);
             $lus = $user->getConfigData('mfnConstraintsLU');
             foreach ($this->data->gridfieldlu->listLU as $lu) {
                 $lus[] = $lu->idLU;
@@ -132,7 +121,7 @@ class UserController extends MController {
             if ($userLevel == 'BEGINNER') {
                 $idSupervisor = $user->getConfigData('mfnJuniorUser');
                 if ($idSupervisor != '') {
-                    $supervisor = new auth\models\User($idSupervisor);
+                    $supervisor = new fnbr\auth\models\User($idSupervisor);
                     $lus = $supervisor->getConfigData('mfnConstraintsLU');
                     foreach ($this->data->gridfieldlu->listLU as $lu) {
                         $lus[] = $lu->idLU;
@@ -148,7 +137,7 @@ class UserController extends MController {
 
     public function savePreferences() {
         try {
-            $user = new auth\models\User($this->data->user->idUser);
+            $user = new fnbr\auth\models\User($this->data->user->idUser);
             $userLevel = $this->data->user->level;
             if ($userLevel == 'BEGINNER') {
                 $user->setConfigData('mfnJuniorUser', $this->data->idJunior);
@@ -166,7 +155,7 @@ class UserController extends MController {
 
     public function resetPassword() {
         try {
-            $user = new auth\models\User($this->data->id);
+            $user = new fnbr\auth\models\User($this->data->id);
             $user->resetPassword();
             $this->renderPrompt('information', 'Ok');
         } catch (\Exception $e) {

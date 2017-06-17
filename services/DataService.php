@@ -9,24 +9,24 @@ class DataService extends MService
 
     public function getLanguage()
     {
-        $language = new mfn\models\Language();
+        $language = new fnbr\models\Language();
         return $language->listForCombo()->asQuery()->chunkResult('idLanguage', 'language');
     }
 
     public function getPOS()
     {
-        $pos = new mfn\models\POS();
+        $pos = new fnbr\models\POS();
         return $pos->listForCombo()->asQuery()->chunkResult('idPOS', 'name');
     }
 
     public function exportFramesToJSON($idFrames)
     {
-        $frameModel = new mfn\models\Frame();
+        $frameModel = new fnbr\models\Frame();
         $frames = $frameModel->listForExport($idFrames)->asQuery()->getResult();
-        $feModel = new mfn\models\FrameElement();
-        $entry = new mfn\models\Entry();
+        $feModel = new fnbr\models\FrameElement();
+        $entry = new fnbr\models\Entry();
         foreach ($frames as $i => $frame) {
-            $entity = new mfn\models\Entity($frame['idEntity']);
+            $entity = new fnbr\models\Entity($frame['idEntity']);
             $frames[$i]['entity'] = [
                 'idEntity' => $entity->getId(),
                 'alias' => $entity->getAlias(),
@@ -37,7 +37,7 @@ class DataService extends MService
             $fes = $feModel->listForExport($frame['idFrame'])->asQuery()->getResult();
             foreach ($fes as $j => $fe) {
                 $frames[$i]['fes'][$j] = $fe;
-                $entityFe = new mfn\models\Entity($fe['idEntity']);
+                $entityFe = new fnbr\models\Entity($fe['idEntity']);
                 $frames[$i]['fes'][$j]['entity'] = [
                     'idEntity' => $entityFe->getId(),
                     'alias' => $entityFe->getAlias(),
@@ -50,7 +50,7 @@ class DataService extends MService
                 $frames[$i]['fes'][$j]['excludes'] = $exclude;
                 $requires = $feModel->listRequires($fe['idFrameElement'])->asQuery()->getResult();
                 $frames[$i]['fes'][$j]['requires'] = $requires;
-                $color = new mfn\models\Color($fe['idColor']);
+                $color = new fnbr\models\Color($fe['idColor']);
                 $frames[$i]['fes'][$j]['color'] = [
                     'name' => $color->getName(),
                     'rgbFg' => $color->getRgbFg(),
@@ -73,10 +73,10 @@ class DataService extends MService
     public function importFramesFromJSON($json)
     {
         $frames = json_decode($json);
-        $frame = new mfn\models\Frame();
-        $fe = new mfn\models\FrameElement();
-        $entity = new mfn\models\Entity();
-        $entry = new mfn\models\Entry();
+        $frame = new fnbr\models\Frame();
+        $fe = new fnbr\models\FrameElement();
+        $entity = new fnbr\models\Entity();
+        $entry = new fnbr\models\Entry();
         $transaction = $frame->beginTransaction();
         try {
             foreach ($frames as $frameData) {
@@ -149,7 +149,7 @@ class DataService extends MService
                 $words[$word] = $word;
             }
         }
-        $wf = new mfn\models\WordForm();
+        $wf = new fnbr\models\WordForm();
         $output = "";
         $i = 0;
         foreach ($words as $word) {
@@ -205,7 +205,7 @@ class DataService extends MService
     public function exportCxnToFS()
     {
         $fs = '';
-        $construction = new mfn\models\Construction();
+        $construction = new fnbr\models\Construction();
         $cxns = $construction->listAll()->orderBy('entry')->asQuery()->getResult();
         foreach ($cxns as $cxn) {
             $idConstruction = $cxn['idConstruction'];

@@ -1,18 +1,6 @@
 <?php
 
-/**
- * 
- *
- * @category   Maestro
- * @package    UFJF
- * @subpackage mfn
- * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version    
- * @since      
- */
-
-namespace auth\models;
+namespace fnbr\auth\models;
 
 use fnbr\models\Base;
 
@@ -23,8 +11,8 @@ class User extends map\UserMap {
             'log' => array(),
             'validators' => array(
                 'login' => array('notnull'),
-                'pwd' => array('notnull'),
-                'passMD5' => array('notnull'),
+//                'pwd' => array('notnull'),
+//                'passMD5' => array('notnull'),
                 'theme' => array('notnull'),
                 'active' => array('notnull'),
                 'idPerson' => array('notnull'),
@@ -248,5 +236,3 @@ class User extends map\UserMap {
     }
 
 }
-
-?>

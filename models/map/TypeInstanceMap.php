@@ -32,10 +32,10 @@ class TypeInstanceMap extends \MBusinessModel {
                 'idEntity' => array('column' => 'idEntity','type' => 'integer'),
             ),
             'associations' => array(
-                'type' => array('toClass' => 'mfn\models\Type', 'cardinality' => 'oneToOne' , 'keys' => 'idType:idType'), 
-                'color' => array('toClass' => 'mfn\models\Color', 'cardinality' => 'oneToOne' , 'keys' => 'idColor:idColor'), 
-                'entity' => array('toClass' => 'mfn\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity:idEntity'), 
-                'entries' => array('toClass' => 'mfn\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
+                'type' => array('toClass' => 'fnbr\models\Type', 'cardinality' => 'oneToOne' , 'keys' => 'idType:idType'), 
+                'color' => array('toClass' => 'fnbr\models\Color', 'cardinality' => 'oneToOne' , 'keys' => 'idColor:idColor'), 
+                'entity' => array('toClass' => 'fnbr\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity:idEntity'), 
+                'entries' => array('toClass' => 'fnbr\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
             )
         );
     }

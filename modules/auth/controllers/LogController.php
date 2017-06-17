@@ -1,17 +1,6 @@
 <?php
-/**
- * $_comment
- *
- * @category   Maestro
- * @package    UFJF
- * @subpackage $_package
- * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version    
- * @since      
- */
 
-Manager::import("auth\models\*");
+Manager::import("fnbr\auth\models\*");
 
 class LogController extends MController {
 
@@ -20,7 +9,7 @@ class LogController extends MController {
     }
 
     public function formFind() {
-        $Log= new mfn\models\Log($this->data->id);
+        $Log= new fnbr\models\Log($this->data->id);
         $filter->idLog = $this->data->idLog;
         $this->data->query = $Log->listByFilter($filter)->asQuery();
         $this->render();
@@ -37,7 +26,7 @@ class LogController extends MController {
     }
 
     public function formUpdate() {
-        $Log= new mfn\models\Log($this->data->id);
+        $Log= new fnbr\models\Log($this->data->id);
         $this->data->Log = $Log->getData();
         
         $this->data->action = '@auth/Log/save/' .  $this->data->id;
@@ -45,28 +34,28 @@ class LogController extends MController {
     }
 
     public function formDelete() {
-        $Log = new mfn\models\Log($this->data->id);
+        $Log = new fnbr\models\Log($this->data->id);
         $ok = '>auth/Log/delete/' . $Log->getId();
         $cancelar = '>auth/Log/formObject/' . $Log->getId();
         $this->renderPrompt('confirmation', "Confirma remoção do Log [{$model->getDescription()}] ?", $ok, $cancelar);
     }
 
     public function lookup() {
-        $model = new mfn\models\Log();
+        $model = new fnbr\models\Log();
         $filter->idLog = $this->data->idLog;
         $this->data->query = $model->listByFilter($filter)->asQuery();
         $this->render();
     }
 
     public function save() {
-            $Log = new mfn\models\Log($this->data->Log);
+            $Log = new fnbr\models\Log($this->data->Log);
             $Log->save();
             $go = '>auth/Log/formObject/' . $Log->getId();
             $this->renderPrompt('information','OK',$go);
     }
 
     public function delete() {
-            $Log = new mfn\models\Log($this->data->id);
+            $Log = new fnbr\models\Log($this->data->id);
             $Log->delete();
             $go = '>auth/Log/formFind';
             $this->renderPrompt('information',"Log [{$this->data->idLog}] removido.", $go);

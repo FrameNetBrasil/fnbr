@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -23,7 +23,7 @@ class RelationTypeController extends MController
 
     public function modelTree()
     {
-        $structure = MApp::getService('', '', 'structurerelationtype');
+        $structure = Manager::getAppService('structurerelationtype');
         if ($this->data->id == '') {
             $children = $structure->listAll($this->data, $this->idLanguage);
             $data = (object)[
@@ -44,12 +44,12 @@ class RelationTypeController extends MController
         }
         $this->data->save = "@structure/relationtype/newRelationType|formNewRelationType";
         $this->data->close = "!$('#formNew_dialog').dialog('close');";
-        $this->data->title = _M('new mfn\models\Relation Type');
+        $this->data->title = _M('new fnbr\models\Relation Type');
         $this->render();
     }
     
     public function formUpdateRelationType(){
-        $model = new mfn\models\RelationType($this->data->id);
+        $model = new fnbr\models\RelationType($this->data->id);
         $this->data->object = $model->getData();
         $this->data->save = "@structure/relationtype/updateRelationType|formUpdateRelationType";
         $this->data->close = "!$('#formUpdate_dialog').dialog('close');";
@@ -60,7 +60,7 @@ class RelationTypeController extends MController
     public function newRelationType()
     {
         try {
-            $model = new mfn\models\RelationType();
+            $model = new fnbr\models\RelationType();
             $this->data->relationtype->entry = 'rel_' . str_replace('rel_','',strtolower($this->data->relationtype->entry)); 
             $this->data->relationtype->nameEntity1 = $this->data->relationtype->entry . '_nameentity1';
             $this->data->relationtype->nameEntity2 = $this->data->relationtype->entry . '_nameentity2';
@@ -75,7 +75,7 @@ class RelationTypeController extends MController
     public function updateRelationType()
     {
         try {
-            $model = new mfn\models\RelationType($this->data->relationtype->idRelationType);
+            $model = new fnbr\models\RelationType($this->data->relationtype->idRelationType);
             $this->data->relationtype->entry = 'rel_' . str_replace('rel_','',strtolower($this->data->relationtype->entry));            
             $model->updateEntry($this->data->relationtype->entry);
             $this->renderPrompt('information', 'OK', "structure.editEntry('{$this->data->relationtype->entry}');");

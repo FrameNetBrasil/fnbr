@@ -20,7 +20,7 @@ class SentenceController extends MController {
     }
 
     public function formFind() {
-        $Sentence= new mfn\models\Sentence($this->data->id);
+        $Sentence= new fnbr\models\Sentence($this->data->id);
         $filter->idSentence = $this->data->idSentence;
         $this->data->query = $Sentence->listByFilter($filter)->asQuery();
         $this->render();
@@ -37,7 +37,7 @@ class SentenceController extends MController {
     }
 
     public function formUpdate() {
-        $Sentence= new mfn\models\Sentence($this->data->id);
+        $Sentence= new fnbr\models\Sentence($this->data->id);
         $this->data->Sentence = $Sentence->getData();
         
         $this->data->action = '@Sentence/save/' .  $this->data->id;
@@ -45,28 +45,28 @@ class SentenceController extends MController {
     }
 
     public function formDelete() {
-        $Sentence = new mfn\models\Sentence($this->data->id);
+        $Sentence = new fnbr\models\Sentence($this->data->id);
         $ok = '>Sentence/delete/' . $Sentence->getId();
         $cancelar = '>Sentence/formObject/' . $Sentence->getId();
         $this->renderPrompt('confirmation', "Confirma remoção do Sentence [{$model->getDescription()}] ?", $ok, $cancelar);
     }
 
     public function lookup() {
-        $model = new mfn\models\Sentence();
+        $model = new fnbr\models\Sentence();
         $filter->idSentence = $this->data->idSentence;
         $this->data->query = $model->listByFilter($filter)->asQuery();
         $this->render();
     }
 
     public function save() {
-            $Sentence = new mfn\models\Sentence($this->data->Sentence);
+            $Sentence = new fnbr\models\Sentence($this->data->Sentence);
             $Sentence->save();
             $go = '>Sentence/formObject/' . $Sentence->getId();
             $this->renderPrompt('information','OK',$go);
     }
 
     public function delete() {
-            $Sentence = new mfn\models\Sentence($this->data->id);
+            $Sentence = new fnbr\models\Sentence($this->data->id);
             $Sentence->delete();
             $go = '>Sentence/formFind';
             $this->renderPrompt('information',"Sentence [{$this->data->idSentence}] removido.", $go);

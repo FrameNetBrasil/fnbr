@@ -1,57 +1,48 @@
 <?php
-/**
- * @category   Maestro
- * @package    UFJF
- * @subpackage mfn
- * @copyright  Copyright (c) 2003-2013 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version
- * @since
- */
 
-// wizard - code section created by Wizard Module
+namespace fnbr\auth\models\map;
 
-namespace auth\models\map;
+class PersonMap extends \MBusinessModel
+{
 
-class PersonMap extends \MBusinessModel {
 
-    
-    public static function ORMMap() {
+    public static function ORMMap()
+    {
 
         return array(
             'class' => \get_called_class(),
             'database' => \Manager::getConf('fnbr.db'),
             'table' => 'auth_person',
             'attributes' => array(
-                'idPerson' => array('column' => 'idPerson','key' => 'primary','idgenerator' => 'identity','type' => 'integer'),
-                'name' => array('column' => 'name','type' => 'string'),
-                'email' => array('column' => 'email','type' => 'string'),
-                'nick' => array('column' => 'nick','type' => 'string'),
+                'idPerson' => array('column' => 'idPerson', 'key' => 'primary', 'idgenerator' => 'identity', 'type' => 'integer'),
+                'name' => array('column' => 'name', 'type' => 'string'),
+                'email' => array('column' => 'email', 'type' => 'string'),
+                'nick' => array('column' => 'nick', 'type' => 'string'),
             ),
             'associations' => array(
-                'users' => array('toClass' => 'auth\models\User', 'cardinality' => 'oneToMany' , 'keys' => 'idPerson:idPerson'), 
+                'users' => array('toClass' => 'fnbr\auth\models\User', 'cardinality' => 'oneToMany', 'keys' => 'idPerson:idPerson'),
             )
         );
     }
-    
+
     /**
-     * 
-     * @var integer 
+     *
+     * @var integer
      */
     protected $idPerson;
     /**
-     * 
-     * @var string 
+     *
+     * @var string
      */
     protected $name;
     /**
-     * 
-     * @var string 
+     *
+     * @var string
      */
     protected $email;
     /**
-     * 
-     * @var string 
+     *
+     * @var string
      */
     protected $nick;
 
@@ -59,70 +50,80 @@ class PersonMap extends \MBusinessModel {
      * Associations
      */
     protected $users;
-    
+
 
     /**
      * Getters/Setters
      */
-    public function getIdPerson() {
+    public function getIdPerson()
+    {
         return $this->idPerson;
     }
 
-    public function setIdPerson($value) {
+    public function setIdPerson($value)
+    {
         $this->idPerson = $value;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function setName($value) {
+    public function setName($value)
+    {
         $this->name = $value;
     }
 
-    public function getEmail() {
+    public function getEmail()
+    {
         return $this->email;
     }
 
-    public function setEmail($value) {
+    public function setEmail($value)
+    {
         $this->email = $value;
     }
 
-    public function getNick() {
+    public function getNick()
+    {
         return $this->nick;
     }
 
-    public function setNick($value) {
+    public function setNick($value)
+    {
         $this->nick = $value;
     }
+
     /**
      *
      * @return Association
      */
-    public function getUsers() {
-        if (is_null($this->users)){
+    public function getUsers()
+    {
+        if (is_null($this->users)) {
             $this->retrieveAssociation("users");
         }
-        return  $this->users;
+        return $this->users;
     }
+
     /**
      *
      * @param Association $value
      */
-    public function setUsers($value) {
+    public function setUsers($value)
+    {
         $this->users = $value;
     }
+
     /**
      *
      * @return Association
      */
-    public function getAssociationUsers() {
+    public function getAssociationUsers()
+    {
         $this->retrieveAssociation("users");
     }
 
-    
 
 }
-// end - wizard
-
-?>

@@ -29,10 +29,10 @@ class POSMap extends \MBusinessModel {
                 'idEntity' => array('column' => 'idEntity','type' => 'integer'),
             ),
             'associations' => array(
-                'entity' => array('toClass' => 'mfn\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity:idEntity'), 
-                'lemmas' => array('toClass' => 'mfn\models\Lemma', 'cardinality' => 'oneToMany' , 'keys' => 'idPOS:idPOS'), 
-                'lexemes' => array('toClass' => 'mfn\models\Lexeme', 'cardinality' => 'oneToMany' , 'keys' => 'idPOS:idPOS'), 
-                'entries' => array('toClass' => 'mfn\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
+                'entity' => array('toClass' => 'fnbr\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity:idEntity'), 
+                'lemmas' => array('toClass' => 'fnbr\models\Lemma', 'cardinality' => 'oneToMany' , 'keys' => 'idPOS:idPOS'), 
+                'lexemes' => array('toClass' => 'fnbr\models\Lexeme', 'cardinality' => 'oneToMany' , 'keys' => 'idPOS:idPOS'), 
+                'entries' => array('toClass' => 'fnbr\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
             )
         );
     }

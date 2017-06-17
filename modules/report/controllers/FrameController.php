@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -28,7 +28,7 @@ class FrameController extends MController
     public function frameTree()
     {
         $this->data->idDomain = Manager::getSession()->idDomain;
-        $report = MApp::getService('', '', 'reportframe');
+        $report = Manager::getAppService('reportframe');
         if ($this->data->id == '') {
             $children = $report->listFrames($this->data, $this->idLanguage);
             $data = (object)[
@@ -46,8 +46,8 @@ class FrameController extends MController
     
     public function showFrame() {
         $idFrame = $this->data->id;
-        $report = MApp::getService('', '', 'reportframe');
-        $frame = new mfn\models\Frame($idFrame);
+        $report = Manager::getAppService('reportframe');
+        $frame = new fnbr\models\Frame($idFrame);
         $this->data->frame->entry = $frame->getEntryObject();
         $this->data->fe = $report->getFEData($idFrame);
         $this->data->fecoreset = $report->getFECoreSet($frame);

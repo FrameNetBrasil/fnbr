@@ -8,7 +8,7 @@ class StructureConstraintsService extends MService
     public function listConstraintsFE($idFrameElement)
     {
         $result = [];
-        $fe = new mfn\models\FrameElement($idFrameElement);
+        $fe = new fnbr\models\FrameElement($idFrameElement);
         $constraints = $fe->listConstraints();
         mdump($constraints);
         foreach ($constraints as $constraint) {
@@ -25,7 +25,7 @@ class StructureConstraintsService extends MService
     public function listConstraintsLU($idLU)
     {
         $result = [];
-        $lu = new mfn\models\LU($idLU);
+        $lu = new fnbr\models\LU($idLU);
         $constraints = $lu->listConstraints();
         foreach ($constraints as $constraint) {
             $node = [];
@@ -41,7 +41,7 @@ class StructureConstraintsService extends MService
     public function listConstraintsCE($idConstructionElement)
     {
         $result = [];
-        $ce = new mfn\models\ConstructionElement($idConstructionElement);
+        $ce = new fnbr\models\ConstructionElement($idConstructionElement);
         $constraints = $ce->listConstraints();
         mdump($constraints);
         foreach ($constraints as $constraint) {
@@ -58,7 +58,7 @@ class StructureConstraintsService extends MService
     public function listConstraintsCN($idConstraint)
     {
         $result = [];
-        $constraint = new mfn\models\Constraint($idConstraint);
+        $constraint = new fnbr\models\Constraint($idConstraint);
         $constraints = $constraint->listConstraints();
         foreach ($constraints as $constraint) {
             $node = [];
@@ -74,7 +74,7 @@ class StructureConstraintsService extends MService
     public function listConstraintsCNCN($idConstraint)
     {
         $result = [];
-        $constraint = new mfn\models\Constraint($idConstraint);
+        $constraint = new fnbr\models\Constraint($idConstraint);
         $constraints = $constraint->listConstraintsCN();
         foreach ($constraints as $constraint) {
             $node = [];
@@ -90,7 +90,7 @@ class StructureConstraintsService extends MService
     public function listConstraintsCX($idCxn)
     {
         $result = [];
-        $cxn = new mfn\models\Construction($idCxn);
+        $cxn = new fnbr\models\Construction($idCxn);
         $constraints = $cxn->listConstraints();
         mdump($constraints);
         foreach ($constraints as $constraint) {
@@ -105,7 +105,7 @@ class StructureConstraintsService extends MService
     }
 
     public function constraintHasChild($idConstraint) {
-        $constraint = new mfn\models\ViewConstraint();
+        $constraint = new fnbr\models\ViewConstraint();
         return $constraint->hasChild($idConstraint);
     }
 

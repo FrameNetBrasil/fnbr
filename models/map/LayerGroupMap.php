@@ -27,7 +27,7 @@ class LayerGroupMap extends \MBusinessModel {
                 'name' => array('column' => 'name','type' => 'string'),
             ),
             'associations' => array(
-                'layertypes' => array('toClass' => 'mfn\models\LayerType', 'cardinality' => 'oneToMany' , 'keys' => 'idLayerGroup:idLayerGroup'), 
+                'layertypes' => array('toClass' => 'fnbr\models\LayerType', 'cardinality' => 'oneToMany' , 'keys' => 'idLayerGroup:idLayerGroup'), 
             )
         );
     }

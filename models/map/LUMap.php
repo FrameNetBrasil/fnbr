@@ -35,8 +35,8 @@ class LUMap extends \MBusinessModel {
                 'idLemma' => array('column' => 'idLemma','type' => 'integer'),
             ),
             'associations' => array(
-                'entity' => array('toClass' => 'mfn\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity:idEntity'), 
-                'lemma' => array('toClass' => 'mfn\models\Lemma', 'cardinality' => 'oneToOne' , 'keys' => 'idLemma:idLemma'), 
+                'entity' => array('toClass' => 'fnbr\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity:idEntity'), 
+                'lemma' => array('toClass' => 'fnbr\models\Lemma', 'cardinality' => 'oneToOne' , 'keys' => 'idLemma:idLemma'), 
             )
         );
     }

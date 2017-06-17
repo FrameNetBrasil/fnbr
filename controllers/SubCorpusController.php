@@ -20,7 +20,7 @@ class SubCorpusController extends MController {
     }
 
     public function formFind() {
-        $SubCorpus= new mfn\models\SubCorpus($this->data->id);
+        $SubCorpus= new fnbr\models\SubCorpus($this->data->id);
         $filter->idSubCorpus = $this->data->idSubCorpus;
         $this->data->query = $SubCorpus->listByFilter($filter)->asQuery();
         $this->render();
@@ -37,7 +37,7 @@ class SubCorpusController extends MController {
     }
 
     public function formUpdate() {
-        $SubCorpus= new mfn\models\SubCorpus($this->data->id);
+        $SubCorpus= new fnbr\models\SubCorpus($this->data->id);
         $this->data->SubCorpus = $SubCorpus->getData();
         
         $this->data->action = '@SubCorpus/save/' .  $this->data->id;
@@ -45,28 +45,28 @@ class SubCorpusController extends MController {
     }
 
     public function formDelete() {
-        $SubCorpus = new mfn\models\SubCorpus($this->data->id);
+        $SubCorpus = new fnbr\models\SubCorpus($this->data->id);
         $ok = '>SubCorpus/delete/' . $SubCorpus->getId();
         $cancelar = '>SubCorpus/formObject/' . $SubCorpus->getId();
         $this->renderPrompt('confirmation', "Confirma remoção do SubCorpus [{$model->getDescription()}] ?", $ok, $cancelar);
     }
 
     public function lookup() {
-        $model = new mfn\models\SubCorpus();
+        $model = new fnbr\models\SubCorpus();
         $filter->idSubCorpus = $this->data->idSubCorpus;
         $this->data->query = $model->listByFilter($filter)->asQuery();
         $this->render();
     }
 
     public function save() {
-            $SubCorpus = new mfn\models\SubCorpus($this->data->SubCorpus);
+            $SubCorpus = new fnbr\models\SubCorpus($this->data->SubCorpus);
             $SubCorpus->save();
             $go = '>SubCorpus/formObject/' . $SubCorpus->getId();
             $this->renderPrompt('information','OK',$go);
     }
 
     public function delete() {
-            $SubCorpus = new mfn\models\SubCorpus($this->data->id);
+            $SubCorpus = new fnbr\models\SubCorpus($this->data->id);
             $SubCorpus->delete();
             $go = '>SubCorpus/formFind';
             $this->renderPrompt('information',"SubCorpus [{$this->data->idSubCorpus}] removido.", $go);

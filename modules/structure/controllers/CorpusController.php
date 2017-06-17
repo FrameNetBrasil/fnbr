@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -23,7 +23,7 @@ class CorpusController extends MController
 
     public function corpusTree()
     {
-        $structure = MApp::getService('', '', 'structurecorpus');
+        $structure = Manager::getAppService('structurecorpus');
         if ($this->data->id == '') {
             $children = $structure->listCorpus($this->data, $this->idLanguage);
             $data = (object) [
@@ -43,13 +43,13 @@ class CorpusController extends MController
     {
         $this->data->save = "@structure/corpus/newCorpus|formNewCorpus";
         $this->data->close = "!$('#formNewCorpus_dialog').dialog('close');";
-        $this->data->title = _M('new mfn\models\Corpus');
+        $this->data->title = _M('new fnbr\models\Corpus');
         $this->render();
     }
 
     public function formUpdateCorpus()
     {
-        $model = new mfn\models\Corpus($this->data->id);
+        $model = new fnbr\models\Corpus($this->data->id);
         $this->data->object = $model->getData();
         $this->data->object->entry = strtolower(str_replace('crp_','',$this->data->object->entry));
         $this->data->save = "@structure/corpus/updateCorpus|formUpdateCorpus";
@@ -61,17 +61,17 @@ class CorpusController extends MController
     public function formNewDocument()
     {
         $this->data->idCorpus = $this->data->id;
-        $model = new mfn\models\Corpus($this->data->idCorpus);
+        $model = new fnbr\models\Corpus($this->data->idCorpus);
         $this->data->corpus = $model->getEntry() . '  [' . $model->getName() . ']';
         $this->data->save = "@structure/corpus/newDocument|formNewDocument";
         $this->data->close = "!$('#formNewDocument_dialog').dialog('close');";
-        $this->data->title = _M('new mfn\models\Document');
+        $this->data->title = _M('new fnbr\models\Document');
         $this->render();
     }
 
     public function formUpdateDocument()
     {
-        $model = new mfn\models\Document($this->data->id);
+        $model = new fnbr\models\Document($this->data->id);
         $this->data->object = $model->getData();
         $this->data->save = "@structure/corpus/updateDocument|formUpdateDocument";
         $this->data->close = "!$('#formUpdateDocument_dialog').dialog('close');";
@@ -82,7 +82,7 @@ class CorpusController extends MController
     public function newCorpus()
     {
         try {
-            $model = new mfn\models\Corpus();
+            $model = new fnbr\models\Corpus();
             $this->data->corpus->entry = 'crp_' . strtolower(str_replace('crp_','',$this->data->corpus->entry));
             $model->setData($this->data->corpus);
             $model->save($this->data->corpus);
@@ -95,7 +95,7 @@ class CorpusController extends MController
     public function updateCorpus()
     {
         try {
-            $model = new mfn\models\Corpus($this->data->corpus->idCorpus);
+            $model = new fnbr\models\Corpus($this->data->corpus->idCorpus);
             $this->data->corpus->entry = 'crp_' . strtolower(str_replace('crp_','',$this->data->corpus->entry));
             $model->updateEntry($this->data->corpus->entry);
             $this->renderPrompt('information', 'OK', "structure.editEntry('{$this->data->corpus->entry}');");
@@ -107,7 +107,7 @@ class CorpusController extends MController
     public function newDocument()
     {
         try {
-            $model = new mfn\models\Document();
+            $model = new fnbr\models\Document();
             $this->data->document->entry = 'doc_' . $this->data->document->entry;
             $model->setData($this->data->document);
             $model->save($this->data->document);
@@ -120,7 +120,7 @@ class CorpusController extends MController
     public function updateDocument()
     {
         try {
-            $model = new mfn\models\Document($this->data->document->idDocument);
+            $model = new fnbr\models\Document($this->data->document->idDocument);
             $model->updateEntry($this->data->document->entry);
             $model->setData($this->data->document);
             $model->save($this->data->document);

@@ -29,9 +29,9 @@ class ViewFrameMap extends \MBusinessModel {
                 'idEntity' => array('column' => 'idEntity','type' => 'integer'),
             ),
             'associations' => array(
-                'entries' => array('toClass' => 'mfn\models\ViewEntryLanguage', 'cardinality' => 'oneToOne' , 'keys' => 'entry:entry'),
-                'lus' => array('toClass' => 'mfn\models\ViewLU', 'cardinality' => 'oneToMany' , 'keys' => 'idFrame:idFrame'),
-                'fes' => array('toClass' => 'mfn\models\ViewFrameElement', 'cardinality' => 'oneToMany' , 'keys' => 'idFrame:idFrame'),
+                'entries' => array('toClass' => 'fnbr\models\ViewEntryLanguage', 'cardinality' => 'oneToOne' , 'keys' => 'entry:entry'),
+                'lus' => array('toClass' => 'fnbr\models\ViewLU', 'cardinality' => 'oneToMany' , 'keys' => 'idFrame:idFrame'),
+                'fes' => array('toClass' => 'fnbr\models\ViewFrameElement', 'cardinality' => 'oneToMany' , 'keys' => 'idFrame:idFrame'),
             )
         );
     }

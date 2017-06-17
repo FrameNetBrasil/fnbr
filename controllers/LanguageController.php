@@ -24,24 +24,24 @@ class LanguageController extends MController
 
     public function gridData()
     {
-        $model = new mfn\models\Language($this->data->id);
+        $model = new fnbr\models\Language($this->data->id);
         $criteria = $model->listByFilter($this->data->filter);
         $this->renderJSON($model->gridDataAsJSON($criteria));
     }
 
     public function comboData()
     {
-        $model = new mfn\models\Language($this->data->id);
+        $model = new fnbr\models\Language($this->data->id);
         $criteria = $model->listForCombo();
         $this->renderJSON($model->gridDataAsJSON($criteria, true));
     }
 
     public function formObject()
     {
-        $model = new mfn\models\Language($this->data->id);
+        $model = new fnbr\models\Language($this->data->id);
         $this->data->forUpdate = ($this->data->id != '');
         $this->data->object = $model->getData();
-        $this->data->title = $this->data->forUpdate ? $model->getDescription() : _M("new mfn\models\Language");
+        $this->data->title = $this->data->forUpdate ? $model->getDescription() : _M("new fnbr\models\Language");
         $this->data->save = "@language/save/" . $model->getId() . '|formObject';
         $this->data->delete = "@language/delete/" . $model->getId() . '|formObject';
         $this->render();
@@ -50,7 +50,7 @@ class LanguageController extends MController
     public function save()
     {
         try {
-            $model = new mfn\models\Language($this->data->id);
+            $model = new fnbr\models\Language($this->data->id);
             $model->setData($this->data);
             $model->save();
             $this->renderPrompt('information', 'OK');
@@ -62,7 +62,7 @@ class LanguageController extends MController
     public function delete()
     {
         try {
-            $model = new mfn\models\Language($this->data->id);
+            $model = new fnbr\models\Language($this->data->id);
             $model->delete();
             $go = "!$('#formObject_dialog').dialog('close');";
             $this->renderPrompt('information', _M("Record [%s] removed.", $model->getDescription()), $go);

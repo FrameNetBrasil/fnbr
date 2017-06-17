@@ -27,8 +27,8 @@ class TypeMap extends \MBusinessModel {
                 'entry' => array('column' => 'entry','type' => 'string'),
             ),
             'associations' => array(
-                'typeinstances' => array('toClass' => 'mfn\models\TypeInstance', 'cardinality' => 'oneToMany' , 'keys' => 'idType:idType'), 
-                'entries' => array('toClass' => 'mfn\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
+                'typeinstances' => array('toClass' => 'fnbr\models\TypeInstance', 'cardinality' => 'oneToMany' , 'keys' => 'idType:idType'), 
+                'entries' => array('toClass' => 'fnbr\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
             )
         );
     }

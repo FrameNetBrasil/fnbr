@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 use Maestro\Types\MFile;
 
 
@@ -25,14 +25,14 @@ class ExportController extends MController
     
     public function gridDataFrames()
     {
-        $model = new mfn\models\Frame();
+        $model = new fnbr\models\Frame();
         $criteria = $model->listByFilter($this->data->filter);
         $this->renderJSON($model->gridDataAsJSON($criteria));
     }    
     
     public function exportFrames(){
         try {
-            $service = MApp::getService('', '', 'data');
+            $service = Manager::getAppService('data');
             $json = $service->exportFramesToJSON($this->data->gridExportFrames->data->checked);
             $fileName = $this->data->fileName . '.json';
             $mfile = MFile::file($json, false, $fileName);
@@ -53,7 +53,7 @@ class ExportController extends MController
             $files = \Maestro\Utils\Mutil::parseFiles('uploadFile');
             mdump($files);
             if (count($files)) {
-                $service = MApp::getService('', '', 'data');
+                $service = Manager::getAppService('data');
                 $mfile = $service->parseDocWf($files[0]);
                 $this->renderFile($mfile);
             } else {
@@ -73,7 +73,7 @@ class ExportController extends MController
 
     public function exportCxnFS(){
         try {
-            $service = MApp::getService('', '', 'data');
+            $service = Manager::getAppService('data');
             $fs =  $service->exportCxnToFS();
             $fileName = $this->data->fileName . '.txt';
             $mfile = MFile::file($fs, false, $fileName);

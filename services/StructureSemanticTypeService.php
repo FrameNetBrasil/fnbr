@@ -7,7 +7,7 @@ class StructureSemanticTypeService extends MService
 
     public function listDomains($data = '', $idLanguage = '')
     {
-        $domain = new mfn\models\Domain();
+        $domain = new fnbr\models\Domain();
         $domains = $domain->listAll()->asQuery()->getResult();
         $result = array();
         foreach ($domains as $row) {
@@ -23,7 +23,7 @@ class StructureSemanticTypeService extends MService
     
     public function listSemanticTypesRoot($data = '', $idDomain = '', $idLanguage = '')
     {
-        $semanticType = new mfn\models\SemanticType();
+        $semanticType = new fnbr\models\SemanticType();
         $filter = (object) ['type' => $data->type, 'idDomain' => $idDomain, 'idLanguage' => $idLanguage];
         $types = $semanticType->listRoot($filter)->asQuery()->getResult();
         $result = array();
@@ -40,7 +40,7 @@ class StructureSemanticTypeService extends MService
 
     public function listSemanticTypesChildren($idSuperType, $idLanguage = '')
     {
-        $semanticType = new mfn\models\SemanticType();
+        $semanticType = new fnbr\models\SemanticType();
         $filter = (object) ['type' => $data->type, 'idLanguage' => $idLanguage];
         $types = $semanticType->listChildren($idSuperType, $filter)->asQuery()->getResult();
         $result = array();
@@ -57,7 +57,7 @@ class StructureSemanticTypeService extends MService
 
     public function listEntitySemanticTypes($id)
     {
-        $semanticType = new mfn\models\SemanticType();
+        $semanticType = new fnbr\models\SemanticType();
         $types = $semanticType->listTypesByEntity($id)->asQuery()->getResult();
         $result = array();
         foreach ($types as $row) {
@@ -71,12 +71,12 @@ class StructureSemanticTypeService extends MService
     }
 
     public function addEntitySemanticType($idEntity, $idSemanticType) {
-        $semanticType = new mfn\models\SemanticType($idSemanticType);
+        $semanticType = new fnbr\models\SemanticType($idSemanticType);
         $semanticType->addEntity($idEntity);
     }
     
     public function delEntitySemanticType($idEntity, $toRemove) {
-        $semanticType = new mfn\models\SemanticType();
+        $semanticType = new fnbr\models\SemanticType();
         $idSemanticTypeEntity = [];
         foreach($toRemove as $st) {
             $idSemanticTypeEntity[] = $st->idEntity;

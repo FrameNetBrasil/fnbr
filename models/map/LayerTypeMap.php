@@ -32,10 +32,10 @@ class LayerTypeMap extends \MBusinessModel {
                 'idEntity' => array('column' => 'idEntity','type' => 'integer'),
             ),
             'associations' => array(
-                'layergroup' => array('toClass' => 'mfn\models\LayerGroup', 'cardinality' => 'oneToOne' , 'keys' => 'idLayerGroup:idLayerGroup'), 
-                'entity' => array('toClass' => 'mfn\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity:idEntity'), 
-                'layers' => array('toClass' => 'mfn\models\Layer', 'cardinality' => 'oneToMany' , 'keys' => 'idLayerType:idLayerType'), 
-                'entries' => array('toClass' => 'mfn\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
+                'layergroup' => array('toClass' => 'fnbr\models\LayerGroup', 'cardinality' => 'oneToOne' , 'keys' => 'idLayerGroup:idLayerGroup'), 
+                'entity' => array('toClass' => 'fnbr\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity:idEntity'), 
+                'layers' => array('toClass' => 'fnbr\models\Layer', 'cardinality' => 'oneToMany' , 'keys' => 'idLayerType:idLayerType'), 
+                'entries' => array('toClass' => 'fnbr\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
             )
         );
     }

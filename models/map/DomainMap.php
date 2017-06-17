@@ -28,9 +28,9 @@ class DomainMap extends \MBusinessModel {
                 'idEntity' => array('column' => 'idEntity','type' => 'integer'),
             ),
             'associations' => array(
-                'entity' => array('toClass' => 'mfn\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity:idEntity'),
-                'relationtypes' => array('toClass' => 'mfn\models\RelationType', 'cardinality' => 'oneToMany' , 'keys' => 'idDomain:idDomain'), 
-                'entries' => array('toClass' => 'mfn\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
+                'entity' => array('toClass' => 'fnbr\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity:idEntity'),
+                'relationtypes' => array('toClass' => 'fnbr\models\RelationType', 'cardinality' => 'oneToMany' , 'keys' => 'idDomain:idDomain'), 
+                'entries' => array('toClass' => 'fnbr\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
             )
         );
     }

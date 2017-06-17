@@ -1,17 +1,6 @@
 <?php
-/**
- * $_comment
- *
- * @category   Maestro
- * @package    UFJF
- * @subpackage $_package
- * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version    
- * @since      
- */
 
-Manager::import("auth\models\*");
+Manager::import("fnbr\auth\models\*");
 
 class MessageController extends MController {
 
@@ -31,9 +20,9 @@ class MessageController extends MController {
     }
 
     public function formMail(){
-        $user = new auth\models\User();
+        $user = new fnbr\auth\models\User();
         $this->data->users = $user->listByFilter()->asQuery()->chunkResult('idUser','name');
-        $group = new auth\models\Group();
+        $group = new fnbr\auth\models\Group();
         $this->data->groups = $group->listByFilter()->asQuery()->chunkResult('idGroup','name');
         $this->data->send = "@auth/message/mail|formMail";
         $this->render();
@@ -41,15 +30,15 @@ class MessageController extends MController {
     
     public function mail() {
         try {
-            $emailService = MApp::getService('', '', 'email');
+            $emailService = Manager::getAppService('email');
             $to = [];
             if ($this->data->toUser != '') {
-                $user = new auth\models\User($this->data->toUser);
+                $user = new fnbr\auth\models\User($this->data->toUser);
                 $email = $user->getPerson()->getEmail(); 
                 $to[$email] = $email;
             }
             if ($this->data->toGroup != '') {
-                $group = new auth\models\Group($this->data->toGroup);
+                $group = new fnbr\auth\models\Group($this->data->toGroup);
                 $users = $group->getUsers();
                 foreach ($users as $user) {
                     $email = $user->getPerson()->getEmail(); 

@@ -20,7 +20,7 @@ class EntityController extends MController {
     }
 
     public function formFind() {
-        $Entity= new mfn\models\Entity($this->data->id);
+        $Entity= new fnbr\models\Entity($this->data->id);
         $filter->idEntity = $this->data->idEntity;
         $this->data->query = $Entity->listByFilter($filter)->asQuery();
         $this->render();
@@ -37,7 +37,7 @@ class EntityController extends MController {
     }
 
     public function formUpdate() {
-        $Entity= new mfn\models\Entity($this->data->id);
+        $Entity= new fnbr\models\Entity($this->data->id);
         $this->data->Entity = $Entity->getData();
         
         $this->data->action = '@Entity/save/' .  $this->data->id;
@@ -45,28 +45,28 @@ class EntityController extends MController {
     }
 
     public function formDelete() {
-        $Entity = new mfn\models\Entity($this->data->id);
+        $Entity = new fnbr\models\Entity($this->data->id);
         $ok = '>Entity/delete/' . $Entity->getId();
         $cancelar = '>Entity/formObject/' . $Entity->getId();
         $this->renderPrompt('confirmation', "Confirma remoção do Entity [{$model->getDescription()}] ?", $ok, $cancelar);
     }
 
     public function lookup() {
-        $model = new mfn\models\Entity();
+        $model = new fnbr\models\Entity();
         $filter->idEntity = $this->data->idEntity;
         $this->data->query = $model->listByFilter($filter)->asQuery();
         $this->render();
     }
 
     public function save() {
-            $Entity = new mfn\models\Entity($this->data->Entity);
+            $Entity = new fnbr\models\Entity($this->data->Entity);
             $Entity->save();
             $go = '>Entity/formObject/' . $Entity->getId();
             $this->renderPrompt('information','OK',$go);
     }
 
     public function delete() {
-            $Entity = new mfn\models\Entity($this->data->id);
+            $Entity = new fnbr\models\Entity($this->data->id);
             $Entity->delete();
             $go = '>Entity/formFind';
             $this->renderPrompt('information',"Entity [{$this->data->idEntity}] removido.", $go);

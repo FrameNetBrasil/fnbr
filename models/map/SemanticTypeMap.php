@@ -30,9 +30,9 @@ class SemanticTypeMap extends \MBusinessModel
                 'idDomain' => array('column' => 'idDomain', 'type' => 'integer'),
             ),
             'associations' => array(
-                'domain' => array('toClass' => 'mfn\models\Domain', 'cardinality' => 'oneToOne', 'keys' => 'idDomain:idDomain'),
-                'entity' => array('toClass' => 'mfn\models\Entity', 'cardinality' => 'oneToOne', 'keys' => 'idEntity:idEntity'),
-                'entries' => array('toClass' => 'mfn\models\Entry', 'cardinality' => 'oneToMany', 'keys' => 'entry:entry'),
+                'domain' => array('toClass' => 'fnbr\models\Domain', 'cardinality' => 'oneToOne', 'keys' => 'idDomain:idDomain'),
+                'entity' => array('toClass' => 'fnbr\models\Entity', 'cardinality' => 'oneToOne', 'keys' => 'idEntity:idEntity'),
+                'entries' => array('toClass' => 'fnbr\models\Entry', 'cardinality' => 'oneToMany', 'keys' => 'entry:entry'),
             )
         );
     }

@@ -28,8 +28,8 @@ class ParagraphMap extends \MBusinessModel {
                 'idDocument' => array('column' => 'idDocument','type' => 'integer'),
             ),
             'associations' => array(
-                'document' => array('toClass' => 'mfn\models\Document', 'cardinality' => 'oneToOne' , 'keys' => 'idDocument:idDocument'), 
-                'sentences' => array('toClass' => 'mfn\models\Sentence', 'cardinality' => 'oneToMany' , 'keys' => 'idParagraph:idParagraph'), 
+                'document' => array('toClass' => 'fnbr\models\Document', 'cardinality' => 'oneToOne' , 'keys' => 'idDocument:idDocument'), 
+                'sentences' => array('toClass' => 'fnbr\models\Sentence', 'cardinality' => 'oneToMany' , 'keys' => 'idParagraph:idParagraph'), 
             )
         );
     }

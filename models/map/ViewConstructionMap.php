@@ -29,8 +29,8 @@ class ViewConstructionMap extends \MBusinessModel {
                 'idEntity' => array('column' => 'idEntity','type' => 'integer'),
             ),
             'associations' => array(
-                'entries' => array('toClass' => 'mfn\models\ViewEntryLanguage', 'cardinality' => 'oneToOne' , 'keys' => 'entry:entry'),
-                'ces' => array('toClass' => 'mfn\models\ViewConstructionElement', 'cardinality' => 'oneToMany' , 'keys' => 'idConstruction:idConstruction'),
+                'entries' => array('toClass' => 'fnbr\models\ViewEntryLanguage', 'cardinality' => 'oneToOne' , 'keys' => 'entry:entry'),
+                'ces' => array('toClass' => 'fnbr\models\ViewConstructionElement', 'cardinality' => 'oneToMany' , 'keys' => 'idConstruction:idConstruction'),
             )
         );
     }

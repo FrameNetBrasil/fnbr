@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -23,7 +23,7 @@ class TemplateController extends MController
 
     public function templateTree()
     {
-        $structure = MApp::getService('', '', 'structuretemplate');
+        $structure = Manager::getAppService('structuretemplate');
         if ($this->data->id == '') {
             $children = $structure->listTemplates($this->data, $this->idLanguage);
             $data = (object)[
@@ -42,12 +42,12 @@ class TemplateController extends MController
     public function formNewTemplate(){
         $this->data->save = "@structure/template/newTemplate|formNewTemplate";
         $this->data->close = "!$('#formNewTemplate_dialog').dialog('close');";
-        $this->data->title = _M('new mfn\models\Template');
+        $this->data->title = _M('new fnbr\models\Template');
         $this->render();
     }
     
     public function formUpdateTemplate(){
-        $model = new mfn\models\Template($this->data->id);
+        $model = new fnbr\models\Template($this->data->id);
         $this->data->object = $model->getData();
         $this->data->save = "@structure/template/updateTemplate|formUpdateTemplate";
         $this->data->close = "!$('#formUpdateTemplate_dialog').dialog('close');";
@@ -57,16 +57,16 @@ class TemplateController extends MController
 
     public function formNewFrameElement(){
         $this->data->idTemplate = $this->data->id;
-        $model = new mfn\models\Template($this->data->idTemplate);
+        $model = new fnbr\models\Template($this->data->idTemplate);
         $this->data->template = $model->getEntry() . '  [' . $model->getName() . ']';
         $this->data->save = "@structure/template/newFrameElement|formNewFrameElement";
         $this->data->close = "!$('#formNewFrameElement_dialog').dialog('close');";
-        $this->data->title = _M('new mfn\models\FrameElement');
+        $this->data->title = _M('new fnbr\models\FrameElement');
         $this->render();
     }
     
     public function formUpdateFrameElement(){
-        $model = new mfn\models\FrameElement($this->data->id);
+        $model = new fnbr\models\FrameElement($this->data->id);
         $this->data->object = $model->getData();
         $this->data->save = "@structure/template/updateFrameElement|formUpdateFrameElement";
         $this->data->close = "!$('#formUpdateFrameElement_dialog').dialog('close');";
@@ -76,7 +76,7 @@ class TemplateController extends MController
 
     public function formTemplatedFrames(){
         $this->data->idTemplate = $this->data->id;
-        $model = new mfn\models\Template($this->data->idTemplate);
+        $model = new fnbr\models\Template($this->data->idTemplate);
         $this->data->title = 'Template: ' . $model->getEntry() . '  [' . $model->getName() . ']';
         $this->data->query = Manager::getAppURL('', 'structure/template/gridDataTemplatedFrames/' . $this->data->id);
         $this->render();
@@ -85,13 +85,13 @@ class TemplateController extends MController
     public function gridDataTemplatedFrames()
     {
         $this->data->idTemplate = $this->data->id;
-        $model = new mfn\models\Template($this->data->idTemplate);
+        $model = new fnbr\models\Template($this->data->idTemplate);
         $criteria = $model->listTemplatedFrames();
         $this->renderJSON($model->gridDataAsJSON($criteria));
     }
 
     public function formTemplatedFEs(){
-        $model = new mfn\models\Template();
+        $model = new fnbr\models\Template();
         $this->data->title = '';//Template: ' . $model->getEntry() . '  [' . $model->getName() . ']';
         $this->data->query = Manager::getAppURL('', 'structure/template/gridDataTemplatedFEs/' . $this->data->id);
         $this->render();
@@ -99,7 +99,7 @@ class TemplateController extends MController
 
     public function formDeleteTemplate(){
         try {
-            $structure = MApp::getService('', '', 'structuretemplate');
+            $structure = Manager::getAppService('structuretemplate');
             $structure->deleteTemplate($this->data->id);
             $this->renderPrompt('information', 'Template deleted.', "$('#templatesTree').tree('reload');");
         } catch (\Exception $e) {
@@ -110,7 +110,7 @@ class TemplateController extends MController
     
     public function gridDataTemplatedFEs()
     {
-        $model = new mfn\models\Template();
+        $model = new fnbr\models\Template();
         $criteria = $model->listTemplatedFEs($this->data->id);
         $this->renderJSON($model->gridDataAsJSON($criteria));
     }
@@ -118,7 +118,7 @@ class TemplateController extends MController
     public function newTemplate()
     {
         try {
-            $model = new mfn\models\Template();
+            $model = new fnbr\models\Template();
             $this->data->template->entry = 'tpl_' . $this->data->template->entry;
             $model->setData($this->data->template);
             $model->save();
@@ -131,7 +131,7 @@ class TemplateController extends MController
     public function updateTemplate()
     {
         try {
-            $model = new mfn\models\Template($this->data->template->idTemplate);
+            $model = new fnbr\models\Template($this->data->template->idTemplate);
             $model->updateEntry($this->data->template->entry);
             $this->renderPrompt('information', 'OK', "structure.editEntry('{$this->data->template->entry}');");
         } catch (\Exception $e) {
@@ -142,7 +142,7 @@ class TemplateController extends MController
     public function newFrameElement()
     {
         try {
-            $model = new mfn\models\FrameElement();
+            $model = new fnbr\models\FrameElement();
             $this->data->frameelement->entry = 'fe_' . $this->data->frameelement->entry;
             $model->setData($this->data->frameelement);
             $model->save($this->data->frameelement);
@@ -155,7 +155,7 @@ class TemplateController extends MController
     public function updateFrameElement()
     {
         try {
-            $model = new mfn\models\FrameElement($this->data->frameelement->idFrameElement);
+            $model = new fnbr\models\FrameElement($this->data->frameelement->idFrameElement);
             $model->updateEntry($this->data->frameelement->entry);
             $model->setData($this->data->frameelement);
             $model->save($this->data->frameelement);

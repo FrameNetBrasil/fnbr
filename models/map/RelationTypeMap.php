@@ -31,10 +31,10 @@ class RelationTypeMap extends \MBusinessModel {
                 'idDomain' => array('column' => 'idDomain','type' => 'integer'),
             ),
             'associations' => array(
-                'domain' => array('toClass' => 'mfn\models\Domain', 'cardinality' => 'oneToOne' , 'keys' => 'idDomain:idDomain'), 
-                'relationgroup' => array('toClass' => 'mfn\models\RelationGroup', 'cardinality' => 'oneToOne' , 'keys' => 'idRelationGroup:idRelationGroup'), 
-                'entityrelations' => array('toClass' => 'mfn\models\EntityRelation', 'cardinality' => 'oneToMany' , 'keys' => 'idRelationType:idRelationType'), 
-                'entries' => array('toClass' => 'mfn\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
+                'domain' => array('toClass' => 'fnbr\models\Domain', 'cardinality' => 'oneToOne' , 'keys' => 'idDomain:idDomain'), 
+                'relationgroup' => array('toClass' => 'fnbr\models\RelationGroup', 'cardinality' => 'oneToOne' , 'keys' => 'idRelationGroup:idRelationGroup'), 
+                'entityrelations' => array('toClass' => 'fnbr\models\EntityRelation', 'cardinality' => 'oneToMany' , 'keys' => 'idRelationType:idRelationType'), 
+                'entries' => array('toClass' => 'fnbr\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
             )
         );
     }

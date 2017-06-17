@@ -1,6 +1,4 @@
 <?php
-use Maestro\MVC\MApp as MApp;
-
 class formNewLemmaFields extends MHContainer
 {
 

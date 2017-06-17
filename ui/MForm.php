@@ -70,31 +70,6 @@ class MForm extends MControl
         }
     }
 
-    /*
-      public function generateFields()
-      {
-      $fields = '';
-      $control = $this->fields;
-      if ($control->hasItems()) {
-      foreach ($control->controls as $field) {
-      if ($field->className == 'mhiddenfield') {
-      $fields .= $field->generate();
-      } else {
-      $mfieldlabel = new mfieldlabel(['id' => $field->id, 'text' => $field->label]);
-      if ($this->property->layout == 'horizontal') {
-      $mfieldlabel->setClass($this->property->labelClass);
-      }
-      $label = $mfieldlabel->generate();
-      $formGroup = $label . $field->generate();
-      // usa a classe form-group do bootstrap
-      $fields .= "<div class=\"form-group\">{$formGroup}</div>";
-      }
-      }
-      }
-      return $fields;
-      }
-     */
-
     public function generateFields()
     {
         $fields = '';

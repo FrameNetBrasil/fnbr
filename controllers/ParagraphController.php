@@ -20,7 +20,7 @@ class ParagraphController extends MController {
     }
 
     public function formFind() {
-        $Paragraph= new mfn\models\Paragraph($this->data->id);
+        $Paragraph= new fnbr\models\Paragraph($this->data->id);
         $filter->idParagraph = $this->data->idParagraph;
         $this->data->query = $Paragraph->listByFilter($filter)->asQuery();
         $this->render();
@@ -37,7 +37,7 @@ class ParagraphController extends MController {
     }
 
     public function formUpdate() {
-        $Paragraph= new mfn\models\Paragraph($this->data->id);
+        $Paragraph= new fnbr\models\Paragraph($this->data->id);
         $this->data->Paragraph = $Paragraph->getData();
         
         $this->data->action = '@Paragraph/save/' .  $this->data->id;
@@ -45,28 +45,28 @@ class ParagraphController extends MController {
     }
 
     public function formDelete() {
-        $Paragraph = new mfn\models\Paragraph($this->data->id);
+        $Paragraph = new fnbr\models\Paragraph($this->data->id);
         $ok = '>Paragraph/delete/' . $Paragraph->getId();
         $cancelar = '>Paragraph/formObject/' . $Paragraph->getId();
         $this->renderPrompt('confirmation', "Confirma remoção do Paragraph [{$model->getDescription()}] ?", $ok, $cancelar);
     }
 
     public function lookup() {
-        $model = new mfn\models\Paragraph();
+        $model = new fnbr\models\Paragraph();
         $filter->idParagraph = $this->data->idParagraph;
         $this->data->query = $model->listByFilter($filter)->asQuery();
         $this->render();
     }
 
     public function save() {
-            $Paragraph = new mfn\models\Paragraph($this->data->Paragraph);
+            $Paragraph = new fnbr\models\Paragraph($this->data->Paragraph);
             $Paragraph->save();
             $go = '>Paragraph/formObject/' . $Paragraph->getId();
             $this->renderPrompt('information','OK',$go);
     }
 
     public function delete() {
-            $Paragraph = new mfn\models\Paragraph($this->data->id);
+            $Paragraph = new fnbr\models\Paragraph($this->data->id);
             $Paragraph->delete();
             $go = '>Paragraph/formFind';
             $this->renderPrompt('information',"Paragraph [{$this->data->idParagraph}] removido.", $go);

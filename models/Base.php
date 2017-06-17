@@ -2,8 +2,7 @@
 
 namespace fnbr\models;
 
-use \Maestro\Utils\MUtil as MUtil;
-use auth\models\Group;
+use fnbr\auth\models\Group;
 /**
   Base class to host "criteria pieces" and methods shared by most of Models.
  */
@@ -56,9 +55,9 @@ class Base {
 
     static public function relation($criteria, $className1, $className2, $relationEntry) {
         $cn1 = explode(' ', $className1);
-        MUtil::SetIfNull($cn1[1], $className1);
+        \MUtil::SetIfNull($cn1[1], $className1);
         $cn2 = explode(' ', $className2);
-        MUtil::SetIfNull($cn2[1], $className2);
+        \MUtil::SetIfNull($cn2[1], $className2);
         $alias = '_' . $cn1[1] . '_' . $cn2[1];
         $criteria->join($className1, "EntityRelation er{$alias}", "{$cn1[1]}.idEntity = er{$alias}.idEntity1");
         $criteria->join("EntityRelation er{$alias}", "RelationType rt{$alias}", "er{$alias}.idRelationType = rt{$alias}.idRelationType");
@@ -71,9 +70,9 @@ class Base {
         $criteria = $er->getCriteria();
         $criteria->select($select);
         $cn1 = explode(' ', $className1);
-        MUtil::SetIfNull($cn1[1], $className1);
+        \MUtil::SetIfNull($cn1[1], $className1);
         $cn2 = explode(' ', $className2);
-        MUtil::SetIfNull($cn2[1], $className2);
+        \MUtil::SetIfNull($cn2[1], $className2);
         $alias = '_' . $cn1[1] . '_' . $cn2[1];
         $criteria->join($className1, "EntityRelation er{$alias}", "{$cn1[1]}.idEntity = er{$alias}.idEntity1");
         $criteria->join("EntityRelation er{$alias}", "RelationType rt{$alias}", "er{$alias}.idRelationType = rt{$alias}.idRelationType");

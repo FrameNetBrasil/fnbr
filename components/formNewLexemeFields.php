@@ -1,5 +1,4 @@
 <?php
-use \Maestro\MVC\Mapp as MApp;
 
 class formNewLexemeFields extends MVContainer
 {

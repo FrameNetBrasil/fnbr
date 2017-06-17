@@ -31,7 +31,7 @@ class EntryMap extends \MBusinessModel {
                 'idLanguage' => array('column' => 'idLanguage','type' => 'integer'),
             ),
             'associations' => array(
-                'language' => array('toClass' => 'mfn\models\Language', 'cardinality' => 'oneToOne' , 'keys' => 'idLanguage:idLanguage'), 
+                'language' => array('toClass' => 'fnbr\models\Language', 'cardinality' => 'oneToOne' , 'keys' => 'idLanguage:idLanguage'), 
             )
         );
     }

@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -17,7 +17,7 @@ class ImportController extends MController
 
     public function formImportWSDoc()
     {
-        $language = new mfn\models\Language(); 
+        $language = new fnbr\models\Language(); 
         $this->data->languages = $language->listAll()->asQuery()->chunkResult('idLanguage','language');
         $this->data->tags = array('N'=>'Não','S'=>'Sim');
         $this->data->action = '@utils/import/importWSDoc';
@@ -28,7 +28,7 @@ class ImportController extends MController
         try {
             if ($this->data->idDocument != '') {
                 $files = \Maestro\Utils\Mutil::parseFiles('uploadFile');
-                $model = new mfn\models\Corpus($this->data->idCorpus);
+                $model = new fnbr\models\Corpus($this->data->idCorpus);
                 if ($this->data->tags == 'N') {
                     $model->uploadSentences($this->data, $files[0]);
                 } else {
@@ -45,7 +45,7 @@ class ImportController extends MController
     
     public function formImportLexWf()
     {
-        $language = new mfn\models\Language(); 
+        $language = new fnbr\models\Language(); 
         $this->data->languages = $language->listForCombo()->asQuery()->chunkResult('idLanguage','language');
         $this->data->action = '@utils/import/importLexWf';
         $this->render();
@@ -54,7 +54,7 @@ class ImportController extends MController
     public function importLexWf(){
         try {
             $files = \Maestro\Utils\Mutil::parseFiles('uploadFile');
-            $model = new mfn\models\Lexeme();
+            $model = new fnbr\models\Lexeme();
             $model->uploadLexemeWordform($this->data, $files[0]);
             $this->renderPrompt('information','OK');
         } catch (EMException $e) {
@@ -64,7 +64,7 @@ class ImportController extends MController
 
     public function importLexWfOffline(){
         try {
-            $model = new mfn\models\Lexeme();
+            $model = new fnbr\models\Lexeme();
             $model->uploadLexemeWordformOffline();
             //$this->renderJSON(json_encode('ok'));
         } catch (EMException $e) {
@@ -74,7 +74,7 @@ class ImportController extends MController
 
     public function formImportFullText()
     {
-        $language = new mfn\models\Language(); 
+        $language = new fnbr\models\Language(); 
         $this->data->languages = $language->listAll()->asQuery()->chunkResult('idLanguage','language');
         $this->data->action = '@utils/import/importFullText';
         $this->render();
@@ -83,7 +83,7 @@ class ImportController extends MController
     public function importFullText(){
         try {
             $files = \Maestro\Utils\Mutil::parseFiles('uploadFile');
-            $model = new mfn\models\Document($this->data->idDocument);
+            $model = new fnbr\models\Document($this->data->idDocument);
             $model->uploadFullText($this->data, $files[0]);
             $this->renderPrompt('information','OK');
         } catch (EMException $e) {
@@ -99,7 +99,7 @@ class ImportController extends MController
     
     public function importFrames(){
         try {
-            $service = MApp::getService('', '', 'data');
+            $service = Manager::getAppService('data');
             $files = \Maestro\Utils\Mutil::parseFiles('uploadFile');
             $json = file_get_contents($files[0]->getTmpName());
             $service->importFramesFromJSON($json);
@@ -111,7 +111,7 @@ class ImportController extends MController
 
     public function formImportMWE()
     {
-        $language = new mfn\models\Language();
+        $language = new fnbr\models\Language();
         $this->data->languages = $language->listAll()->asQuery()->chunkResult('idLanguage','language');
         $this->data->action = '@utils/import/importMWE';
         $this->render();
@@ -120,7 +120,7 @@ class ImportController extends MController
     public function importMWE(){
         try {
             $files = \Maestro\Utils\Mutil::parseFiles('uploadFile');
-            $model = new mfn\models\Lemma();
+            $model = new fnbr\models\Lemma();
             $mfile = $model->uploadMWE($this->data, $files[0]);
             $this->renderFile($mfile);
             //$this->renderPrompt('information','OK');

@@ -10,7 +10,7 @@ class StructureDomainService extends MService
         $relations = Base::relationCriteria('ViewFrame', 'Domain', 'rel_hasdomain', 'Domain.idDomain');
         $relations->where("idFrame = {$id}");
         $domains = $relations->asQuery()->chunkResult('idDomain','idDomain');
-        $domain = new mfn\models\Domain();
+        $domain = new fnbr\models\Domain();
         $types = $domain->listAll()->asQuery()->getResult();
         $result = array();
         foreach ($types as $row) {
@@ -25,7 +25,7 @@ class StructureDomainService extends MService
     }
 
     public function saveFrameDomain($idFrame, $toSave) {
-        $frame = new mfn\models\Frame($idFrame);
+        $frame = new fnbr\models\Frame($idFrame);
         $transaction = $frame->beginTransaction();
         try {
             Base::deleteEntity1Relation($frame->getIdEntity(), 'rel_hasdomain');

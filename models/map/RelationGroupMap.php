@@ -27,7 +27,7 @@ class RelationGroupMap extends \MBusinessModel {
                 'entry' => array('column' => 'entry','type' => 'string'),
             ),
             'associations' => array(
-                'entries' => array('toClass' => 'mfn\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
+                'entries' => array('toClass' => 'fnbr\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
             )
         );
     }

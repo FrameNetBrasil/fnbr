@@ -16,7 +16,7 @@
  * 02110-1301, USA.
  */
 
-class MBaseControl extends MComponent
+class MBaseControl extends MBase
 {
 
     /**
@@ -168,7 +168,6 @@ class MBaseControl extends MComponent
         $xmlControls = new MXMLControls();
         $controls = $xmlControls->fetch($file, $this);
         $this->addControls($controls);
-        return $controls;
     }
 
     function onCreate()
@@ -540,14 +539,6 @@ class MBaseControl extends MComponent
                 }
             }
         }
-    }
-
-    public function load() {
-
-    }
-
-    public function postback() {
-
     }
 
     /*

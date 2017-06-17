@@ -1,6 +1,6 @@
 <?php
 
-Manager::import("mfn\models\*");
+Manager::import("fnbr\models\*");
 
 class GrapherService extends MService
 {
@@ -585,14 +585,14 @@ class GrapherService extends MService
     public function getLURelationsByFrame($idEntityFrame, $chosen)
     {
         $relations = [];
-        $frame = new \mfn\models\Frame();
+        $frame = new \fnbr\models\Frame();
         $frameData = $frame->getByIdEntity($idEntityFrame);
         $node0 = (object)[
             'id' => $idEntityFrame,
             'type' => 'frame',
             'name' => $frameData->name
         ];
-        $lu = new \mfn\models\ViewLU();
+        $lu = new \fnbr\models\ViewLU();
         $criteria = $lu->listByIdEntityFrame($idEntityFrame, \Manager::getSession()->idLanguage);
         $evokesRelations = $criteria->asQuery()->getResult();
         foreach ($evokesRelations as $er) {
@@ -628,14 +628,14 @@ class GrapherService extends MService
     public function getFERelationsByFrame($idEntityFrame, $chosen)
     {
         $relations = [];
-        $frame = new \mfn\models\Frame();
+        $frame = new \fnbr\models\Frame();
         $frameData = $frame->getByIdEntity($idEntityFrame);
         $node0 = (object)[
             'id' => $idEntityFrame,
             'type' => 'frame',
             'name' => $frameData->name
         ];
-        $fe = new \mfn\models\ViewFrameElement();
+        $fe = new \fnbr\models\ViewFrameElement();
         $criteria = $fe->listByIdEntityFrame($idEntityFrame, \Manager::getSession()->idLanguage);
         $feRelations = $criteria->asQuery()->getResult();
         foreach ($feRelations as $er) {

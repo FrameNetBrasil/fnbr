@@ -5,8 +5,8 @@
             <fields>
                 <javascript>
                     function doChallengeResponse() {
-                        var str = $("#user").val() + ':' + $.md5($("#password").val()) + ':' + $("#challenge").val();
-                        $("#password").textbox('setValue','-');
+                        var str = $("#user").val() + ':' + $.md5($("#pwd").val()) + ':' + $("#challenge").val();
+                        $("#pwd").textbox('setValue','-');
                         $("#response").attr('value', $.md5(str));
                         return true;
                     }
@@ -17,7 +17,7 @@
                 <mhiddenfield id="response"/>
                 <mhiddenfield id="return_to_url"/>
                 <mtextfield id="user" label="Login" size="15" />
-                <mtextfield type="password" id="password" label="Password"  size="15"/>
+                <mtextfield type="password" id="pwd" label="Password"  size="15"/>
             </fields>
             <buttons>
                 <mbutton id="btnLogin" text="Login" action="$this->data->action"/>

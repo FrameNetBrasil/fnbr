@@ -7,7 +7,7 @@ class StructureRelationGroupService extends MService
 
     public function listAll($data = '', $idLanguage = '')
     {
-        $rg = new mfn\models\RelationGroup();
+        $rg = new fnbr\models\RelationGroup();
         $rows = $rg->listAll()->asQuery()->getResult();
         $result = array();
         foreach ($rows as $row) {

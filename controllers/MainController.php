@@ -11,9 +11,9 @@
  * @since      
  */
 
-use \mfn\models\Base,
-    mfn\models\Language,
-    auth\models\User;
+use fnbr\models\Base,
+    fnbr\models\Language,
+    fnbr\auth\models\User;
 
 class MainController extends \MController {
 
@@ -47,7 +47,7 @@ class MainController extends \MController {
         $user = $login->getUser();
         $levels = $user->getAvaiableLevels();
         if ($levels[$toLevel]) {
-            $newUser = new auth\models\User($levels[$toLevel]);
+            $newUser = new fnbr\auth\models\User($levels[$toLevel]);
             $login->setUser($newUser);
             Manager::getSession()->mfnLayers = $newUser->getConfigData('mfnLayers');
             Manager::getSession()->mfnLevel = $toLevel;
@@ -62,7 +62,7 @@ class MainController extends \MController {
         $path = Manager::getAppPath('conf');
         $pathPUB = $path . '/rsa_1024_pub.pem';
         $pathPVT = $path . '/rsa_1024_priv.pem';
-        $jc = new mfn\models\jcryption($pathPUB, $pathPVT);
+        $jc = new fnbr\models\jcryption($pathPUB, $pathPVT);
         $jc->go();
         header('Content-type: text/plain');
         print_r($_POST);

@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 class LayerTypeController extends MController
@@ -22,7 +22,7 @@ class LayerTypeController extends MController
 
     public function modelTree()
     {
-        $structure = MApp::getService('', '', 'structurelayertype');
+        $structure = Manager::getAppService('structurelayertype');
         if ($this->data->id == '') {
             $children = $structure->listAll($this->data, $this->idLanguage);
             $data = (object)[
@@ -46,14 +46,14 @@ class LayerTypeController extends MController
         }
         $this->data->save = "@structure/layertype/newLayerType|formNewLayerType";
         $this->data->close = "!$('#formNew_dialog').dialog('close');";
-        $this->data->title = _M('new mfn\models\Layer Type');
+        $this->data->title = _M('new fnbr\models\Layer Type');
         $this->render();
     }
 
     public function newLayerType()
     {
         try {
-            $model = new mfn\models\LayerType();
+            $model = new fnbr\models\LayerType();
             $this->data->layertype->entry = 'lty_' . str_replace('lty_', '', strtolower($this->data->layertype->entry));
             $model->save($this->data->layertype);
             $this->renderPrompt('information', 'OK', "structure.editEntry('{$this->data->layertype->entry}');");
@@ -64,7 +64,7 @@ class LayerTypeController extends MController
 
     public function formUpdateLayerType()
     {
-        $model = new mfn\models\LayerType($this->data->id);
+        $model = new fnbr\models\LayerType($this->data->id);
         $this->data->object = $model->getData();
         $this->data->object->entry = str_replace('lty_', '', strtolower($this->data->object->entry));
         $this->data->save = "@structure/layertype/updateLayerType|formUpdateLayerType";
@@ -76,7 +76,7 @@ class LayerTypeController extends MController
     public function updateLayerType()
     {
         try {
-            $model = new mfn\models\LayerType($this->data->layertype->idLayerType);
+            $model = new fnbr\models\LayerType($this->data->layertype->idLayerType);
             $this->data->layertype->entry = 'lty_' . str_replace('lty_', '', strtolower($this->data->layertype->entry));
             $model->updateEntry($this->data->layertype->entry);
             $this->renderPrompt('information', 'OK', "structure.editEntry('{$this->data->layertype->entry}');");
@@ -88,7 +88,7 @@ class LayerTypeController extends MController
     public function formNewGenericLabel()
     {
         $this->data->idLayerType = $this->data->id;
-        $model = new mfn\models\LayerType($this->data->idLayerType);
+        $model = new fnbr\models\LayerType($this->data->idLayerType);
         $this->data->layerType = $model->getName();
         $this->data->save = "@structure/layertype/newGenericLabel|formNewGenericLabel";
         $this->data->close = "!$('#formNewGenericLabel_dialog').dialog('close');";
@@ -99,7 +99,7 @@ class LayerTypeController extends MController
     public function newGenericLabel()
     {
         try {
-            $model = new mfn\models\GenericLabel();
+            $model = new fnbr\models\GenericLabel();
             if (!$model->exists($this->data->genericlabel)) {
                 $model->saveData($this->data->genericlabel);
                 $this->renderPrompt('information', 'Label created.');
@@ -114,10 +114,10 @@ class LayerTypeController extends MController
     public function formUpdateGenericLabel()
     {
         $this->data->idGenericLabel = $this->data->id;
-        $gl = new mfn\models\GenericLabel($this->data->idGenericLabel);
+        $gl = new fnbr\models\GenericLabel($this->data->idGenericLabel);
         $this->data->genericlabel = $gl->getData();
         $this->data->idLayerType = Manager::getContext()->get(1);
-        $lt = new mfn\models\LayerType($this->data->idLayerType);
+        $lt = new fnbr\models\LayerType($this->data->idLayerType);
         $this->data->layerType = $lt->getName();
         $this->data->save = "@structure/layertype/updateGenericLabel|formUpdateGenericLabel";
         $this->data->close = "!$('#formUpdateGenericLabel_dialog').dialog('close');";
@@ -128,7 +128,7 @@ class LayerTypeController extends MController
     public function updateGenericLabel()
     {
         try {
-            $model = new mfn\models\GenericLabel($this->data->genericlabel->idGenericLabel);
+            $model = new fnbr\models\GenericLabel($this->data->genericlabel->idGenericLabel);
             $model->saveData($this->data->genericlabel);
             $this->renderPrompt('information', 'Label updated.');
         } catch (\Exception $e) {
@@ -145,7 +145,7 @@ class LayerTypeController extends MController
     public function deleteGenericLabel()
     {
         try {
-            $model = new mfn\models\GenericLabel($this->data->id);
+            $model = new fnbr\models\GenericLabel($this->data->id);
             if (!$model->inUse()) {
                 $model->delete();
                 $this->renderPrompt('information', 'Label deleted.', "!structure.reloadGenericLabel();");

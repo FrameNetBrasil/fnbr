@@ -1,6 +1,6 @@
 <?php
 
-use  mfn\models\Base;
+use  fnbr\models\Base;
 
 class LoginController extends \MController
 {
@@ -19,18 +19,18 @@ class LoginController extends \MController
     public function authenticate()
     {
         if ($this->data->datasource == '') {
-            $this->data->datasource = Manager::getConf('mfn.db'); //$this->renderPrompt('error', 'Inform database name.');
+            $this->data->datasource = Manager::getConf('fnbr.db'); //$this->renderPrompt('error', 'Inform database name.');
         }
-        Manager::setConf('mfn.db', $this->data->datasource);
+        Manager::setConf('fnbr.db', $this->data->datasource);
         Manager::getSession()->mfndb = $this->data->datasource;
         $auth = Manager::getAuth();
         $this->data->result = $auth->authenticate($this->data->user, $this->data->challenge, $this->data->response);
         if ($this->data->result) {
             $user = Manager::getLogin()->getUser();
-            $this->data->idLanguage = $user->getConfigData('mfnIdLanguage');
+            $this->data->idLanguage = $user->getConfigData('fnbrIdLanguage');
             if ($this->data->idLanguage == '') {
                 $this->data->idLanguage = 1;
-                $user->setConfigData('mfnIdLanguage', $this->data->idLanguage);
+                $user->setConfigData('fnbrIdLanguage', $this->data->idLanguage);
             }
             if ($this->data->ifLanguage == '') {
                 $this->data->ifLanguage = 'en';
@@ -38,8 +38,7 @@ class LoginController extends \MController
 
             Manager::getSession()->idLanguage = $this->data->idLanguage;
             Manager::getSession()->lang = $this->data->ifLanguage;
-            Manager::getSession()->mfnLevel = $user->getUserLevel();
-
+            Manager::getSession()->fnbrLevel = $user->getUserLevel();
             $this->redirect(Manager::getURL('main'));
         } else {
             $this->renderPrompt('error', 'Login or password not valid.');

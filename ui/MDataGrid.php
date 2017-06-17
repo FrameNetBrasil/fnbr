@@ -67,7 +67,7 @@ class MDataGrid extends MControl {
 
         foreach ($this->property->columns as $column) {
             $column->style->width = $column->style->width ? : '0';
-            $column->field = (Manager::getOptions('fetchStyle') == \FETCH_NUM) ? strtoupper($column->field) : $column->field;
+            $column->field = (\Manager::getOptions('fetchStyle') == \FETCH_NUM) ? strtoupper($column->field) : $column->field;
         }
 
         if ($this->property->checkbox) {
@@ -105,7 +105,7 @@ class MDataGrid extends MControl {
             if (preg_match('/^[0-9]/', $this->property->idField)) {
                 $this->property->idField = 'F' . $this->property->idField;
             }
-            $custom->idField = (Manager::getOptions('fetchStyle') == \FETCH_NUM) ? strtoupper($this->property->idField) : $this->property->idField;
+            $custom->idField = (\Manager::getOptions('fetchStyle') == \FETCH_NUM) ? strtoupper($this->property->idField) : $this->property->idField;
         }
         $toolbar = '';
         if ($this->property->toolbar) {

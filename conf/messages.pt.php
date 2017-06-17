@@ -1,6 +1,6 @@
 <?php
     
-    return array(
+    return [
         "New" => "Novo",
         "Search" => "Pesquisar",
         "Delete" => "Excluir",
@@ -46,4 +46,4 @@
         "repAnnotation" => "Anotação",
         "repStatus" => "Status",
         "repCE" => "Elementos do Construto",
-    );
+    ];

@@ -20,7 +20,7 @@ class ColorController extends MController {
     }
     
     public function lookupData(){
-        $model = new mfn\models\Color();
+        $model = new fnbr\models\Color();
         $colors = $model->listForLookup()->asQuery()->getResult(\FETCH_ASSOC);
         $data = [];
         foreach($colors as $color) {
@@ -37,7 +37,7 @@ class ColorController extends MController {
     
 
     public function formFind() {
-        $Color= new mfn\models\Color($this->data->id);
+        $Color= new fnbr\models\Color($this->data->id);
         $filter->idColor = $this->data->idColor;
         $this->data->query = $Color->listByFilter($filter)->asQuery();
         $this->render();
@@ -54,7 +54,7 @@ class ColorController extends MController {
     }
 
     public function formUpdate() {
-        $Color= new mfn\models\Color($this->data->id);
+        $Color= new fnbr\models\Color($this->data->id);
         $this->data->Color = $Color->getData();
         
         $this->data->action = '@Color/save/' .  $this->data->id;
@@ -62,28 +62,28 @@ class ColorController extends MController {
     }
 
     public function formDelete() {
-        $Color = new mfn\models\Color($this->data->id);
+        $Color = new fnbr\models\Color($this->data->id);
         $ok = '>Color/delete/' . $Color->getId();
         $cancelar = '>Color/formObject/' . $Color->getId();
         $this->renderPrompt('confirmation', "Confirma remoção do Color [{$model->getDescription()}] ?", $ok, $cancelar);
     }
 
     public function lookup() {
-        $model = new mfn\models\Color();
+        $model = new fnbr\models\Color();
         $filter->idColor = $this->data->idColor;
         $this->data->query = $model->listByFilter($filter)->asQuery();
         $this->render();
     }
 
     public function save() {
-            $Color = new mfn\models\Color($this->data->Color);
+            $Color = new fnbr\models\Color($this->data->Color);
             $Color->save();
             $go = '>Color/formObject/' . $Color->getId();
             $this->renderPrompt('information','OK',$go);
     }
 
     public function delete() {
-            $Color = new mfn\models\Color($this->data->id);
+            $Color = new fnbr\models\Color($this->data->id);
             $Color->delete();
             $go = '>Color/formFind';
             $this->renderPrompt('information',"Color [{$this->data->idColor}] removido.", $go);

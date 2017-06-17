@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -22,7 +22,7 @@ class CxnController extends MController
     {
         $this->data->isMaster = Manager::checkAccess('MASTER', A_EXECUTE) ? 'true' : 'false';
         
-        $editor = MApp::getService('', '', 'visualeditor');
+        $editor = Manager::getAppService('visualeditor');
         $this->data->relationData = $editor->getAllCxnRelationData();
         mdump($this->data->relationData);
         $this->data->relationEntry = json_encode($this->data->relationData);
@@ -32,7 +32,7 @@ class CxnController extends MController
 
     public function cxnTree()
     {
-        $grapher = MApp::getService('', '', 'grapher');
+        $grapher = Manager::getAppService('grapher');
         if ($this->data->id == '') {
             $children = $grapher->listCxns($this->data, $this->idLanguage);
             $data = (object)[

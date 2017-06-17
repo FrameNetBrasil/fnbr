@@ -1,17 +1,6 @@
 <?php
-/**
- * $_comment
- *
- * @category   Maestro
- * @package    UFJF
- * @subpackage $_package
- * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version    
- * @since      
- */
 
-Manager::import("auth\models\*");
+Manager::import("fnbr\auth\models\*");
 
 class MessageBoxController extends MController {
 
@@ -20,7 +9,7 @@ class MessageBoxController extends MController {
     }
 
     public function formFind() {
-        $auth_messagebox= new mfn\models\Auth_messagebox($this->data->id);
+        $auth_messagebox= new fnbr\models\Auth_messagebox($this->data->id);
         $filter->idMessageBox = $this->data->idMessageBox;
         $this->data->query = $auth_messagebox->listByFilter($filter)->asQuery();
         $this->render();
@@ -37,7 +26,7 @@ class MessageBoxController extends MController {
     }
 
     public function formUpdate() {
-        $auth_messagebox= new mfn\models\Auth_messagebox($this->data->id);
+        $auth_messagebox= new fnbr\models\Auth_messagebox($this->data->id);
         $this->data->auth_messagebox = $auth_messagebox->getData();
         $this->data->auth_messagebox->idUserDesc = $auth_messagebox->getUser()->getDescription();
 	$this->data->auth_messagebox->idMsgStatusDesc = $auth_messagebox->getMsgStatus()->getDescription();
@@ -48,28 +37,28 @@ class MessageBoxController extends MController {
     }
 
     public function formDelete() {
-        $auth_messagebox = new mfn\models\Auth_messagebox($this->data->id);
+        $auth_messagebox = new fnbr\models\Auth_messagebox($this->data->id);
         $ok = '>auth/auth_messagebox/delete/' . $auth_messagebox->getId();
         $cancelar = '>auth/auth_messagebox/formObject/' . $auth_messagebox->getId();
         $this->renderPrompt('confirmation', "Confirma remoção do Auth_messagebox [{$model->getDescription()}] ?", $ok, $cancelar);
     }
 
     public function lookup() {
-        $model = new mfn\models\Auth_messagebox();
+        $model = new fnbr\models\Auth_messagebox();
         $filter->idMessageBox = $this->data->idMessageBox;
         $this->data->query = $model->listByFilter($filter)->asQuery();
         $this->render();
     }
 
     public function save() {
-            $auth_messagebox = new mfn\models\Auth_messagebox($this->data->auth_messagebox);
+            $auth_messagebox = new fnbr\models\Auth_messagebox($this->data->auth_messagebox);
             $auth_messagebox->save();
             $go = '>auth/auth_messagebox/formObject/' . $auth_messagebox->getId();
             $this->renderPrompt('information','OK',$go);
     }
 
     public function delete() {
-            $auth_messagebox = new mfn\models\Auth_messagebox($this->data->id);
+            $auth_messagebox = new fnbr\models\Auth_messagebox($this->data->id);
             $auth_messagebox->delete();
             $go = '>auth/auth_messagebox/formFind';
             $this->renderPrompt('information',"Auth_messagebox [{$this->data->idMessageBox}] removido.", $go);

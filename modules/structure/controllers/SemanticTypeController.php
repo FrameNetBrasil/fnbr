@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -23,7 +23,7 @@ class SemanticTypeController extends MController
 
     public function semanticTypeTree()
     {
-        $structure = MApp::getService('', '', 'structuresemantictype');
+        $structure = Manager::getAppService('structuresemantictype');
         if ($this->data->id == '') {
             $children = $structure->listDomains($this->data, $this->idLanguage);
             $data = (object)[
@@ -52,12 +52,12 @@ class SemanticTypeController extends MController
         }
         $this->data->save = "@structure/semantictype/newSemanticType|formNewSemanticType";
         $this->data->close = "!$('#formNewSemanticType_dialog').dialog('close');";
-        $this->data->title = _M('new mfn\models\SemanticType');
+        $this->data->title = _M('new fnbr\models\SemanticType');
         $this->render();
     }
     
     public function formUpdateSemanticType(){
-        $model = new mfn\models\SemanticType($this->data->id);
+        $model = new fnbr\models\SemanticType($this->data->id);
         $this->data->object = $model->getData();
         $this->data->save = "@structure/semantictype/updateSemanticType|formUpdateSemanticType";
         $this->data->close = "!$('#formUpdateSemanticType_dialog').dialog('close');";
@@ -68,7 +68,7 @@ class SemanticTypeController extends MController
     public function newSemanticType()
     {
         try {
-            $model = new mfn\models\SemanticType();
+            $model = new fnbr\models\SemanticType();
             $this->data->semantictype->entry = 'sty_' . $this->data->semantictype->entry;
             $model->setData($this->data->semantictype);
             $model->save($this->data->semantictype);
@@ -81,7 +81,7 @@ class SemanticTypeController extends MController
     public function updateSemanticType()
     {
         try {
-            $model = new mfn\models\SemanticType($this->data->semantictype->idSemanticType);
+            $model = new fnbr\models\SemanticType($this->data->semantictype->idSemanticType);
             $model->updateEntry($this->data->semantictype->entry);
             $this->renderPrompt('information', 'OK', "structure.editEntry('{$this->data->semantictype->entry}');");
         } catch (\Exception $e) {
@@ -92,7 +92,7 @@ class SemanticTypeController extends MController
     public function deleteSemanticType()
     {
         try {
-            $model = new mfn\models\SemanticType($this->data->id);
+            $model = new fnbr\models\SemanticType($this->data->id);
             $model->delete();
             $this->renderPrompt('information', "Record removed.","structure.reloadSemanticType();");
         } catch (\Exception $e) {
@@ -102,7 +102,7 @@ class SemanticTypeController extends MController
     
     public function addEntitySemanticType() {
         try {
-            $structure = MApp::getService('', '', 'structuresemantictype');
+            $structure = Manager::getAppService('structuresemantictype');
             $structure->addEntitySemanticType($this->data->idEntity, $this->data->idSemanticType);
             $this->renderPrompt('information', "Ok","$('#{$this->data->idGrid}').datagrid('reload');");
         } catch (\Exception $e) {
@@ -112,7 +112,7 @@ class SemanticTypeController extends MController
 
     public function delEntitySemanticType() {
         try {
-            $structure = MApp::getService('', '', 'structuresemantictype');
+            $structure = Manager::getAppService('structuresemantictype');
             $structure->delEntitySemanticType($this->data->idEntity, $this->data->toRemove);
             $this->renderPrompt('information', "Ok","$('#{$this->data->idGrid}').datagrid('reload');");
         } catch (\Exception $e) {

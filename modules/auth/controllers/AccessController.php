@@ -1,17 +1,6 @@
 <?php
-/**
- * $_comment
- *
- * @category   Maestro
- * @package    UFJF
- * @subpackage $_package
- * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version    
- * @since      
- */
 
-Manager::import("auth\models\*");
+Manager::import("fnbr\auth\models\*");
 
 class AccessController extends MController {
 
@@ -20,7 +9,7 @@ class AccessController extends MController {
     }
 
     public function formFind() {
-        $Access= new mfn\models\Access($this->data->id);
+        $Access= new fnbr\models\Access($this->data->id);
         $filter->idAccess = $this->data->idAccess;
         $this->data->query = $Access->listByFilter($filter)->asQuery();
         $this->render();
@@ -37,7 +26,7 @@ class AccessController extends MController {
     }
 
     public function formUpdate() {
-        $Access= new mfn\models\Access($this->data->id);
+        $Access= new fnbr\models\Access($this->data->id);
         $this->data->Access = $Access->getData();
         
         $this->data->action = '@auth/Access/save/' .  $this->data->id;
@@ -45,28 +34,28 @@ class AccessController extends MController {
     }
 
     public function formDelete() {
-        $Access = new mfn\models\Access($this->data->id);
+        $Access = new fnbr\models\Access($this->data->id);
         $ok = '>auth/Access/delete/' . $Access->getId();
         $cancelar = '>auth/Access/formObject/' . $Access->getId();
         $this->renderPrompt('confirmation', "Confirma remoção do Access [{$model->getDescription()}] ?", $ok, $cancelar);
     }
 
     public function lookup() {
-        $model = new mfn\models\Access();
+        $model = new fnbr\models\Access();
         $filter->idAccess = $this->data->idAccess;
         $this->data->query = $model->listByFilter($filter)->asQuery();
         $this->render();
     }
 
     public function save() {
-            $Access = new mfn\models\Access($this->data->Access);
+            $Access = new fnbr\models\Access($this->data->Access);
             $Access->save();
             $go = '>auth/Access/formObject/' . $Access->getId();
             $this->renderPrompt('information','OK',$go);
     }
 
     public function delete() {
-            $Access = new mfn\models\Access($this->data->id);
+            $Access = new fnbr\models\Access($this->data->id);
             $Access->delete();
             $go = '>auth/Access/formFind';
             $this->renderPrompt('information',"Access [{$this->data->idAccess}] removido.", $go);

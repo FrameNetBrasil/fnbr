@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -14,17 +14,17 @@ class RelationGroupController extends MController
     
     public function gridData()
     {
-        $model = new mfn\models\RelationGroup();
+        $model = new fnbr\models\RelationGroup();
         $criteria = $model->listByFilter($this->data->filter);
         $this->renderJSON($model->gridDataAsJSON($criteria));
     }
     
     public function formObject()
     {
-        $model = new mfn\models\RelationGroup($this->data->id);
+        $model = new fnbr\models\RelationGroup($this->data->id);
         $this->data->forUpdate = ($this->data->id != '');
         $this->data->object = $model->getData();
-        $this->data->title = $this->data->forUpdate ? $model->getDescription() : _M("new mfn\models\Relation Group");
+        $this->data->title = $this->data->forUpdate ? $model->getDescription() : _M("new fnbr\models\Relation Group");
         $this->data->save = "@admin/relationgroup/save/" . $model->getId() . '|formObject';
         $this->data->delete = "@admin/relationgroup/delete/" . $model->getId() . '|formObject';
         $this->render();
@@ -33,7 +33,7 @@ class RelationGroupController extends MController
     public function save()
     {
         try {
-            $model = new mfn\models\RelationGroup();
+            $model = new fnbr\models\RelationGroup();
             $this->data->relationgroup->entry = 'rgp_' . $this->data->relationgroup->entry;
             $model->setData($this->data->relationgroup);
             $model->save();

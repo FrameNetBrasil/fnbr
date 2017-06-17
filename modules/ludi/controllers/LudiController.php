@@ -1,6 +1,6 @@
 <?php
 
-use Maestro\MVC\MApp;
+
 
 
 
@@ -21,7 +21,7 @@ class LudiController extends MController
     public function main()
     {
         $this->data->isMaster = Manager::checkAccess('MASTER', A_EXECUTE) ? 'true' : 'false';
-        $grapher = MApp::getService('', '', 'grapher');
+        $grapher = Manager::getAppService('grapher');
         $this->data->relationData = $grapher->getRelationData();
         $this->render();
     }

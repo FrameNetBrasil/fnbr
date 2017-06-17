@@ -20,7 +20,7 @@ class LayerGroupController extends MController {
     }
 
     public function formFind() {
-        $LayerGroup= new mfn\models\LayerGroup($this->data->id);
+        $LayerGroup= new fnbr\models\LayerGroup($this->data->id);
         $filter->idLayerGroup = $this->data->idLayerGroup;
         $this->data->query = $LayerGroup->listByFilter($filter)->asQuery();
         $this->render();
@@ -37,7 +37,7 @@ class LayerGroupController extends MController {
     }
 
     public function formUpdate() {
-        $LayerGroup= new mfn\models\LayerGroup($this->data->id);
+        $LayerGroup= new fnbr\models\LayerGroup($this->data->id);
         $this->data->LayerGroup = $LayerGroup->getData();
         
         $this->data->action = '@LayerGroup/save/' .  $this->data->id;
@@ -45,28 +45,28 @@ class LayerGroupController extends MController {
     }
 
     public function formDelete() {
-        $LayerGroup = new mfn\models\LayerGroup($this->data->id);
+        $LayerGroup = new fnbr\models\LayerGroup($this->data->id);
         $ok = '>LayerGroup/delete/' . $LayerGroup->getId();
         $cancelar = '>LayerGroup/formObject/' . $LayerGroup->getId();
         $this->renderPrompt('confirmation', "Confirma remoção do LayerGroup [{$model->getDescription()}] ?", $ok, $cancelar);
     }
 
     public function lookup() {
-        $model = new mfn\models\LayerGroup();
+        $model = new fnbr\models\LayerGroup();
         $filter->idLayerGroup = $this->data->idLayerGroup;
         $this->data->query = $model->listByFilter($filter)->asQuery();
         $this->render();
     }
 
     public function save() {
-            $LayerGroup = new mfn\models\LayerGroup($this->data->LayerGroup);
+            $LayerGroup = new fnbr\models\LayerGroup($this->data->LayerGroup);
             $LayerGroup->save();
             $go = '>LayerGroup/formObject/' . $LayerGroup->getId();
             $this->renderPrompt('information','OK',$go);
     }
 
     public function delete() {
-            $LayerGroup = new mfn\models\LayerGroup($this->data->id);
+            $LayerGroup = new fnbr\models\LayerGroup($this->data->id);
             $LayerGroup->delete();
             $go = '>LayerGroup/formFind';
             $this->renderPrompt('information',"LayerGroup [{$this->data->idLayerGroup}] removido.", $go);

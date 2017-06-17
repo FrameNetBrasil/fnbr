@@ -20,7 +20,7 @@ class AnnotationSetController extends MController {
     }
 
     public function formFind() {
-        $AnnotationSet= new mfn\models\AnnotationSet($this->data->id);
+        $AnnotationSet= new fnbr\models\AnnotationSet($this->data->id);
         $filter->idAnnotationSet = $this->data->idAnnotationSet;
         $this->data->query = $AnnotationSet->listByFilter($filter)->asQuery();
         $this->render();
@@ -37,7 +37,7 @@ class AnnotationSetController extends MController {
     }
 
     public function formUpdate() {
-        $AnnotationSet= new mfn\models\AnnotationSet($this->data->id);
+        $AnnotationSet= new fnbr\models\AnnotationSet($this->data->id);
         $this->data->AnnotationSet = $AnnotationSet->getData();
         
         $this->data->action = '@AnnotationSet/save/' .  $this->data->id;
@@ -45,28 +45,28 @@ class AnnotationSetController extends MController {
     }
 
     public function formDelete() {
-        $AnnotationSet = new mfn\models\AnnotationSet($this->data->id);
+        $AnnotationSet = new fnbr\models\AnnotationSet($this->data->id);
         $ok = '>AnnotationSet/delete/' . $AnnotationSet->getId();
         $cancelar = '>AnnotationSet/formObject/' . $AnnotationSet->getId();
         $this->renderPrompt('confirmation', "Confirma remoção do AnnotationSet [{$model->getDescription()}] ?", $ok, $cancelar);
     }
 
     public function lookup() {
-        $model = new mfn\models\AnnotationSet();
+        $model = new fnbr\models\AnnotationSet();
         $filter->idAnnotationSet = $this->data->idAnnotationSet;
         $this->data->query = $model->listByFilter($filter)->asQuery();
         $this->render();
     }
 
     public function save() {
-            $AnnotationSet = new mfn\models\AnnotationSet($this->data->AnnotationSet);
+            $AnnotationSet = new fnbr\models\AnnotationSet($this->data->AnnotationSet);
             $AnnotationSet->save();
             $go = '>AnnotationSet/formObject/' . $AnnotationSet->getId();
             $this->renderPrompt('information','OK',$go);
     }
 
     public function delete() {
-            $AnnotationSet = new mfn\models\AnnotationSet($this->data->id);
+            $AnnotationSet = new fnbr\models\AnnotationSet($this->data->id);
             $AnnotationSet->delete();
             $go = '>AnnotationSet/formFind';
             $this->renderPrompt('information',"AnnotationSet [{$this->data->idAnnotationSet}] removido.", $go);

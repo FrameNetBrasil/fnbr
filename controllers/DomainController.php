@@ -20,14 +20,14 @@ class DomainController extends MController {
     }
 
     public function lookupData($rowsOnly){
-        $model = new mfn\models\Domain();
+        $model = new fnbr\models\Domain();
         $criteria = $model->listAll();
         $this->renderJSON($model->gridDataAsJSON($criteria, $rowsOnly));
     }
 
     public function saveFrameDomain() {
         try {
-            $structure = MApp::getService('', '', 'structuredomain');
+            $structure = Manager::getAppService('structuredomain');
             $structure->saveFrameDomain($this->data->idFrame, $this->data->toSave);
             $this->renderPrompt('information', "Ok","$('#{$this->data->idGrid}').datagrid('reload');");
         } catch (\Exception $e) {

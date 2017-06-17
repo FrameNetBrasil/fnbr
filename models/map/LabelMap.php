@@ -32,9 +32,9 @@ class LabelMap extends \MBusinessModel {
                 'idInstantiationType' => array('column' => 'idInstantiationType','type' => 'integer'),
             ),
             'associations' => array(
-                'entity' => array('toClass' => 'mfn\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idLabelType:idEntity'), 
-                'layer' => array('toClass' => 'mfn\models\Layer', 'cardinality' => 'oneToOne' , 'keys' => 'idLayer:idLayer'), 
-                'instantiationType' => array('toClass' => 'mfn\models\TypeInstance', 'cardinality' => 'oneToOne' , 'keys' => 'idInstantiationType:idTypeInstance'), 
+                'entity' => array('toClass' => 'fnbr\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idLabelType:idEntity'), 
+                'layer' => array('toClass' => 'fnbr\models\Layer', 'cardinality' => 'oneToOne' , 'keys' => 'idLayer:idLayer'), 
+                'instantiationType' => array('toClass' => 'fnbr\models\TypeInstance', 'cardinality' => 'oneToOne' , 'keys' => 'idInstantiationType:idTypeInstance'), 
             )
         );
     }
