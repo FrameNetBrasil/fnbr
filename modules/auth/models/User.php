@@ -4,9 +4,11 @@ namespace fnbr\auth\models;
 
 use fnbr\models\Base;
 
-class User extends map\UserMap {
+class User extends map\UserMap
+{
 
-    public static function config() {
+    public static function config()
+    {
         return array(
             'log' => array(),
             'validators' => array(
@@ -21,19 +23,25 @@ class User extends map\UserMap {
         );
     }
 
-    public function getDescription() {
+    public function getDescription()
+    {
         return $this->getLogin();
     }
 
-    public function delete() {
+    public function delete()
+    {
         $this->deleteAssociation('groups');
         parent::delete();
     }
 
-    public function listByFilter($filter) {
+    public function listByFilter($filter)
+    {
         $criteria = $this->getCriteria()->select('*, person.name')->orderBy('login');
         if ($filter->idUser) {
             $criteria->where("idUser = {$filter->idUser}");
+        }
+        if ($filter->idPerson) {
+            $criteria->where("idPerson = {$filter->idPerson}");
         }
         if ($filter->login) {
             $criteria->where("login LIKE '{$filter->login}%'");
@@ -44,12 +52,13 @@ class User extends map\UserMap {
         return $criteria;
     }
 
-    public function listForGrid($filter) {
+    public function listForGrid($filter)
+    {
         $levels = array_keys(Base::userLevel());
         $constraintsLU = _M("Constraints_LU");
         $preferences = _M("Preferences");
         $criteria = $this->getCriteria()->select("*, idUser as resetPassword, person.name, person.email, groups.name as level, " .
-                        "IF((groups.name = 'BEGINNER') or (groups.name = 'JUNIOR') or (groups.name = 'SENIOR'), '{$constraintsLU}','') as constraints, '{$preferences}' as preferences")->orderBy('login');
+            "IF((groups.name = 'BEGINNER') or (groups.name = 'JUNIOR') or (groups.name = 'SENIOR'), '{$constraintsLU}','') as constraints, '{$preferences}' as preferences")->orderBy('login');
         if ($filter->idUser) {
             $criteria->where("idUser = {$filter->idUser}");
         }
@@ -66,15 +75,18 @@ class User extends map\UserMap {
         return $criteria;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->login;
     }
 
-    public function getForRegisterLogin() {
-        
+    public function getForRegisterLogin()
+    {
+
     }
 
-    public function getArrayGroups() {
+    public function getArrayGroups()
+    {
         $aGroups = array();
         $groups = $this->getGroups();
         foreach ($groups as $group) {
@@ -84,46 +96,62 @@ class User extends map\UserMap {
         return $aGroups;
     }
 
-    public function getRights() {
+    public function getRights()
+    {
         $query = $this->getCriteria()->
-                select('groups.access.transaction.name', 'max(groups.access.rights) as rights')->
-                where("login = '{$this->login}'")->
-                groupBy('groups.access.transaction.name')->
-                asQuery();
+        select('groups.access.transaction.name', 'max(groups.access.rights) as rights')->
+        where("login = '{$this->login}'")->
+        groupBy('groups.access.transaction.name')->
+        asQuery();
         return $query->chunkResult('name', 'rights', false);
     }
 
-    public function weakPassword() {
+    public function weakPassword()
+    {
         $weak = ($this->passMD5 == MD5('010101')) || ($this->passMD5 == MD5($this->login));
         return $weak;
     }
 
-    public function resetPassword() {
+    public function resetPassword()
+    {
         $this->newPassword(\Manager::getOptions('defaultPassword'));
     }
 
-    public function newPassword($password) {
+    public function newPassword($password)
+    {
         $this->setPassMD5(md5($password));
         $this->save();
     }
 
-    public function validatePassword($password) {
+    public function validatePassword($password)
+    {
         return ($this->getPassMD5() == md5($password));
     }
 
-    public function validatePasswordMD5($challenge, $response) {
+    public function validatePasswordMD5($challenge, $response)
+    {
         $hash_pass = MD5(trim($this->login) . ':' . trim($this->passMD5) . ":" . $challenge);
         return ($hash_pass == $response);
     }
 
-    public function getByLogin($login) {
+    public function getByLogin($login)
+    {
         $criteria = $this->getCriteria()->
-                where("login = '{$login}'");
+        where("login = '{$login}'");
         $this->retrieveFromCriteria($criteria);
         return $this;
     }
 
-    public function listGroups() {
+    public function getByIdPerson($idPerson)
+    {
+        $criteria = $this->getCriteria()->
+        where("idPerson = {$idPerson}");
+        $this->retrieveFromCriteria($criteria);
+        return $this;
+    }
+
+    public function listGroups()
+    {
         $criteria = $this->getCriteria()->select("groups.idGroup,groups.name")->orderBy("groups.name");
         if ($this->idUser) {
             $criteria->where("idUser = {$this->idUser}");
@@ -131,7 +159,8 @@ class User extends map\UserMap {
         return $criteria;
     }
 
-    public function getConfigData($attr) {
+    public function getConfigData($attr)
+    {
         $config = parent::getConfig();
         if ($config == '') {
             $config = new \StdClass();
@@ -142,7 +171,8 @@ class User extends map\UserMap {
         return $config->$attr;
     }
 
-    public function setConfigData($attr, $value) {
+    public function setConfigData($attr, $value)
+    {
         $config = parent::getConfig();
         if ($config == '') {
             $config = new \StdClass();
@@ -155,7 +185,8 @@ class User extends map\UserMap {
         parent::save();
     }
 
-    public function getUserLevel() {
+    public function getUserLevel()
+    {
         $userLevel = '';
         $levels = Base::userLevel();
         $groups = $this->getArrayGroups();
@@ -167,11 +198,12 @@ class User extends map\UserMap {
         return $userLevel;
     }
 
-    public function getAvaiableLevels() {
+    public function getAvaiableLevels()
+    {
         $levels = [];
         $criteria = $this->getCriteria()->
-                select('idUser')->
-                where("idPerson = {$this->getIdPerson()}");
+        select('idUser')->
+        where("idPerson = {$this->getIdPerson()}");
         $users = $criteria->asQuery()->getResult();
         foreach ($users as $row) {
             $idUser = $row['idUser'];
@@ -182,7 +214,8 @@ class User extends map\UserMap {
         return $levels;
     }
 
-    public function setUserLevel($userLevel) {
+    public function setUserLevel($userLevel)
+    {
         $levels = Base::userLevel();
         $currentLevel = $this->getUserLevel();
         if ($currentLevel != $userLevel) {
@@ -200,14 +233,16 @@ class User extends map\UserMap {
         }
     }
 
-    public function getUsersOfLevel($level) {
+    public function getUsersOfLevel($level)
+    {
         $criteria = $this->getCriteria()->select("idUser, login")
-                ->where("groups.name = '{$level}'")
-                ->orderBy("login");
+            ->where("groups.name = '{$level}'")
+            ->orderBy("login");
         return $criteria->asQuery()->chunkResult('idUser', 'login');
     }
 
-    public function getUserSupervisedByIdLU($idLU) {
+    public function getUserSupervisedByIdLU($idLU)
+    {
         $criteria = $this->getCriteria()->select('idUser,config');
         $rows = $criteria->asQuery()->getResult();
         foreach ($rows as $row) {
@@ -225,7 +260,32 @@ class User extends map\UserMap {
         return NULL;
     }
 
-    public function save() {
+    public function createPersonUser($userData)
+    {
+        $transaction = $this->beginTransaction();
+        try {
+            $person = new Person();
+            $person->setData($userData);
+            $person->save();
+            $this->setIdPerson($person->getIdPerson());
+            $this->setLogin($person->getEmail());
+            $this->setActive(0);
+            $this->setStatus('0');
+            $this->registerLogin();
+            $transaction->commit();
+        } catch (Exception $e) {
+            $transaction->rollback();
+        }
+    }
+
+    public function registerLogin()
+    {
+        $this->setLastLogin(\Manager::getSysTime());
+        $this->save();
+    }
+
+    public function save()
+    {
         if ($this->getPassMD5() == '') {
             $this->setPassMD5(md5(\Manager::getOptions('defaultPassword')));
         }

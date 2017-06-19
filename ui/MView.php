@@ -94,7 +94,12 @@ class MView extends MBaseView
         $page = Manager::getPage();
         $page->setName($oPrompt->getId());
         $page->setContent($oPrompt);
-        $prompt->setContent($page->generate());
+        //mdump($page->generate());
+        if (Manager::isAjaxCall()) {
+            $prompt->setContent($page->generate());
+        } else {
+            $prompt->setContent($page->render());
+        }
         $prompt->setId($oPrompt->getId());
     }
 

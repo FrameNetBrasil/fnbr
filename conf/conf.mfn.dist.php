@@ -23,6 +23,13 @@ return [
     'ui' => [
         'actions' => 'actions.mfn.php',
     ],
+    'login' => [
+        'handler' => 'auth0',
+        'AUTH0_CLIENT_ID' => 'UorLBpOPNNMP6HF7wfqQMOxFg3YqKzEk',
+        'AUTH0_DOMAIN' => 'framenetbr.auth0.com',
+        'AUTH0_CLIENT_SECRET' => 'FKqctCzv0QILbPXgerC_mdfRxzWNHdeUchxwQAYePrhngLwC4cVCe2QFWpY-vvU9',
+        'AUTH0_CALLBACK_URL' => 'http://kenobi.cpd.ufjf.br/auth0/callback.php'
+    ],
     'theme' => [
         'name' => 'mfn',
         'template' => 'index'

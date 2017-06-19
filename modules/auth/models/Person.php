@@ -25,6 +25,9 @@ class Person extends map\PersonMap {
         if ($filter->idPerson){
             $criteria->where("idPerson = {$filter->idPerson}");
         }
+        if ($filter->auth0IdUser){
+            $criteria->where("auth0IdUser = '{$filter->auth0IdUser}'");
+        }
         return $criteria;
     }
 

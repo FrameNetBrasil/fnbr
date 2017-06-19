@@ -14,6 +14,7 @@
 use fnbr\models\Base,
     fnbr\models\Language,
     fnbr\auth\models\User;
+use Auth0\SDK\Auth0;
 
 class MainController extends \MController {
 
@@ -25,14 +26,67 @@ class MainController extends \MController {
         if (Manager::isLogged()) {
             $this->render('formMain');
         } else {
-            $this->data->datasources = Manager::getConf('mfn.datasource');
-            $this->data->action = "@auth/login/authenticate|formLogin";
-            $this->render('formLogin');
+            if (Manager::getConf('login.handler') == 'auth0') {
+
+                $this->data->domain        = Manager::getConf('login.AUTH0_DOMAIN');
+                $this->data->client_id     = Manager::getConf('login.AUTH0_CLIENT_ID');
+                $this->data->client_secret = Manager::getConf('login.AUTH0_CLIENT_SECRET');
+                $this->data->redirect_uri  = Manager::getConf('login.AUTH0_CALLBACK_URL');
+
+                $auth0 = new Auth0([
+                    'domain' => $this->data->domain,
+                    'client_id' => $this->data->client_id,
+                    'client_secret' => $this->data->client_secret,
+                    'redirect_uri' => $this->data->redirect_uri,
+                    'audience' => 'urn:test:api',
+                    'persist_id_token' => true,
+                    'persist_refresh_token' => true,
+                ]);
+
+                $this->data->userInfo = $auth0->getUser();
+                mdump($this->data);
+                $this->render('auth0Login');
+            } else {
+                $this->data->datasources = Manager::getConf('mfn.datasource');
+                $this->data->action = "@auth/login/authenticate|formLogin";
+                $this->render('formLogin');
+            }
         }
     }
 
     public function formMain() {
         $this->render();
+    }
+
+    public function auth0Callback() {
+        $this->data->domain        = Manager::getConf('login.AUTH0_DOMAIN');
+        $this->data->client_id     = Manager::getConf('login.AUTH0_CLIENT_ID');
+        $this->data->client_secret = Manager::getConf('login.AUTH0_CLIENT_SECRET');
+        $this->data->redirect_uri  = Manager::getConf('login.AUTH0_CALLBACK_URL');
+
+        $auth0 = new Auth0([
+            'domain' => $this->data->domain,
+            'client_id' => $this->data->client_id,
+            'client_secret' => $this->data->client_secret,
+            'redirect_uri' => $this->data->redirect_uri,
+            'audience' => 'urn:test:api',
+            'persist_id_token' => true,
+            'persist_refresh_token' => true,
+        ]);
+
+        $userInfo = $auth0->getUser();
+        $goMain = ">main/main";
+        $user = Manager::getAppService('authuser');
+        $status = $user->auth0Login($userInfo);
+        if ($status == 'new') {
+            $this->renderPrompt('info',_M('User registered. Now it is necessary Administrator approval.'), $goMain);
+        } elseif ($status == 'pending') {
+            $this->renderPrompt('info',_M('User already registered, but waiting for Administrator approval.'), $goMain);
+        } elseif ($status == 'logged') {
+            $this->redirect($goMain);
+        } else {
+            $this->renderPrompt('error',_M('Login failed; contact administrator.'));
+        }
     }
 
     public function changeLanguage() {

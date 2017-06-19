@@ -21,6 +21,8 @@ class UserMap extends \MBusinessModel
                 'theme' => array('column' => 'theme', 'type' => 'string'),
                 'config' => array('column' => 'config', 'type' => 'string'),
                 'active' => array('column' => 'active', 'type' => 'integer'),
+                'status' => array('column' => 'status', 'type' => 'string'),
+                'lastLogin' => array('column' => 'lastLogin', 'type' => 'timestamp'),
                 'idPerson' => array('column' => 'idPerson', 'type' => 'integer'),
             ),
             'associations' => array(
@@ -61,6 +63,16 @@ class UserMap extends \MBusinessModel
      * @var integer
      */
     protected $active;
+    /**
+     *
+     * @var string
+     */
+    protected $status;
+    /**
+     *
+     * @var timestamp
+     */
+    protected $lastLogin;
     /**
      *
      * @var integer
@@ -146,6 +158,29 @@ class UserMap extends \MBusinessModel
     public function setActive($value)
     {
         $this->active = $value;
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    public function setStatus($value)
+    {
+        $this->status = $value;
+    }
+
+    public function getLastLogin()
+    {
+        return $this->lastLogin;
+    }
+
+    public function setLastLogin($value)
+    {
+        if (!($value instanceof \MTimeStamp)) {
+            $value = new \MTimeStamp($value);
+        }
+        $this->lastLogin = $value;
     }
 
     public function getIdPerson()
