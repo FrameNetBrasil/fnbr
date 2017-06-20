@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <view>
-    <mformdialog id="formExportDocWf" title="Export Doc-Wordform"  close=">mfn/main" >
+    <mformdialog id="formExportDocWf" title="Export Doc-Wordform"  close=">fnbr/main" >
         <fields>
             <mvcontainer>
                 <mspan>Parse the uploaded document and export a wordform file (with missing wf in database).</mspan>

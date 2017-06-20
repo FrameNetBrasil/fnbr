@@ -12,7 +12,7 @@ class LayerController extends MController
     public function init()
     {
         parent::init();
-        $this->idLanguage = Manager::getConf('mfn.lang');
+        $this->idLanguage = Manager::getConf('fnbr.lang');
     }
 
     public function formManager()

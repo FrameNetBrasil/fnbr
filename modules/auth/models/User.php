@@ -269,7 +269,7 @@ class User extends map\UserMap
             $person->save();
             $this->setIdPerson($person->getIdPerson());
             $this->setLogin($person->getEmail());
-            $this->setActive(0);
+            $this->setActive(1);
             $this->setStatus('0');
             $this->registerLogin();
             $transaction->commit();

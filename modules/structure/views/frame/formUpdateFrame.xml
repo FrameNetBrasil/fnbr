@@ -23,7 +23,7 @@
                     theme.dialog.refresh('formUpdateFrameDialog', {
                         toolbar: null,
                         width: 510,
-                        url: 'mfn/entry/gridUpdate/' + $('#frame_entry').textbox('getValue')   
+                        url: 'fnbr/entry/gridUpdate/' + $('#frame_entry').textbox('getValue')   
                     });
                 }
             }, 'formUpdateFrame');

@@ -3,7 +3,7 @@
 /**
  * @category   Maestro
  * @package    UFJF
- * @subpackage mfn
+ *  @subpackage fnbr
  * @copyright  Copyright (c) 2003-2013 UFJF (http://www.ufjf.br)
  * @license    http://siga.ufjf.br/license
  * @version

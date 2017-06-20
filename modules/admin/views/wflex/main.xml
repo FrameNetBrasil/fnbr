@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <view>
-    <mformdialog id="main" title="{{_M('Wordform-Lexeme')}}" close=">mfn/main" >
+    <mformdialog id="main" title="{{_M('Wordform-Lexeme')}}" close=">fnbr/main" >
         <fields>
             <mdatagrid id="gridFind" query="$this->data->query" pageLength="15" width="350px">
                 <options singleSelect="true"/>
@@ -9,7 +9,7 @@
                     <mtextfield id="filter_lexeme" label="{{_M('Lexeme')}}" size="15" value="$this->data->lexeme" placeholder="{{_M('Lexeme')}}" />
                     <mlinkbutton id="lbSearch" action="!$('#gridFind').datagrid('filter',event)" iconCls="icon-search" title="{{_M('Search')}}" plain="true"/>
                     <!--
-                    <mlinkbutton id="lbAdd" action="^mfn/admin/genre/formObject|dlgFormObject" iconCls="icon-add" text="{{_M('New')}}" plain="true"/>
+                    <mlinkbutton id="lbAdd" action="^fnbr/admin/genre/formObject|dlgFormObject" iconCls="icon-add" text="{{_M('New')}}" plain="true"/>
                     -->
                 </mtoolbar>
                 <mdatagridcolumn field="idWordForm" visible="false"/>

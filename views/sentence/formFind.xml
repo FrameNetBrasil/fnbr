@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE view SYSTEM "../../../../public/layouts/view.dtd">
 <view>
-    <mform id="formFind" title="Pesquisar" close=">mfn/main" base="formBase">
+    <mform id="formFind" title="Pesquisar" close=">fnbr/main" base="formBase">
         <fields>
             <mhcontainer>
                 <mtextfield id="idSentence" label="IdSentence" value="$this->data->idSentence" size="15" />
@@ -9,7 +9,7 @@
             </mhcontainer>
             <mdatagrid id="gridFind" query="$this->data->query" pageLength="15">
                 <mdatagridcolumn field="idSentence" visible="false"/>
-                <mdatagridhyperlink field="idSentence" action=">mfn/Sentence/formObject/#0#" title="IdSentence" width="100%"/>
+                <mdatagridhyperlink field="idSentence" action=">fnbr/Sentence/formObject/#0#" title="IdSentence" width="100%"/>
             </mdatagrid>
         </fields>
     </mform>

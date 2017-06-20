@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <view>
-    <mformdialog id="formImportLexWf" title="Import Wordforms+Lexemes"  close=">mfn/main" >
+    <mformdialog id="formImportLexWf" title="Import Wordforms+Lexemes"  close=">fnbr/main" >
         <fields>
             <mvcontainer>
                 <mspan>Importação de arquivos texto simples, com Wordform+Lexeme informado em cada linha,</mspan>

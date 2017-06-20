@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE view SYSTEM "../../../../public/layouts/view.dtd">
 <view>
-    <mform id="formNew" title="Novo" close=">mfn/Domain/formFind" base="formBase">
+    <mform id="formNew" title="Novo" close=">fnbr/Domain/formFind" base="formBase">
         <include file="fields.xml" />
     </mform>
 </view>

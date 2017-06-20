@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <view>
-    <mformdialog id="formImportWSDoc" title="Import WordSketch"  close=">mfn/main" >
+    <mformdialog id="formImportWSDoc" title="Import WordSketch"  close=">fnbr/main" >
         <fields>
             <mvcontainer>
                 <mspan>Importação do arquivo do WordSketch (formato UTF-8).</mspan>

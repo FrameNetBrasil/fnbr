@@ -26,7 +26,7 @@
                     theme.dialog.refresh('formNewFrameDialog', {
                         toolbar: null,
                         width: 510,
-                        url: 'mfn/entry/gridUpdate/frm_' + $('#frame_entry').textbox('getValue')   
+                        url: 'fnbr/entry/gridUpdate/frm_' + $('#frame_entry').textbox('getValue')   
                     });
                 }
             }, 'formNewFrame');

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE view SYSTEM "../../../../public/layouts/view.dtd">
 <view>
-    <mform id="formUpdate" title="Editar" close="{{'mfn/Type/formObject/'.$this->data->id}}" base="formObject">
+    <mform id="formUpdate" title="Editar" close="{{'fnbr/Type/formObject/'.$this->data->id}}" base="formObject">
         <include file="fields.xml" />
         <data load="$this->data" />
     </mform>

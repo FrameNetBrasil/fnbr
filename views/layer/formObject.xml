@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE view SYSTEM "../../../../public/layouts/view.dtd">
 <view>
-    <mform id="formObject" close=">mfn/Layer/formFind" base="formBase">
+    <mform id="formObject" close=">fnbr/Layer/formFind" base="formBase">
         <property title="$this->data->Layer->description" />
         <action action="{{ 'formUpdate/' . $this->data->id }}" label="Editar" />
         <action action="{{ 'formDelete/' . $this->data->id }}" label="Excluir" />

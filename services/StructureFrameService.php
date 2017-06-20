@@ -537,7 +537,7 @@ class StructureFrameService extends MService
     public function addConstraintsFE($data)
     {
         try {
-            $transaction = Manager::getDatabase(Manager::getConf('mfn.db'))->beginTransaction();
+            $transaction = Manager::getDatabase(Manager::getConf('fnbr.db'))->beginTransaction();
             if ($data->idFrame != '') {
                 $constraint = Base::createEntity('CN', 'con');
                 $cf = new fnbr\models\FrameElement($data->idFrameElement);
@@ -565,7 +565,7 @@ class StructureFrameService extends MService
     public function addConstraintsLU($data)
     {
         try {
-            $transaction = Manager::getDatabase(Manager::getConf('mfn.db'))->beginTransaction();
+            $transaction = Manager::getDatabase(Manager::getConf('fnbr.db'))->beginTransaction();
             if ($data->idLUQualia != '') {
                 $lu = new fnbr\models\LU($data->idLU);
                 $luQualia = new fnbr\models\LU($data->idLUQualia);

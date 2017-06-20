@@ -7,10 +7,10 @@
                 <mtoolbar>
                     <mtextfield id="filter_language" label="{{_M('Language')}}" size="15" value="$this->data->language" placeholder="{{_M('Language')}}" />
                     <mlinkbutton id="lbSearch" action="!$('#gridFind').datagrid('filter',event)" iconCls="icon-search" title="{{_M('Search')}}" plain="true"/>
-                    <mlinkbutton id="lbAdd" action="^mfn/language/formObject|dlgFormObject" iconCls="icon-add" text="{{_M('New')}}" plain="true"/>
+                    <mlinkbutton id="lbAdd" action="^fnbr/language/formObject|dlgFormObject" iconCls="icon-add" text="{{_M('New')}}" plain="true"/>
                 </mtoolbar>
                 <mdatagridcolumn field="idLanguage" visible="false"/>
-                <mdatagridcolumn type="link" field="language" action="^mfn/language/formObject/#idLanguage#|dlgFormObject" title="{{_M('Language')}}"/>
+                <mdatagridcolumn type="link" field="language" action="^fnbr/language/formObject/#idLanguage#|dlgFormObject" title="{{_M('Language')}}"/>
                 <mdatagridcolumn field="description" title="{{_M('Description')}}"/>
             </mdatagrid>
         </fields>

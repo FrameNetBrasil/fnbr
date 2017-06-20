@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <view>
-    <mformdialog id="formExportCxnFS" title="Export Cxn to FS"  close=">mfn/main" >
+    <mformdialog id="formExportCxnFS" title="Export Cxn to FS"  close=">fnbr/main" >
         <fields>
             <mhcontainer>
                 <mspan>Exporta as construções como Feature Structures, em formato texto.</mspan>

@@ -551,7 +551,7 @@ class StructureCxnService extends MService
     public function addConstraintsCX($data)
     {
         try {
-            $transaction = Manager::getDatabase(Manager::getConf('mfn.db'))->beginTransaction();
+            $transaction = Manager::getDatabase(Manager::getConf('fnbr.db'))->beginTransaction();
             if (($data->idEntityA1 != '') && ($data->idEntityA2 != '')) {
                 $constraint = Base::createEntity('CN', 'con');
                 Base::createEntityRelation($constraint->getIdEntity(), $data->relation, $data->idEntityA1, $data->idEntityA2);
@@ -577,7 +577,7 @@ class StructureCxnService extends MService
     public function addConstraintsCE($data)
     {
         try {
-            $transaction = Manager::getDatabase(Manager::getConf('mfn.db'))->beginTransaction();
+            $transaction = Manager::getDatabase(Manager::getConf('fnbr.db'))->beginTransaction();
             if ($data->idConstruction != '') {
                 $constraint = Base::createEntity('CN', 'con');
                 $ce = new fnbr\models\ConstructionElement($data->idConstructionElement);
@@ -619,7 +619,7 @@ class StructureCxnService extends MService
     {
         mdump($data);
         try {
-            $transaction = Manager::getDatabase(Manager::getConf('mfn.db'))->beginTransaction();
+            $transaction = Manager::getDatabase(Manager::getConf('fnbr.db'))->beginTransaction();
             if ($data->idConstructionElement != '') {
                 $constraint = Base::createEntity('CN', 'con');
                 $cn = new fnbr\models\Constraint($data->idConstraint);

@@ -7,7 +7,7 @@
             <mselection id="languagePreference" label="Language" options="$this->data->languages" value="$this->data->languagePreference"/>
         </fields>
         <tools>
-            <mlinkbutton id="lbSave" iconCls="icon-save" text="{{_M('Save')}}" plain="true" action="@mfn/profile/myprofile|formMyProfile"/>
+            <mlinkbutton id="lbSave" iconCls="icon-save" text="{{_M('Save')}}" plain="true" action="@fnbr/profile/myprofile|formMyProfile"/>
         </tools>            
     </mformdialog>
 </view>

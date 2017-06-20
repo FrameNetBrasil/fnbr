@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <view>
-    <mformdialog id="formImportMWE" title="Import MWE+POS"  close=">mfn/main" >
+    <mformdialog id="formImportMWE" title="Import MWE+POS"  close=">fnbr/main" >
         <fields>
             <mvcontainer>
                 <mspan>Importação de arquivos texto simples, com MWE_POS informado em cada linha,</mspan>

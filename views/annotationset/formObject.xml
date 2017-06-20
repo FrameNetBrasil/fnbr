@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE view SYSTEM "../../../../public/layouts/view.dtd">
 <view>
-    <mform id="formObject" close=">mfn/AnnotationSet/formFind" base="formBase">
+    <mform id="formObject" close=">fnbr/AnnotationSet/formFind" base="formBase">
         <property title="$this->data->AnnotationSet->description" />
         <action action="{{ 'formUpdate/' . $this->data->id }}" label="Editar" />
         <action action="{{ 'formDelete/' . $this->data->id }}" label="Excluir" />

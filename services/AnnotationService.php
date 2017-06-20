@@ -450,7 +450,7 @@ class AnnotationService extends MService {
         
         $level = Manager::getSession()->mfnLevel;
         if ($level == 'BEGINNER') {
-            $layersToShow = Manager::getConf('mfn.beginnerLayers');
+            $layersToShow = Manager::getConf('fnbr.beginnerLayers');
         } else {
             $layersToShow = Manager::getSession()->mfnLayers;
             if ($layersToShow == '') {

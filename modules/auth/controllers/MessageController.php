@@ -45,7 +45,7 @@ class MessageController extends MController {
                     $to[$email] = $email;
                 }
             }
-            $fromUser = \mfn\models\Base::getCurrentUser();
+            $fromUser = \fnbr\models\Base::getCurrentUser();
             $from = (object)[
                 'from' => $fromUser->getPerson()->getEmail(),
                 'fromName' => $fromUser->getPerson()->getName(),

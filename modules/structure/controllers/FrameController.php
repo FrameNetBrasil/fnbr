@@ -291,8 +291,8 @@ class FrameController extends MController
                 $this->data->lu->active = '1';
                 $this->data->lu->name = $this->data->lemma;
                 $lu->save($this->data->lu);
-                $frame = mfn\models\Frame::create($this->data->lu->idFrame);
-                mfn\models\Base::createEntityRelation($lu->getIdEntity(), 'rel_evokes', $frame->getIdEntity());
+                $frame = fnbr\models\Frame::create($this->data->lu->idFrame);
+                fnbr\models\Base::createEntityRelation($lu->getIdEntity(), 'rel_evokes', $frame->getIdEntity());
                 //$this->renderPrompt('information', 'OK', "!$('#formNewLU_dialog').dialog('close'); structure.reloadFrame();");
                 $updateLU = "!manager.doAction('@" . Manager::getApp() . "/structure/frame/formUpdateLU/{$lu->getId()}|formNewLU');";
                 $this->renderPrompt('information', 'OK', $updateLU . "$('#formNewLU_dialog').dialog('close');");

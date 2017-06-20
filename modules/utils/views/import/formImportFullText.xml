@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <view>
-    <mformdialog id="formImportFullText" title="Import FullText"  close=">mfn/main" >
+    <mformdialog id="formImportFullText" title="Import FullText"  close=">fnbr/main" >
         <fields>
             <mvcontainer>
                 <mspan>Importação de arquivos texto simples, com uma sentença por linha, associadas a um Document.</mspan>

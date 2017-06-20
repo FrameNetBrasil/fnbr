@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <view>
-    <mformdialog id="formMail" title="{{_M('Send Email')}}" close=">mfn/main" >
+    <mformdialog id="formMail" title="{{_M('Send Email')}}" close=">fnbr/main" >
         <fields>
             <mselection id="toUser" label="To User" options="$this->data->users" />
             <mselection id="toGroup" label="To Group" options="$this->data->groups" />

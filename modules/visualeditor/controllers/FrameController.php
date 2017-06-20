@@ -12,7 +12,7 @@ class FrameController extends MController
     public function init()
     {
         Manager::checkLogin(false);
-        $this->idLanguage = Manager::getConf('mfn.lang');
+        $this->idLanguage = Manager::getConf('fnbr.lang');
         $msgDir = Manager::getAppPath('conf/report');
         Manager::$msg->file = 'messages.' . $this->idLanguage . '.php';
         Manager::$msg->addMessages($msgDir);

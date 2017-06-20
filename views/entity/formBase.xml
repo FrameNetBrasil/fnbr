@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE view SYSTEM "../../../../public/layouts/view.dtd">
 <view>
-    <mform id="formBase" title="Entity" close=">mfn/main">
+    <mform id="formBase" title="Entity" close=">fnbr/main">
         <action action="formFind" label="Pesquisar" />
         <action action="formNew" label="Inserir Novo" />
     </mform>

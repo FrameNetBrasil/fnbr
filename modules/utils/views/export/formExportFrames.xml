@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <view>
-    <mformdialog id="formExportFrames" title="Export Frames"  close=">mfn/main" >
+    <mformdialog id="formExportFrames" title="Export Frames"  close=">fnbr/main" >
         <fields>
             <mhcontainer>
                 <mspan>Exporta definição de Frames (e FEs associados) em formato JSON.</mspan>

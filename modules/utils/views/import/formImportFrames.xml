@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <view>
-    <mformdialog id="formImportFrames" title="Import Frames"  close=">mfn/main" >
+    <mformdialog id="formImportFrames" title="Import Frames"  close=">fnbr/main" >
         <fields>
             <mhcontainer>
                 <mspan>Importa definição de Frames (e FEs associados) a partir do arquivo JSON, gerado pela opção "Export Frames".</mspan>

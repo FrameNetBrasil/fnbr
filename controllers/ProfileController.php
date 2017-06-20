@@ -1,7 +1,7 @@
 <?php
 
 use Maestro\Services\Exception\ESecurityException;
-use \mfn\models\Base;
+use \fnbr\models\Base;
 
 class ProfileController extends MController {
 

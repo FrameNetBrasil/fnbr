@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <view>
-    <mform id="main" title="{{_M('Entry')}}" close=">mfn/main">
+    <mform id="main" title="{{_M('Entry')}}" close=">fnbr/main">
         <fields>
             <mdatagrid id="gridFind" query="$this->data->query" pageLength="15">
                 <options singleSelect="true"/>
                 <mtoolbar>
                     <mtextfield id="filter_entry" label="{{_M('Entry')}}" size="15" value="$this->data->entry" placeholder="{{_M('Entry')}}" />
                     <mlinkbutton id="lbSearch" action="!$('#gridFind').datagrid('filter',event)" iconCls="icon-search" title="{{_M('Search')}}" plain="true"/>
-                    <mlinkbutton id="lbAdd" action="^mfn/entry/formObject|dlgFormObject" iconCls="icon-add" text="{{_M('New')}}" plain="true"/>
+                    <mlinkbutton id="lbAdd" action="^fnbr/entry/formObject|dlgFormObject" iconCls="icon-add" text="{{_M('New')}}" plain="true"/>
                 </mtoolbar>
                 <mdatagridcolumn field="idEntry" visible="false"/>
-                <mdatagridcolumn type="link" field="entry" action="^mfn/entry/formObject/#idEntry#|dlgFormObject" title="{{_M('Entry')}}"/>
+                <mdatagridcolumn type="link" field="entry" action="^fnbr/entry/formObject/#idEntry#|dlgFormObject" title="{{_M('Entry')}}"/>
             </mdatagrid>
         </fields>
     </mform>
