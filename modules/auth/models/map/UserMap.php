@@ -22,6 +22,11 @@ class UserMap extends \MBusinessModel
                 'config' => array('column' => 'config', 'type' => 'string'),
                 'active' => array('column' => 'active', 'type' => 'integer'),
                 'status' => array('column' => 'status', 'type' => 'string'),
+                'name' => array('column' => 'name', 'type' => 'string'),
+                'email' => array('column' => 'email', 'type' => 'string'),
+                'nick' => array('column' => 'nick', 'type' => 'string'),
+                'auth0IdUser' => array('column' => 'auth0IdUser', 'type' => 'string'),
+                'auth0CreatedAt' => array('column' => 'auth0CreatedAt', 'type' => 'string'),
                 'lastLogin' => array('column' => 'lastLogin', 'type' => 'timestamp'),
                 'idPerson' => array('column' => 'idPerson', 'type' => 'integer'),
             ),
@@ -68,6 +73,34 @@ class UserMap extends \MBusinessModel
      * @var string
      */
     protected $status;
+    /**
+     *
+     * @var string
+     */
+    protected $name;
+    /**
+     *
+     * @var string
+     */
+    protected $email;
+    /**
+     *
+     * @var string
+     */
+    protected $nick;
+
+    /**
+     *
+     * @var string
+     */
+    protected $auth0IdUser;
+
+    /**
+     *
+     * @var string
+     */
+    protected $auth0CreatedAt;
+
     /**
      *
      * @var timestamp
@@ -168,6 +201,56 @@ class UserMap extends \MBusinessModel
     public function setStatus($value)
     {
         $this->status = $value;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setName($value)
+    {
+        $this->name = $value;
+    }
+
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    public function setEmail($value)
+    {
+        $this->email = $value;
+    }
+
+    public function getNick()
+    {
+        return $this->nick;
+    }
+
+    public function setNick($value)
+    {
+        $this->nick = $value;
+    }
+
+    public function getAuth0IdUser()
+    {
+        return $this->auth0IdUser;
+    }
+
+    public function setAuth0IdUser($value)
+    {
+        $this->auth0IdUser = $value;
+    }
+
+    public function getAuth0CreatedAt()
+    {
+        return $this->auth0CreatedAt;
+    }
+
+    public function setAuth0CreatedAt($value)
+    {
+        $this->auth0CreatedAt = $value;
     }
 
     public function getLastLogin()

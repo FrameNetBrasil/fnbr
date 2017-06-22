@@ -3,16 +3,13 @@
 return [
     'fnbr' => ['mainPanel', 'main/main', 'fnbrIconForm', '', A_ACCESS, [
         'admin' => ['Admin', 'admin/main', 'fa fa-cogs fa16px', 'ADMIN', A_ACCESS, [
+            'users' => ['Users', 'auth/user/main', 'fa fa-user fa16px', 'ADMIN', A_ACCESS, []],
             'annostatus' => ['Anno Status', 'admin/annostatus/main', 'fa fa-cog fa16px', 'ADMIN', A_ACCESS, []],
             'domain' => ['Domain', 'admin/domain/main', 'fa fa-cog fa16px', 'ADMIN', A_ACCESS, []],
             'relationgroup' => ['Relation Group', 'admin/relationgroup/main', 'fa fa-cog fa16px', 'ADMIN', A_ACCESS, []],
             'type' => ['Type', 'admin/type/main', 'fa fa-cog fa16px', 'ADMIN', A_ACCESS, []],
             'genre' => ['Genre', 'admin/genre/main', 'fa fa-cog fa16px', 'ADMIN', A_ACCESS, []],
             'wflex' => ['Wf-Lexeme', 'admin/wflex/main', 'fa fa-cog fa16px', 'ADMIN', A_ACCESS, []],
-        ]],
-        'auth' => ['Auth', 'main/auth', 'fa fa-key fa16px', 'ADMIN', A_ACCESS, [
-            'persons' => ['Persons', 'auth/person/main', 'fa fa-child fa16px', 'ADMIN', A_ACCESS, []],
-            'users' => ['Users', 'auth/user/main', 'fa fa-user fa16px', 'ADMIN', A_ACCESS, []],
         ]],
         'structure' => ['Structure', 'main/structure', 'fa fa-database fa16px', '', A_ACCESS, [
             'framestructure' => ['Frame', 'structure/frame/main', 'fa fa-list-alt fa16px', '', A_ACCESS, []],

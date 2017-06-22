@@ -18,7 +18,7 @@
  * Maestro 2.0 - Manager Core
  */
 var manager = {
-    version: 'Manager 2.0',
+    version: 'Manager 3.0',
     contentElement: '',
     baseURL: window.location.href.replace(/\/index\.php\/(.*)/, "/index.php/"),
     onLoad: [],
@@ -324,10 +324,17 @@ var manager = {
             preparingMessageHtml: "We are preparing your report, please wait...",
             failMessageHtml: "There was a problem generating your report, please try again."
         };
+    },
+    doGetObject: function (url) {
+        var object = null;
+        manager.doAjax(url, function (data) {
+            object = data;
+        });
+        return object;
     }
 };
 /**
- * Maestro 2.0 - Manager Loader
+ * Maestro 3.0 - Manager Loader
  */
 
 (function () {

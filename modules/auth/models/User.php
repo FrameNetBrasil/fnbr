@@ -15,9 +15,9 @@ class User extends map\UserMap
                 'login' => array('notnull'),
 //                'pwd' => array('notnull'),
 //                'passMD5' => array('notnull'),
-                'theme' => array('notnull'),
+//                'theme' => array('notnull'),
                 'active' => array('notnull'),
-                'idPerson' => array('notnull'),
+//                'idPerson' => array('notnull'),
             ),
             'converters' => array()
         );
@@ -36,7 +36,7 @@ class User extends map\UserMap
 
     public function listByFilter($filter)
     {
-        $criteria = $this->getCriteria()->select('*, person.name')->orderBy('login');
+        $criteria = $this->getCriteria()->select('*')->orderBy('login');
         if ($filter->idUser) {
             $criteria->where("idUser = {$filter->idUser}");
         }
@@ -47,7 +47,13 @@ class User extends map\UserMap
             $criteria->where("login LIKE '{$filter->login}%'");
         }
         if ($filter->name) {
-            $criteria->where("person.name LIKE '{$filter->name}%'");
+            $criteria->where("name LIKE '{$filter->name}%'");
+        }
+        if ($filter->email != '') {
+            $criteria->where("email = '{$filter->email}'");
+        }
+        if ($filter->status != '') {
+            $criteria->where("status = '{$filter->status}'");
         }
         return $criteria;
     }
@@ -57,7 +63,7 @@ class User extends map\UserMap
         $levels = array_keys(Base::userLevel());
         $constraintsLU = _M("Constraints_LU");
         $preferences = _M("Preferences");
-        $criteria = $this->getCriteria()->select("*, idUser as resetPassword, person.name, person.email, groups.name as level, " .
+        $criteria = $this->getCriteria()->select("*, idUser as resetPassword, name, email, groups.name as level, " .
             "IF((groups.name = 'BEGINNER') or (groups.name = 'JUNIOR') or (groups.name = 'SENIOR'), '{$constraintsLU}','') as constraints, '{$preferences}' as preferences")->orderBy('login');
         if ($filter->idUser) {
             $criteria->where("idUser = {$filter->idUser}");
@@ -66,18 +72,13 @@ class User extends map\UserMap
             $criteria->where("login LIKE '{$filter->login}%'");
         }
         if ($filter->name) {
-            $criteria->where("person.name LIKE '{$filter->name}%'");
+            $criteria->where("name LIKE '{$filter->name}%'");
         }
         if ($filter->level) {
             $criteria->where("upper(groups.name) LIKE upper('{$filter->level}%')");
         }
         $criteria->where('upper(groups.name)', 'IN', $levels);
         return $criteria;
-    }
-
-    public function getName()
-    {
-        return $this->login;
     }
 
     public function getForRegisterLogin()
@@ -260,17 +261,15 @@ class User extends map\UserMap
         return NULL;
     }
 
-    public function createPersonUser($userData)
+    public function createUser($userData)
     {
         $transaction = $this->beginTransaction();
         try {
-            $person = new Person();
-            $person->setData($userData);
-            $person->save();
-            $this->setIdPerson($person->getIdPerson());
-            $this->setLogin($person->getEmail());
+            $this->setIdPerson(null);
+            $this->setLogin($userData->email);
             $this->setActive(1);
             $this->setStatus('0');
+            $this->setData($userData);
             $this->registerLogin();
             $transaction->commit();
         } catch (Exception $e) {

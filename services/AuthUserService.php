@@ -1,11 +1,11 @@
 <?php
 
-use fnbr\auth\models\Person,
-    fnbr\auth\models\User;
+use fnbr\auth\models\User;
 
 class AuthUserService extends MService
 {
-    public function auth0Login($userInfo) {
+    public function auth0Login($userInfo)
+    {
         $userData = new PlainObject([
             'auth0IdUser' => $userInfo['user_id'],
             'email' => $userInfo['email'],
@@ -14,15 +14,13 @@ class AuthUserService extends MService
             'nick' => $userInfo['nickname']
         ]);
         mdump($userData);
-        $person = new Person();
-        $result = $person->listByFilter($userData)->asQuery()->getResult();
+        $user = new User();
+        $result = $user->listByFilter($userData)->asQuery()->getResult();
         if (count($result) == 0) {
-            $user = new User();
-            $user->createPersonUser($userData);
+            $user->createUser($userData);
             return 'new';
         } else {
-            $user = new User();
-            $user->getByIdPerson($result[0]['idPerson']);
+            $user->getById($result[0]['idUser']);
             if ($user->getStatus() == '0') {
                 return 'pending';
             } else {
@@ -36,6 +34,25 @@ class AuthUserService extends MService
                 return 'logged';
             }
         }
+    }
+
+    public function listForTree($filter)
+    {
+        $user = new User();
+        $users = $user->listByFilter($filter)->asQuery()->getResult(\FETCH_ASSOC);
+        $result = [];
+        foreach ($users as $row) {
+            $node = [
+                'id' => 'u' . $row['idUser'],
+                'text' => $row['login'],
+                'state' => 'closed',
+                'iconCls' => 'icon-man',
+                'entry' => $row['entry']
+            ];
+            $result[] = $node;
+        }
+        return $result;
+
     }
 
 }

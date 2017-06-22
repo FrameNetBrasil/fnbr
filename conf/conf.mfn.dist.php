@@ -45,12 +45,12 @@ return [
     ],
     'mad' => [
         'module' => "auth",
-        'access' => "access",
-        'group' => "group",
-        'log' => "log",
-        'session' => "session",
-        'transaction' => "transaction",
-        'user' => "user"
+        'access' => "Access",
+        'group' => "Group",
+        'log' => "Log",
+        'session' => "Session",
+        'transaction' => "Transaction",
+        'user' => "User"
     ],
     'logs' => [
         'level' => 0,

@@ -47,7 +47,6 @@ class MainController extends \MController
                 ]);
 
                 $this->data->userInfo = $auth0->getUser();
-                mdump($this->data);
                 $this->render('auth0Login');
             } else {
                 $this->data->datasources = Manager::getConf('fnbr.datasource');
@@ -101,7 +100,6 @@ class MainController extends \MController
                 $this->renderPrompt('error', _M('Login failed; contact administrator.'));
             }
         } catch (Exception $e) {
-            mdump($e);
             $this->renderPrompt('error', "Auth0: Invalid authorization code.", $goMain);
         }
     }

@@ -43,4 +43,14 @@ class DomainController extends MController
         }
     }
 
+    public function saveFrameDomain() {
+        try {
+            $structure = Manager::getAppService('structuredomain');
+            $structure->saveFrameDomain($this->data->idFrame, $this->data->toSave);
+            $this->renderPrompt('information', "Ok","$('#{$this->data->idGrid}').datagrid('reload');");
+        } catch (\Exception $e) {
+            $this->renderPrompt('error', $e->getMessage());
+        }
+    }
+
 }

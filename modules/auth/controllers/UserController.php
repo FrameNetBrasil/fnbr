@@ -4,20 +4,50 @@ use fnbr\models\Base,
     fnbr\models\LU,
     fnbr\auth\models\User;
 
-class UserController extends MController {
+class UserController extends MController
+{
 
-    public function main() {
-        $this->data->query = Manager::getAppURL('', 'auth/user/gridData');
+    public function main()
+    {
+        //$this->data->query = Manager::getAppURL('', 'auth/user/gridData');
         $this->render();
     }
 
-    public function gridData() {
+    public function tree()
+    {
+        $user = Manager::getAppService('AuthUser');
+        if ($this->data->id == '') {
+            $children = $user->listForTree($this->data);
+            $data = (object)[
+                'id' => 'root',
+                'state' => 'open',
+                'text' => 'Users',
+                'children' => $children
+            ];
+            $json = json_encode([$data]);
+        }
+        $this->renderJson($json);
+    }
+
+    public function statusList()
+    {
+        $statusList = [
+            ['value' => '', 'text' => 'All'],
+            ['value' => '0', 'text' => 'Pending'],
+            ['value' => '1', 'text' => 'Authorized']
+        ];
+        $this->renderJson(json_encode($statusList));
+    }
+
+    public function gridData()
+    {
         $model = new fnbr\auth\models\User();
         $criteria = $model->listForGrid($this->data->filter);
         $this->renderJSON($model->gridDataAsJSON($criteria));
     }
 
-    public function formObject() {
+    public function formObject()
+    {
         $model = new fnbr\auth\models\User($this->data->id);
         $this->data->forUpdate = ($this->data->id != '');
         $this->data->object = $model->getData();
@@ -29,14 +59,16 @@ class UserController extends MController {
         $this->render();
     }
 
-    public function formConstraintsLU() {
+    public function formConstraintsLU()
+    {
         $model = new fnbr\auth\models\User($this->data->id);
         $this->data->title = $model->getLogin() . ' :: Constraints_LU';
         $this->data->save = "@auth/user/saveConstraintsLU/" . $model->getId() . '|formConstraintsLU';
         $this->render();
     }
 
-    public function formPreferences() {
+    public function formPreferences()
+    {
         $user = new fnbr\auth\models\User($this->data->id);
         $this->data->title = $user->getLogin() . ' :: Preferences';
         $this->data->save = "@auth/user/savePreferences|formPreferences";
@@ -63,14 +95,22 @@ class UserController extends MController {
         $this->render();
     }
 
-    public function formResetPassword() {
+    public function formResetPassword()
+    {
         $yes = ">auth/user/resetPassword/" . $this->data->id;
         $this->renderPrompt('question', _M("Confirm password reset?"), $yes, "");
     }
 
-    public function save() {
+    public function get()
+    {
+        $model = new fnbr\auth\models\User($this->data->id);
+        $this->renderJSON(json_encode($model->getData()));
+    }
+
+    public function save()
+    {
         try {
-            $model = new fnbr\auth\models\User($this->data->id);
+            $model = new fnbr\auth\models\User($this->data->user->idUser);
             $model->setData($this->data->user);
             $model->save();
             $model->setUserLevel($this->data->user->userLevel);
@@ -80,9 +120,10 @@ class UserController extends MController {
         }
     }
 
-    public function delete() {
+    public function delete()
+    {
         try {
-            $model = new fnbr\auth\models\User($this->data->id);
+            $model = new fnbr\auth\models\User($this->data->user->idUser);
             $model->delete();
             $go = "!$('#formObject_dialog').dialog('close');";
             $this->renderPrompt('information', _M("Record [%s] removed.", $model->getDescription()), $go);
@@ -91,15 +132,16 @@ class UserController extends MController {
         }
     }
 
-    public function getConstraintsLU() {
-        $idUser = $this->data->id;
+    public function getConstraintsLU()
+    {
+        $idUser = $this->data->idUser;
         $user = new fnbr\auth\models\User($idUser);
         $lus = $user->getConfigData('mfnConstraintsLU');
         $lu = new fnbr\models\LU();
         if (is_array($lus) && count($lus)) {
             $result = $lu->listForConstraint($lus)->asQuery()->getResult();
             foreach ($result as $row) {
-                $l[] = (object) $row;
+                $l[] = (object)$row;
             }
             $r = $l;
         } else {
@@ -108,7 +150,8 @@ class UserController extends MController {
         $this->renderJson(json_encode($r));
     }
 
-    public function saveConstraintsLU() {
+    public function saveConstraintsLU()
+    {
         try {
             $user = new fnbr\auth\models\User($this->data->user->idUser);
             $lus = $user->getConfigData('mfnConstraintsLU');
@@ -127,7 +170,7 @@ class UserController extends MController {
                         $lus[] = $lu->idLU;
                     }
                     $supervisor->setConfigData('mfnConstraintsLU', $lus);
-                }    
+                }
             }
             $this->renderPrompt('information', 'Ok');
         } catch (\Exception $e) {
@@ -135,7 +178,8 @@ class UserController extends MController {
         }
     }
 
-    public function savePreferences() {
+    public function savePreferences()
+    {
         try {
             $user = new fnbr\auth\models\User($this->data->user->idUser);
             $userLevel = $this->data->user->level;
@@ -153,7 +197,8 @@ class UserController extends MController {
         }
     }
 
-    public function resetPassword() {
+    public function resetPassword()
+    {
         try {
             $user = new fnbr\auth\models\User($this->data->id);
             $user->resetPassword();
