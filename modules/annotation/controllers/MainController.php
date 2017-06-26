@@ -66,7 +66,7 @@ class MainController extends MController
                 $stats .= "({$stat->name}: {$stat->quant})  ";
             }
             $this->data->title = $annotation->getSubCorpusTitle($this->data->idSubCorpus, $this->idLanguage, $this->data->cxn) . "  - Stats: {$stats}  -  Status: {$this->data->status->status->msg}";
-            $this->data->userLanguage = fnbr\models\Base::languages()[fnbr\models\Base::getCurrentUser()->getConfigData('mfnIdLanguage')];
+            $this->data->userLanguage = fnbr\models\Base::languages()[fnbr\models\Base::getCurrentUser()->getConfigData('fnbrIdLanguage')];
             $this->render();
         }
     }
@@ -103,11 +103,12 @@ class MainController extends MController
         $this->data->idSentence = $this->data->id;
         $sentence = new fnbr\models\Sentence($this->data->idSentence);
         $idLanguage = $sentence->getIdLanguage();
-        $userIdLanguage = fnbr\models\Base::getCurrentUser()->getConfigData('mfnIdLanguage');
+        $userIdLanguage = fnbr\models\Base::getCurrentUser()->getConfigData('fnbrIdLanguage');
         $canSave = ($idLanguage == $userIdLanguage);
         $this->data->canSave = $canSave && Manager::checkAccess('BEGINNER', A_EXECUTE);
         $this->data->idAnnotationSet = Manager::getContext()->get(1);
         $this->data->type = Manager::getContext()->get(2);
+        mdump($this->data);
         $annotation = Manager::getAppService('annotation');
         $this->data->layers = $annotation->getLayers($this->data, $this->idLanguage);
 

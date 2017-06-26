@@ -530,7 +530,7 @@ class FrameController extends MController
 
     public function formImportWS()
     {
-        $this->data->languages = Base::languages();
+        $this->data->languages = fnbr\models\Base::languages();
         $this->data->idLU = $this->data->id;
         $this->data->tags = array('N' => 'Não', 'S' => 'Sim');
         $this->data->message = _M("Importação do arquivo do WordSketch<br>com nome do documento informado em cada linha.<br>Os documentos já devem estar cadastrados no sistema.");
@@ -542,7 +542,7 @@ class FrameController extends MController
     public function importWS()
     {
         try {
-            $files = \Maestro\Utils\Mutil::parseFiles('uploadFile');
+            $files = MUtil::parseFiles('uploadFile');
             $model = new fnbr\models\Corpus($this->data->idCorpus);
             if ($this->data->tags == 'N') {
                 $result = $model->uploadSentences($this->data, $files[0]);

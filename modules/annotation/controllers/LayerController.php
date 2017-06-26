@@ -1,9 +1,5 @@
 <?php
 
-
-
-
-
 class LayerController extends MController
 {
 
@@ -19,8 +15,8 @@ class LayerController extends MController
     {
         $this->data->query = Manager::getAppURL('', 'annotation/layer/gridData');
         $this->data->action = "@annotation/layer/save|formManager";
-        $mfnLayers = Manager::getSession()->mfnLayers;
-        $this->data->layersToShow = \Maestro\Services\MJSON::encode($mfnLayers ?: []);
+        $fnbrLayers = Manager::getSession()->fnbrLayers;
+        $this->data->layersToShow = MJSON::encode($fnbrLayers ?: []);
         $this->render();
     }
     
@@ -33,9 +29,9 @@ class LayerController extends MController
     
     public function save() {
         $layers = $this->data->gridManager->data->checked;
-        Manager::getSession()->mfnLayers = $layers;
+        Manager::getSession()->fnbrLayers = $layers;
         $user = Manager::getLogin()->getUser();
-        $user->setConfigData('mfnLayers', $layers);
+        $user->setConfigData('fnbrLayers', $layers);
         $this->renderPrompt('information', 'OK');
     }
     

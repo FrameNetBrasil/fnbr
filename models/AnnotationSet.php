@@ -120,28 +120,6 @@ class AnnotationSet extends map\AnnotationSetMap
             ++$order;
             $values[$startChar] = [$order, $lWordForm, $startChar, $endChar]; //"{$order}, {$startChar}, {$endChar}, {$idSentence}, 0, '{$lWordForm}'";
         }
-
-        /*
-        $i = 0;
-        for ($j = 0; $j < strlen($text); $j++) {
-            $char = $text{$j};
-            $break = (strpos($punctuation, $char) !== false);
-            if ($break) {
-                $word = substr($text, $i, $j - $i);
-                $array[$i] = $word;
-                $array[$j] = $char;
-                $i = $j + 1;
-            }
-        }
-        $values[-1] = [0, '', -1];
-        $order = 0;
-        foreach ($array as $startChar => $wordForm) {
-            $endChar = $startChar + strlen($wordForm) - 1;
-            $lWordForm = utf8_encode(str_replace("'", "\\'", $wordForm));
-            ++$order;
-            $values[$startChar] = [$order, $lWordForm, $startChar, $endChar]; //"{$order}, {$startChar}, {$endChar}, {$idSentence}, 0, '{$lWordForm}'";
-        }
-        */
         return $values;
     }
 
@@ -190,40 +168,6 @@ class AnnotationSet extends map\AnnotationSetMap
             }
             ++$order;
         }
-        /*
-        $i = 0;
-        for ($j = 0; $j < strlen($text); $j++) {
-            $char = $text{$j};
-            $break = (strpos($punctuation, $char) !== false);
-            if ($break) {
-                $word = substr($text, $i, $j - $i);
-                $array[$i] = $word;
-                $array[$j] = $char;
-                $i = $j + 1;
-            }
-        }
-        $chars = [];
-        $order = 1;
-        foreach ($array as $startChar => $wordForm) {
-            $endChar = $startChar + strlen($wordForm) - 1;
-            $lWordForm = utf8_encode(str_replace("'", "\\'", $wordForm));
-            $words[(string)$order] = [
-                'order' => $order,
-                'word' => $lWordForm,
-                'startChar' => $startChar,
-                'endChar' => $endChar
-            ];
-            for ($pos = (int)$startChar; $pos <= $endChar; $pos++) {
-                $o = $pos - $startChar;
-                $chars[$pos] = [
-                    'offset' => (string)$o,
-                    'char' => str_replace("'", "\\'", utf8_encode($wordForm{$o})),
-                    'order' => $order
-                ];
-            }
-            ++$order;
-        }
-        */
         $wordsChars = new \StdClass();
         $wordsChars->words = $words;
         $wordsChars->chars = $chars;

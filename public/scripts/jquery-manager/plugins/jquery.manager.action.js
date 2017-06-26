@@ -15,7 +15,7 @@
  */
 
 /**
- * Maestro 2.0 - Manager Action Plugin
+ * Maestro 3.0 - Manager Action Plugin
  */
 
 (function ($) {
@@ -27,7 +27,7 @@
         this.parseAction();
     };
     manager.action.prototype = {
-        version: 'Manager 2.0',
+        version: 'Manager 3.0',
         onPlugginLoad: function () {
         },
         returnThis: function () {
@@ -72,27 +72,34 @@
                 return action.substr(1);
             }
             if (modifier === ':') {
+                action = manager.addAppToAction(action);
                 var parts = action.substr(1).split('|');
                 var url = urlBase + "/index.php/" + parts[0];
                 return "manager.doAjaxText('" + url + "','" + parts[2] + "','" + parts[1] + "');";
             }
             if (modifier === '*') {
+                action = manager.addAppToAction(action);
                 var parts = action.substr(1).split('|');
                 var url = urlBase + "/index.php/" + parts[0];
                 return "manager.doAjax('" + url + "'," + parts[2] + ",'" + parts[1] + "');";
             }
-            var parts = action.substr(1).split('|');
-            var url = urlBase + "/index.php/" + parts[0];
             if (modifier === '@') {
+                action = manager.addAppToAction(action);
+                var parts = action.substr(1).split('|');
+                var url = urlBase + "/index.php/" + parts[0];
                 return parts[1] ? "manager.doPost('" + id + "','" + url + "','" + parts[1] + "');" : "manager.doPost('" + id + "','" + url + "');";
             }
             if (modifier === '>') {
+                action = manager.addAppToAction(action);
+                var parts = action.substr(1).split('|');
+                var url = urlBase + "/index.php/" + parts[0];
                 return parts[1] ? "manager.doGet('" + url + "','" + parts[1] + "');" : "manager.doGet('" + url + "');";
             }
             if (modifier === '^') {
-                //return "manager.doDialog('" + id + "','" + url + "');";
+                action = manager.addAppToAction(action);
+                var parts = action.substr(1).split('|');
+                var url = urlBase + "/index.php/" + parts[0];
                 var wrapper =  parts[1] ? parts[1] : 'manager-dialog-' + $.md5(url);
-                //console.log("manager.doGet('" + url + "', '', '" + wrapper + "');");
                 return "manager.doGet('" + url + "', '', '" + wrapper + "');";
             }
             if (modifier === '+') {
@@ -102,15 +109,19 @@
                 return "manager.doRedirect('" + url + "');";
             }
             if (modifier === 'd') {
+                action = manager.addAppToAction(action);
                 return "manager.showDialog('" + action.substr(2) + "');";
             }
             if (modifier === 'p') {
+                action = manager.addAppToAction(action);
                 return "manager.showPrompt('" + action.substr(2) + "');";
             }
             if (modifier === 'h') {
+                action = manager.addAppToAction(action);
                 return "manager.showDialog('" + action.substr(2) + "');";
             }
             if (modifier === 'f') {
+                action = manager.addAppToAction(action);
                 var url = urlBase + "/index.php/" + action.substr(2);
                 console.log('****' +  url);
                 return "manager.doGetFile('" + url + "');";

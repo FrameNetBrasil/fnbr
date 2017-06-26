@@ -358,7 +358,7 @@ class StructureCxnService extends MService
         $layersToShow = Manager::getSession()->mfnLayers;
         if ($layersToShow == '') {
             $user = Manager::getLogin()->getUser();
-            $layersToShow = Manager::getSession()->mfnLayers = $user->getConfigData('mfnLayers');
+            $layersToShow = Manager::getSession()->mfnLayers = $user->getConfigData('fnbrLayers');
         }
         $wordsChars = $as->getWordsChars($idSentence);
         $chars = $wordsChars->chars;

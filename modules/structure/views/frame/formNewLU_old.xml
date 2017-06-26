@@ -10,7 +10,7 @@
                 <mtoolbar>
                     <msearchfield id="lemma" width="200px" value="$this->data->lemma" searcher="jQuery('#gridSearchLemma').datagrid('filter',name)" placeholder="{{_M('Search Lemma')}}" />
                     <include component="mlanguage.php" id="idLanguage"/>
-                    <mlinkbutton id="lbAdd" action="@fnbr/structure/frame/formNewLemma|formNewLU" iconCls="icon-add" text="{{_M('Create New')}}" plain="true"/>
+                    <mlinkbutton id="lbAdd" action="@structure/frame/formNewLemma|formNewLU" iconCls="icon-add" text="{{_M('Create New')}}" plain="true"/>
                 </mtoolbar>
                 <mdatagridcolumn field="idLemma" visible="false"/>
                 <mdatagridcolumn field="fullname" title="{{_M('Name')}}" width="300px" />

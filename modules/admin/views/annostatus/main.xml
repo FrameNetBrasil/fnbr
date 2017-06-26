@@ -9,10 +9,10 @@
                     <mlinkbutton id="lbSearch" action="!$('#gridFind').datagrid('filter',event)" iconCls="icon-search" title="{{_M('Search')}}" plain="true"/>
                 </mtoolbar>
                 <mdatagridcolumn field="idAnnotationStatus" visible="false"/>
-                <mdatagridcolumn type="link" field="entry" action="^fnbr/structure/entry/formUpdate/#entry#|dlgFormObject" title="{{_M('Entry')}}"/>
+                <mdatagridcolumn type="link" field="entry" action="^structure/entry/formUpdate/#entry#|dlgFormObject" title="{{_M('Entry')}}"/>
                 <mdatagridcolumn field="name" title="{{_M('Name')}}"/>
                 <mdatagridcolumn field="idColor" title="{{_M('Color')}}" render="colorBox"/>
-                <mdatagridcolumn type="link" field="colorName" title="{{_M('Change Color')}}" action="^fnbr/admin/annostatus/formColor/#idAnnotationStatus#|dlgFormObject"/>
+                <mdatagridcolumn type="link" field="colorName" title="{{_M('Change Color')}}" action="^admin/annostatus/formColor/#idAnnotationStatus#|dlgFormObject"/>
             </mdatagrid>
         </fields>
     </mformdialog>

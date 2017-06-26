@@ -8,12 +8,12 @@ class AnnotationService extends MService {
         $result = new \stdclass();
         foreach ($colors as $c) {
             $node = new \stdclass();
-            $node->rgbFg = $c['rgbFg'];
-            $node->rgbBg = $c['rgbBg'];
+            $node->rgbFg = '#' . $c['rgbFg'];
+            $node->rgbBg = '#' . $c['rgbBg'];
             $idColor = $c['idColor'];
             $result->$idColor = $node;
         }
-        return json_encode($result);
+        return MUtil::php2js($result);//json_encode($result);
     }
 
     public function getLayerType() {
@@ -27,7 +27,7 @@ class AnnotationService extends MService {
             $idLT = $row['idLayerType'];
             $result->$idLT = $node;
         }
-        return json_encode($result);
+        return MUtil::php2js($result);//json_encode($result);
     }
 
     public function getInstantiationType() {
@@ -51,8 +51,8 @@ class AnnotationService extends MService {
             }
         }
         $result = [
-            'array' => json_encode($array),
-            'obj' => json_encode($obj)
+            'array' => MUtil::php2js($array),//json_encode($array),
+            'obj' => MUtil::php2js($obj)//json_encode($obj)
         ];
         return $result;
     }
@@ -62,7 +62,7 @@ class AnnotationService extends MService {
         $userLevel = fnbr\models\Base::getCurrentUserLevel();
         if (($userLevel == 'BEGINNER') || ($userLevel == 'JUNIOR')) {
             $user = fnbr\models\Base::getCurrentUser();
-            $lus = $user->getConfigData('mfnConstraintsLU');
+            $lus = $user->getConfigData('fnbrConstraintsLU');
             if (is_array($lus) && count($lus)) {
                 $idLU = $lus;
             } else {
@@ -224,20 +224,24 @@ class AnnotationService extends MService {
         $result = [];
         foreach ($words as $i => $word) {
             $fieldData = $i;
-            $result[$fieldData]->word = $word['word'];
-            $result[$fieldData]->startChar = $word['startChar'];
-            $result[$fieldData]->endChar = $word['endChar'];
+            $result[$fieldData] = (object) [
+                'word' => $word['word'],
+                'startChar' => $word['startChar'],
+                'endChar' => $word['endChar']
+            ];
         }
-        $layers['words'] = json_encode($result);
+        $layers['words'] =  MUtil::php2js($result);;//json_encode($result);
 
         $result = [];
         foreach ($chars as $i => $char) {
             $fieldData = 'wf' . $i;
-            $result[$fieldData]->order = $char['offset'];
-            $result[$fieldData]->char = $char['char'];
-            $result[$fieldData]->word = $char['order'];
+            $result[$fieldData] = (object) [
+                'order' => $char['offset'],
+                'char' => $char['char'],
+                'word' => $char['order']
+            ];
         }
-        $layers['chars'] = json_encode($result);
+        $layers['chars'] =  MUtil::php2js($result);;//json_encode($result);
 
         // annotationSet Status
         $asStatus = $as->getFullAnnotationStatus();
@@ -311,7 +315,7 @@ class AnnotationService extends MService {
                 'show' => true
             ];
         }
-        $layers['annotationSets'] = json_encode($result);
+        $layers['annotationSets'] =  MUtil::php2js($result);;//json_encode($result);
 
         // get Labels
         $result = array();
@@ -448,14 +452,14 @@ class AnnotationService extends MService {
         $queryLabelType = $as->getLayerNameCnxFrame($idSentence);
         $cefe = $queryLabelType->chunkResultMany('idLayer',['idFrame','name'],'A');
         
-        $level = Manager::getSession()->mfnLevel;
+        $level = Manager::getSession()->fnbrLevel;
         if ($level == 'BEGINNER') {
             $layersToShow = Manager::getConf('fnbr.beginnerLayers');
         } else {
-            $layersToShow = Manager::getSession()->mfnLayers;
+            $layersToShow = Manager::getSession()->fnbrLayers;
             if ($layersToShow == '') {
                 $user = Manager::getLogin()->getUser();
-                $layersToShow = Manager::getSession()->mfnLayers = $user->getConfigData('mfnLayers');
+                $layersToShow = Manager::getSession()->fnbrLayers = $user->getConfigData('fnbrLayers');
             }
         }
 
@@ -658,11 +662,11 @@ class AnnotationService extends MService {
             $user = fnbr\models\Base::getCurrentUser();
             $userLevel = $user->getUserLevel();
             if ($userLevel == 'BEGINNER') {
-                $idSupervisor = $user->getConfigData('mfnJuniorUser');
+                $idSupervisor = $user->getConfigData('fnbrJuniorUser');
             } else if ($userLevel == 'JUNIOR') {
-                $idSupervisor = $user->getConfigData('mfnSeniorUser');
+                $idSupervisor = $user->getConfigData('fnbrSeniorUser');
             } else if ($userLevel == 'SENIOR') {
-                $idSupervisor = $user->getConfigData('mfnMasterUser');
+                $idSupervisor = $user->getConfigData('fnbrMasterUser');
             }
             $supervisor = new fnbr\models\User($idSupervisor);
             $email = $supervisor->getPerson()->getEmail();

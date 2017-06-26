@@ -12,7 +12,7 @@ class ProfileController extends MController {
     public function formMyProfile() {
         $user = Base::getCurrentUser();
         $this->data->idUser = $user->getId();
-        $this->data->languagePreference = $user->getConfigData('mfnLangPref');
+        $this->data->languagePreference = $user->getConfigData('fnbrLangPref');
         $this->data->languages = Base::languages();
         $this->data->title = "Profile of " . $user->getLogin();
         $this->render();
@@ -30,7 +30,7 @@ class ProfileController extends MController {
     {
         try {
             $user = new fnbr\auth\models\User($this->data->idUser);
-            $user->setConfigData('mfnLangPref', $this->data->languagePreference);
+            $user->setConfigData('fnbrLangPref', $this->data->languagePreference);
             $this->renderPrompt('information', 'Ok');
         } catch (\Exception $e) {
             $this->renderPrompt('error', $e->getMessage());

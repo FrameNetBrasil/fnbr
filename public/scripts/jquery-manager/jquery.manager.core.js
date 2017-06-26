@@ -21,6 +21,18 @@ var manager = {
     version: 'Manager 3.0',
     contentElement: '',
     baseURL: window.location.href.replace(/\/index\.php\/(.*)/, "/index.php/"),
+    getApp: function() {
+        var re = new RegExp(/\/index\.php\/([^\/]*)\//, "g");
+        var matches = re.exec(window.location.href);
+        return matches[1];
+    },
+    addAppToAction: function  (action) {
+        var app = manager.getApp();
+        var appRE = "^(\/?)" + app + "\/";
+        var re = new RegExp(appRE, "gi");
+        var actionBase = action.substr(1).replace(re, '');
+        return action.charAt(0) + app + '/' + actionBase;
+    },
     onLoad: [],
     onSubmit: [],
     onBeforePost: function () {

@@ -120,7 +120,7 @@ class MainController extends \MController
         if ($levels[$toLevel]) {
             $newUser = new fnbr\auth\models\User($levels[$toLevel]);
             $login->setUser($newUser);
-            Manager::getSession()->mfnLayers = $newUser->getConfigData('mfnLayers');
+            Manager::getSession()->mfnLayers = $newUser->getConfigData('fnbrLayers');
             Manager::getSession()->mfnLevel = $toLevel;
             $this->redirect(Manager::getURL('main'));
         } else {
