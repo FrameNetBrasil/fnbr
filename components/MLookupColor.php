@@ -5,7 +5,7 @@ class MLookupColor extends MControl
 
     public function generate()
     {
-        $url = Manager::getAppURL('', 'color/lookupData');
+        $url = Manager::getAppURL('', 'data/color/lookupData');
         $onLoad = <<<EOT
         
         $('#{$this->property->id}').combogrid({

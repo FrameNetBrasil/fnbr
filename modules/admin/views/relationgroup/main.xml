@@ -10,14 +10,14 @@
                     <mlinkbutton id="lbAdd" action="^fnbr/admin/relationgroup/formObject|dlgFormObject" iconCls="icon-add" text="{{_M('New')}}" plain="true"/>
                 </mtoolbar>
                 <mdatagridcolumn field="idRelationGroup" visible="false"/>
-                <mdatagridcolumn type="link" field="entry" action="^fnbr/entry/formUpdate/#entry#|dlgFormObject" title="{{_M('Entry')}}"/>
+                <mdatagridcolumn type="link" field="entry" action="^fnbr/structure/entry/formUpdate/#entry#|dlgFormObject" title="{{_M('Entry')}}"/>
             </mdatagrid>
         </fields>
     </mformdialog>
     <javascript>
 <![CDATA[
     var editEntry = function (entry) {
-        manager.doAction('^fnbr/entry/formUpdate/' + entry);
+        manager.doAction('^fnbr/structure/entry/formUpdate/' + entry);
     }
 ]]>
     </javascript>

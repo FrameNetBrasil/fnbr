@@ -5,7 +5,7 @@ class MLookupCoreType extends MControl
 
     public function generate()
     {
-        $url = Manager::getAppURL('', 'typeinstance/lookupCoreType');
+        $url = Manager::getAppURL('', 'data/typeinstance/lookupCoreType');
         $onLoad = <<<EOT
         
         $('#{$this->property->id}').combogrid({

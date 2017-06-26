@@ -13,8 +13,6 @@
 
 namespace fnbr\models;
 
-use Maestro\Manager;
-
 class Timeline extends map\TimelineMap {
 
     public static function config() {
@@ -55,7 +53,7 @@ class Timeline extends map\TimelineMap {
         $this->setNumOrder($order);
         $this->setOperation($operation);
         $this->setTlDateTime(\Manager::getSysTime());
-        $author = Manager::getLogin() ? Manager::getLogin()->getLogin() : 'offline';
+        $author = \Manager::getLogin() ? \Manager::getLogin()->getLogin() : 'offline';
         $this->setAuthor($author);
         $this->save();
         return $timeline;

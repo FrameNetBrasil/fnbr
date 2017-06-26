@@ -133,7 +133,7 @@ class Document extends map\DocumentMap
         $transaction = $this->beginTransaction();
         try {
             $entry = new Entry();
-            $this->setTimeLine(Base::updateTimeLine($this->getEntry(), $newEntry));
+            Base::updateTimeLine($this->getEntry(), $newEntry);
             $entry->updateEntry($this->getEntry(), $newEntry);
             $this->setEntry($newEntry);
             parent::save();

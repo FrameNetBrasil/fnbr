@@ -103,8 +103,8 @@ class TimelineMap extends \MBusinessModel {
     }
 
     public function setTlDateTime($value) {
-        if (!($value instanceof \Maestro\Types\MTimestamp)) {
-            $value = new \Maestro\Types\MTimestamp($value);
+        if (!($value instanceof \MTimestamp)) {
+            $value = new \MTimestamp($value);
         }
         $this->tlDateTime = $value;
     }

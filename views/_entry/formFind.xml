@@ -9,7 +9,7 @@
             </mhcontainer>
             <mdatagrid id="gridFind" query="$this->data->query" pageLength="15">
                 <mdatagridcolumn field="idEntry" visible="false"/>
-                <mdatagridhyperlink field="idEntry" action=">fnbr/Entry/formObject/#0#" title="IdEntry" width="100%"/>
+                <mdatagridhyperlink field="idEntry" action=">fnbr/structure/entry/formObject/#0#" title="IdEntry" width="100%"/>
             </mdatagrid>
         </fields>
     </mform>

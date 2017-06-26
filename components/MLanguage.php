@@ -5,7 +5,7 @@ class MLanguage extends MControl
 
     public function generate()
     {
-        $url = Manager::getAppURL('', 'language/comboData');
+        $url = Manager::getAppURL('', 'data/language/comboData');
         $onLoad = <<<EOT
         
         $('#{$this->property->id}').combobox({
@@ -21,4 +21,4 @@ EOT;
     }
 
 }
-?>
+

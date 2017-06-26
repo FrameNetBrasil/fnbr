@@ -1,23 +1,10 @@
 <?php
-/**
- * $_comment
- *
- * @category   Maestro
- * @package    UFJF
- * @subpackage $_package
- * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version    
- * @since      
- */
-
-
 
 class EntryController extends MController {
 
     public function main()
     {
-        $this->data->query = Manager::getAppURL('', 'entry/gridData');
+        $this->data->query = Manager::getAppURL('', '/structure/entry/gridData');
         $this->render();
     }
 
@@ -34,8 +21,8 @@ class EntryController extends MController {
         $this->data->forUpdate = ($this->data->id != '');
         $this->data->object = $model->getData();
         $this->data->title = $this->data->forUpdate ? $model->getDescription() : _M("new fnbr\models\Entry");
-        $this->data->save = "@entry/save/" . $model->getId() . '|formObject';
-        $this->data->delete = "@entry/delete/" . $model->getId() . '|formObject';
+        $this->data->save = "@structure/entry/save/" . $model->getId() . '|formObject';
+        $this->data->delete = "@structure/entry/delete/" . $model->getId() . '|formObject';
         $this->render();
     }
 
@@ -43,16 +30,16 @@ class EntryController extends MController {
     {
         $model = new fnbr\models\Entry();
         $this->data->undefined = $model->getUndefinedLanguages($this->data->id);
-        $this->data->new = "@entry/newLanguage/" . $this->data->id;
+        $this->data->new = "@structure/entry/newLanguage/" . $this->data->id;
         $this->data->title = "Entry: " . $this->data->id;
-        $this->data->query = Manager::getAppURL('', 'entry/gridUpdateData/' . $this->data->id);
+        $this->data->query = Manager::getAppURL('', 'structure/entry/gridUpdateData/' . $this->data->id);
         $this->render();
     }
 
     public function gridUpdate()
     {
         $this->data->title = "Entry: " . $this->data->id;
-        $this->data->query = Manager::getAppURL('', 'entry/gridUpdateData/' . $this->data->id);
+        $this->data->query = Manager::getAppURL('', 'structure/entry/gridUpdateData/' . $this->data->id);
         $this->render();
     }
 
@@ -72,7 +59,7 @@ class EntryController extends MController {
         $model = new fnbr\models\Entry($this->data->id);
         $this->data->object = $model->getData();
         $this->data->title = $model->getEntry() . ' [' . $model->getLanguage()->getLanguage() . ']';
-        $this->data->save = "@entry/save/" . $model->getId() . '|formUpdateEntry';
+        $this->data->save = "@structure/entry/save/" . $model->getId() . '|formUpdateEntry';
         $this->render();
     }
 

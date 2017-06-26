@@ -87,7 +87,7 @@ class Corpus extends map\CorpusMap {
     public function updateEntry($newEntry) {
         $transaction = $this->beginTransaction();
         try {
-            $this->setTimeLine(Base::updateTimeLine($this->getEntry(), $newEntry));
+            Base::updateTimeLine($this->getEntry(), $newEntry);
             $entry = new Entry();
             $entry->updateEntry($this->getEntry(), $newEntry);
             $this->setEntry($newEntry);

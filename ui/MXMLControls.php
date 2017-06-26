@@ -154,7 +154,6 @@ class MXMLControls extends MBase
         if ($this->ignoreElement($node)) {
             return NULL;
         }
-        mdump('==='.$fieldClass);
         if ($this->painter->hasMethod($fieldClass)) {
             $control = new $fieldClass();
         } else {

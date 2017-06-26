@@ -153,7 +153,7 @@
             if ($.type(entry) === "undefined") {
                 entry = structure.node.entry;
             }
-            manager.doAction('^' + structure.app + '/entry/formUpdate/' + entry);
+            manager.doAction('^' + structure.app + '/structure/entry/formUpdate/' + entry);
             if (form) {
                 $('#' + form + '_dialog').dialog('close');
             }
@@ -364,7 +364,7 @@
 
         $('#framesTree').tree({
             url: {{$manager->getURL('structure/frame/frameTree')}},
-            onSelect: function (node) {
+            onClick: function (node) {
                 console.log(node);
                 if (node.id.charAt(0) == 'f') {
                     structure.showFrame(node.id.substr(1));

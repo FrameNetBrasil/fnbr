@@ -18,7 +18,7 @@ return [
         'templateEngine' => 'latte',
         'defaultPassword' => 'default',
         'pageTitle' => 'FNBr Webtool',
-        'mainTitle' => 'FNBr Webtool'
+        'mainTitle' => 'FrameNet Brasil Webtool 3.0'
     ],
     'ui' => [
         'actions' => 'actions.fnbr.php',

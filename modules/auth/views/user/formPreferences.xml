@@ -6,6 +6,7 @@
         <fields>
             <mhiddenfield id="user_idUser" value="$this->data->id" />  
             <mhiddenfield id="user_level" value="$this->data->userLevel" />
+            <mhiddenfield id="user_active" value="$this->data->userActive" />
             <include component="mlanguage.php" id="user_idLanguage" label="Language"/>
             <mbasegroup label="Junior User"  id="juniorUser" process="$this->data->isBeginner">
                 <mselection id="idJunior" label="Senior" options="$this->data->junior" value="$this->data->idJunior"/>

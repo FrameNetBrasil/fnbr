@@ -16,7 +16,7 @@ class User extends map\UserMap
 //                'pwd' => array('notnull'),
 //                'passMD5' => array('notnull'),
 //                'theme' => array('notnull'),
-                'active' => array('notnull'),
+//                'active' => array('notnull'),
 //                'idPerson' => array('notnull'),
             ),
             'converters' => array()
@@ -193,6 +193,7 @@ class User extends map\UserMap
         $groups = $this->getArrayGroups();
         foreach ($levels as $level => $levelName) {
             if ($groups[$level]) {
+                mdump('====='.$level);
                 $userLevel = $level;
             }
         }
@@ -217,15 +218,15 @@ class User extends map\UserMap
 
     public function setUserLevel($userLevel)
     {
-        $levels = Base::userLevel();
+        //$levels = Base::userLevel();
         $currentLevel = $this->getUserLevel();
         if ($currentLevel != $userLevel) {
             $newGroups = [];
-            foreach ($this->groups as $group) {
-                if (!(in_array($group->getName(), $levels))) {
-                    $newGroups[] = $group;
-                }
-            }
+            //foreach ($this->groups as $group) {
+            //    if (!(in_array($group->getName(), $levels))) {
+            //        $newGroups[] = $group;
+            //    }
+            //}
             $g = new Group();
             $g->getByName($userLevel);
             $newGroups[] = $g;
@@ -248,7 +249,7 @@ class User extends map\UserMap
         $rows = $criteria->asQuery()->getResult();
         foreach ($rows as $row) {
             $config = unserialize($row['config']);
-            $lus = $config->mfnConstraintsLU;
+            $lus = $config->fnbrConstraintsLU;
             if ($lus) {
                 foreach ($lus as $id) {
                     if ($idLU == $id) {

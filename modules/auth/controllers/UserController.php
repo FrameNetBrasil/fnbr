@@ -75,23 +75,24 @@ class UserController extends MController
         $userLevel = $user->getUserLevel();
         if ($userLevel == 'BEGINNER') {
             $this->data->isBeginner = true;
-            $this->data->idJunior = $user->getConfigData('mfnJuniorUser');
+            $this->data->idJunior = $user->getConfigData('fnbrJuniorUser');
             $this->data->junior = $user->getUsersOfLevel('JUNIOR');
             mdump($this->data);
         }
         if ($userLevel == 'JUNIOR') {
             $this->data->isJunior = true;
-            $this->data->idSenior = $user->getConfigData('mfnSeniorUser');
+            $this->data->idSenior = $user->getConfigData('fnbrSeniorUser');
             $this->data->senior = $user->getUsersOfLevel('SENIOR');
             mdump($this->data);
         }
         if ($userLevel == 'SENIOR') {
             $this->data->isSenior = true;
-            $this->data->idMaster = $user->getConfigData('mfnMasterUser');
+            $this->data->idMaster = $user->getConfigData('fnbrMasterUser');
             $this->data->master = $user->getUsersOfLevel('MASTER');
             mdump($this->data);
         }
         $this->data->userLevel = $userLevel;
+        $this->data->userActive = $user->getActive();
         $this->render();
     }
 
@@ -103,8 +104,10 @@ class UserController extends MController
 
     public function get()
     {
-        $model = new fnbr\auth\models\User($this->data->id);
-        $this->renderJSON(json_encode($model->getData()));
+        $user = new fnbr\auth\models\User($this->data->id);
+        $data = $user->getData();
+        $data->userLevel = $user->getUserLevel();
+        $this->renderJSON(json_encode($data));
     }
 
     public function save()
@@ -132,11 +135,23 @@ class UserController extends MController
         }
     }
 
+    public function authorize()
+    {
+        try {
+            $user = new fnbr\auth\models\User($this->data->id);
+            $user->setStatus('1');
+            $user->save();
+            $this->renderPrompt('information', "User [{$user->getLogin()}] is now authorized.");
+        } catch (\Exception $e) {
+            $this->renderPrompt('error', $e->getMessage());
+        }
+    }
+
     public function getConstraintsLU()
     {
         $idUser = $this->data->idUser;
         $user = new fnbr\auth\models\User($idUser);
-        $lus = $user->getConfigData('mfnConstraintsLU');
+        $lus = $user->getConfigData('fnbrConstraintsLU');
         $lu = new fnbr\models\LU();
         if (is_array($lus) && count($lus)) {
             $result = $lu->listForConstraint($lus)->asQuery()->getResult();
@@ -154,22 +169,22 @@ class UserController extends MController
     {
         try {
             $user = new fnbr\auth\models\User($this->data->user->idUser);
-            $lus = $user->getConfigData('mfnConstraintsLU');
+            $lus = $user->getConfigData('fnbrConstraintsLU');
             foreach ($this->data->gridfieldlu->listLU as $lu) {
                 $lus[] = $lu->idLU;
             }
-            $user->setConfigData('mfnConstraintsLU', $lus);
+            $user->setConfigData('fnbrConstraintsLU', $lus);
             // assign same LU to supervisor
             $userLevel = $user->getUserLevel();
             if ($userLevel == 'BEGINNER') {
-                $idSupervisor = $user->getConfigData('mfnJuniorUser');
+                $idSupervisor = $user->getConfigData('fnbrJuniorUser');
                 if ($idSupervisor != '') {
                     $supervisor = new fnbr\auth\models\User($idSupervisor);
-                    $lus = $supervisor->getConfigData('mfnConstraintsLU');
+                    $lus = $supervisor->getConfigData('fnbrConstraintsLU');
                     foreach ($this->data->gridfieldlu->listLU as $lu) {
                         $lus[] = $lu->idLU;
                     }
-                    $supervisor->setConfigData('mfnConstraintsLU', $lus);
+                    $supervisor->setConfigData('fnbrConstraintsLU', $lus);
                 }
             }
             $this->renderPrompt('information', 'Ok');
@@ -184,13 +199,13 @@ class UserController extends MController
             $user = new fnbr\auth\models\User($this->data->user->idUser);
             $userLevel = $this->data->user->level;
             if ($userLevel == 'BEGINNER') {
-                $user->setConfigData('mfnJuniorUser', $this->data->idJunior);
+                $user->setConfigData('fnbrJuniorUser', $this->data->idJunior);
             } else if ($userLevel == 'JUNIOR') {
-                $user->setConfigData('mfnSeniorUser', $this->data->idSenior);
+                $user->setConfigData('fnbrSeniorUser', $this->data->idSenior);
             } else if ($userLevel == 'SENIOR') {
-                $user->setConfigData('mfnMasterUser', $this->data->idMaster);
+                $user->setConfigData('fnbrMasterUser', $this->data->idMaster);
             }
-            $user->setConfigData('mfnIdLanguage', $this->data->user->idLanguage);
+            $user->setConfigData('fnbrIdLanguage', $this->data->user->idLanguage);
             $this->renderPrompt('information', 'Ok');
         } catch (\Exception $e) {
             $this->renderPrompt('error', $e->getMessage());

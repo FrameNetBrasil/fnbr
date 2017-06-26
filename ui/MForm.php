@@ -28,7 +28,6 @@ class MForm extends MControl
         $control->setForm($this);
         $className = ($control->className == 'mhtml') ? $control->tag : $control->className;
         if (($className == 'fields') || ($className == 'buttons') || ($className == 'help') || ($className == 'tools') || ($className == 'toolbar')) {
-            mdump('form = ' . $className);
             $this->$className = $control;
         } else {
             if ($this->fields == NULL) {

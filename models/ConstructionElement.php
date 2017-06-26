@@ -144,7 +144,7 @@ class ConstructionElement extends map\ConstructionElementMap {
     {
         $transaction = $this->beginTransaction();
         try {
-            $this->setTimeLine(Base::updateTimeLine($this->getEntry(), $newEntry));
+            Base::updateTimeLine($this->getEntry(), $newEntry);
             $entity = new Entity($this->getIdEntity());
             $entity->setAlias($newEntry);
             $entity->save();
