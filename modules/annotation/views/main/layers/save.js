@@ -1,6 +1,32 @@
 <script type="text/javascript">
     // layers/save.js
     $(function () {
+        {{if ($data->canSave) }}
+
+        annotation.save = function() {
+            var panel = $('#layers').datagrid("getPanel");
+            annotation.showMessage(panel, "Saving AnnotationSets...");
+            $('#type').val(annotation.type);
+            var data = annotation.getDataToPost();
+            $('#dataLayers').val(data);
+            manager.doPostBack('formLayers');
+            annotation.cleanData();
+            annotation.hideMessage(panel);
+        }
+        {{/if}}
+
+        annotation.refresh = function() {
+            $('#dlgValidation').dialog('destroy');
+            $('#dlgNI').dialog('destroy');
+            $('#dlgMWE').dialog('destroy');
+            $('#dlgASComments').dialog('destroy');
+            $('#dlgASInfo').dialog('destroy');
+            $('#dlgSubCorpus').dialog('destroy');
+            $('#dlgAS').dialog('destroy');
+            $('#dlgASRemove').dialog('destroy');
+            $('#dlgCxn').dialog('destroy');
+            $('#layersPane').panel('refresh');
+        }
 
         annotation.getDataToPost = function() {
             var data = [];

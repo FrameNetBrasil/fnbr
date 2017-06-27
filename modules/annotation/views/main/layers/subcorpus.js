@@ -48,12 +48,11 @@
             $.ajax({
                 type: "POST",
                 url: {{$manager->getURL('annotation/main/addManualSubcorpus')}},
-               data: {idLU: idLU, idSentence: idSentence, startChar: startChar, endChar: endChar},
-                 dataType: "json",
-                    async: false,
+                data: {idLU: idLU, idSentence: idSentence, startChar: startChar, endChar: endChar},
+                dataType: "json",
+                async: false
             });
-            $('#layersPane').html('');
-            manager.doGet({{$manager->getURL('annotation/main/layers')}} + '/' + annotation.idSentence+ '/' + annotation.idAnnotationSet, 'layersPane');
+            annotation.refresh();
         }
 
     });

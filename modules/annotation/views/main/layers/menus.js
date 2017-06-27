@@ -22,16 +22,6 @@
             }
         }
 
-        annotation.onHeaderContextMenu = function(e, field){
-            //console.log('onHeaderContextMenu ' + field);
-            e.preventDefault();
-            annotation.createHeaderContextMenu(field);
-            annotation.headerContextMenu.menu('show', {
-                left:e.pageX,
-                top:e.pageY
-            });
-        }
-
         annotation.contextMenu = null;
         annotation.createContextMenu = function (rowIndex, rowData) {
             //console.log('createContextMenu ' + rowIndex);
@@ -77,12 +67,27 @@
             });
         }
 
+        annotation.onHeaderContextMenu = function(e, field){
+            //console.log('onHeaderContextMenu ' + field);
+            e.preventDefault();
+            annotation.createHeaderContextMenu(field);
+            $('#dlgSubCorpus').dialog('doLayout');
+            $('#dlgSubCorpus').dialog('open');
+            /*
+            annotation.headerContextMenu.menu('show', {
+                left:e.pageX,
+                top:e.pageY
+            });
+            */
+        }
+
         annotation.headerContextMenu = null;
         annotation.createHeaderContextMenu = function (field) {
             if (!annotation.checkSavedData()) {
                 return;
             }
             //console.log('createHeaderContextMenu ' + field);
+            /*
             var menu = 'menu' + field;
             $menu = $('#' + menu);
             //console.log($menu);
@@ -138,6 +143,45 @@
                     }
                 }
             });
+            */
+            var wf = annotation.words[annotation.chars[field]['word']];
+            $.ajax({
+                type: "POST",
+                url: {{$manager->getURL('annotation/main/headerMenu')}},
+                data: {wordform: wf.word},
+                dataType: "json",
+                success: function (data, textStatus, jqXHR) {
+                    //console.log('success');
+                    if (jQuery.isEmptyObject(data)) {
+                        $('#dlgSubCorpusList').html('** No matching lemma **');
+                    } else {
+                        console.log(data);
+                        $('#dlgSubCorpusField').attr('value',field);
+                        $('#dlgSubCorpusList').datalist({
+                            data: data,
+                            valueField: 'idLU',
+                            textField: 'fullName',
+                            lines: true
+                        });
+                    }
+                }
+            });
+        }
+
+        annotation.dlgSubCorpusSave = function() {
+            var field = $('#dlgSubCorpusField').attr('value');
+            var wf = annotation.words[annotation.chars[field]['word']];
+            var lu = $('#dlgSubCorpusList').datalist('getSelected');
+            console.log(lu);
+            console.log(wf);
+            $('#dlgSubCorpus').dialog('close');
+            $('#dlgSubCorpus').dialog('destroy',true);
+            if (lu.mwe != '0') {
+                annotation.addMWEManualSubcorpus(wf, lu.idLU, annotation.idSentence);
+            } else {
+                annotation.addManualSubcorpus(lu.idLU, annotation.idSentence, wf.startChar, wf.endChar);
+            }
+
         }
 
         annotation.ASMenu = null;

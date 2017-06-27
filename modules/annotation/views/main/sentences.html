@@ -119,7 +119,7 @@
             onSelect: function (rowIndex, rowData) {
                 $('#layersPane').html('');
                 console.log(rowData);
-                window.open({{$manager->getURL('annotation/main/layers')}} + '/' + rowData.idSentence + '/' + rowData.idAnnotationSet + '/' + annotation.type, '_blank');
+                window.open({{$manager->getURL('annotation/main/annotation')}} + '/' + rowData.idSentence + '/' + rowData.idAnnotationSet + '/' + annotation.type, '_blank');
             }
         });
     });

@@ -231,8 +231,8 @@ class AnnotationSet extends map\AnnotationSetMap
     {
         $criteria = $this->getCriteria();
         $criteria->select("idAnnotationSet, l.idLayer, genericlabel.idEntity as idLabelType, genericlabel.name as labelType, genericlabel.idColor, '' as coreType");
-        Base::relation($criteria, 'LU lu', 'SubCorpus sc', 'rel_hassubcorpus');
-        $criteria->join('SubCorpus sc', 'AnnotationSet', "sc.idSubCorpus = AnnotationSet.idSubCorpus");
+        //Base::relation($criteria, 'LU lu', 'SubCorpus sc', 'rel_hassubcorpus');
+        //$criteria->join('SubCorpus sc', 'AnnotationSet', "sc.idSubCorpus = AnnotationSet.idSubCorpus");
         $criteria->join('AnnotationSet', 'Sentence s', "AnnotationSet.idSentence = s.idSentence");
         $criteria->join('AnnotationSet', 'Layer l', "AnnotationSet.idAnnotationSet = l.idAnnotationSet");
         $criteria->join('Layer l', 'LayerType lt', "l.idLayerType=lt.idLayerType");

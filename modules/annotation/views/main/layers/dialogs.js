@@ -77,6 +77,7 @@
                 rows[r].show = annotation.annotationSets[rows[r].idAnnotationSet].show;
                 $('#layers').datagrid('refreshRow', r);
             }
+            $('#dlgAS').dialog('close');
         }
 
         annotation.dlgASOpenRemove = function() {
@@ -115,8 +116,8 @@
                 dataType: "json",
                 async: false
             });
-            $('#layersPane').html('');
-            manager.doGet({{$manager->getURL('annotation/main/layers')}} + '/' + annotation.idSentence + '/' + annotation.idAnnotationSet, 'layersPane');
+            $('#dlgASRemove').dialog('close');
+            annotation.refresh();
         }
 
         annotation.dlgASCommentsSave = function() {
@@ -140,12 +141,12 @@
             $.ajax({
                 type: "POST",
                 url: {{$manager->getURL('annotation/main/addManualSubcorpus')}},
-            data: {idConstruction: selected.idConstruction, idSentence: annotation.idSentence},
-            dataType: "json",
-                    async: false,
-        });
-            $('#layersPane').html('');
-            manager.doGet({{$manager->getURL('annotation/main/layers')}} + '/' + annotation.idSentence + '/' + annotation.idAnnotationSet, 'layersPane');
+                data: {idConstruction: selected.idConstruction, idSentence: annotation.idSentence},
+                dataType: "json",
+                async: false,
+            });
+            $('#dlgCxn').dialog('close');
+            annotation.refresh();
         }
 
         annotation.dlgValidationOpen = function() {
@@ -154,11 +155,19 @@
         }
 
         annotation.ASComments = function (idAnnotationSet) {
-            console.log('----' + idAnnotationSet);
             annotation.idASComments = idAnnotationSet;
             $('#dlgASComments').dialog({href: {{$manager->getURL('annotation/main/formASComments')}} + "/" + annotation.idASComments });
             $('#dlgASComments').dialog('doLayout');
             $('#dlgASComments').dialog('open');
+        }
+
+        annotation.ASInfo = function (idAnnotationSet) {
+            var idASInfo = annotation.annotationSets[idAnnotationSet];
+            //$('#dlgASInfo').dialog({href: {{$manager->getURL('annotation/main/formASComments')}} + "/" + annotation.idASComments });
+            $('#dlgASInfo_idAnnotationSet').html(idAnnotationSet);
+            $('#dlgASInfo_name').html(idASInfo['name']);
+            $('#dlgASInfo').dialog('doLayout');
+            $('#dlgASInfo').dialog('open');
         }
 
         annotation.showMessage = function(element, msg) {

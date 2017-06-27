@@ -9,26 +9,21 @@
         annotation.toolbarNull = [
 
         ];
+
         {{if ($data->canSave) }}
-
-        annotation.save = function() {
-
-            var panel = $('#layers').datagrid("getPanel");
-            annotation.showMessage(panel, "Saving AnnotationSets...");
-            $('#type').val(annotation.type);
-            var data = annotation.getDataToPost();
-            $('#dataLayers').val(data);
-            manager.doPostBack('formLayers');
-            annotation.cleanData();
-            annotation.hideMessage(panel);
-        }
-
         annotation.toolbar = [
             {
                 text:'<u>S</u>ave',
                 iconCls:'fa fa-folder-o fa16px',
                 handler: function(){
                     annotation.save();
+                }
+            },
+            {
+                text:'<u>R</u>efresh',
+                iconCls:'fa fa-refresh fa16px',
+                handler: function(){
+                    annotation.refresh();
                 }
             },
             /*
@@ -75,6 +70,13 @@
                 iconCls:'fa fa-folder-o fa16px',
                 handler: function(){
                     annotation.save();
+                }
+            },
+            {
+                text:'<u>R</u>efresh',
+                iconCls:'fa fa-refresh fa16px',
+                handler: function(){
+                    annotation.refresh();
                 }
             },
             /*
@@ -125,6 +127,13 @@
                 iconCls:'fa fa-folder-o fa16px',
                 handler: function(){
                     annotation.save();
+                }
+            },
+            {
+                text:'<u>R</u>efresh',
+                iconCls:'fa fa-refresh fa16px',
+                handler: function(){
+                    annotation.refresh();
                 }
             },
             /*

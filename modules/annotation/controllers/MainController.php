@@ -80,6 +80,14 @@ class MainController extends MController
         $this->renderJson($json);
     }
 
+    public function annotation()
+    {
+        $this->data->idSentence = $this->data->id;
+        $this->data->idAnnotationSet = Manager::getContext()->get(1);
+        $this->data->type = Manager::getContext()->get(2);
+        $this->render();
+    }
+
     public function layers()
     {
         $annotation = Manager::getAppService('annotation');
@@ -89,13 +97,8 @@ class MainController extends MController
         $this->data->colors = $annotation->getColor();
         $this->data->layerType = $annotation->getLayerType();
         $it = $annotation->getInstantiationType();
-        mdump('***************');
-        mdump($it);
-        mdump('***************');
-
         $this->data->instantiationType = $it['array'];
         $this->data->instantiationTypeObj = $it['obj'];
-
         $this->data->idSentence = $this->data->id;
         $sentence = new fnbr\models\Sentence($this->data->idSentence);
         $idLanguage = $sentence->getIdLanguage();
@@ -104,19 +107,10 @@ class MainController extends MController
         $this->data->canSave = $canSave && Manager::checkAccess('BEGINNER', A_EXECUTE);
         $this->data->idAnnotationSet = Manager::getContext()->get(1);
         $this->data->type = Manager::getContext()->get(2);
-        mdump($this->data);
+        //mdump($this->data);
         $annotation = Manager::getAppService('annotation');
         $this->data->layers = $annotation->getLayers($this->data, $this->idLanguage);
-
-        $language = fnbr\models\Base::languages()[$idLanguage];
-        if ($language == 'ar') {
-            $this->data->rtl = Manager::getThemeURL(). '/scripts/lib/jquery-easyui-1.5/easyui-rtl.js';
-            $this->render('layers.ar');
-        } elseif ($language == 'jp') {
-            $this->render('layers.jp');
-        } else {
-            $this->render();
-        }
+        $this->render();
     }
 
     public function layersData()
@@ -292,13 +286,15 @@ class MainController extends MController
         $this->render();
     }
 
-    public function formASComments() {
+    public function formASComments()
+    {
         $annotation = Manager::getAppService('annotation');
         $this->data->object->asc = $annotation->getASComments($this->data->id);
         $this->render();
     }
 
-    public function saveASComments() {
+    public function saveASComments()
+    {
         try {
             $annotation = Manager::getAppService('annotation');
             $annotation->saveASComments($this->data->asc);

@@ -1,8 +1,10 @@
 <?php
 
-class AnnotationService extends MService {
+class AnnotationService extends MService
+{
 
-    public function getColor() {
+    public function getColor()
+    {
         $color = new fnbr\models\Color();
         $colors = $color->listAll()->asQuery()->getResult();
         $result = new \stdclass();
@@ -16,7 +18,8 @@ class AnnotationService extends MService {
         return MUtil::php2js($result);//json_encode($result);
     }
 
-    public function getLayerType() {
+    public function getLayerType()
+    {
         $lt = new fnbr\models\LayerType();
         $lts = $lt->listAll()->asQuery()->getResult();
         $result = new \stdclass();
@@ -30,7 +33,8 @@ class AnnotationService extends MService {
         return MUtil::php2js($result);//json_encode($result);
     }
 
-    public function getInstantiationType() {
+    public function getInstantiationType()
+    {
         $type = new fnbr\models\Type();
         $instances = $type->getInstantiationType()->asQuery()->getResult();
         $array = array();
@@ -57,7 +61,8 @@ class AnnotationService extends MService {
         return $result;
     }
 
-    private function constraintLU() {
+    private function constraintLU()
+    {
         $idLU = NULL;
         $userLevel = fnbr\models\Base::getCurrentUserLevel();
         if (($userLevel == 'BEGINNER') || ($userLevel == 'JUNIOR')) {
@@ -72,13 +77,14 @@ class AnnotationService extends MService {
         return $idLU;
     }
 
-    public function listFrames($lu = '', $idLanguage = '') {
+    public function listFrames($lu = '', $idLanguage = '')
+    {
         $idLU = $this->constraintLU();
         if ($idLU == -1) {
             return json_encode([[]]);
         }
         $frame = new fnbr\models\ViewFrame();
-        $filter = (object) ['lu' => $lu, 'idLanguage' => $idLanguage, 'idLU' => $idLU];
+        $filter = (object)['lu' => $lu, 'idLanguage' => $idLanguage, 'idLU' => $idLU];
         $frames = $frame->listByFilter($filter)->asQuery()->chunkResult('idFrame', 'name');
         $result = array();
         foreach ($frames as $idFrame => $name) {
@@ -91,7 +97,8 @@ class AnnotationService extends MService {
         return json_encode($result);
     }
 
-    public function listLUs($idFrame, $idLanguage) {
+    public function listLUs($idFrame, $idLanguage)
+    {
         $idLU = $this->constraintLU();
         if ($idLU == -1) {
             return json_encode([[]]);
@@ -109,7 +116,8 @@ class AnnotationService extends MService {
         return json_encode($result);
     }
 
-    public function listSubCorpus($idLU) {
+    public function listSubCorpus($idLU)
+    {
         $sc = new fnbr\models\ViewSubCorpusLU();
         $scs = $sc->listByLU($idLU)->asQuery()->getResult();
         foreach ($scs as $sc) {
@@ -122,13 +130,15 @@ class AnnotationService extends MService {
         return json_encode($result);
     }
 
-    public function getSubCorpusTitle($idSubCorpus, $idLanguage, $isCxn) {
+    public function getSubCorpusTitle($idSubCorpus, $idLanguage, $isCxn)
+    {
         $sc = $isCxn ? new fnbr\models\ViewSubCorpusCxn() : new fnbr\models\ViewSubCorpusLU();
         $title = $sc->getTitle($idSubCorpus, $idLanguage);
         return $title;
     }
 
-    public function getSubCorpusStatus($idSubCorpus, $isCxn) {
+    public function getSubCorpusStatus($idSubCorpus, $isCxn)
+    {
         $sc = $isCxn ? new fnbr\models\ViewSubCorpusCxn() : new fnbr\models\ViewSubCorpusLU();
         $status = new \stdclass;
         $total = 0;
@@ -136,13 +146,13 @@ class AnnotationService extends MService {
         $stats = $sc->getStats($idSubCorpus);
         foreach ($stats as $st) {
             $entry = $st['entry'];
-            $status->stat->$entry = (object) ['name' => $st['name'], 'quant' => $st['quant']];
+            $status->stat->$entry = (object)['name' => $st['name'], 'quant' => $st['quant']];
             $total += $st['quant'];
             if ($entry == 'ast_unann') {
                 ++$totalUnann;
             }
         }
-        $status->stat->total = (object) ['name' => _M('Total'), 'quant' => $total];
+        $status->stat->total = (object)['name' => _M('Total'), 'quant' => $total];
         if ($totalUnann == 0) {
             $status->status->code = 1;
             $status->status->msg = _M('Complete');
@@ -153,14 +163,16 @@ class AnnotationService extends MService {
         return $status;
     }
 
-    public function getDocumentTitle($idDocument, $idLanguage) {
+    public function getDocumentTitle($idDocument, $idLanguage)
+    {
         $doc = new fnbr\models\Document();
-        $filter = (object) ['idDocument' => $idDocument];
+        $filter = (object)['idDocument' => $idDocument];
         $result = $doc->listByFilter($filter)->asQuery()->getResult();
         return 'Document:' . $result['name'];
     }
 
-    public function decorateSentence($sentence, $labels) {
+    public function decorateSentence($sentence, $labels)
+    {
         $decorated = "";
         $ni = "";
         $i = 0;
@@ -179,7 +191,8 @@ class AnnotationService extends MService {
         return $decorated;
     }
 
-    public function listAnnotationSet($idSubCorpus, $sortable = NULL) {
+    public function listAnnotationSet($idSubCorpus, $sortable = NULL)
+    {
         $as = new fnbr\models\ViewAnnotationSet();
         $sentences = $as->listBySubCorpus($idSubCorpus, $sortable)->asQuery()->getResult();
         $annotation = $as->listFECEBySubCorpus($idSubCorpus);
@@ -200,11 +213,13 @@ class AnnotationService extends MService {
         return json_encode($result);
     }
 
-    public function getLayers($params, $idLanguage) {
+    public function getLayers($params, $idLanguage)
+    {
         $idSentence = $params->idSentence;
         $idAnnotationSet = $params->idAnnotationSet;
+        $annotationType = $params->type;
 
-        $layers = array(
+        $layers = [
             "words" => NULL,
             "frozenColumns" => NULL,
             "columns" => NULL,
@@ -212,9 +227,13 @@ class AnnotationService extends MService {
             "layers" => NULL,
             "labelTypes" => NULL,
             "nis" => NULL,
-        );
+        ];
 
-        $as = $idAnnotationSet ? new fnbr\models\AnnotationSet($idAnnotationSet) : new fnbr\models\AnnotationSet();
+        if ($annotationType == 'c') { // corpus mode
+            $as = new fnbr\models\AnnotationSet();
+        } else {
+            $as = $idAnnotationSet ? new fnbr\models\AnnotationSet($idAnnotationSet) : new fnbr\models\AnnotationSet();
+        }
 
         // get words/chars
         $wordsChars = $as->getWordsChars($idSentence);
@@ -224,33 +243,38 @@ class AnnotationService extends MService {
         $result = [];
         foreach ($words as $i => $word) {
             $fieldData = $i;
-            $result[$fieldData] = (object) [
+            $result[$fieldData] = (object)[
                 'word' => $word['word'],
                 'startChar' => $word['startChar'],
                 'endChar' => $word['endChar']
             ];
         }
-        $layers['words'] =  MUtil::php2js($result);;//json_encode($result);
+        $layers['words'] = MUtil::php2js($result);;//json_encode($result);
 
         $result = [];
         foreach ($chars as $i => $char) {
             $fieldData = 'wf' . $i;
-            $result[$fieldData] = (object) [
+            $result[$fieldData] = (object)[
                 'order' => $char['offset'],
                 'char' => $char['char'],
                 'word' => $char['order']
             ];
         }
-        $layers['chars'] =  MUtil::php2js($result);//json_encode($result);
+        $layers['chars'] = MUtil::php2js($result);//json_encode($result);
 
-        // annotationSet Status
-        $asStatus = $as->getFullAnnotationStatus();
+        if ($annotationType == 'c') { // corpus mode
+            $header = "[{$idSentence}] ";
+        } else {
+            // annotationSet Status
+            $asStatus = $as->getFullAnnotationStatus();
+            $header = "[{$idSentence}] " . "<span class='fa fa-square' style='width:16px;color:#" . $asStatus->rgbBg . "'></span><span>" . $asStatus->annotationStatus . "</span>";
+        }
 
         // get hiddenColumns/frozenColumns/Columns using $words
         $frozenColumns[] = array(
             "field" => "layer",
             "width" => '60',
-            "title" => "[{$idSentence}] " . "<span class='fa fa-square' style='width:16px;color:#" . $asStatus->rgbBg . "'></span><span>" . $asStatus->annotationStatus . "</span>",
+            "title" => $header,
             "formatter" => "annotation.cellLayerFormatter",
             "styler" => "annotation.cellStyler"
         );
@@ -316,7 +340,7 @@ class AnnotationService extends MService {
                 'show' => true
             ];
         }
-        $layers['annotationSets'] =  MUtil::php2js($result);;//json_encode($result);
+        $layers['annotationSets'] = MUtil::php2js($result);;//json_encode($result);
 
         /*
         // get Labels
@@ -337,8 +361,8 @@ class AnnotationService extends MService {
         $queryLabelType = $as->getLabelTypesGLGF($idSentence)->asQuery();
         $rows = $queryLabelType->getResult();
         foreach ($rows as $row) {
-        //    $result[$row['idLayer']][$row['idLabelType']] = [
-            if(!isset($layerLabelsTemp[$row['idLayer']][$row['idLabelType']])) {
+            //    $result[$row['idLayer']][$row['idLabelType']] = [
+            if (!isset($layerLabelsTemp[$row['idLayer']][$row['idLabelType']])) {
                 $layerLabels[$row['idLayer']][] = $row['idLabelType'];
                 $layerLabelsTemp[$row['idLayer']][$row['idLabelType']] = 1;
             }
@@ -352,8 +376,8 @@ class AnnotationService extends MService {
         $queryLabelType = $as->getLabelTypesGL($idSentence)->asQuery();
         $rows = $queryLabelType->getResult();
         foreach ($rows as $row) {
-        //    $result[$row['idLayer']][$row['idLabelType']] = [
-            if(!isset($layerLabelsTemp[$row['idLayer']][$row['idLabelType']])) {
+            //    $result[$row['idLayer']][$row['idLabelType']] = [
+            if (!isset($layerLabelsTemp[$row['idLayer']][$row['idLabelType']])) {
                 $layerLabels[$row['idLayer']][] = $row['idLabelType'];
                 $layerLabelsTemp[$row['idLayer']][$row['idLabelType']] = 1;
             }
@@ -368,8 +392,8 @@ class AnnotationService extends MService {
         $rows = $queryLabelType->getResult();
         //mdump($rows);
         foreach ($rows as $row) {
-        //    $result[$row['idLayer']][$row['idLabelType']] = [
-            if(!isset($layerLabelsTemp[$row['idLayer']][$row['idLabelType']])) {
+            //    $result[$row['idLayer']][$row['idLabelType']] = [
+            if (!isset($layerLabelsTemp[$row['idLayer']][$row['idLabelType']])) {
                 $layerLabels[$row['idLayer']][] = $row['idLabelType'];
                 $layerLabelsTemp[$row['idLayer']][$row['idLabelType']] = 1;
             }
@@ -383,8 +407,8 @@ class AnnotationService extends MService {
         $queryLabelType = $as->getLabelTypesCE($idSentence);
         $rows = $queryLabelType->getResult();
         foreach ($rows as $row) {
-        //    $result[$row['idLayer']][$row['idLabelType']] = [
-            if(!isset($layerLabelsTemp[$row['idLayer']][$row['idLabelType']])) {
+            //    $result[$row['idLayer']][$row['idLabelType']] = [
+            if (!isset($layerLabelsTemp[$row['idLayer']][$row['idLabelType']])) {
                 $layerLabels[$row['idLayer']][] = $row['idLabelType'];
                 $layerLabelsTemp[$row['idLayer']][$row['idLabelType']] = 1;
             }
@@ -397,8 +421,8 @@ class AnnotationService extends MService {
 
         // CE-FE - $rowsCEFE is obtained via query for layer above
         foreach ($rowsCEFE as $row) {
-        //    $result[$row['idLayer']][$row['idLabelType']] = [
-            if(!isset($layerLabelsTemp[$row['idLayer']][$row['idLabelType']])) {
+            //    $result[$row['idLayer']][$row['idLabelType']] = [
+            if (!isset($layerLabelsTemp[$row['idLayer']][$row['idLabelType']])) {
                 $layerLabels[$row['idLayer']][] = $row['idLabelType'];
                 $layerLabelsTemp[$row['idLayer']][$row['idLabelType']] = 1;
             }
@@ -431,7 +455,8 @@ class AnnotationService extends MService {
         return $layers;
     }
 
-    public function getLayersData($params, $idLanguage) {
+    public function getLayersData($params, $idLanguage)
+    {
         $idSentence = $params->idSentence;
         $idAnnotationSet = $params->idAnnotationSet;
 
@@ -439,7 +464,7 @@ class AnnotationService extends MService {
         $idLU = $as->getSubCorpus()->getIdLU();
         $idCxn = $as->getSubCorpus()->getIdCxn();
         $isCxn = ($idLU == NULL) && ($idCxn != NULL);
-        
+
         $result = array();
         $queryLayersData = $as->getLayersData($idSentence);
         $unorderedRows = $queryLayersData->getResult();
@@ -484,8 +509,8 @@ class AnnotationService extends MService {
         $ltCEFE = new fnbr\models\LayerType();
         $ltCEFE->getByEntry('lty_cefe');
         $queryLabelType = $as->getLayerNameCnxFrame($idSentence);
-        $cefe = $queryLabelType->chunkResultMany('idLayer',['idFrame','name'],'A');
-        
+        $cefe = $queryLabelType->chunkResultMany('idLayer', ['idFrame', 'name'], 'A');
+
         $level = Manager::getSession()->fnbrLevel;
         if ($level == 'BEGINNER') {
             $layersToShow = Manager::getConf('fnbr.beginnerLayers');
@@ -536,7 +561,7 @@ class AnnotationService extends MService {
             if ($idLayer != $idLayerRef) {
                 // if lastLayer=CE, try to add the layers for CE-FE
                 if ($lastLayerTypeEntry == 'lty_ce') {
-                    foreach($cefe as $idLayerCEFE => $frame) {
+                    foreach ($cefe as $idLayerCEFE => $frame) {
                         $line[$idLayerCEFE] = new \stdclass();
                         $line[$idLayerCEFE]->idAnnotationSet = $row['idAnnotationSet'];
                         $line[$idLayerCEFE]->idLayerType = "{$ltCEFE->getId()}";
@@ -546,7 +571,7 @@ class AnnotationService extends MService {
                         $line[$idLayerCEFE]->ni = '';
                         $line[$idLayerCEFE]->show = true;
                         $cefeData = $as->getCEFEData($idSentence, $idLayerCEFE)->getResult();
-                        foreach($cefeData as $labelCEFE) {
+                        foreach ($cefeData as $labelCEFE) {
                             if ($labelCEFE['startChar'] > -1) {
                                 $posChar = $labelCEFE['startChar'];
                                 while ($posChar <= $labelCEFE['endChar']) {
@@ -597,7 +622,8 @@ class AnnotationService extends MService {
         //return $data;
     }
 
-    public function putLayers($layers) {
+    public function putLayers($layers)
+    {
         $annotationSet = new fnbr\models\AnnotationSet();
         $transaction = $annotationSet->beginTransaction();
         $idAS = [];
@@ -616,7 +642,8 @@ class AnnotationService extends MService {
         $transaction->commit();
     }
 
-    public function addFELayer($idAnnotationSet) {
+    public function addFELayer($idAnnotationSet)
+    {
         $annotationSet = new fnbr\models\AnnotationSet($idAnnotationSet);
         $idLayer = $annotationSet->addFELayer();
         $result[$idLayer] = [
@@ -627,8 +654,9 @@ class AnnotationService extends MService {
         ];
         return $result;
     }
-    
-    public function getFELabels($idAnnotationSet, $idSentence) {
+
+    public function getFELabels($idAnnotationSet, $idSentence)
+    {
         $annotationSet = new fnbr\models\AnnotationSet($idAnnotationSet);
         $queryLabelType = $annotationSet->getLabelTypesFE($idSentence, true);
         $rows = $queryLabelType->getResult();
@@ -643,13 +671,15 @@ class AnnotationService extends MService {
         return $result;
     }
 
-    public function delFELayer($idAnnotationSet) {
+    public function delFELayer($idAnnotationSet)
+    {
         $annotationSet = new fnbr\models\AnnotationSet($idAnnotationSet);
         $annotationSet->delFELayer();
         $this->render();
     }
 
-    public function validation($as, $validation, $feedback = '') {
+    public function validation($as, $validation, $feedback = '')
+    {
         $annotationSet = new fnbr\models\AnnotationSet();
         foreach ($as as $idAnnotationSet => $o) {
             $annotationSet->getById($idAnnotationSet);
@@ -661,7 +691,8 @@ class AnnotationService extends MService {
         }
     }
 
-    public function notifySupervised($annotationSet, $feedback = '') {
+    public function notifySupervised($annotationSet, $feedback = '')
+    {
         $idLU = $annotationSet->getIdLU();
         $user = fnbr\models\Base::getCurrentUser();
         $userSupervised = $user->getUserSupervisedByIdLU($idLU);
@@ -672,7 +703,7 @@ class AnnotationService extends MService {
             $subject = 'FNBr - AnnotationSet Disapproved';
             $body = "<p>From supervisor: " . $user->getLogin() . ' - ' . $user->getPerson()->getName() . "</p>";
             $subCorpus = $annotationSet->getSubCorpus();
-            $body .= "<p>SubCorpus [" . $subCorpus->getTitle() . '] - Sentence ['. $annotationSet->getIdSentence() . ']  disapproved. Please, correct it.</p>';
+            $body .= "<p>SubCorpus [" . $subCorpus->getTitle() . '] - Sentence [' . $annotationSet->getIdSentence() . ']  disapproved. Please, correct it.</p>';
             $body .= "<p>Message: " . $feedback . "</p>";
             $emailService->sendSystemEmail($to, $subject, $body);
         } else {
@@ -680,7 +711,8 @@ class AnnotationService extends MService {
         }
     }
 
-    public function notifySupervisor($as) {
+    public function notifySupervisor($as)
+    {
         $body = '';
         $annotationSet = new fnbr\models\AnnotationSet();
         foreach ($as as $idAnnotationSet => $o) {
@@ -713,9 +745,10 @@ class AnnotationService extends MService {
         }
     }
 
-    public function listCxn($cxn = '', $idLanguage = '') {
+    public function listCxn($cxn = '', $idLanguage = '')
+    {
         $construction = new fnbr\models\Construction();
-        $filter = (object) ['cxn' => $cxn, 'idLanguage' => $idLanguage];
+        $filter = (object)['cxn' => $cxn, 'idLanguage' => $idLanguage];
         $constructions = $construction->listByFilter($filter)->asQuery()->chunkResult('idConstruction', 'name');
         $result = array();
         foreach ($constructions as $idCxn => $name) {
@@ -728,7 +761,8 @@ class AnnotationService extends MService {
         return json_encode($result);
     }
 
-    public function listSubCorpusCxn($idCxn) {
+    public function listSubCorpusCxn($idCxn)
+    {
         $sc = new fnbr\models\SubCorpus();
         $scs = $sc->listByCxn($idCxn)->asQuery()->getResult();
         foreach ($scs as $sc) {
@@ -741,13 +775,15 @@ class AnnotationService extends MService {
         return json_encode($result);
     }
 
-    public function headerMenu($wordform) {
+    public function headerMenu($wordform)
+    {
         $wf = new fnbr\models\WordForm();
         $lus = $wf->listLUByWordForm($wordform);
         return json_encode($lus);
     }
 
-    public function addManualSubcorpus($data) {
+    public function addManualSubcorpus($data)
+    {
         $sc = new fnbr\models\SubCorpus();
         if ($data->idLU != '') {
             $sc->addManualSubcorpusLU($data);
@@ -756,16 +792,18 @@ class AnnotationService extends MService {
         }
     }
 
-    public function cxnGridData() {
+    public function cxnGridData()
+    {
         $cxn = new fnbr\models\Construction();
         $criteria = $cxn->listAll();
         $data = $cxn->gridDataAsJSON($criteria);
         return $data;
     }
 
-    public function listCorpus($corpusName = '', $idLanguage = '') {
+    public function listCorpus($corpusName = '', $idLanguage = '')
+    {
         $corpus = new fnbr\models\Corpus();
-        $filter = (object) ['corpus' => $corpusName, 'idLanguage' => $idLanguage];
+        $filter = (object)['corpus' => $corpusName, 'idLanguage' => $idLanguage];
         $corpora = $corpus->listByFilter($filter)->asQuery()->chunkResult('idCorpus', 'name');
         $result = array();
         foreach ($corpora as $idCorpus => $name) {
@@ -778,7 +816,8 @@ class AnnotationService extends MService {
         return json_encode($result);
     }
 
-    public function listCorpusDocument($idCorpus) {
+    public function listCorpusDocument($idCorpus)
+    {
         $doc = new fnbr\models\Document();
         $docs = $doc->listByCorpus($idCorpus)->asQuery()->getResult();
         foreach ($docs as $doc) {
@@ -792,25 +831,28 @@ class AnnotationService extends MService {
         }
         return json_encode($result);
     }
-    
-    public function changeStatusAS($arrayAS, $newStatus) {
+
+    public function changeStatusAS($arrayAS, $newStatus)
+    {
         $as = new fnbr\models\AnnotationSet();
-        foreach($arrayAS as $idAnnotationStatus) {
+        foreach ($arrayAS as $idAnnotationStatus) {
             $as->getById($idAnnotationStatus);
             $as->setIdAnnotationStatus($newStatus);
             $as->save();
         }
     }
 
-    public function deleteAS($arrayAS) {
+    public function deleteAS($arrayAS)
+    {
         $as = new fnbr\models\AnnotationSet();
-        foreach($arrayAS as $idAnnotationSet) {
+        foreach ($arrayAS as $idAnnotationSet) {
             $as->getById($idAnnotationSet);
             $as->delete();
         }
     }
 
-    public function getLabelHelp($idLanguage) {
+    public function getLabelHelp($idLanguage)
+    {
         $gl = new fnbr\models\GenericLabel();
         $queryLabelHelp = $gl->listForHelp($idLanguage)->asQuery();
         $rows = $queryLabelHelp->getResult();
@@ -828,7 +870,8 @@ class AnnotationService extends MService {
         return $result;
     }
 
-    public function getASComments($idAnnotationSet) {
+    public function getASComments($idAnnotationSet)
+    {
         $asc = new \fnbr\models\ASComments();
         $asc->getByAnnotationSet($idAnnotationSet);
         $data = $asc->getData();
@@ -838,7 +881,8 @@ class AnnotationService extends MService {
         return $data;
     }
 
-    public function saveASComments($data) {
+    public function saveASComments($data)
+    {
         $asc = new \fnbr\models\ASComments();
         $asc->getByAnnotationSet($data->idAnnotationSet);
         $asc->setData($data);
