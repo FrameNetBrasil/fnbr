@@ -60,14 +60,22 @@
     </div>
 </div>
 
-<div id="dlgASInfo" title="Annotation Set Info" style="width:200px;height:100px;padding:0px">
+<div id="dlgASInfo" title="Annotation Set Info" style="width:300px;height:150px;padding:0px">
     <div id="dlgASInfo_tools">
         <a href='#' name="dlgASInfoClose" id="dlgASInfoClose" >
             Close
         </a>
     </div>
-    <div>Id: <span  id="dlgASInfo_idAnnotationSet"></span></div>
-    <div>Frame.LU: <span  id="dlgASInfo_name"></span></div>
+    <form class="form-horizontal" style="width:90%">
+        <div class="row">
+            <label class="col-sm-4 control-label">Id:</label>
+            <span class="col-sm-6 form-control-static" id="dlgASInfo_idAnnotationSet"></span>
+        </div>
+        <div class="row">
+            <label class="col-sm-4 control-label">Frame.LU:</label>
+            <span class="col-sm-6 form-control-static" id="dlgASInfo_name"></span>
+        </div>
+    </form>
 </div>
 
 <div id="dlgSubCorpus" title="Choose Subcorpus" style="width:400px;height:250px;padding:0px">

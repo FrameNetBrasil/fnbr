@@ -90,8 +90,9 @@ label {
   top: 0; left: 0; bottom: 0; right: 0;
 }
 
+/*
 .form-horizontal {
-    padding: 15px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
 }
 
 .form-horizontal .control-label {
@@ -104,6 +105,7 @@ label {
 .form-vertical .form-group {
     margin-left: 15px;
 }
+*/
 
 .mform-outer {
     padding: 15px 0px 0px 0px;

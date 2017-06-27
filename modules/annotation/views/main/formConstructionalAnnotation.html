@@ -12,12 +12,13 @@
 
 <script type="text/javascript">
     var annotation = {
+        type: 'x',
         isMaster: {{$data->isMaster|noescape}},
         isSenior: {{$data->isSenior|noescape}},
-        rgbColors: JSON.parse({{$data->colors}}),
-        layerType: JSON.parse({{$data->layerType}}),
-        instantiationType: JSON.parse({{$data->instantiationType}}),
-        instantiationTypeObj: JSON.parse({{$data->instantiationTypeObj}})
+        rgbColors: {{$data->colors}},
+        layerType: {{$data->layerType|noescape}},
+        instantiationType: {{$data->instantiationType|noescape}},
+        instantiationTypeObj: {{$data->instantiationTypeObj|noescape}}
     };
 
     annotation.showSubCorpus = function (subCorpus) {

@@ -5,7 +5,7 @@
  *
  * @category   Maestro
  * @package    UFJF
- *  @subpackage fnbr
+ * @subpackage fnbr
  * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
  * @license    http://siga.ufjf.br/license
  * @version
@@ -84,8 +84,13 @@ class AnnotationSet extends map\AnnotationSetMap
 
     public function getLUFullName()
     {
-        $lu = new LU($this->getSubCorpus()->getIdLU());
-        return $lu->getFullName();
+        $idLU = $this->getSubCorpus()->getIdLU();
+        if ($idLU) {
+            $lu = new LU($this->getSubCorpus()->getIdLU());
+            return $lu->getFullName();
+        } else {
+            return '';
+        }
     }
 
     public function getWords($idSentence)
@@ -102,7 +107,7 @@ class AnnotationSet extends map\AnnotationSetMap
 
         mb_internal_encoding("UTF-8"); // this IS A MUST!! PHP has trouble with multibyte when no internal encoding is set!
         $i = 0;
-        for ($j = 0; $j < mb_strlen($text); $j++ ) {
+        for ($j = 0; $j < mb_strlen($text); $j++) {
             $char = mb_substr($text, $j, 1);
             $break = (mb_strpos($punctuation, $char) !== false);
             if ($break) {
@@ -137,7 +142,7 @@ class AnnotationSet extends map\AnnotationSetMap
 
         mb_internal_encoding("UTF-8"); // this IS A MUST!! PHP has trouble with multibyte when no internal encoding is set!
         $i = 0;
-        for ($j = 0; $j < mb_strlen($text); $j++ ) {
+        for ($j = 0; $j < mb_strlen($text); $j++) {
             $char = mb_substr($text, $j, 1);
             $break = (mb_strpos($punctuation, $char) !== false);
             if ($break) {
@@ -185,7 +190,7 @@ class AnnotationSet extends map\AnnotationSetMap
         if ((!\Manager::checkAccess('MASTER', A_EXECUTE)) && (!\Manager::checkAccess('ANNO', A_EXECUTE))) {
             $criteriaLU->where("idAnnotationSet = {$this->getId()}");
         }
-        Base::entryLanguage($criteriaLU,"frameEntries.");
+        Base::entryLanguage($criteriaLU, "frameEntries.");
 
         $criteriaCxn = $as->getCriteria()
             ->select("idAnnotationSet, cxnEntries.name as name")
@@ -195,7 +200,7 @@ class AnnotationSet extends map\AnnotationSetMap
         if ((!\Manager::checkAccess('MASTER', A_EXECUTE)) && (!\Manager::checkAccess('ANNO', A_EXECUTE))) {
             $criteriaCxn->where("idAnnotationSet = {$this->getId()}");
         }
-        Base::entryLanguage($criteriaCxn,"cxnEntries.");
+        Base::entryLanguage($criteriaCxn, "cxnEntries.");
 
         $criteria = $criteriaLU;
         $criteria->union($criteriaCxn);
@@ -528,7 +533,8 @@ HERE;
         }
     }
 
-    public function setTimeline() {
+    public function setTimeline()
+    {
         $timeline = 'as_' . md5($this->getIdSubCorpus() . $this->getIdSentence());
         parent::setTimeLine(Base::newTimeLine($timeline, 'S'));
     }
@@ -560,8 +566,8 @@ HERE;
                 }
                 $labels = array();
                 if ($layer->idLayerType != 0) {
-                    if (substr($layer->layerTypeEntry,0,8) == 'lty_cefe') {
-                        $idFrame = substr($layer->layerTypeEntry,9);//$layer->idFrame;
+                    if (substr($layer->layerTypeEntry, 0, 8) == 'lty_cefe') {
+                        $idFrame = substr($layer->layerTypeEntry, 9);//$layer->idFrame;
                         unset($layer);
                         $layer = clone $layerCE;
                         $layer->layerTypeEntry = 'lty_cefe';
@@ -599,7 +605,7 @@ HERE;
                     }
                 }
                 if (count($labels)) {
-                    if (substr($layer->layerTypeEntry,0,8) == 'lty_cefe') {
+                    if (substr($layer->layerTypeEntry, 0, 8) == 'lty_cefe') {
                         continue;
                     }
                     if ($layer->layerTypeEntry == 'lty_fe') {
@@ -686,7 +692,7 @@ HERE;
             $layer = new Layer();
             $criteria = $this->listBySubCorpus($idSubCorpus);
             $result = $criteria->asQuery()->getResult();
-            foreach($result as $as) {
+            foreach ($result as $as) {
                 $idAS = $as['idAnnotationSet'];
                 $layer->deleteByAnnotationSet($idAS);
                 $deleteCriteria = $this->getDeleteCriteria()->where("idAnnotationSet = {$idAS}");
