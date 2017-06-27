@@ -237,9 +237,9 @@ class AnnotationSet extends map\AnnotationSetMap
         $criteria->join('AnnotationSet', 'Layer l', "AnnotationSet.idAnnotationSet = l.idAnnotationSet");
         $criteria->join('Layer l', 'LayerType lt', "l.idLayerType=lt.idLayerType");
         Base::relation($criteria, 'LayerType lt', 'GenericLabel', 'rel_haslabeltype');
-        Base::relation($criteria, 'GenericLabel', 'POS p', 'rel_gfpos');
+        //Base::relation($criteria, 'GenericLabel', 'POS p', 'rel_gfpos');
         $criteria->where("idSentence = {$idSentence}");
-        $criteria->where("lu.lemma.pos.entry = p.entry");
+        //$criteria->where("lu.lemma.pos.entry = p.entry");
         $criteria->where("lt.entry = 'lty_gf'");
         $criteria->where("(GenericLabel.idLanguage = s.idLanguage)");
         if ((!\Manager::checkAccess('MASTER', A_EXECUTE)) && (!\Manager::checkAccess('ANNO', A_EXECUTE))) {
@@ -277,23 +277,24 @@ class AnnotationSet extends map\AnnotationSetMap
 
         $cmd = <<<HERE
 
-        SELECT a.idAnnotationSet,
+        SELECT distinct a.idAnnotationSet,
             l.idLayer,
             fe.idEntity AS idLabelType,
             e.name AS labelType,
             fe.idColor,
-            fe.typeEntry AS coreType
+            fe.typeEntry AS coreType,
+            ti.info
         FROM View_AnnotationSet a
             INNER JOIN View_Layer l on (a.idAnnotationSet = l.idAnnotationSet)
             INNER JOIN View_SubCorpusLU sc on (a.idSubCorpus = sc.idSubCorpus)
             INNER JOIN View_LU lu on (sc.idLU = lu.idLU)
             INNER JOIN View_FrameElement fe on (lu.idFrame = fe.idFrame)
+            INNER JOIN TypeInstance ti on (fe.typeEntry=ti.entry)
             INNER JOIN View_EntryLanguage e on (fe.entry = e.entry)
         WHERE (e.idLanguage = {$idLanguage} )
             AND (l.entry = 'lty_fe' )
-            AND (a.idSentence = {$idSentence})
-            {$condition}
-        ORDER BY a.idAnnotationSet, l.idLayer, fe.typeEntry, e.name
+            AND (a.idSentence = {$idSentence}) {$condition}
+        ORDER BY a.idAnnotationSet, l.idLayer, ti.info, fe.typeEntry, e.name
 HERE;
 
         $query = $this->getDb()->getQueryCommand($cmd);
@@ -525,6 +526,17 @@ HERE;
             $layer = new Layer($maxIdLayer);
             $layer->delete();
         }
+    }
+
+    public function setTimeline() {
+        $timeline = 'as_' . md5($this->getIdSubCorpus() . $this->getIdSentence());
+        parent::setTimeLine(Base::newTimeLine($timeline, 'S'));
+    }
+
+    public function save()
+    {
+        $this->setTimeline();
+        parent::save();
     }
 
     public function putLayers($layers)

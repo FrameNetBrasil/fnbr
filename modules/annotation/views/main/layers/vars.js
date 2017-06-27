@@ -28,7 +28,7 @@ var annotation = {
             annotation.e = null;
         });
 
-        annotation.coreIcon = {"cty_core": "fa-icon fa fa-circle", "cty_peripheral": "fa-icon fa fa-dot-circle-o", "cty_extra-thematic": "fa-icon fa fa-circle-o"};
+        annotation.coreIcon = {"cty_core": "fa-icon fa fa-circle", "cty_core-unexpressed": "fa-icon fa fa-circle", "cty_peripheral": "fa-icon fa fa-dot-circle-o", "cty_extra-thematic": "fa-icon fa fa-circle-o"};
 
         annotation.idSentence = {{$data->idSentence}};
 
@@ -40,16 +40,17 @@ var annotation = {
 
         annotation.annotationSets = {{$data->layers['annotationSets']|noescape}};
 
-        annotation.layers = JSON.parse({{$data->layers['layers']}});
-        annotation.labels = JSON.parse({{$data->layers['labels']}});
-        annotation.labelTypes = JSON.parse({{$data->layers['labelTypes']}});
-        annotation.nis = JSON.parse({{$data->layers['nis']}});
-        annotation.data = JSON.parse({{$data->layers['data']}});
-        annotation.lus = {};
+        annotation.layers = {{$data->layers['layers']|noescape}};
 
-console.log(annotation.layers);
-console.log(annotation.labels);
-console.log(annotation.labelTypes);
+        annotation.labelTypes = {{$data->layers['labelTypes']|noescape}};
+
+        annotation.layerLabels = {{$data->layers['layerLabels']|noescape}};
+
+        annotation.nis = {{$data->layers['nis']|noescape}};
+
+        annotation.data = {{$data->layers['data']|noescape}};
+
+        annotation.lus = {};
 
         annotation.currentSelection = {
             rowIndex: -1,

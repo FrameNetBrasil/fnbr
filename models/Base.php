@@ -162,7 +162,7 @@ class Base {
     }
 
     static public function getAnnotationStatus($approvement = false, $validation = '1') {
-        $level = \Manager::getSession()->mfnLevel;
+        $level = \Manager::getSession()->fnbrLevel;
         if ($level == 'ADMIN') {
             $level = 'MASTER';
         }

@@ -7,7 +7,6 @@
             e.preventDefault();
             var rows=$('#layers').datagrid("getRows");
             var row = rows[rowIndex];
-            //if (annotation.layerType[row.idLayerType]['name'] == 'Target') {
             if (row.idLayerType == 0){
                 annotation.createASMenu(rowIndex, rowData);
                 annotation.ASMenu.menu('show', {
@@ -61,12 +60,12 @@
             });
             var idLayer = rowData['idLayer'];
             //console.log('idLayer = ' + idLayer);
-            var labels = annotation.labelTypes[idLayer];
-            for(idLabelType in labels){
+            var labels = annotation.layerLabels[idLayer];
+            jQuery.each(labels, function (i, idLabelType) {
                 //console.log(label);
-                var labelType = annotation.labelTypes[idLayer][idLabelType];
+                var labelType = annotation.labelTypes[idLabelType];
                 var color = annotation.rgbColors[labelType['idColor']];
-                var style = 'background-color:#' + color.rgbBg + ';color:#'+ color.rgbFg + ';';
+                var style = 'background-color:' + color.rgbBg + ';color:'+ color.rgbFg + ';';
                 var text = "<div style='" + style + "'>" + labelType['label'] + "</div>";
                 var icon = labelType['coreType'] == '' ? 'fa fa-caret-right' : annotation.coreIcon[labelType['coreType']];
                 annotation.contextMenu.menu('appendItem', {
@@ -75,7 +74,7 @@
                     name: labelType['label'],
                     iconCls: icon
                 });
-            }
+            });
         }
 
         annotation.headerContextMenu = null;
@@ -132,12 +131,12 @@
                             annotation.headerContextMenu.menu('appendItem', {
                                 id: lu.idLU,
                                 text: lu.fullName,
-                                name: field,
+                                //name: field,
                                 iconCls: 'fa fa-caret-right'
                             });
                         });
                     }
-                },
+                }
             });
         }
 

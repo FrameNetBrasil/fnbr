@@ -1,23 +1,25 @@
 <?php
 /**
- * 
+ *
  *
  * @category   Maestro
  * @package    UFJF
- *  @subpackage fnbr
+ * @subpackage fnbr
  * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
  * @license    http://siga.ufjf.br/license
- * @version    
- * @since      
+ * @version
+ * @since
  */
 
 namespace fnbr\models;
 
-class Layer extends map\LayerMap {
+class Layer extends map\LayerMap
+{
 
-    public static function config() {
+    public static function config()
+    {
         return array(
-            'log' => array(  ),
+            'log' => array(),
             'validators' => array(
                 'rank' => array('notnull'),
                 'timeline' => array('notnull'),
@@ -27,14 +29,16 @@ class Layer extends map\LayerMap {
             'converters' => array()
         );
     }
-    
-    public function getDescription(){
+
+    public function getDescription()
+    {
         return $this->getIdLayer();
     }
 
-    public function listByFilter($filter){
+    public function listByFilter($filter)
+    {
         $criteria = $this->getCriteria()->select('*')->orderBy('idLayer');
-        if ($filter->idLayer){
+        if ($filter->idLayer) {
             $criteria->where("idLayer LIKE '{$filter->idLayer}%'");
         }
         return $criteria;
@@ -47,6 +51,18 @@ class Layer extends map\LayerMap {
         return $criteria;
     }
 
+    public function setTimeline()
+    {
+        $timeline = 'lyr_' . md5($this->getIdAnnotationSet() . $this->getIdLayerType());
+        parent::setTimeLine(Base::newTimeLine($timeline, 'S'));
+    }
+
+    public function save()
+    {
+        $this->setTimeline();
+        parent::save();
+    }
+
     public function deleteByAnnotationSet($idAnnotationSet)
     {
         $transaction = $this->beginTransaction();
@@ -54,7 +70,7 @@ class Layer extends map\LayerMap {
             $label = new Label();
             $criteria = $this->listByAnnotationSet($idAnnotationSet);
             $result = $criteria->asQuery()->getResult();
-            foreach($result as $layer) {
+            foreach ($result as $layer) {
                 $idLayer = $layer['idLayer'];
                 $deleteLabel = $label->getDeleteCriteria()->where("idLayer = {$idLayer}");
                 $deleteLabel->delete();

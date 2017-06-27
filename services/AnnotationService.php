@@ -241,7 +241,7 @@ class AnnotationService extends MService {
                 'word' => $char['order']
             ];
         }
-        $layers['chars'] =  MUtil::php2js($result);;//json_encode($result);
+        $layers['chars'] =  MUtil::php2js($result);//json_encode($result);
 
         // annotationSet Status
         $asStatus = $as->getFullAnnotationStatus();
@@ -292,6 +292,7 @@ class AnnotationService extends MService {
                 'currentLabelPos' => 0
             ];
         }
+
         // CE-FE is a "artificial" layer; it needs to be inserts manually
         $queryLabelType = $as->getLabelTypesCEFE($idSentence);
         $rowsCEFE = $queryLabelType->getResult();
@@ -303,7 +304,7 @@ class AnnotationService extends MService {
                 'currentLabelPos' => 0
             ];
         }
-        $layers['layers'] = json_encode($result);
+        $layers['layers'] = MUtil::php2js($result);//json_encode($result);
 
         // get AnnotationSets
         $result = array();
@@ -317,6 +318,7 @@ class AnnotationService extends MService {
         }
         $layers['annotationSets'] =  MUtil::php2js($result);;//json_encode($result);
 
+        /*
         // get Labels
         $result = array();
         $asLabels = $as->getLabels($idSentence);
@@ -324,14 +326,23 @@ class AnnotationService extends MService {
             $result[$row['idLayer']][$row['idLabel']] = ['idLabelType' => $row['idLabelType']];
         }
         $layers['labels'] = json_encode($result);
+        */
 
         // get LabelTypes
-        $result = array();
+        $result = [];
+        $layerLabels = [];
+        $layerLabelsTemp = [];
+
         // GL-GF
         $queryLabelType = $as->getLabelTypesGLGF($idSentence)->asQuery();
         $rows = $queryLabelType->getResult();
         foreach ($rows as $row) {
-            $result[$row['idLayer']][$row['idLabelType']] = [
+        //    $result[$row['idLayer']][$row['idLabelType']] = [
+            if(!isset($layerLabelsTemp[$row['idLayer']][$row['idLabelType']])) {
+                $layerLabels[$row['idLayer']][] = $row['idLabelType'];
+                $layerLabelsTemp[$row['idLayer']][$row['idLabelType']] = 1;
+            }
+            $result[$row['idLabelType']] = [
                 'label' => $row['labelType'],
                 'idColor' => $row['idColor'],
                 'coreType' => $row['coreType']
@@ -341,7 +352,12 @@ class AnnotationService extends MService {
         $queryLabelType = $as->getLabelTypesGL($idSentence)->asQuery();
         $rows = $queryLabelType->getResult();
         foreach ($rows as $row) {
-            $result[$row['idLayer']][$row['idLabelType']] = [
+        //    $result[$row['idLayer']][$row['idLabelType']] = [
+            if(!isset($layerLabelsTemp[$row['idLayer']][$row['idLabelType']])) {
+                $layerLabels[$row['idLayer']][] = $row['idLabelType'];
+                $layerLabelsTemp[$row['idLayer']][$row['idLabelType']] = 1;
+            }
+            $result[$row['idLabelType']] = [
                 'label' => $row['labelType'],
                 'idColor' => $row['idColor'],
                 'coreType' => $row['coreType']
@@ -352,7 +368,12 @@ class AnnotationService extends MService {
         $rows = $queryLabelType->getResult();
         //mdump($rows);
         foreach ($rows as $row) {
-            $result[$row['idLayer']][$row['idLabelType']] = [
+        //    $result[$row['idLayer']][$row['idLabelType']] = [
+            if(!isset($layerLabelsTemp[$row['idLayer']][$row['idLabelType']])) {
+                $layerLabels[$row['idLayer']][] = $row['idLabelType'];
+                $layerLabelsTemp[$row['idLayer']][$row['idLabelType']] = 1;
+            }
+            $result[$row['idLabelType']] = [
                 'label' => $row['labelType'],
                 'idColor' => $row['idColor'],
                 'coreType' => $row['coreType']
@@ -362,7 +383,12 @@ class AnnotationService extends MService {
         $queryLabelType = $as->getLabelTypesCE($idSentence);
         $rows = $queryLabelType->getResult();
         foreach ($rows as $row) {
-            $result[$row['idLayer']][$row['idLabelType']] = [
+        //    $result[$row['idLayer']][$row['idLabelType']] = [
+            if(!isset($layerLabelsTemp[$row['idLayer']][$row['idLabelType']])) {
+                $layerLabels[$row['idLayer']][] = $row['idLabelType'];
+                $layerLabelsTemp[$row['idLayer']][$row['idLabelType']] = 1;
+            }
+            $result[$row['idLabelType']] = [
                 'label' => $row['labelType'],
                 'idColor' => $row['idColor'],
                 'coreType' => $row['coreType']
@@ -371,14 +397,21 @@ class AnnotationService extends MService {
 
         // CE-FE - $rowsCEFE is obtained via query for layer above
         foreach ($rowsCEFE as $row) {
-            $result[$row['idLayer']][$row['idLabelType']] = [
+        //    $result[$row['idLayer']][$row['idLabelType']] = [
+            if(!isset($layerLabelsTemp[$row['idLayer']][$row['idLabelType']])) {
+                $layerLabels[$row['idLayer']][] = $row['idLabelType'];
+                $layerLabelsTemp[$row['idLayer']][$row['idLabelType']] = 1;
+            }
+            $result[$row['idLabelType']] = [
                 'label' => $row['labelType'],
                 'idColor' => $row['idColor'],
                 'coreType' => $row['coreType']
             ];
         }
+
 //mdump($result);
-        $layers['labelTypes'] = json_encode($result);
+        $layers['labelTypes'] = MUtil::php2js($result);//json_encode($result);
+        $layers['layerLabels'] = MUtil::php2js($layerLabels);//json_encode($result);
 
         // get NIs
         //$niFields = array();
@@ -393,7 +426,8 @@ class AnnotationService extends MService {
                 'idColor' => $row['idColor']
             ];
         }
-        $layers['nis'] = (count($result) > 0) ? json_encode($result) : "{}";
+        $layers['nis'] = (count($result) > 0) ? MUtil::php2js($result) : "{}";
+        $layers['data'] = 'null';
         return $layers;
     }
 

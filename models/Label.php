@@ -19,8 +19,8 @@ class Label extends map\LabelMap {
         return array(
             'log' => array(  ),
             'validators' => array(
-                'startChar' => array('notnull'),
-                'endChar' => array('notnull'),
+                //'startChar' => array('notnull'),
+                //'endChar' => array('notnull'),
                 'multi' => array('notnull'),
                 'idLabelType' => array('notnull'),
                 'idLayer' => array('notnull'),

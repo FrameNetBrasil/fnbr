@@ -27,8 +27,7 @@
         // datagrid
         var frozenColumns = [
             {{foreach $data->layers['frozenColumns'] as $column}}
-        {field:{{$column['field']}}, title:{{$column['title']}} {{if $column['formatter'] != ''}},formatter:{{$column['formatter']|noescape}} {{/if}} }
-        {{sep}},{{/sep}}
+        {field:{{$column['field']}}, title:{{$column['title']}} {{if $column['formatter'] != ''}},formatter:{{$column['formatter']|noescape}} {{/if}} } {{sep}},{{/sep}}
         {{/foreach}}
         ];
         var columns = [
@@ -38,30 +37,30 @@
             {{if $column['styler'] != ''}},styler:{{$column['styler']|noescape}} {{/if}}
             {{if $column['resizable'] != ''}},resizable:{{$column['resizable']|noescape}} {{/if}}
             {{if $column['width'] != ''}},width:{{$column['width']|noescape}} {{/if}}
-        }
-        {{sep}},{{/sep}}
+        } {{sep}},{{/sep}}
         {{/foreach}}
         ];
 
         $('#layers').datagrid({
             url:{{$manager->getURL('annotation/main/layersData')}} + "/" + {{$data->idSentence}} + "/" + {{$data->idAnnotationSet}},
-                method:'get',
-                collapsible:true,
-                fitColumns: false,
-                autoRowHeight: false,
-                nowrap: true,
-                rowStyler: annotation.rowStyler,
-                showHeader: true,
-                onSelect: annotation.onSelect,
-                onClickCell: annotation.onClickCell,
-                onRowContextMenu: annotation.onRowContextMenu,
-                onHeaderContextMenu: annotation.onHeaderContextMenu,
-                toolbar: tb,
-                frozenColumns: [frozenColumns],
-                columns: [columns],
-                onLoadSuccess: function() {
-                    annotation.initCursor();
-                }
+            method:'get',
+            collapsible:true,
+            fitColumns: false,
+            autoRowHeight: false,
+            nowrap: true,
+            rowStyler: annotation.rowStyler,
+            showHeader: true,
+            onBeforeSelect: function() {return false;},
+            onSelect: annotation.onSelect,
+            onClickCell: annotation.onClickCell,
+            onRowContextMenu: annotation.onRowContextMenu,
+            onHeaderContextMenu: annotation.onHeaderContextMenu,
+            toolbar: tb,
+            frozenColumns: [frozenColumns],
+            columns: [columns],
+            onLoadSuccess: function() {
+                annotation.initCursor();
+            }
         });
 
     });

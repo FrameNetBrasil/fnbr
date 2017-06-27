@@ -8,6 +8,7 @@
         annotation.onClickCell = function (rowIndex, field, value) {
             var rows=$('#layers').datagrid("getRows");
             var row = rows[rowIndex];
+            console.log(row);
             if (row.idLayerType == 0){
                 return;
             }

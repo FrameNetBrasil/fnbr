@@ -1,9 +1,5 @@
 <?php
 
-
-
-
-
 class MainController extends MController
 {
 
