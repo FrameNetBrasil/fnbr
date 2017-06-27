@@ -40,9 +40,9 @@ class User extends map\UserMap
         if ($filter->idUser) {
             $criteria->where("idUser = {$filter->idUser}");
         }
-        if ($filter->idPerson) {
-            $criteria->where("idPerson = {$filter->idPerson}");
-        }
+        //if ($filter->idPerson) {
+        //    $criteria->where("idPerson = {$filter->idPerson}");
+        //}
         if ($filter->login) {
             $criteria->where("login LIKE '{$filter->login}%'");
         }
@@ -143,6 +143,7 @@ class User extends map\UserMap
         return $this;
     }
 
+/*
     public function getByIdPerson($idPerson)
     {
         $criteria = $this->getCriteria()->
@@ -150,7 +151,7 @@ class User extends map\UserMap
         $this->retrieveFromCriteria($criteria);
         return $this;
     }
-
+*/
     public function listGroups()
     {
         $criteria = $this->getCriteria()->select("groups.idGroup,groups.name")->orderBy("groups.name");
@@ -205,7 +206,8 @@ class User extends map\UserMap
         $levels = [];
         $criteria = $this->getCriteria()->
         select('idUser')->
-        where("idPerson = {$this->getIdPerson()}");
+//        where("idPerson = {$this->getIdPerson()}");
+        where("idUser = {$this->getIdUser()}");
         $users = $criteria->asQuery()->getResult();
         foreach ($users as $row) {
             $idUser = $row['idUser'];

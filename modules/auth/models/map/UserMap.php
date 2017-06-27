@@ -31,7 +31,7 @@ class UserMap extends \MBusinessModel
                 'idPerson' => array('column' => 'idPerson', 'type' => 'integer'),
             ),
             'associations' => array(
-                'person' => array('toClass' => 'fnbr\auth\models\Person', 'cardinality' => 'oneToOne', 'keys' => 'idPerson:idPerson'),
+//                'person' => array('toClass' => 'fnbr\auth\models\Person', 'cardinality' => 'oneToOne', 'keys' => 'idPerson:idPerson'),
                 'logs' => array('toClass' => 'fnbr\auth\models\Log', 'cardinality' => 'oneToMany', 'keys' => 'idUser:idUser'),
                 'groups' => array('toClass' => 'fnbr\auth\models\Group', 'cardinality' => 'manyToMany', 'associative' => 'auth_user_group'),
             )

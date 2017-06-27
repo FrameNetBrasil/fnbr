@@ -126,7 +126,7 @@ class UserController extends MController
     public function delete()
     {
         try {
-            $model = new fnbr\auth\models\User($this->data->user->idUser);
+            $model = new fnbr\auth\models\User($this->data->id);
             $model->delete();
             $go = "!$('#formObject_dialog').dialog('close');";
             $this->renderPrompt('information', _M("Record [%s] removed.", $model->getDescription()), $go);

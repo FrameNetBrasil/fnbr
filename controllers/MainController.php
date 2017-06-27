@@ -70,7 +70,7 @@ class MainController extends \MController
 
     public function auth0Callback()
     {
-        $goMain = "=main/main";
+        $goMain = Manager::getURL('main');
         try {
             $this->data->domain = Manager::getConf('login.AUTH0_DOMAIN');
             $this->data->client_id = Manager::getConf('login.AUTH0_CLIENT_ID');
@@ -95,11 +95,12 @@ class MainController extends \MController
             } elseif ($status == 'pending') {
                 $this->renderPrompt('info', _M('User already registered, but waiting for Administrator approval.'), $goMain);
             } elseif ($status == 'logged') {
-                $this->redirect($goMain);
+                $this->redirect(Manager::getURL('main'));
             } else {
                 $this->renderPrompt('error', _M('Login failed; contact administrator.'));
             }
         } catch (Exception $e) {
+			mdump($e->getMessage());
             $this->renderPrompt('error', "Auth0: Invalid authorization code.", $goMain);
         }
     }
