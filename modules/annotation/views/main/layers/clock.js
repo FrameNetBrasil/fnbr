@@ -28,8 +28,8 @@
                     icon: 'error',
                     msg: 'Session expired!',
                     fn: function(){
-                        console.log({{$manager->getURL('mfn/main')}});
-                        window.location = {{$manager->getURL('mfn/main')}};
+                        console.log({{$manager->getURL('main/main')}});
+                        window.location = {{$manager->getURL('main/main')}};
                     }
                 });
             } else {
