@@ -56,12 +56,12 @@
 
         structure.showCxn = function (idCxn) {
             $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('mfn/report/cxn/showCxn')}} + '/' + idCxn, 'structureCenterPane');
+            manager.doGet({{$manager->getURL('report/cxn/showCxn')}} + '/' + idCxn, 'structureCenterPane');
         }
 
         structure.newCxn = function () {
             $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('mfn/structure/cxn/formNewCxn')}},'structureCenterPane');
+            manager.doGet({{$manager->getURL('structure/cxn/formNewCxn')}},'structureCenterPane');
         }
 
         structure.editCxn = function (id) {
@@ -69,7 +69,7 @@
                 id = structure.node.id.substr(1);
             }
             $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('mfn/structure/cxn/formUpdateCxn')}} + '/' + id,'structureCenterPane');
+            manager.doGet({{$manager->getURL('structure/cxn/formUpdateCxn')}} + '/' + id,'structureCenterPane');
         }
         
         structure.deleteCxn = function (id) {
@@ -77,7 +77,7 @@
                 id = structure.node.id.substr(1);
             }
             $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('mfn/structure/cxn/formDeleteCxn')}} + '/' + id,'structureCenterPane');
+            manager.doGet({{$manager->getURL('structure/cxn/formDeleteCxn')}} + '/' + id,'structureCenterPane');
         }
 
         structure.reloadCxn = function () {
@@ -101,7 +101,7 @@
             if ($.type(entry) === "undefined") {
                 entry = structure.node.entry;
             }
-            manager.doAction('^mfn/entry/formUpdate/' + entry);
+            manager.doAction('^entry/formUpdate/' + entry);
             if (form) {
                 $('#' + form + '_dialog').dialog('close');
             }
@@ -112,7 +112,7 @@
                 idCxn = structure.node.id.substr(1);
             }
             $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('mfn/structure/cxn/formNewCxnElement')}} + '/' + idCxn,'structureCenterPane');
+            manager.doGet({{$manager->getURL('structure/cxn/formNewCxnElement')}} + '/' + idCxn,'structureCenterPane');
         }
 
         structure.editCxnElement = function (id) {
@@ -120,7 +120,7 @@
                 id = structure.node.id.substr(1);
             }
             $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('mfn/structure/cxn/formUpdateCxnElement')}} + '/' + id,'structureCenterPane');
+            manager.doGet({{$manager->getURL('structure/cxn/formUpdateCxnElement')}} + '/' + id,'structureCenterPane');
         }
 
         structure.deleteCxnElement = function (id) {
@@ -128,7 +128,7 @@
                 id = structure.node.id.substr(1);
             }
             $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('mfn/structure/cxn/formDeleteCxnElement')}} + '/' + id,'structureCenterPane');
+            manager.doGet({{$manager->getURL('structure/cxn/formDeleteCxnElement')}} + '/' + id,'structureCenterPane');
         }
 
         structure.importTxt = function (id) {
@@ -136,7 +136,7 @@
                 id = structure.node.id.substr(1);
             }
             $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('mfn/structure/cxn/formImportTxt')}} + '/' + id,'structureCenterPane');
+            manager.doGet({{$manager->getURL('structure/cxn/formImportTxt')}} + '/' + id,'structureCenterPane');
         }
 
         structure.viewGraph = function (id) {
@@ -144,7 +144,7 @@
                 id = structure.node.id.substr(1);
             }
             $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('mfn/structure/cxn/graphCxn')}} + '/' + id,'structureCenterPane');
+            manager.doGet({{$manager->getURL('structure/cxn/graphCxn')}} + '/' + id,'structureCenterPane');
         }
 
         structure.addConstraint = function (id) {
@@ -154,13 +154,13 @@
             }
             $('#structureCenterPane').html('');
             if (structure.node.id.charAt(0) == 'c') {
-                manager.doGet({{$manager->getURL('mfn/structure/cxn/formAddConstraintCX')}} + '/' + id,'structureCenterPane');
+                manager.doGet({{$manager->getURL('structure/cxn/formAddConstraintCX')}} + '/' + id,'structureCenterPane');
             }
             if (structure.node.id.charAt(0) == 'e') {
-                manager.doGet({{$manager->getURL('mfn/structure/cxn/formAddConstraintCE')}} + '/' + id,'structureCenterPane');
+                manager.doGet({{$manager->getURL('structure/cxn/formAddConstraintCE')}} + '/' + id,'structureCenterPane');
             }
             if (structure.node.id.charAt(0) == 'x') {
-                manager.doGet({{$manager->getURL('mfn/structure/cxn/formAddConstraintCN')}} + '/' + id,'structureCenterPane');
+                manager.doGet({{$manager->getURL('structure/cxn/formAddConstraintCN')}} + '/' + id,'structureCenterPane');
             }
         }
 
@@ -169,7 +169,7 @@
                 id = structure.node.id.substr(1);
             }
             $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('mfn/structure/cxn/formDeleteConstraint')}} + '/' + id,'structureCenterPane');
+            manager.doGet({{$manager->getURL('structure/cxn/formDeleteConstraint')}} + '/' + id,'structureCenterPane');
         }
 
         structure.contextMenuFrame = function(e, node) {
@@ -240,7 +240,7 @@
         })
 
         $('#cxnTree').tree({
-            url: {{$manager->getURL('mfn/structure/cxn/cxnTree')}},
+            url: {{$manager->getURL('structure/cxn/cxnTree')}},
             onSelect: function (node) {
                 console.log(node);
                 if (node.id.charAt(0) == 'c') {

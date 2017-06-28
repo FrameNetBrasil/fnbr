@@ -1,9 +1,5 @@
 <?php
 
-
-
-
-
 class GrapherController extends MController
 {
 

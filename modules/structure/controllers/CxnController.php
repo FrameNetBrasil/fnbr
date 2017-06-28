@@ -1,9 +1,5 @@
 <?php
 
-
-
-
-
 class CxnController extends MController
 {
 
@@ -48,7 +44,7 @@ class CxnController extends MController
 
     public function formNewCxn()
     {
-        $this->data->title = _M('new fnbr\models\Construction');
+        $this->data->title = _M('new Construction');
         $this->render();
     }
 
@@ -73,7 +69,7 @@ class CxnController extends MController
         $this->data->cxn = $model->getEntry() . '  [' . $model->getName() . ']';
         $this->data->save = "@structure/cxn/newCxnElement|formNewCxnElement";
         $this->data->close = "!$('#formNewCxnElement_dialog').dialog('close');";
-        $this->data->title = _M('new fnbr\models\CxnElement');
+        $this->data->title = _M('new Construction Element');
         $this->render();
     }
 
