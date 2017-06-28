@@ -1,12 +1,7 @@
 <?php
 
-
-
-
-
 class DomainController extends MController
 {
-
     private $idLanguage;
 
     public function init()

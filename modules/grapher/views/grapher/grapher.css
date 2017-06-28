@@ -1,3 +1,5 @@
+<style>
+
 .link {
     fill: none;
     /*stroke: #666;*/
@@ -75,3 +77,4 @@ marker path.{{$relation['id']}} {
 }
 {{/foreach}}
 
+</style>

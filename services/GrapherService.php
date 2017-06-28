@@ -15,7 +15,7 @@ class GrapherService extends MService
             $node = array();
             $node['id'] = $id;
             $node['label'] = $row['name'];
-            $node['color'] = Manager::getConf("mfn.color.{$id}");
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
             $node['idType'] = 'rgp_frame_relations';
             $node['default'] = (($id == 'rel_inheritance') || ($id == 'rel_subframe') || ($id == 'rel_using'));
             $result->$id = $node;
@@ -26,7 +26,7 @@ class GrapherService extends MService
             $node = array();
             $node['id'] = $id;
             $node['label'] = $row['name'];
-            $node['color'] = Manager::getConf("mfn.color.{$id}");
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
             $node['idType'] = 'rgp_cxn_relations';
             $node['default'] = true;
             $result->$id = $node;
@@ -37,7 +37,7 @@ class GrapherService extends MService
             $node = array();
             $node['id'] = $id;
             $node['label'] = $row['name'];
-            $node['color'] = Manager::getConf("mfn.color.{$id}");
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
             $node['idType'] = 'rel_evokes';
             $node['default'] = true;
             $result->$id = $node;
@@ -49,7 +49,7 @@ class GrapherService extends MService
             $node = array();
             $node['id'] = $id;
             $node['label'] = $row['name'];
-            $node['color'] = Manager::getConf("mfn.color.{$id}");
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
             $node['idType'] = 'rel_hassemtype';
             $node['default'] = false;
             $result->$id = $node;
@@ -60,7 +60,7 @@ class GrapherService extends MService
             $node = array();
             $node['id'] = $id;
             $node['label'] = $row['name'];
-            $node['color'] = Manager::getConf("mfn.color.{$id}");
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
             $node['idType'] = 'rel_elementof';
             $node['default'] = false;
             $result->$id = $node;
@@ -195,6 +195,7 @@ class GrapherService extends MService
         ];
         $inverseRelations = $entity->listInverseRelations();
         foreach ($inverseRelations as $entry => $row) {
+            mdump($row);
             foreach ($row as $r) {
                 $node0 = (object)[
                     'id' => $r['idEntity'],
@@ -259,8 +260,6 @@ class GrapherService extends MService
     public function getElement2ElementRelation($elements1, $elements2, $type)
     {
         $entity = new Entity();
-        mdump('-' . $type);
-
         $elementRelations = $entity->listElement2ElementRelation($elements1, $elements2, $type);
         foreach ($elementRelations as $entry => $row) {
             $node0 = (object)[
@@ -672,7 +671,7 @@ class GrapherService extends MService
                 $node = array();
                 $node['id'] = $id;
                 $node['label'] = $row['name'];
-                $node['color'] = Manager::getConf("mfn.color.{$id}");
+                $node['color'] = Manager::getConf("fnbr.color.{$id}");
                 $node['idType'] = 'rgp_frame_relations';
                 $node['default'] = (($id == 'rel_inheritance') || ($id == 'rel_subframe') || ($id == 'rel_using'));
                 $result->$id = $node;
@@ -684,7 +683,7 @@ class GrapherService extends MService
             $node = array();
             $node['id'] = $id;
             $node['label'] = $row['name'];
-            $node['color'] = Manager::getConf("mfn.color.{$id}");
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
             $node['idType'] = 'rel_evokes';
             $node['default'] = true;
             $result->$id = $node;
@@ -695,7 +694,7 @@ class GrapherService extends MService
             $node = array();
             $node['id'] = $id;
             $node['label'] = $row['name'];
-            $node['color'] = Manager::getConf("mfn.color.{$id}");
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
             $node['idType'] = 'rel_hassemtype';
             $node['default'] = false;
             $result->$id = $node;
@@ -706,7 +705,7 @@ class GrapherService extends MService
             $node = array();
             $node['id'] = $id;
             $node['label'] = $row['name'];
-            $node['color'] = Manager::getConf("mfn.color.{$id}");
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
             $node['idType'] = 'rel_elementof';
             $node['default'] = false;
             $result->$id = $node;
@@ -717,7 +716,7 @@ class GrapherService extends MService
             $node = array();
             $node['id'] = $id;
             $node['label'] = $row['name'];
-            $node['color'] = Manager::getConf("mfn.color.{$id}");
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
             $node['idType'] = 'rgp_frame_relations';
             $node['default'] = true;
             $result->$id = $node;
@@ -728,7 +727,7 @@ class GrapherService extends MService
             $node = array();
             $node['id'] = $id;
             $node['label'] = $row['name'];
-            $node['color'] = Manager::getConf("mfn.color.{$id}");
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
             $node['idType'] = 'rel_constraint_fe';
             $node['default'] = true;
             $result->$id = $node;

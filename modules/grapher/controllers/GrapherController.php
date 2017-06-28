@@ -20,7 +20,7 @@ class GrapherController extends MController
         $grapher = Manager::getAppService('grapher');
         Manager::getSession()->idDomain = $this->data->idDomain;
         $this->data->relationData = $grapher->getRelationData();
-        $this->data->relationEntry = json_encode($this->data->relationData);
+        $this->data->relationEntry = MUtil::php2js($this->data->relationData);
         $this->render();
     }
 

@@ -1,7 +1,9 @@
+<script type="text/javascript">
+
 var grapher = {
     isMaster: {{$data->isMaster|noescape}},
     currentyEntity: null,
-    relationEntry: JSON.parse('{{$data->relationEntry}}'),
+    relationEntry: {{$data->relationEntry|noescape}},
     relationData: [],
     relations: [],
     onDblClick: function(node) {
@@ -251,5 +253,5 @@ grapher.graph = function (element, relations) {
     update();
 }
 
-
+</script>
 
