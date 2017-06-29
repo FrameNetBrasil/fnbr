@@ -1,5 +1,4 @@
 <style>
-
 .link {
     fill: none;
     /*stroke: #666;*/
@@ -51,16 +50,25 @@ text {
 }
 
 .entity_st {
+    color: white;
     fill: black;
 }
 
 .entity_fe {
+    color: white;
     fill: white;
     stroke: black;
 }
 
 .entity_ce {
+    color: white;
     fill: white;
+    stroke: black;
+}
+
+.entity_lu {
+    color: gray;
+    fill: gray;
     stroke: black;
 }
 

@@ -22,9 +22,7 @@
         </div>
     </div>
 </div>    
-<style>
-    {{include grapher.css}}
-</style>
+{{include $manager->getThemePath('css/graph.css')}}
 <script type="text/javascript">
 
     $(function () {
@@ -85,7 +83,7 @@
             }
             var idDomain = $('#idDomain').combobox('getValue');
             grapher.isShowing = false;
-            manager.doAjax({{$manager->getURL('service/grapher/getDomainRelations')}}, function(data) {
+            manager.doAjax({{$manager->getURL('api/grapher/getDomainRelations')}}, function(data) {
                 var links = data;
                 grapher.clear();
                 $.each(links, function(index, link) {
@@ -105,7 +103,7 @@
                 chosen[r] = r;
             });
             var idDomain = $('#idDomain').combobox('getValue');
-            manager.doAjax({{$manager->getURL('service/grapher/getDomainRelations')}}, function(data) {
+            manager.doAjax({{$manager->getURL('api/grapher/getDomainRelations')}}, function(data) {
                 var links = JSON.parse(data);
                 $.each(links, function(index, link) {
                     if (chosen[link.type]) {
@@ -142,7 +140,7 @@
                 return;
             }
             var idDomain = $('#idDomain').combobox('getValue');
-            manager.doAjax({{$manager->getURL('service/grapher/getEntitiesRelations')}}, function(data) {
+            manager.doAjax({{$manager->getURL('api/grapher/getEntitiesRelations')}}, function(data) {
                 var links = JSON.parse(data);
                 console.log(links);
                 grapher.clear();
@@ -163,7 +161,7 @@
                 chosen[r] = r;
             });
             var idDomain = $('#idDomain').combobox('getValue');
-            manager.doAjax({{$manager->getURL('service/grapher/getConstraintRelations')}}, function(data) {
+            manager.doAjax({{$manager->getURL('api/grapher/getConstraintRelations')}}, function(data) {
                 grapher.clear();
                 grapher.isShowing = true;
                 var links = JSON.parse(data);
