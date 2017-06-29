@@ -64,6 +64,8 @@
     <div onclick="structure.deleteSubCorpus()" data-options="iconCls:'icon-remove'">{{_'Delete SubCorpus'}}</div>
 </div>
 
+{{include $manager->getThemePath('css/graph.css')}}
+
 <script type="text/javascript">
     var structure = {
         app: {{$manager->getApp()}},

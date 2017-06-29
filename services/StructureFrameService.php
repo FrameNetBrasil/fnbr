@@ -16,6 +16,7 @@ class StructureFrameService extends MService
             $node['id'] = 'f' . $row['idFrame'];
             $node['text'] = $row['name'];
             $node['state'] = 'closed';
+            $node['iconCls'] = 'icon-blank fa fa-square fa16px entity_frame';
             $node['entry'] = $row['entry'];
             $result[] = $node;
         }
@@ -50,6 +51,7 @@ class StructureFrameService extends MService
             $node['id'] = 'l' . $idLU;
             $node['text'] = $name;
             $node['state'] = 'closed';
+            $node['iconCls'] = 'icon-blank fa fa-hashtag fa16px entity_lu';
             $result[] = $node;
         }
         return json_encode($result);
@@ -64,6 +66,7 @@ class StructureFrameService extends MService
             $node['id'] = 's' . $sc['idSubCorpus'];
             $node['text'] = $sc['name'] . ' [' . $sc['quant'] . ']';
             $node['state'] = 'open';
+            $node['iconCls'] = 'icon-blank fa fa-file-text-o fa16px';
             $result[] = $node;
         }
         $this->data->result = $result;
@@ -79,6 +82,7 @@ class StructureFrameService extends MService
             $node['id'] = 's' . $sc['idSubCorpus'];
             $node['text'] = $sc['name'] . ' [' . $sc['quant'] . ']';
             $node['state'] = 'open';
+            $node['iconCls'] = 'icon-blank fa fa-file-text-o fa16px';
             $result[] = $node;
         }
         $service = Manager::getAppService('structureconstraints');
