@@ -56,7 +56,7 @@ class Frame extends map\FrameMap
         $criteria = $this->getCriteria()->select('entries.name as name');
         $criteria->where("idFrame = {$this->getId()}");
         Base::entryLanguage($criteria);
-        return $criteria->asQuery()->fields('name');
+        return $criteria->asQuery()->getResult()[0]['name'];
     }
 
     public function listByFilter($filter)

@@ -1,7 +1,5 @@
 <?php
 
-
-
 class ValenceService extends MService
 {
     public $lang;
@@ -15,8 +13,6 @@ class ValenceService extends MService
         $this->idLanguage = Manager::getConf('options.language');
         $this->idDomain = 5;
     }
-
-
 
     public function getFramePatterns($idLanguage, $idFrame = '')
     {

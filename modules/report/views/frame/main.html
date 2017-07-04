@@ -21,6 +21,7 @@
 </div>
 
 <script type="text/javascript">
+    var idCenterPane = "reportCenterPane";
     var report = {
         isMaster: {{$data->isMaster|noescape}},
         node: null
@@ -38,6 +39,11 @@
         report.showFrame = function (idFrame) {
             $('#reportCenterPane').html('');
             manager.doGet({{$manager->getURL('report/frame/showFrame')}} + '/' + idFrame, 'reportCenterPane');
+        }
+
+        report.showLU = function (idLU) {
+            $('#reportCenterPane').html('');
+            manager.doGet({{$manager->getURL('report/lu/showLU')}} + '/' + idLU, 'reportCenterPane');
         }
 /*
         $('#lu').textbox({
@@ -71,6 +77,9 @@
                 console.log(node);
                 if (node.id.charAt(0) == 'f') {
                     report.showFrame(node.id.substr(1));
+                }
+                if (node.id.charAt(0) == 'l') {
+                    report.showLU(node.id.substr(1));
                 }
             }
         });

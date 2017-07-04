@@ -67,6 +67,7 @@
 {{include $manager->getThemePath('css/graph.css')}}
 
 <script type="text/javascript">
+    var idCenterPane = "structureCenterPane";
     var structure = {
         app: {{$manager->getApp()}},
         isMaster: {{$data->isMaster|noescape}},
@@ -75,6 +76,11 @@
     };
     $(function () {
         $('#structureLayout').layout();
+
+        structure.showLU = function (idLU) {
+            $('#reportCenterPane').html('');
+            manager.doGet({{$manager->getURL('report/lu/showLU')}} + '/' + idLU, 'structureCenterPane');
+        }
 
         structure.showFrame = function (idFrame) {
             $('#structureCenterPane').html('');
@@ -370,6 +376,9 @@
                 console.log(node);
                 if (node.id.charAt(0) == 'f') {
                     structure.showFrame(node.id.substr(1));
+                }
+                if (node.id.charAt(0) == 'l') {
+                    structure.showLU(node.id.substr(1));
                 }
             },
             onContextMenu: structure.contextMenuFrame

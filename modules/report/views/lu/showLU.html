@@ -1,0 +1,78 @@
+<div class="reportLU">
+    <div class="luName">
+        Lexical Entry
+    </div>
+    <div class="luName">
+        {{$data->lu->name|noescape}}
+    </div>
+    <div class="frameName">
+        Frame: {{$data->lu->frameName|noescape}}
+    </div>
+    <div class="divPanel">
+        <div id="panelDefinition" class="easyui-panel" title="{{_'repDefinition'}}" collapsible="false" data-options="fit:true"  style="width:100%;">
+            <div class="text">
+                {{$data->lu->senseDescription|noescape}}
+            </div>
+        </div>
+    </div>
+    <div class="divPanel">
+        <div id="panelRealizations" class="easyui-panel" title="{{_'repSyntaticRealizations'}}" collapsible="true" data-options="fit:true"  style="width:100%;">
+            <div class="text">The Frame Elements for this word sense are (with realizations):</div>
+            <table class="tableRealizations">
+                <tr>
+                    <th>Frame Element</th>
+                    <th>Number Annotated</th>
+                    <th>Realization(s)</th>
+                </tr>
+                <tbody>
+                {{foreach $data->realizations as $frame => $gfptas}}
+                <tr>
+                    <td><span class="{{$data->feIcon[$data->fes[$frame]['type']]}}">&nbsp;&nbsp;</span></span><span class="fe_{{$data->fes[$frame]['entry']}}">{{$frame}}</span></td>
+                    <td>{{$data->fes[$frame]['count']}}</td>
+                    <td>
+                        {{foreach $gfptas as $gf => $ptas}}
+                            {{foreach $ptas as $pt => $as}}
+                                {{$gf}}.{{$pt}}&nbsp;&nbsp;({{count($ptas[$pt])}})<br/>
+                            {{/foreach}}
+                        {{/foreach}}
+                    </td>
+                </tr>
+                {{/foreach}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="divPanel">
+        <div id="panelVP" class="easyui-panel" title="{{_'repVP'}}" collapsible="true" data-options="fit:true"  style="width:100%;">
+            <div class="text">These frame elements occur in the following syntactic patterns:</div>
+            <table class="tableVP">
+                <tr>
+                    <th>Number Annotated</th>
+                    <th>Patterns</th>
+                </tr>
+                <tbody>
+                {{foreach $data->vp as $idVP => $as}}
+                <tr>
+                    <td>{{count($data->vp[$idVP])}}</td>
+                    <td>{{$idVP}}</td>
+                </tr>
+                {{/foreach}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $.parser.parse();
+</script>
+<style type="text/css">
+    .fe_target {
+        color: rgb(255, 255, 255); background-color: rgb(0, 0, 0); text-transform:uppercase;
+    }
+    {{foreach $data->fe['styles'] as $style}}
+    .fe_{{$style['entry']|noescape}} {color: #{{$style['rgbFg']}}; background-color: #{{$style['rgbBg']}};}
+    {{/foreach}}
+
+</style>

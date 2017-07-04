@@ -50,7 +50,7 @@ class LU extends map\LUMap
         parent::getById($id);
         $criteria = $this->getCriteria()->select('frame.idFrame');
         Base::relation($criteria, 'LU', 'Frame', 'rel_evokes');
-        $criteria->where("idLU = '{$id}'");
+        $criteria->where("idLU = {$id}");
         $result = $criteria->asQuery()->getResult();
         $this->setIdFrame($result[0]['idFrame']);
     }

@@ -1,7 +1,5 @@
 <?php
 
-
-
 class ReportFrameService extends MService
 {
 
@@ -103,24 +101,30 @@ class ReportFrameService extends MService
         $relations = [];
         $directRelations = $frame->listDirectRelations();
         foreach($directRelations as $entry => $row) {
-            $relations[$entry] = '';
+            $relations[$entry] = [];
             $i = 0;
             foreach($row as $r) {
-                $relations[$entry] .= ($i++ > 0 ? ', ' : '') . $r['name'];
+                $relations[$entry][$r['idFrame']] = $r['name'];
             }
         }
         $inverseRelations = $frame->listInverseRelations(); 
         foreach($inverseRelations as $entry => $row) {
             $entry = $entry . '_inv';
-            $relations[$entry] = '';
+            $relations[$entry] = [];
             $i = 0;
             foreach($row as $r) {
-                $relations[$entry] .= ($i++ > 0 ? ', ' : '') . $r['name'];
+                $relations[$entry][$r['idFrame']] = $r['name'];
             }
         }
         ksort($relations);
-        mdump($relations);
         return $relations;
+    }
+
+    public function getLUs($frame, $idLanguage)
+    {
+        $lu = new fnbr\models\ViewLU();
+        $lus = $lu->listByFrame($frame->getIdFrame(), $idLanguage)->asQuery()->chunkResult('idLU', 'name');
+        return $lus;
     }
 
 }

@@ -121,7 +121,7 @@ class FrameElement extends map\FrameElementMap
         $styles = [];
         foreach ($result as $fe) {
             $name = strtolower($fe['name']);//
-            $styles[$name] = ['fe' => $name, 'rgbFg' => $fe['rgbFg'], 'rgbBg' => $fe['rgbBg']];
+            $styles[$name] = ['fe' => $name, 'entry' => $fe['entry'], 'rgbFg' => $fe['rgbFg'], 'rgbBg' => $fe['rgbBg']];
         }
         return $styles;
     }

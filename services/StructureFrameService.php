@@ -51,7 +51,7 @@ class StructureFrameService extends MService
             $node['id'] = 'l' . $idLU;
             $node['text'] = $name;
             $node['state'] = 'closed';
-            $node['iconCls'] = 'icon-blank fa fa-hashtag fa16px entity_lu';
+            $node['iconCls'] = 'icon-blank fa fa-hashtag fa12px entity_lu';
             $result[] = $node;
         }
         return json_encode($result);

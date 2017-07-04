@@ -269,6 +269,79 @@ label {
     margin:5px;
 }
 
+.reportFrame .divPanel .tableLU {
+    border-collapse: separate;
+    border-spacing: 5px;
+    margin:5px;
+}
+
+.reportLU {
+
+}
+
+.reportLU .luName {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.reportLU .frameName {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.reportLU .divPanel {
+    margin-top:5px;
+    margin-bottom:5px;
+}
+
+.reportLU .divPanel .text {
+    padding:5px;
+}
+.reportLU .divPanel .header {
+    padding:5px;
+    font-weight: bold;
+}
+
+.reportLU .divPanel .tableRealizations {
+    border-collapse: collapse;
+    border-spacing: 5px;
+    margin:5px;
+    border: 1px solid #ddd;
+}
+
+.reportLU .divPanel .tableRealizations th {
+    background-color: #8d8d8d;
+    color: white;
+}
+
+.reportLU .divPanel .tableRealizations th, td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+}
+
+.reportLU .divPanel .tableRealizations tr:nth-child(even){background-color: #f2f2f2}
+
+.reportLU .divPanel .tableVP {
+    border-collapse: collapse;
+    border-spacing: 5px;
+    margin:5px;
+    border: 1px solid #ddd;
+}
+
+.reportLU .divPanel .tableVP th {
+    background-color: #8d8d8d;
+    color: white;
+}
+
+.reportLU .divPanel .tableVP th, td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+}
+
+.reportLU .divPanel .tableVP tr:nth-child(even){background-color: #f2f2f2}
+
 .reportCxn {
     
 }
