@@ -34,7 +34,14 @@ class LUController extends MController
         $this->data->realizations = $result['realizations'];
         $this->data->fes = $result['fes'];
         $this->data->vp = $result['vp'];
+        $this->data->vpfe = $result['vpfe'];
+        $this->data->maxCountFE = $result['maxCountFE'];
         $this->data->patterns = $result['patterns'];
+        $this->data->realizationAS = $result['realizationAS'];
+        $this->data->feAS = MUtil::php2js($result['feAS']);
+        $this->data->patternFEAS = MUtil::php2js($result['patternFEAS']);
+        $this->data->patternAS = MUtil::php2js($result['patternAS']);
+
         $report = Manager::getAppService('reportframe');
         $this->data->fe = $report->getFEData($frame->getIdFrame());
         $this->data->feIcon = [
@@ -45,5 +52,6 @@ class LUController extends MController
         ];
         $this->render();
     }
-    
+
+
 }

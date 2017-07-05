@@ -340,7 +340,17 @@ label {
     padding: 8px;
 }
 
-.reportLU .divPanel .tableVP tr:nth-child(even){background-color: #f2f2f2}
+.reportLU .divPanel .tableVP .pattern {
+    background-color: #f2f2f2;
+}
+
+#reportLUCenterPane {
+    padding:  5px;
+}
+
+#reportLUSouthPane {
+    padding:  5px;
+}
 
 .reportCxn {
     
