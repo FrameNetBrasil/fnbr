@@ -66,7 +66,11 @@
                     {{foreach $data->patterns[$idVPFE] as $idVP => $scfegfptas}}
                         {{if $iterator->first}}
                         <tr class="pattern">
-                            <td>{{$data->vpfe[$idVPFE]['count']}}</td>
+                            <td>
+                                <a href="#" onclick="javascript:addASSentences(patternFEAS['{{$idVPFE|noescape}}'])">
+                                    {{$data->vpfe[$idVPFE]['count']}}
+                                </a>
+                            </td>
                             {{foreach $scfegfptas as $sc => $fegfptas}}
                                 {{foreach $fegfptas as $feEntry => $gfptas}}
                                     {{foreach $gfptas as $gf => $ptas}}
@@ -82,7 +86,11 @@
                         </tr>
                         {{/if}}
                         <tr>
-                            <td>{{count($data->vp[$idVPFE][$idVP])}}</td>
+                            <td>
+                                <a href="#" onclick="javascript:addASSentences(patternAS['{{$idVP|noescape}}'])">
+                                    {{count($data->vp[$idVPFE][$idVP])}}
+                                </a>
+                            </td>
                             {{foreach $scfegfptas as $sc => $fegfptas}}
                                 {{foreach $fegfptas as $fe => $gfptas}}
                                     {{foreach $gfptas as $gf => $ptas}}
@@ -105,10 +113,10 @@
 
 </div>
     </div>
-            <div id="reportLUSouthPane" region="south" title="Sentences" style="height: 40%">
+            <div id="reportLUSouthPane" region="south" title="Sentences" data-options="split:true" style="height: 40%">
                 <div class="text">
                     <a href="#" class="easyui-linkbutton" onclick="javascript:clearSentences()">Clear Sentences</a>
-                    <a href="#" class="easyui-linkbutton" onclick="javascript:toogleSentenceColors()">Toogle Colors</a>
+                    <a href="#" class="easyui-linkbutton" onclick="javascript:toogleSentenceColors()">Turn Colors On/Off</a>
                 </div>
                 <div id="divLexicalEntrySentences" class="text">
                 </div>
@@ -133,7 +141,12 @@
     }
 
     function toogleSentenceColors() {
-        console.log('toogle sentence coloros');
+        console.log('toogle sentence colors');
+        $.each($("#divLexicalEntrySentences div.sentence").get(), function (index, data) {
+            console.log(data.id);
+            console.log(data.innerHTML);
+        });
+
     }
 
     function addFESentences(feEntry) {
@@ -153,6 +166,7 @@
     }
 
     function addASSentences(asSet) {
+        console.log(asSet);
         manager.doAjax({{$manager->getURL('api/reportlu/getSentences')}}, function (data) {
             console.log(data);
             $.each(data, function(index, sentence ) {
@@ -160,15 +174,16 @@
                 if ($('#' + id).length) {
                     //$(sentence.text).replaceAll('#' + id);
                 } else {
-                    $("#divLexicalEntrySentences").append( "<div class='sentence' id='" + id + "'>" + sentence.text + "</div>" );
+                    var ban = "<div class=\"ban\"><a href=\"#\" onclick=\"javascript:removeSentence('" + id + "')\"><span class=\"fa12px fa fa-ban\"></span></a></div>";
+                    $("#divLexicalEntrySentences").append( "<div class='sentence' id='" + id + "'>" + ban + sentence.text + "</div>" );
                 }
             });
 
         }, {idAS: asSet});
     }
 
-    function addSentences(id) {
-
+    function removeSentence(id) {
+        $('#' + id).remove();
     }
 
 </script>
@@ -180,6 +195,15 @@
 
     #divLexicalEntrySentences .sentence {
         padding: 3px;
+    }
+
+    div.ban {
+        padding: 0px 4px 2px 0px;
+        float: left;
+    }
+
+    div.ban span {
+        color: red;
     }
 
     .fe_target {

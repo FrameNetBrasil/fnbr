@@ -69,13 +69,13 @@ HERE;
             $condition = "(idAnnotationSet = {$idAnnotationSet})";
         }
         $cmd = <<<HERE
-        SELECT *
-        FROM view_labelfecetarget
+        SELECT l.idSentence, l.startChar, l.endChar, l.rgbFg, l. rgbBg, l.instantiationType, fe.entry as feEntry
+        FROM view_labelfecetarget l join view_frameelement fe on (l.idFrameElement = fe.idFrameElement)
         WHERE {$condition} AND (idLanguage = {$idLanguage} )
         ORDER BY idSentence,startChar
 
 HERE;
-        $result = $this->getDb()->getQueryCommand($cmd)->treeResult('idSentence', 'startChar,endChar,rgbFg,rgbBg,instantiationType');
+        $result = $this->getDb()->getQueryCommand($cmd)->treeResult('idSentence', 'startChar,endChar,rgbFg,rgbBg,instantiationType,feEntry');
         return $result;
     }
 }

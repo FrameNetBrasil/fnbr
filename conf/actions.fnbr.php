@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'fnbr' => ['mainPanel', 'main/main', 'fnbrIconForm', '', A_ACCESS, [
+    'fnbr' => ['mainPanel', 'main/main', 'fnbrIconForm', '', '', [
         'admin' => ['Admin', 'admin/main', 'fa fa-cogs fa16px', 'ADMIN', A_ACCESS, [
             'users' => ['Users', 'auth/user/main', 'fa fa-user fa16px', 'ADMIN', A_ACCESS, []],
             'annostatus' => ['Anno Status', 'admin/annostatus/main', 'fa fa-cog fa16px', 'ADMIN', A_ACCESS, []],
@@ -27,13 +27,13 @@ return [
             'corpusAnnotation' => ['Corpus Mode', 'annotation/main/formCorpusAnnotation', 'fa fa-file-text fa16px', '', A_ACCESS, []],
             'layers' => ['Manage Layers', '^annotation/layer/formManager', 'fa fa-list fa16px', 'JUNIOR', A_ACCESS, []],
         ]],
-        'reports' => ['Reports', 'main/reports', 'fa fa-newspaper-o fa16px', '', A_ACCESS, [
-            'framereport' => ['Frames', 'report/frame/main', 'fa fa-list-alt fa16px', '', A_ACCESS, []],
-            'cxnreport' => ['Constructions', 'report/cxn/main', 'fa fa-th fa16px', '', A_ACCESS, []],
+        'reports' => ['Reports', 'main/reports', 'fa fa-newspaper-o fa16px', '', '', [
+            'framereport' => ['Frames', 'report/frame/main', 'fa fa-list-alt fa16px', '', '', []],
+            'cxnreport' => ['Constructions', 'report/cxn/main', 'fa fa-th fa16px', '', '', []],
         ]],
-        'grapher' => ['Grapher', 'main/grapher', 'fa fa-share-alt fa16px', '', A_ACCESS, [
-            'fullgrapher' => ['Frames & CxN', 'grapher/grapher/main', 'fa fa-link fa16px', '', A_ACCESS, []],
-            'domaingrapher' => ['Frames by Domain', 'grapher/domain/main', 'fa fa-link fa16px', '', A_ACCESS, []],
+        'grapher' => ['Grapher', 'main/grapher', 'fa fa-share-alt fa16px', '', '', [
+            'fullgrapher' => ['Frames & CxN', 'grapher/grapher/main', 'fa fa-link fa16px', '', '', []],
+            'domaingrapher' => ['Frames by Domain', 'grapher/domain/main', 'fa fa-link fa16px', '', '', []],
         ]],
         'editor' => ['Editor', 'main/visualeditor', 'fa fa-arrows fa16px', 'ADMIN', A_ACCESS, [
             'frameeditor' => ['Frame Relation', 'visualeditor/frame/main', 'fa fa-list-alt fa16px', 'MASTER', A_ACCESS, []],
@@ -54,22 +54,9 @@ return [
             'exportCxnFS' => ['Export Cxn as FS', 'utils/export/formExportCxnFS', 'fa fa-download fa16px', 'ADMIN', A_ACCESS, []],
         ]],
         'language' => ['Language', 'main/language', 'fa fa-flag-checkered fa16px', '', A_ACCESS, [
-            'sq' => ['Albanian', 'main/changeLanguage/sq', 'fnbrFlagSq', '', A_ACCESS, []],
-            'ar' => ['Arabic', 'main/changeLanguage/ar', 'fnbrFlagAr', '', A_ACCESS, []],
-            'zh' => ['Chinese', 'main/changeLanguage/zh', 'fnbrFlagZh', '', A_ACCESS, []],
             'en' => ['English', 'main/changeLanguage/en', 'fnbrFlagEn', '', A_ACCESS, []],
-            'fi' => ['Finnish', 'main/changeLanguage/fi', 'fnbrFlagFi', '', A_ACCESS, []],
-            'fr' => ['French', 'main/changeLanguage/fr', 'fnbrFlagFr', '', A_ACCESS, []],
-            'de' => ['German', 'main/changeLanguage/de', 'fnbrFlagDe', '', A_ACCESS, []],
-            'iw' => ['Hebrew', 'main/changeLanguage/iw', 'fnbrFlagIw', '', A_ACCESS, []],
-            'it' => ['Italian', 'main/changeLanguage/it', 'fnbrFlagIt', '', A_ACCESS, []],
-            'jp' => ['Japanese', 'main/changeLanguage/jp', 'fnbrFlagJp', '', A_ACCESS, []],
-            'ko' => ['Korean', 'main/changeLanguage/ko', 'fnbrFlagKo', '', A_ACCESS, []],
-            'lt' => ['Lituan', 'main/changeLanguage/lt', 'fnbrFlagLt', '', A_ACCESS, []],
             'pt' => ['Portuguese', 'main/changeLanguage/pt', 'fnbrFlagPt', '', A_ACCESS, []],
             'es' => ['Spanish', 'main/changeLanguage/es', 'fnbrFlagEs', '', A_ACCESS, []],
-            'se' => ['Swedish', 'main/changeLanguage/se', 'fnbrFlagSe', '', A_ACCESS, []],
-            'ru' => ['Russian', 'main/changeLanguage/ru', 'fnbrFlagRu', '', A_ACCESS, []],
         ]],
         'profile' => ['Profile', 'main/profile', 'fa fa-info fa16px', '', A_ACCESS, [
             'myprofile' => ['My Profile', 'profile/formMyProfile', 'fa fa-credit-card fa16px', '', A_ACCESS, []],

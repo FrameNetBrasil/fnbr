@@ -53,8 +53,8 @@ class ReportLUService extends MService
                         $patterns[$idVPFE][$idVP] = $pattern;
                     }
                 }
-                $idVP = '';
-                $idVPFE = '';
+                $idVP = 'id';
+                $idVPFE = 'id';
                 $pattern = [];
                 $feEntries = [];
             }
@@ -65,8 +65,8 @@ class ReportLUService extends MService
             }
             $idAS = $row['idAnnotationSet'];
             $feEntries[$feEntry] = $fe;
-            $idVPFE = md5($idVPFE. $fe);
-            $idVP = md5($idVP. $fe . $gf . $pt . $it);
+            $idVPFE = 'id'. md5($idVPFE. $fe);
+            $idVP = 'id'. md5($idVP. $fe . $gf . $pt . $it);
         }
         $vpfe[$idVPFE]['feEntries'] = $feEntries;
         $vpfe[$idVPFE]['count'] = $vpfe[$idVPFE]['count'] + 1;
@@ -81,9 +81,9 @@ class ReportLUService extends MService
         $patternAS = [];
         foreach($vp as $idVPFE => $p) {
             foreach($p as $idVP => $as) {
-                $patternAS['id'.$idVP] = $as;
+                $patternAS[$idVP] = $as;
                 foreach($as as $a) {
-                    $patternFEAS['id'.$idVPFE][] = $a;
+                    $patternFEAS[$idVPFE][] = $a;
                 }
             }
         }
@@ -113,20 +113,87 @@ class ReportLUService extends MService
         $as = new fnbr\models\ViewAnnotationSet();
         $sentences = $as->listSentencesByAS($this->data->idAS)->asQuery()->getResult();
         $annotation = $as->listFECEByAS($this->data->idAS);
-        $annotationService = Manager::getAppService('annotation');
         $result = [];
         foreach ($sentences as $sentence) {
             $node = array();
             $node['idAnnotationSet'] = $sentence['idAnnotationSet'];
             $node['idSentence'] = $sentence['idSentence'];
             if ($annotation[$sentence['idSentence']]) {
-                $node['text'] = $annotationService->decorateSentence($sentence['text'], $annotation[$sentence['idSentence']]);
+                $node['text'] = $this->decorateSentence($sentence['text'], $annotation[$sentence['idSentence']]);
             } else {
                 $node['text'] = $sentence['text'];
             }
             $node['status'] = $sentence['annotationStatus'];
             $node['rgbBg'] = $sentence['rgbBg'];
             $result[] = $node;
+        }
+        return $result;
+    }
+
+    public function decorateSentence($sentence, $labels)
+    {
+        $sentence = utf8_decode($sentence);
+        mdump($sentence);
+        mdump($labels);
+        $layer = [];
+        $tempStartChar = -2;
+        foreach($labels as $i => $label) {
+            $startChar = $label['startChar'];
+            if ($startChar >= 0) {
+                if ($startChar > $tempStartChar) {
+                    $layer[0][$i] = $label;
+                } else {
+                    if (isset($layer[1][$startChar])) {
+                        if (isset($layer[2][$startChar])) {
+                            if (isset($layer[3][$startChar])) {
+                                if (isset($layer[4][$startChar])) {
+                                } else {
+                                    $layer[4][$startChar] = $label;
+                                }
+                            } else {
+                                $layer[3][$startChar] = $label;
+                            }
+                        } else {
+                            $layer[2][$startChar] = $label;
+                        }
+                    } else {
+                        $layer[1][$startChar] = $label;
+                    }
+                }
+                $tempStartChar = $label['startChar'];
+            } else {
+                $layer[0][$i] = $label;
+            }
+        }
+        $result = '';
+        foreach($layer as $layerNum => $layerLabels) {
+            $i = 0;
+            $ni = "";
+            $decorated = "";
+            $invisible = 'background-color:#FFFFF;color:#FFFFFF;';
+            foreach($layerLabels as $label) {
+                $style = 'background-color:#' . $label['rgbBg'] . ';color:#' . $label['rgbFg'] . ';';
+                $class = 'fe_' . $label['feEntry'];
+                if ($label['startChar'] >= 0) {
+                    if ($layerNum == 0) {
+                        $decorated .= substr($sentence, $i, $label['startChar'] - $i);
+                    } else {
+                        $decorated .= "<span style='{$invisible}'>" . substr($sentence, $i, $label['startChar'] - $i) . "</span>";
+                    }
+                    //$decorated .= "<span style='{$style}'>" . substr($sentence, $label['startChar'], $label['endChar'] - $label['startChar'] + 1) . "</span>";
+                    $decorated .= "<span class='{$class}'>" . substr($sentence, $label['startChar'], $label['endChar'] - $label['startChar'] + 1) . "</span>";
+                    $i = $label['endChar'] + 1;
+                } else { // null instantiation
+                    $ni .= "<span class='{$class}'>" . $label['instantiationType'] . "</span> ";
+                    mdump($ni);
+                }
+            }
+            if ($layerNum == 0) {
+                $decorated .= substr($sentence, $i) . $ni;
+            } else {
+                $decorated .= "<span style='{$invisible}'>" . substr($sentence, $i) . "</span>";
+            }
+            $result .= ($layerNum > 0 ? '<br/>' : '') . utf8_encode($decorated);
         }
         return $result;
     }

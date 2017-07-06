@@ -69,7 +69,9 @@
         node: null
     };
     $(function () {
-        $('#authUserLayout').layout();
+        $('#authUserLayout').layout({
+            fit:true
+        });
 
         authUser.showUser = function (id) {
             authUser.editUser(id);

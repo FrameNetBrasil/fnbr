@@ -28,7 +28,9 @@
     };
     $(function () {
 
-        $('#reportLayout').layout();
+        $('#reportLayout').layout({
+            fit: true
+        });
         
         report.reloadFrame = function () {
             $('#reportCenterPane').html('');
