@@ -93,7 +93,7 @@ class ReportLUService extends MService
                 $feAS[$feEntry][] = $as;
             }
         }
-        mdump($realizations);
+        //mdump($realizations);
         $result = [
             'realizations' => $realizations,
             'realizationAS' => $realizationAS,
@@ -173,7 +173,7 @@ class ReportLUService extends MService
             $invisible = 'background-color:#FFFFF;color:#FFFFFF;';
             foreach($layerLabels as $label) {
                 $style = 'background-color:#' . $label['rgbBg'] . ';color:#' . $label['rgbFg'] . ';';
-                $class = 'fe_' . $label['feEntry'];
+                $class = 'fe_' . ($label['feEntry'] ?: 'target');
                 if ($label['startChar'] >= 0) {
                     if ($layerNum == 0) {
                         $decorated .= substr($sentence, $i, $label['startChar'] - $i);
@@ -181,10 +181,10 @@ class ReportLUService extends MService
                         $decorated .= "<span style='{$invisible}'>" . substr($sentence, $i, $label['startChar'] - $i) . "</span>";
                     }
                     //$decorated .= "<span style='{$style}'>" . substr($sentence, $label['startChar'], $label['endChar'] - $label['startChar'] + 1) . "</span>";
-                    $decorated .= "<span class='{$class}'>" . substr($sentence, $label['startChar'], $label['endChar'] - $label['startChar'] + 1) . "</span>";
+                    $decorated .= "<span class=\"{$class}\">" . substr($sentence, $label['startChar'], $label['endChar'] - $label['startChar'] + 1) . "</span>";
                     $i = $label['endChar'] + 1;
                 } else { // null instantiation
-                    $ni .= "<span class='{$class}'>" . $label['instantiationType'] . "</span> ";
+                    $ni .= "<span class=\"{$class}\">" . $label['instantiationType'] . "</span> ";
                     mdump($ni);
                 }
             }

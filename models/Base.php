@@ -37,8 +37,15 @@ class Base {
 
     static public function entryLanguage($criteria, $association = '') {
         $idLanguage = \Manager::getSession()->idLanguage;
-        $associationName = ($association != '') ? ((substr($association, -1) == '.') ? $association : "{$association}.entries.") : 'entries.';
-        $criteria->where("{$associationName}idLanguage = {$idLanguage}");
+        if ($association == '') {
+            $associationCriteria = $criteria->getAssociation('entries');
+            $alias = ($associationCriteria ? $associationCriteria->getAlias() : '');
+            $associationName = ($alias == '' ? 'entries' : $alias);
+            $criteria->where("{$associationName}.idLanguage = {$idLanguage}");
+        } else {
+            $associationName = (substr($association, -1) == '.') ? $association : "{$association}.entries.";
+            $criteria->where("{$associationName}idLanguage = {$idLanguage}");
+        }
     }
 
     /*

@@ -35,7 +35,9 @@
         node: null
     };
     $(function () {
-        $('#structureLayout').layout();
+        $('#structureLayout').layout({
+            fit:true
+        });
 
         structure.newCorpus = function () {
             manager.doGet({{$manager->getURL('structure/corpus/formNewCorpus')}},'structureCenterPane');

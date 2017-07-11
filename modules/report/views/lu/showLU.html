@@ -17,7 +17,7 @@
     </div>
     <div class="divPanel">
         <div id="panelRealizations" class="easyui-panel" title="{{_'repSyntaticRealizations'}}" collapsible="true" data-options="fit:true"  style="width:100%;">
-            <div class="text">The Frame Elements for this word sense are (with realizations):</div>
+            <div class="text">{{_'repSyntaticRealizationsMsg'}}</div>
             <table class="tableRealizations">
                 <tr>
                     <th>Frame Element</th>
@@ -55,7 +55,7 @@
 
     <div class="divPanel">
         <div id="panelVP" class="easyui-panel" title="{{_'repVP'}}" collapsible="true" data-options="fit:true"  style="width:100%;">
-            <div class="text">These frame elements occur in the following syntactic patterns:</div>
+            <div class="text">{{_'repVPMsg'}}</div>
             <table class="tableVP">
                 <tr>
                     <th>Number Annotated</th>
@@ -119,6 +119,8 @@
                     <a href="#" class="easyui-linkbutton" onclick="javascript:toogleSentenceColors()">Turn Colors On/Off</a>
                 </div>
                 <div id="divLexicalEntrySentences" class="text">
+                    <div id="divSentencesColorOn" style="display:block"></div>
+                    <div id="divSentencesColorOff" style="display:none"></div>
                 </div>
             </div>
 
@@ -131,34 +133,35 @@
         fit: true
     });
 
+    var fes = {{MUtil::php2js($data->fes)|noescape}};
     var realizationAS = {{MUtil::php2js($data->realizationAS)|noescape}};
     var feAS = {{$data->feAS|noescape}};
     var patternFEAS = {{$data->patternFEAS|noescape}};
     var patternAS = {{$data->patternAS|noescape}};
 
     function clearSentences() {
-        $("#divLexicalEntrySentences").html('');
+        $("#divSentencesColorOn").html('');
+        $("#divSentencesColorOff").html('');
     }
 
     function toogleSentenceColors() {
-        console.log('toogle sentence colors');
-        $.each($("#divLexicalEntrySentences div.sentence").get(), function (index, data) {
-            console.log(data.id);
-            console.log(data.innerHTML);
-        });
-
+        if ($("#divSentencesColorOn").css('display') == 'block') {
+            $("#divSentencesColorOn").css('display', 'none');
+            $("#divSentencesColorOff").css('display', 'block');
+        } else {
+            $("#divSentencesColorOn").css('display', 'block');
+            $("#divSentencesColorOff").css('display', 'none');
+        }
     }
 
     function addFESentences(feEntry) {
-        console.log(feAS[feEntry]);
         manager.doAjax({{$manager->getURL('api/reportlu/getSentences')}}, function (data) {
-            console.log(data);
             $.each(data, function(index, sentence ) {
                 var id = "sentence" + sentence.idSentence;
                 if ($('#' + id).length) {
                     //$(sentence.text).replaceAll('#' + id);
                 } else {
-                    $("#divLexicalEntrySentences").append( "<div class='sentence' id='" + id + "'>" + sentence.text + "</div>" );
+                    addSentence(id, sentence.text);
                 }
             });
 
@@ -166,20 +169,31 @@
     }
 
     function addASSentences(asSet) {
-        console.log(asSet);
         manager.doAjax({{$manager->getURL('api/reportlu/getSentences')}}, function (data) {
-            console.log(data);
             $.each(data, function(index, sentence ) {
                 var id = "sentence" + sentence.idSentence;
                 if ($('#' + id).length) {
                     //$(sentence.text).replaceAll('#' + id);
                 } else {
-                    var ban = "<div class=\"ban\"><a href=\"#\" onclick=\"javascript:removeSentence('" + id + "')\"><span class=\"fa12px fa fa-ban\"></span></a></div>";
-                    $("#divLexicalEntrySentences").append( "<div class='sentence' id='" + id + "'>" + ban + sentence.text + "</div>" );
+                    addSentence(id, sentence.text);
                 }
             });
 
         }, {idAS: asSet});
+    }
+
+    function addSentence(id, text) {
+        var ban = "<div class=\"ban\"><a href=\"#\" onclick=\"javascript:removeSentence('" + id + "')\"><span class=\"fa12px fa fa-ban\"></span></a></div>";
+        $("#divSentencesColorOn").append( "<div class='sentence' id='" + id + "'>" + ban + text + "</div>");
+        var regex = /<span class="fe_([^"]*)"([^>]*)>([^<]*)<\/span>/g;
+        wbText = text.replace(regex, "<span class=\"none\">[<sub>$1</sub>$3]<\/span>");
+        wbText = wbText.replace(/(\[(<sub>target<\/sub>)([^\]]*)\])/g, function target(x0, x1, x2, x3) {
+            return x3.toUpperCase() + "<sup>Target</sup>";
+        });
+        for(fe in fes) {
+            wbText = wbText.replace(new RegExp(fe, 'g'), fes[fe].name);
+        }
+        $("#divSentencesColorOff").append( "<div class='sentence' id='" + id + "'>" + ban + wbText + "</div>");
     }
 
     function removeSentence(id) {

@@ -8,13 +8,13 @@ class SessionFilter extends MFilter
         $context = $this->frontController->getContext();
         // alteração da configuração dependendo do modulo sendo executado
         $module = $context->getModule();
-        if (($module == 'report') || ($module == 'grapher') || ($module == 'carma')) {
+        if (($module == 'report') || ($module == 'grapher')) {
             Manager::setConf('session.check', false);
             Manager::setConf('login.check', false);
         }
         // alteração da configuração dependendo do controller sendo executado
         $controller = $context->getController();
-        if (($controller == 'grapher') || ($controller == 'reports') || ($controller == 'report') || ($controller == 'actions') || ($controller == 'carma')) {
+        if (($controller == 'grapher') || ($controller == 'reports') || ($controller == 'report') || ($controller == 'actions')) {
             Manager::setConf('session.check', false);
             Manager::setConf('login.check', false);
         }

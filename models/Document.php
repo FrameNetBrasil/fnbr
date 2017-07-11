@@ -50,7 +50,7 @@ class Document extends map\DocumentMap
         $criteria = $this->getCriteria()->select('entries.name as name');
         $criteria->where("idDocument = {$this->getId()}");
         Base::entryLanguage($criteria);
-        return $criteria->asQuery()->fields('name');
+        return $criteria->asQuery()->getResult()[0]['name'];
     }
 
     public function listByFilter($filter)
@@ -258,6 +258,130 @@ class Document extends map\DocumentMap
         $annotationSet->setIdSentence($data->idSentence);
         $annotationSet->setIdAnnotationStatus('ast_manual');
         $annotationSet->save();
+    }
+
+    public function listAnnotationReport($options, $sort = 'frame', $order = 'asc')
+    {
+        $idLanguage = \Manager::getSession()->idLanguage;
+
+        $none = ($options['fe'] == 0) && ($options['gf'] == 0) && ($options['pt'] == 0) && ($options['ni'] == 0);
+
+        if($none) {
+            $feSelect = "";
+            $feFrom = <<<HERE
+INNER JOIN view_labelfecetarget vl on (annotationset.idAnnotationSet = vl.idAnnotationset)
+INNER JOIN view_frameelement fe on (vl.idFrameElement = fe.idFrameElement)
+INNER JOIN entry e3 ON (fe.entry = e3.entry)
+HERE;
+            $feWhere = <<<HERE
+AND (e3.idLanguage = {$idLanguage})
+AND (vl.layerTypeEntry = 'lty_fe')
+AND (vl.idLanguage = {$idLanguage})
+HERE;
+            $feGroupBy = "";
+        }
+
+        if($options['fe']) {
+            $feSelect = "fe.entry feEntry, e3.name fe,";
+            $feFrom = <<<HERE
+INNER JOIN view_labelfecetarget vl on (annotationset.idAnnotationSet = vl.idAnnotationset)
+INNER JOIN view_frameelement fe on (vl.idFrameElement = fe.idFrameElement)
+INNER JOIN entry e3 ON (fe.entry = e3.entry)
+HERE;
+            $feWhere = <<<HERE
+AND (e3.idLanguage = {$idLanguage})
+AND (vl.layerTypeEntry = 'lty_fe')
+AND (vl.idLanguage = {$idLanguage})
+HERE;
+            $feGroupBy = ", fe.entry, e3.name";
+        }
+
+        if($options['gf']) {
+            $gfSelect = "gl1.name gf,";
+            $gfFrom = <<<HERE
+LEFT JOIN layer l1 on (annotationset.idAnnotationSet = l1.idAnnotationset)
+LEFT JOIN layerType lt1 on (l1.idLayerType = lt1.idLayerType)
+LEFT JOIN label lb1 on (lb1.idLayer = l1.idLayer)
+LEFT JOIN genericlabel gl1 ON (lb1.idLabelType = gl1.idEntity)
+HERE;
+            $gfWhere = <<<HERE
+AND ((gl1.idLanguage = {$idLanguage}) OR (gl1.idLanguage is null))
+AND (lt1.entry = 'lty_gf')
+HERE;
+            if ($options['fe']) {
+                $gfWhere .= " AND (vl.startChar = lb1.startchar)";
+            }
+            $gfGroupBy = ", gl1.name";
+        }
+
+        if($options['pt']) {
+            $ptSelect = "gl2.name pt,";
+            $ptFrom = <<<HERE
+LEFT JOIN layer l2 on (annotationset.idAnnotationSet = l2.idAnnotationset)
+LEFT JOIN layerType lt2 on (l2.idLayerType = lt2.idLayerType)
+LEFT JOIN label lb2 on (lb2.idLayer = l2.idLayer)
+LEFT JOIN genericlabel gl2 ON (lb2.idLabelType = gl2.idEntity)
+HERE;
+            $ptWhere = <<<HERE
+AND ((gl2.idLanguage = {$idLanguage}) OR (gl2.idLanguage is null))
+AND (lt2.entry = 'lty_pt')
+HERE;
+            if ($options['fe']) {
+                $ptWhere .= " AND (vl.startChar = lb2.startchar)";
+            }
+            if ($options['gf']) {
+                $ptWhere .= " AND (lb1.startChar = lb2.startchar)";
+            }
+            $ptGroupBy = ", gl2.name";
+        }
+
+        if($options['ni']) {
+            $niSelect = "vl.instantiationType ni,";
+            $niFrom = "";
+            $niWhere = <<<HERE
+AND (vl.startChar = -1)
+HERE;
+            $niGroupBy = ", vl.instantiationType";
+        }
+
+        $from = <<<HERE
+  FROM document 
+  INNER JOIN paragraph ON (document.idDocument = paragraph.idDocument)
+  INNER JOIN sentence ON (paragraph.idParagraph = sentence.idParagraph)
+  INNER JOIN annotationset ON (sentence.idSentence = annotationset.idSentence)
+  INNER JOIN view_subcorpuslu sc ON (annotationset.idSubCorpus = sc.idSubCorpus)
+  INNER JOIN view_lu lu ON (sc.idLU = lu.idLU)
+  INNER JOIN lemma lm ON (lu.idLemma = lm.idLemma)
+  INNER JOIN entry e1 ON (lu.frameEntry = e1.entry)
+  INNER JOIN entry e2 ON (document.entry = e2.entry)
+  INNER JOIN language l on (lu.idLanguage = l.idLanguage)
+  {$feFrom}
+  {$gfFrom}
+  {$ptFrom}
+  {$niFrom}
+  WHERE (e1.idLanguage = {$idLanguage} )
+  AND (e2.idLanguage = {$idLanguage} )
+  AND (lu.idLanguage = {$idLanguage})
+  AND (document.idDocument = {$this->getIdDocument()} )
+  AND (lu.idLanguage = sentence.idLanguage )
+  {$feWhere}
+  {$gfWhere}
+  {$ptWhere}
+  {$niWhere}
+HERE;
+
+        if (($sort == '') || ($sort == 'frame')) {
+            $cmd = "SELECT document.idDocument,e1.name frame,lu.name lu,l.language lang,{$feSelect}{$gfSelect}{$ptSelect}{$niSelect}count(*) count";
+            $cmd .= $from . " GROUP BY document.idDocument,e1.name,lu.name,l.language{$feGroupBy}{$gfGroupBy}{$ptGroupBy}{$niGroupBy}";
+        }
+        if ($sort == 'lu') {
+            $cmd = "SELECT document.idDocument,lu.name lu,e1.name frame,l.language lang,{$feSelect}{$gfSelect}{$ptSelect}{$niSelect}count(*) count";
+            $cmd .= $from . " GROUP BY document.idDocument,lu.name,e1.name,l.language{$feGroupBy}{$gfGroupBy}{$ptGroupBy}{$niGroupBy}";
+        }
+
+        $query = $this->getDb()->getQueryCommand($cmd);
+        return $query;
+
     }
 
 }

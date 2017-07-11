@@ -33,7 +33,9 @@
 
     $(function () {
 
-        $('#annoLayout').layout();
+        $('#annoLayout').layout({
+            fit:true
+        });
         
         $('#corpus').textbox({
             buttonText:{{_'Search Corpus'}},

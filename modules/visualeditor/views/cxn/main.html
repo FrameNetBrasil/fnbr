@@ -17,7 +17,9 @@
         isMaster: {{$data->isMaster|noescape}}
     };
     $(function () {
-        $('#editorLayout').layout();
+        $('#editorLayout').layout({
+            fit:true
+        });
         
         editor.reloadFrame = function () {
             $('#editorCenterPane').html('');

@@ -34,7 +34,9 @@
 <script type="text/javascript">
 
     $(function () {
-        $('#grapherLayout').layout();
+        $('#grapherLayout').layout({
+            fit:true
+        });
         grapher.instance = new grapher.graph("grapherArea", grapher.relations);
  
         grapher.reload = function () {

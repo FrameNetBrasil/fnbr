@@ -24,7 +24,9 @@
         node: null
     };
     $(function () {
-        $('#structureLayout').layout();
+        $('#structureLayout').layout({
+            fit:true
+        });
 
         structure.newModel = function () {
             var nodeId = structure.node.id;

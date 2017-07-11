@@ -27,7 +27,9 @@
 
     $(function () {
 
-        $('#grapherLayout').layout();
+        $('#grapherLayout').layout({
+            fit:true
+        });
 
         var relation = {
             entry: JSON.parse({{$data->relationEntry}}),

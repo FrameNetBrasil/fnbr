@@ -1,9 +1,5 @@
 <?php
 
-
-
-
-
 class CorpusController extends MController
 {
 

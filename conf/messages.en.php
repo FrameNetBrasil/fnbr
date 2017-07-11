@@ -1,6 +1,21 @@
 <?php
 
 return [
+    "New" => "New",
+    "Search" => "Search",
+    "Delete" => "Delete",
+    "Edit" => "Edit",
+    "Description" => "Description",
+    "Language" => "Language",
+    "Cancel" => "Cancel",
+    "Send" => "Send",
+    "Clear" => "Clear",
+    "Are you sure you want to remove [%s] ?" => "Are you sure you want to remove [%s] ?",
+    "Record [%s] removed." => "Record [%s] removed.",
+    "Lexical Annotation" => "Lexical Annotation",
+    "Constructional Annotation" => "Constructional Annotation",
+    "Constructions" => "Constructions",
+    "Search Cnx" => "Search Cnx",
 	"repFrames" => "Frames",
 	"repFrameReport" => "Frame Report",
 	"repCnx" => "Constructions",

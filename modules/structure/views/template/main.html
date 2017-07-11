@@ -37,7 +37,9 @@
         node: null
     };
     $(function () {
-        $('#structureLayout').layout();
+        $('#structureLayout').layout({
+            fit:true
+        });
 
         structure.newTemplate = function () {
             manager.doGet({{$manager->getURL('structure/template/formNewTemplate')}},'structureCenterPane');

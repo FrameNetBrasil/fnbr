@@ -1,22 +1,24 @@
 <?php
 
 /**
- * 
+ *
  *
  * @category   Maestro
  * @package    UFJF
- *  @subpackage fnbr
+ * @subpackage fnbr
  * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
  * @license    http://siga.ufjf.br/license
- * @version    
- * @since      
+ * @version
+ * @since
  */
 
 namespace fnbr\models;
 
-class Corpus extends map\CorpusMap {
+class Corpus extends map\CorpusMap
+{
 
-    public static function config() {
+    public static function config()
+    {
         return array(
             'log' => array(),
             'validators' => array(
@@ -27,38 +29,45 @@ class Corpus extends map\CorpusMap {
         );
     }
 
-    public function getDescription() {
+    public function getDescription()
+    {
         return $this->getEntry();
     }
 
-    public function getEntryObject() {
+    public function getEntryObject()
+    {
         $criteria = $this->getCriteria()->select('entries.name, entries.description, entries.nick');
         $criteria->where("idCorpus = {$this->getId()}");
         Base::entryLanguage($criteria);
         return $criteria->asQuery()->asObjectArray()[0];
     }
 
-    public function getName() {
+    public function getName()
+    {
         $criteria = $this->getCriteria()->select('entries.name as name');
         $criteria->where("idCorpus = {$this->getId()}");
         Base::entryLanguage($criteria);
-        return $criteria->asQuery()->fields('name');
+        return $criteria->asQuery()->getResult()[0]['name'];
     }
 
-    public function listAll() {
+    public function listAll()
+    {
         $criteria = $this->getCriteria()->select('idCorpus, entries.name as name')->orderBy('entry');
         Base::entryLanguage($criteria);
         return $criteria;
     }
 
-    public function listByFilter($filter) {
-        $criteria = $this->getCriteria()->select('idCorpus, entry, entries.name as name')->orderBy('entries.name');
+    public function listByFilter($filter)
+    {
+        $criteria = $this->getCriteria();
+        $criteria->setAssociationAlias('entries', 'centry');
+        $criteria->select('distinct idCorpus, entry, centry.name as name')->orderBy('centry.name');
         Base::entryLanguage($criteria);
         if ($filter->idCorpus) {
             $criteria->where("idCorpus = '{$filter->idCorpus}'");
         }
         if ($filter->corpus) {
-            $criteria->where("upper(entries.name) LIKE upper('%{$filter->corpus}%')");
+            $criteria->where("upper(centry.name) LIKE upper('%{$filter->corpus}%')");
         }
         if ($filter->entry) {
             $criteria->where("upper(entry) LIKE upper('%{$filter->entry}%')");
@@ -70,7 +79,8 @@ class Corpus extends map\CorpusMap {
         return $criteria;
     }
 
-    public function save($data) {
+    public function save($data)
+    {
         $transaction = $this->beginTransaction();
         try {
             $entry = new Entry();
@@ -84,7 +94,8 @@ class Corpus extends map\CorpusMap {
         }
     }
 
-    public function updateEntry($newEntry) {
+    public function updateEntry($newEntry)
+    {
         $transaction = $this->beginTransaction();
         try {
             Base::updateTimeLine($this->getEntry(), $newEntry);
@@ -102,7 +113,7 @@ class Corpus extends map\CorpusMap {
     /**
      * Upload sentenças do WordSketch com Documento anotado em cada linha. Documentos já devem estar cadastrados.
      * @param type $data
-     * @param type $file 
+     * @param type $file
      */
     /*
     public function uploadSentences_Old($data, $file) {  // em cada linha: doc,url
@@ -270,9 +281,10 @@ class Corpus extends map\CorpusMap {
     /**
      * Upload sentenças do WordSketch com Documento anotado em cada linha. Documentos já devem estar cadastrados.
      * @param type $data
-     * @param type $file 
+     * @param type $file
      */
-    public function uploadSentences($data, $file) {  // em cada linha: url,doc
+    public function uploadSentences($data, $file)
+    {  // em cada linha: url,doc
         $idLU = $data->idLU;
 //        $idCorpus = $data->idCorpus;
         $subCorpus = $data->subCorpus;
@@ -366,7 +378,7 @@ class Corpus extends map\CorpusMap {
      * Upload sentenças do WordSketch com Documento anotado em cada linha. Documentos já devem estar cadastrados.
      * Usando tags Penn do TreeTagger (para textos em inglês e espanhol)
      * @param type $data
-     * @param type $file 
+     * @param type $file
      */
     /*
     public function uploadSentencesPenn_Old($data, $file) { // em cada linha: doc,url
@@ -538,9 +550,10 @@ class Corpus extends map\CorpusMap {
      * Upload sentenças do WordSketch com Documento anotado em cada linha. Documentos já devem estar cadastrados.
      * Usando tags Penn do TreeTagger (para textos em inglês e espanhol)
      * @param type $data
-     * @param type $file 
+     * @param type $file
      */
-    public function uploadSentencesPenn($data, $file) { // em cada linha: url,doc
+    public function uploadSentencesPenn($data, $file)
+    { // em cada linha: url,doc
         $idLU = $data->idLU;
         //$idCorpus = $data->idCorpus;
         $idDocument = $data->idDocument;
@@ -647,7 +660,7 @@ class Corpus extends map\CorpusMap {
                         if ($t == '<') {
                             $word = $t;
                             $isTarget = true;
-                        } else if($t == '>') {
+                        } else if ($t == '>') {
                             $word = $t . ' ';
                             $isTarget = false;
                         } else {
@@ -704,13 +717,15 @@ class Corpus extends map\CorpusMap {
         }
         return;
     }
+
     /**
      * Upload de sentenças de construções, em arquivo texto simples (uma sentença por linha).
      * Parâmetro data informa: idConstruction, subCorpus e idLanguage
      * @param type $data
-     * @param type $file 
+     * @param type $file
      */
-    public function uploadCxnSimpleText($data, $file) {
+    public function uploadCxnSimpleText($data, $file)
+    {
         $subCorpus = $data->subCorpus;
         $idLanguage = $data->idLanguage;
         $transaction = $this->beginTransaction();
@@ -749,17 +764,60 @@ class Corpus extends map\CorpusMap {
         return $result;
     }
 
-    
-    public function createSubcorpus($data) {
+
+    public function createSubcorpus($data)
+    {
         $sc = new SubCorpus();
         $sc->addSubcorpusLU($data);
         return $sc;
     }
 
-    public function createSubcorpusCxn($data) {
+    public function createSubcorpusCxn($data)
+    {
         $sc = new SubCorpus();
         $sc->addSubcorpusCxn($data);
         return $sc;
     }
-    
+
+    public function listAnnotationReport($sort = 'frame', $order = 'asc')
+    {
+        $idLanguage = \Manager::getSession()->idLanguage;
+
+        $from = <<<HERE
+  FROM corpus
+  INNER JOIN document ON (corpus.idCorpus = document.idCorpus)
+  INNER JOIN paragraph ON (document.idDocument = paragraph.idDocument)
+  INNER JOIN sentence ON (paragraph.idParagraph = sentence.idParagraph)
+  INNER JOIN annotationset ON (sentence.idSentence = annotationset.idSentence)
+  INNER JOIN view_subcorpuslu sc ON (annotationset.idSubCorpus = sc.idSubCorpus)
+  INNER JOIN view_lu lu ON (sc.idLU = lu.idLU)
+  INNER JOIN lemma lm ON (lu.idLemma = lm.idLemma)
+  INNER JOIN entry e1 ON (lu.frameEntry = e1.entry)
+  INNER JOIN entry e2 ON (document.entry = e2.entry)
+  INNER JOIN language l on (lu.idLanguage = l.idLanguage)
+  WHERE (e1.idLanguage = {$idLanguage} )
+  AND (e2.idLanguage = {$idLanguage} )
+  AND (lu.idLanguage = {$idLanguage})
+  AND (corpus.idCorpus = {$this->getIdCorpus()} )
+  AND (lu.idLanguage = sentence.idLanguage )
+HERE;
+
+        if (($sort == '') || ($sort == 'frame')) {
+            $cmd = "SELECT corpus.idCorpus,e1.name frame,lu.name lu,e2.name doc,l.language lang,count(*) count";
+            $cmd .= $from . " GROUP BY corpus.idCorpus,e1.name,lu.name,e2.name,l.language";
+        }
+        if ($sort == 'lu') {
+            $cmd = "SELECT corpus.idCorpus,lu.name lu,e1.name frame,e2.name doc,l.language lang,count(*) count";
+            $cmd .= $from . " GROUP BY corpus.idCorpus,lu.name,e1.name,e2.name,l.language";
+        }
+        if ($sort == 'doc') {
+            $cmd = "SELECT corpus.idCorpus,e2.name doc, e1.name frame,lu.name lu,l.language lang,count(*) count";
+            $cmd .= $from . " GROUP BY corpus.idCorpus,e2.name,e1.name,lu.name,l.language";
+        }
+
+        $query = $this->getDb()->getQueryCommand($cmd);
+        return $query;
+
+    }
+
 }

@@ -8,8 +8,8 @@ class Valence
     public function FERealizations($idLU)
     {
         $cmd = <<<HERE
-select a.idAnnotationSet, lb.startChar, lb.endChar, l.entry layerEntry, entry_it.entry itEntry, entry_it.name itName, entry_fe.entry feEntry, entry_fe.name feName,
-fe.idFRameElement feId, fe.typeEntry feTypeEntry, gf.name gfName, pt.name ptName
+select a.idAnnotationSet, lb.startChar, lb.endChar, l.entry layerEntry, entry_it.entry itEntry, entry_it.name itName, entry_fe.entry feEntry,
+entry_fe.name feName, fe.idFRameElement feId, fe.typeEntry feTypeEntry, gf.name gfName, pt.name ptName
 FROM view_lu lu join view_subcorpuslu v1 on (lu.idLU = v1.idLU)
 join View_AnnotationSet a on (v1.idSubCorpus = a.idSubCorpus)
 join View_Layer l on (a.idAnnotationSet = l.idAnnotationSet)
