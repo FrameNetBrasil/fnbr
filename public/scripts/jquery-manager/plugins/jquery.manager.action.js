@@ -103,9 +103,15 @@
                 return "manager.doGet('" + url + "', '', '" + wrapper + "');";
             }
             if (modifier === '+') {
+                action = manager.addAppToAction(action);
+                var parts = action.substr(1).split('|');
+                var url = urlBase + "/index.php/" + parts[0];
                 return "manager.doWindow('" + url + "');";
             }
             if (modifier === '=') {
+                action = manager.addAppToAction(action);
+                var parts = action.substr(1).split('|');
+                var url = urlBase + "/index.php/" + parts[0];
                 return "manager.doRedirect('" + url + "');";
             }
             if (modifier === 'd') {

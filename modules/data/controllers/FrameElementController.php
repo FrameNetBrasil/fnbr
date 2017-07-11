@@ -61,6 +61,7 @@ class FrameElementController extends MController {
         $this->renderJSON(json_encode($data));
     }
 
+    /*
     public function formFind() {
         $FrameElement= new fnbr\models\FrameElement($this->data->id);
         $filter->idFrameElement = $this->data->idFrameElement;
@@ -113,5 +114,5 @@ class FrameElementController extends MController {
             $go = '>FrameElement/formFind';
             $this->renderPrompt('information',"FrameElement [{$this->data->idFrameElement}] removido.", $go);
     }
-
+    */
 }

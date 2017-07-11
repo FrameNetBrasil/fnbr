@@ -5,7 +5,7 @@ class MLookupTemplate extends MControl
 
     public function generate()
     {
-        $url = Manager::getAppURL('', 'template/lookupData');
+        $url = Manager::getAppURL('', 'data/template/lookupData');
         $onLoad = <<<EOT
         
         $('#{$this->property->id}').combogrid({

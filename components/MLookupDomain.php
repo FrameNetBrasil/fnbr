@@ -5,7 +5,7 @@ class MLookupDomain extends MControl
 
     public function generate()
     {
-        $url = Manager::getAppURL('', 'domain/lookupData');
+        $url = Manager::getAppURL('', 'data/domain/lookupData');
         $onLoad = <<<EOT
         
         $('#{$this->property->id}').combogrid({

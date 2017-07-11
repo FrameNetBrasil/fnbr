@@ -5,7 +5,7 @@ class MLookupBFF extends MControl
 
     public function generate()
     {
-        $url = Manager::getAppURL('', 'typeinstance/lookupBFF');
+        $url = Manager::getAppURL('', 'data/typeinstance/lookupBFF');
         $onLoad = <<<EOT
         
         $('#{$this->property->id}').combogrid({

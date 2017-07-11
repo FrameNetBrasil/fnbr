@@ -1,23 +1,6 @@
 <?php
-/**
- * $_comment
- *
- * @category   Maestro
- * @package    UFJF
- * @subpackage $_package
- * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version    
- * @since      
- */
-
-
 
 class LemmaController extends MController {
-
-    public function main() {
-        $this->render("formBase");
-    }
 
     public function lookupData(){
         if (strlen($this->data->q) < 3) {
@@ -29,7 +12,12 @@ class LemmaController extends MController {
         }
         $this->renderJSON($json);
     }
-    
+/*
+
+    public function main() {
+        $this->render("formBase");
+    }
+
     public function formFind() {
         $Lemma= new fnbr\models\Lemma($this->data->id);
         $filter->idLemma = $this->data->idLemma;
@@ -82,5 +70,5 @@ class LemmaController extends MController {
             $go = '>Lemma/formFind';
             $this->renderPrompt('information',"Lemma [{$this->data->idLemma}] removido.", $go);
     }
-
+*/
 }

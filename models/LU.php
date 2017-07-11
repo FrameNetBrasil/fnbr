@@ -24,10 +24,6 @@ class LU extends map\LUMap
             'log' => array(),
             'validators' => array(
                 'name' => array('notnull'),
-                'senseDescription' => array('notnull'),
-                'active' => array('notnull'),
-                'importNum' => array('notnull'),
-                'incorporatedFE' => array('notnull'),
                 'idEntity' => array('notnull'),
                 'idLemma' => array('notnull'),
             ),

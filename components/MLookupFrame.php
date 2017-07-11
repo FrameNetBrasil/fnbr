@@ -5,7 +5,7 @@ class MLookupFrame extends MControl
 
     public function generate()
     {
-        $url = Manager::getAppURL('', 'frame/lookupData');
+        $url = Manager::getAppURL('', 'data/frame/lookupData');
         $onLoad = <<<EOT
         
         $('#{$this->property->id}').combogrid({

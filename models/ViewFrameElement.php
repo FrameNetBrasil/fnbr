@@ -37,7 +37,7 @@ class ViewFrameElement extends map\ViewFrameElementMap {
     }
 
     public function hasAnnotations($idFrameElement) {
-        $criteria = $this->getCriteria()->select('labels.*');
+        $criteria = $this->getCriteria()->select('*');
         $criteria->where("idFrameElement = {$idFrameElement}" );
         $criteria->where("idEntity = labels.idLabelType" );
         $count = $criteria->asQuery()->count();

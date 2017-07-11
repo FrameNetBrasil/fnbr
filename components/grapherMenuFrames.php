@@ -1,5 +1,4 @@
 <?php
-Manager::import("fnbr\models\*");
 
 class GrapherMenuFrames extends MBaseGroup {
     
@@ -8,7 +7,7 @@ class GrapherMenuFrames extends MBaseGroup {
         $data = Manager::getData();
         $db = $data->db;
 
-        $frame = new Frame();
+        $frame = new fnbr\models\Frame();
         $initials = $frame->listInitialsForReport()->asQuery()->chunkResult(0,0);        
         
         $i = 0;
@@ -17,7 +16,7 @@ class GrapherMenuFrames extends MBaseGroup {
         $p->addControl(new MRawText('<br>'));
         foreach($initials as $char) {
             $p->addControl(new MLink($char,'','grapher/listFrames?db=' . $db . '#'.$char,$char,'listFrames'));
-            $p->addControl(new Mlabel('&nbsp;&nbsp'));
+            $p->addControl(new MLabel('&nbsp;&nbsp'));
             if(++$i > 12) {
                 $i = 0;
                 $p->addControl(new MRawText('<br>'));
@@ -30,5 +29,3 @@ class GrapherMenuFrames extends MBaseGroup {
     }
     
 }
-
-?>

@@ -9,7 +9,6 @@ return [
             'relationgroup' => ['Relation Group', 'admin/relationgroup/main', 'fa fa-cog fa16px', 'ADMIN', A_ACCESS, []],
             'type' => ['Type', 'admin/type/main', 'fa fa-cog fa16px', 'ADMIN', A_ACCESS, []],
             'genre' => ['Genre', 'admin/genre/main', 'fa fa-cog fa16px', 'ADMIN', A_ACCESS, []],
-            'wflex' => ['Wf-Lexeme', 'admin/wflex/main', 'fa fa-cog fa16px', 'ADMIN', A_ACCESS, []],
         ]],
         'structure' => ['Structure', 'main/structure', 'fa fa-database fa16px', '', A_ACCESS, [
             'framestructure' => ['Frame', 'structure/frame/main', 'fa fa-list-alt fa16px', '', A_ACCESS, []],
@@ -26,11 +25,12 @@ return [
             'corpusAnnotation' => ['Corpus Mode', 'annotation/main/formCorpusAnnotation', 'fa fa-file-text fa16px', '', A_ACCESS, []],
             'layers' => ['Manage Layers', '^annotation/layer/formManager', 'fa fa-list fa16px', 'JUNIOR', A_ACCESS, []],
         ]],
-        'reports' => ['Reports', 'main/reports', 'fa fa-newspaper-o fa16px', '', A_ACCESS, [
-            'framereport' => ['Frames', 'report/frame/main', 'fa fa-list-alt fa16px', '', A_ACCESS, []],
+        'reports' => ['Reports', 'main/reports', 'fa fa-newspaper-o fa16px', '', '', [
+            'framereport' => ['Frames', 'report/frame/main', 'fa fa-list-alt fa16px', '', '', []],
+            'corpusAnnotationReport' => ['Corpus Annotation', 'report/corpus/main', 'fa fa-file-text fa16px', '', A_ACCESS, []],
         ]],
-        'grapher' => ['Grapher', 'main/grapher', 'fa fa-share-alt fa16px', '', A_ACCESS, [
-            'fullgrapher' => ['Frames & CxN', 'grapher/grapher/main', 'fa fa-link fa16px', '', A_ACCESS, []],
+        'grapher' => ['Grapher', 'main/grapher', 'fa fa-share-alt fa16px', '', '', [
+            'fullgrapher' => ['Frames & CxN', 'grapher/grapher/main', 'fa fa-link fa16px', '', '', []],
         ]],
         'editor' => ['Editor', 'main/visualeditor', 'fa fa-arrows fa16px', 'ADMIN', A_ACCESS, [
             'frameeditor' => ['Frame Relation', 'visualeditor/frame/main', 'fa fa-list-alt fa16px', 'MASTER', A_ACCESS, []],
@@ -38,8 +38,10 @@ return [
             'cxneditor' => ['CxN Relation', 'visualeditor/cxn/main', 'fa fa-list-alt fa16px', 'MASTER', A_ACCESS, []],
             'cxnframeeditor' => ['CxN-Frame Relation', 'visualeditor/cxnframe/main', 'fa fa-list-alt fa16px', 'MASTER', A_ACCESS, []],
         ]],
-        'messages' => ['Messages', 'auth/message/main', 'fa fa-envelope-o fa16px', '', A_ACCESS, [
+        'utils' => ['Utils', 'main/utils/', 'fa fa-briefcase fa16px', 'MASTER', A_ACCESS, [
             'mailmsg' => ['Mail Message', 'auth/message/formMail', 'fa fa-envelope-o fa16px', '', A_ACCESS, []],
+            'importLexWf' => ['Import Wf-Lexeme', 'utils/import/formImportLexWf', 'fa fa-upload fa16px', 'MASTER', A_ACCESS, []],
+            'wflex' => ['Search Wf-Lexeme', 'admin/wflex/main', 'fa fa-cog fa16px', '', A_ACCESS, []],
         ]],
         'language' => ['Language', 'main/language', 'fa fa-flag-checkered fa16px', '', A_ACCESS, [
             'sq' => ['Albanian', 'main/changeLanguage/sq', 'fnbrFlagSq', '', A_ACCESS, []],
@@ -61,7 +63,6 @@ return [
         ]],
         'profile' => ['Profile', 'main/profile', 'fa fa-info fa16px', '', A_ACCESS, [
             'myprofile' => ['My Profile', 'profile/formMyProfile', 'fa fa-credit-card fa16px', '', A_ACCESS, []],
-            'changePass' => ['Change Password', 'profile/formChangePassword', 'fa fa-lock fa16px', '', A_ACCESS, []],
             'logout' => ['Logout', 'auth/login/logout', 'fa fa-sign-out fa16px', '', A_ACCESS, []],
         ]],
     ]]

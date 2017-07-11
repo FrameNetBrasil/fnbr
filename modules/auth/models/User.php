@@ -194,7 +194,6 @@ class User extends map\UserMap
         $groups = $this->getArrayGroups();
         foreach ($levels as $level => $levelName) {
             if ($groups[$level]) {
-                mdump('====='.$level);
                 $userLevel = $level;
             }
         }

@@ -30,6 +30,15 @@ class AuthUserService extends MService
                 $auth->setLogin($login);
                 $auth->setLoginLogUserId($user->getId());
                 $auth->setLoginLog($login->getLogin());
+
+                $idLanguage = $user->getConfigData('fnbrIdLanguage');
+                if ($idLanguage == '') {
+                    $idLanguage = 1;
+                    $user->setConfigData('fnbrIdLanguage', $idLanguage);
+                }
+                Manager::getSession()->idLanguage = $idLanguage;
+                Manager::getSession()->fnbrLevel = $user->getUserLevel();
+
                 Manager::logMessage("[LOGIN] Authenticated {$user->getLogin()}");
                 return 'logged';
             }

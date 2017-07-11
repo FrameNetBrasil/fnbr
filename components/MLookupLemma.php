@@ -5,7 +5,7 @@ class MLookupLemma extends MControl
 
     public function generate()
     {
-        $url = Manager::getAppURL('', 'lemma/lookupData');
+        $url = Manager::getAppURL('', 'data/lemma/lookupData');
         $onLoad = <<<EOT
         
         $('#{$this->property->id}').combogrid({

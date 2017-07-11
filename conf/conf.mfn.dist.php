@@ -28,7 +28,7 @@ return [
         'AUTH0_CLIENT_ID' => 'UorLBpOPNNMP6HF7wfqQMOxFg3YqKzEk',
         'AUTH0_DOMAIN' => 'framenetbr.auth0.com',
         'AUTH0_CLIENT_SECRET' => 'FKqctCzv0QILbPXgerC_mdfRxzWNHdeUchxwQAYePrhngLwC4cVCe2QFWpY-vvU9',
-        'AUTH0_CALLBACK_URL' => 'http://kenobi.cpd.ufjf.br/auth0/callback.php'
+        'AUTH0_CALLBACK_URL' => 'http://kenobi.cpd.ufjf.br/maestro3/index.php/fnbr/main/auth0Callback'
     ],
     'theme' => [
         'name' => 'mfn',
@@ -59,7 +59,7 @@ return [
         'port' => 0
     ],
     'filters' => [
-        'db' => 'fnbr',
+        'db' => 'mfn',
         'session' => 'session',
     ],
     'fnbr' => [

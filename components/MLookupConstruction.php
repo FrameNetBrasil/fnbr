@@ -5,7 +5,7 @@ class MLookupConstruction extends MControl
 
     public function generate()
     {
-        $url = Manager::getAppURL('', 'construction/lookupData');
+        $url = Manager::getAppURL('', 'data/construction/lookupData');
         $onLoad = <<<EOT
         
         $('#{$this->property->id}').combogrid({

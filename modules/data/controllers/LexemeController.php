@@ -1,23 +1,6 @@
 <?php
-/**
- * $_comment
- *
- * @category   Maestro
- * @package    UFJF
- * @subpackage $_package
- * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version    
- * @since      
- */
-
-
 
 class LexemeController extends MController {
-
-    public function main() {
-        $this->render("formBase");
-    }
 
     public function gridLemmaData(){
         $model = new fnbr\models\Lexeme();
@@ -26,7 +9,12 @@ class LexemeController extends MController {
         $criteria = $model->listForGridLemma($filter);
         $this->renderJSON($model->gridDataAsJSON($criteria));
     }
-    
+/*
+
+    public function main() {
+        $this->render("formBase");
+    }
+
     public function formFind() {
         $Lexeme= new fnbr\models\Lexeme($this->data->id);
         $filter->idLexeme = $this->data->idLexeme;
@@ -79,5 +67,5 @@ class LexemeController extends MController {
             $go = '>Lexeme/formFind';
             $this->renderPrompt('information',"Lexeme [{$this->data->idLexeme}] removido.", $go);
     }
-
+*/
 }

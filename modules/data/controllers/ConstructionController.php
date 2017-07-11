@@ -1,28 +1,18 @@
 <?php
-/**
- * $_comment
- *
- * @category   Maestro
- * @package    UFJF
- * @subpackage $_package
- * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version    
- * @since      
- */
-
-
 
 class ConstructionController extends MController {
-
-    public function main() {
-        $this->render("formBase");
-    }
 
     public function lookupData(){
         $model = new fnbr\models\Construction();
         $criteria = $model->listForLookupName($this->data->q);
         $this->renderJSON($model->gridDataAsJSON($criteria));
+    }
+
+    /*
+
+
+    public function main() {
+        $this->render("formBase");
     }
 
     public function formFind() {
@@ -77,5 +67,6 @@ class ConstructionController extends MController {
             $go = '>Construction/formFind';
             $this->renderPrompt('information',"Construction [{$this->data->idConstruction}] removido.", $go);
     }
+    */
 
 }

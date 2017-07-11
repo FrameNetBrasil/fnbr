@@ -1,13 +1,11 @@
 <?php
 
-
-
 class StructureDomainService extends MService
 {
 
     public function listFrameDomain($id)
     {
-        $relations = Base::relationCriteria('ViewFrame', 'Domain', 'rel_hasdomain', 'Domain.idDomain');
+        $relations = fnbr\models\Base::relationCriteria('ViewFrame', 'Domain', 'rel_hasdomain', 'Domain.idDomain');
         $relations->where("idFrame = {$id}");
         $domains = $relations->asQuery()->chunkResult('idDomain','idDomain');
         $domain = new fnbr\models\Domain();
@@ -28,9 +26,9 @@ class StructureDomainService extends MService
         $frame = new fnbr\models\Frame($idFrame);
         $transaction = $frame->beginTransaction();
         try {
-            Base::deleteEntity1Relation($frame->getIdEntity(), 'rel_hasdomain');
+            fnbr\models\Base::deleteEntity1Relation($frame->getIdEntity(), 'rel_hasdomain');
             foreach($toSave as $dm) {
-                Base::createEntityRelation($frame->getIdEntity(), 'rel_hasdomain', $dm->idEntity);
+                fnbr\models\Base::createEntityRelation($frame->getIdEntity(), 'rel_hasdomain', $dm->idEntity);
             }
             $transaction->commit();
         } catch (\Exception $e) {

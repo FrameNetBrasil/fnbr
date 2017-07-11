@@ -5,7 +5,7 @@ class MLookupStatusType extends MControl
 
     public function generate()
     {
-        $url = Manager::getAppURL('', 'typeinstance/lookupStatusType');
+        $url = Manager::getAppURL('', 'data/typeinstance/lookupStatusType');
         $onLoad = <<<EOT
         
         $('#{$this->property->id}').combogrid({

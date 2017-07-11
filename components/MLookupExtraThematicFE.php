@@ -6,7 +6,7 @@ class MLookupExtraThematicFE extends MControl
     public function generate()
     {
         $idFrame = $this->data->idFrame;
-        $url = Manager::getAppURL('', 'frameelement/lookupDataExtraThematic/' . $idFrame);
+        $url = Manager::getAppURL('', 'data/frameelement/lookupDataExtraThematic/' . $idFrame);
         $onLoad = <<<EOT
         
         $('#{$this->property->id}').combogrid({

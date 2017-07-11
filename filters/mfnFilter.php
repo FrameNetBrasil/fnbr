@@ -2,21 +2,21 @@
 
 use fnbr\models\Base;
 
-class fnbrFilter extends MFilter {
+class mfnFilter extends MFilter {
 
     public function preProcess() {
         $data = Manager::getData();
         if (Manager::isLogged()) {
             $login = Manager::getLogin();
             $userIdLanguage = $login->getUser()->getConfigData('fnbrIdLanguage');
-        }        
+        }
         $idLanguage = $data->lang;
         if ($idLanguage == '') {
             $idLanguage = Manager::getSession()->idLanguage;
             if ($idLanguage == '') {
                 $idLanguage = $userIdLanguage;
                 if ($idLanguage == '') {
-                    $idLanguage = 1;
+                    $idLanguage = 2;
                 }
             }
         }

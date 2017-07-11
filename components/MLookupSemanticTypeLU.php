@@ -5,7 +5,7 @@ class MLookupSemanticTypeLU extends MControl
 
     public function generate()
     {
-        $url = Manager::getAppURL('', 'semantictype/lookupDataForLU');
+        $url = Manager::getAppURL('', 'data/semantictype/lookupDataForLU');
         $onLoad = <<<EOT
         
         $('#{$this->property->id}').combogrid({

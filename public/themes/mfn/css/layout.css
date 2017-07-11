@@ -10,22 +10,30 @@ Licença URI: license.txt
 */
 
 html {
-  height: 100%;
+    height: 100%;
 }
+
 * {
-	font-size:12px;
+    font-size: 12px;
 }
+
 body {
-    position:absolute; top:0; bottom:0; right:0; left:0; 
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
     /*font-family:verdana,helvetica,arial,sans-serif;*/
-	font-family: open_sansregular;
-/*	font-family: tahoma;*/
-    font-size:12px;
+    font-family: open_sansregular;
+    /*	font-family: tahoma;*/
+    font-size: 12px;
 }
+
 label {
     font-weight: normal;
 }
 
+/*
 #appContainer {
     height: 100%;
     width: 100%;
@@ -40,54 +48,62 @@ label {
 }
 
 #topPane {
-    
+    height: 30px;
+    height: 96%;
 }
+*/
 
 #menuPane {
-    width: 75%;
-    float:left;
+    width: 65%;
+    float: left;
 }
 
 #userPane {
-    width: 25%;
-    text-align:right;
+    width: 35%;
+    text-align: right;
     padding-right: 5px;
-    float:right;
+    float: right;
     vertical-align: center;
 }
 
-#loader
-{
-  padding:0;
-  margin:0;
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:#FFF;
-  z-index:999;
-  vertical-align:middle;
+#loader {
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #FFF;
+    z-index: 999;
+    vertical-align: middle;
 }
 
-#loaderInner
-{
-  padding:5px;
-  position:relative;
-  left:0;
-  top:0;
-  width:175px;
-  background:#3c3;
-  color:#fff;
+#loaderInner {
+    padding: 5px;
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 175px;
+    background: #3c3;
+    color: #fff;
 }
 
 .absoluteCenter {
-  width: 50%;
-  height: 50%;
-  overflow: auto;
-  margin: auto;
-  position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
+    width: 50%;
+    height: 50%;
+    overflow: auto;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+/*
+.form-horizontal {
+    padding: 0px 0px 0px 0px;
 }
 
 .form-horizontal .control-label {
@@ -100,22 +116,28 @@ label {
 .form-vertical .form-group {
     margin-left: 15px;
 }
+*/
+
 .mform-outer {
     padding: 15px 0px 0px 0px;
 }
+
 .mform-label {
     display: block;
-    margin-bottom:  0px;
+    margin-bottom: 0px;
 }
-.mform-control{
-    display:  block;
+
+.mform-control {
+    display: block;
 }
+
 .mform-buttons {
     background-color: #f7f7f9;
     border-top: 1px solid #e1e1e8;
-    text-align:  right;
+    text-align: right;
     padding: 5px;
 }
+
 .mform-button {
     min-width: 80px;
 }
@@ -125,12 +147,12 @@ label {
  
  */
 .l-btn-icon {
-    font-size:  12px;
+    font-size: 12px;
 }
 
 #annoLayout {
     height: 100%;
-    width:  100%;
+    width: 100%;
 }
 
 #annoLeftPane {
@@ -139,20 +161,18 @@ label {
 }
 
 #annoCenterPane {
-    padding:  5px;
+    padding: 5px;
 }
 
 #layersPane {
-   /* margin-top:  5px;*/ 
-   font-family: 'oxygen_monoregular';
+    /* margin-top:  5px;*/
+    font-family: 'oxygen_monoregular';
 }
-
 
 #layersPane > .datagrid-row-selected,
 #layersPane > .datagrid-row-checked {
-    background-color:transparent;
+    background-color: transparent;
 }
-
 
 .layerSelected {
     background-color: transparent;
@@ -165,7 +185,7 @@ label {
 .divNI {
     float: left;
     width: 30px;
-    height:24px;
+    height: 24px;
     padding: 2px;
 }
 
@@ -175,7 +195,7 @@ label {
 
 .cellSelected div {
     background-color: #CCC;
-    color:  black;
+    color: black;
 }
 
 .divLabelMenu {
@@ -193,7 +213,7 @@ label {
  */
 #structureLayout {
     height: 100%;
-    width:  100%;
+    width: 100%;
 }
 
 #structureLeftPane {
@@ -202,7 +222,7 @@ label {
 }
 
 #structureCenterPane {
-    padding:  5px;
+    padding: 5px;
 }
 
 .mtreeIcon {
@@ -214,7 +234,7 @@ label {
  */
 #reportLayout {
     height: 100%;
-    width:  100%;
+    width: 100%;
 }
 
 #reportLeftPane {
@@ -223,7 +243,7 @@ label {
 }
 
 #reportCenterPane {
-    padding:  5px;
+    padding: 5px;
 }
 
 .mtreeIcon {
@@ -231,7 +251,7 @@ label {
 }
 
 .reportFrame {
-    
+
 }
 
 .reportFrame .frameName {
@@ -240,30 +260,121 @@ label {
 }
 
 .reportFrame .divPanel {
-    margin-top:5px;
-    margin-bottom:5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .reportFrame .divPanel .text {
-    padding:5px;
+    padding: 5px;
 }
+
 .reportFrame .divPanel .header {
-    padding:5px;
+    padding: 5px;
     font-weight: bold;
 }
+
 .reportFrame .divPanel .frameElement {
-    border-collapse: separate;   
+    border-collapse: separate;
     border-spacing: 5px;
-    margin:5px;
+    margin: 5px;
 }
+
 .reportFrame .divPanel .tableRelations {
-    border-collapse: separate;   
+    border-collapse: separate;
     border-spacing: 5px;
-    margin:5px;
+    margin: 5px;
+}
+
+.reportFrame .divPanel .tableLU {
+    border-collapse: separate;
+    border-spacing: 5px;
+    margin: 5px;
+}
+
+.reportLU {
+
+}
+
+.reportLU .luName {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.reportLU .frameName {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.reportLU .divPanel {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.reportLU .divPanel .text {
+    padding: 5px;
+}
+
+.reportLU .divPanel .header {
+    padding: 5px;
+    font-weight: bold;
+}
+
+.reportLU .divPanel .tableRealizations {
+    border-collapse: collapse;
+    border-spacing: 5px;
+    margin: 5px;
+    border: 1px solid #ddd;
+}
+
+.reportLU .divPanel .tableRealizations tbody tr th {
+    background-color: #8d8d8d;
+    color: white;
+    padding: 5px;
+}
+
+.reportLU .divPanel .tableRealizations tbody tr td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+}
+
+.reportLU .divPanel .tableRealizations tr:nth-child(even) {
+    background-color: #f2f2f2
+}
+
+.reportLU .divPanel .tableVP {
+    border-collapse: collapse;
+    border-spacing: 5px;
+    margin: 5px;
+    border: 1px solid #ddd;
+}
+
+.reportLU .divPanel .tableVP  tbody tr th {
+    background-color: #8d8d8d;
+    color: white;
+    padding: 5px;
+}
+
+.reportLU .divPanel .tableVP  tbody tr td  {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+}
+
+.reportLU .divPanel .tableVP .pattern {
+    background-color: #f2f2f2;
+}
+
+#reportLUCenterPane {
+    padding: 5px;
+}
+
+#reportLUSouthPane {
+    padding: 5px;
 }
 
 .reportCxn {
-    
+
 }
 
 .reportCxn .cxnName {
@@ -272,22 +383,24 @@ label {
 }
 
 .reportCxn .divPanel {
-    margin-top:5px;
-    margin-bottom:5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .reportCxn .divPanel .text {
-    padding:5px;
+    padding: 5px;
 }
+
 .reportCxn .divPanel .cxnElement {
-    border-collapse: separate;   
+    border-collapse: separate;
     border-spacing: 5px;
-    margin:5px;
+    margin: 5px;
 }
+
 .reportCxn .divPanel .tableRelations {
-    border-collapse: separate;   
+    border-collapse: separate;
     border-spacing: 5px;
-    margin:5px;
+    margin: 5px;
 }
 
 /*
@@ -295,7 +408,7 @@ label {
  */
 #editorLayout {
     height: 100%;
-    width:  100%;
+    width: 100%;
 }
 
 #editorLeftPane {
@@ -304,7 +417,7 @@ label {
 }
 
 #editorCenterPane {
-    padding:  5px;
+    padding: 5px;
 }
 
 /*
@@ -312,7 +425,7 @@ label {
  */
 #grapherLayout {
     height: 100%;
-    width:  100%;
+    width: 100%;
 }
 
 #grapherLeftPane {
@@ -321,7 +434,7 @@ label {
 }
 
 #grapherCenterPane {
-    padding:  5px;
+    padding: 5px;
 }
 
 

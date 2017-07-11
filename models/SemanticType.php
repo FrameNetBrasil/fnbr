@@ -176,17 +176,23 @@ HERE;
 
     public function listTypesByEntity($idEntity)
     {
+        $idLanguage = \Manager::getSession()->idLanguage;
         $domain = new Domain();
         $domainCriteria = $domain->getCriteria()
-                ->select('domain.idDomain, domain.entries.name as domainName')
+                ->select('idDomain, entries.name as domainName')
                 ->setAlias('d');
-        Base::entryLanguage($domainCriteria,'domain');
-        $criteria = Base::relationCriteria('entity', 'semantictype', 'rel_hassemtype', 
-                'semantictype.idSemanticType,semantictype.entries.name as name,semantictype.idEntity, d.domainName')
-                ->orderBy('semantictype.entries.name');
+        Base::entryLanguage($domainCriteria);
+        $entry = new Entry();
+        $entryCriteria = $entry->getCriteria()
+            ->select('entry, name')
+            ->where("idLanguage = {$idLanguage}")
+            ->setAlias('e');
+        $criteria = Base::relationCriteria('entity', 'semantictype', 'rel_hassemtype',
+                'semantictype.idSemanticType,e.name,semantictype.idEntity, d.domainName')
+                ->orderBy('e.name');
+        $criteria->joinCriteria($entryCriteria,"(e.entry = semantictype.entry)");
         $criteria->joinCriteria($domainCriteria,"(d.idDomain = semantictype.idDomain)");
         $criteria->where('entity.idEntity','=',$idEntity);
-        Base::entryLanguage($criteria,'semantictype');
         return $criteria;
     }
 

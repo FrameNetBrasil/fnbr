@@ -61,7 +61,6 @@ return [
         ]],
         'profile' => ['Profile', 'main/profile', 'fa fa-info fa16px', '', A_ACCESS, [
             'myprofile' => ['My Profile', 'profile/formMyProfile', 'fa fa-credit-card fa16px', '', A_ACCESS, []],
-            'changePass' => ['Change Password', 'profile/formChangePassword', 'fa fa-lock fa16px', '', A_ACCESS, []],
             'logout' => ['Logout', 'auth/login/logout', 'fa fa-sign-out fa16px', '', A_ACCESS, []],
         ]],
     ]]

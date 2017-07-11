@@ -48,18 +48,6 @@ class Base {
         }
     }
 
-    /*
-    static public function entryLanguageAlias($criteria, $className) {
-        $idLanguage = \Manager::getSession()->idLanguage;
-        $cn = explode(' ', $className);
-        $alias = $cn[1] ? : $className;
-        $criteria->join($className, "entry entry_{$alias}", "{$alias}.entry = entry_{$alias}.entry");
-        //$criteria->join("entry entry_{$alias}", "language language_{$alias}", "entry_{$alias}.idLanguage= language_{$alias}.idLanguage");
-        $criteria->where("entry_{$alias}.idLanguage = {$idLanguage}");
-    }
-     * 
-     */
-
     static public function relation($criteria, $className1, $className2, $relationEntry) {
         $cn1 = explode(' ', $className1);
         \MUtil::SetIfNull($cn1[1], $className1);

@@ -1,5 +1,5 @@
 <div id="structureLayout" style="width:100%;height:100%;">
-    <div id="structureNorthPane" data-options="collapsible:false, region:'north', title:'{{_'Constructions'}}'" style="height:60px">
+    <div id="structureNorthPane" data-options="collapsible:false, region:'north', title:'{{_'Constructions'}}'" style="height:70px">
         <div style="float:left;padding:5px">
             <input id="cxn" name="cxn" type="text" style="width:200px; padding:5px" placeholder="{{_'Search CxN'}}">
         </div>
@@ -47,6 +47,7 @@
 
 <script type="text/javascript">
     var structure = {
+        app: {{$manager->getApp()}},
         isMaster: {{$data->isMaster|noescape}},
         nodeSelected: null,
         node: null
@@ -103,7 +104,7 @@
             if ($.type(entry) === "undefined") {
                 entry = structure.node.entry;
             }
-            manager.doAction('^entry/formUpdate/' + entry);
+            manager.doAction('^' + structure.app + '/structure/entry/formUpdate/' + entry);
             if (form) {
                 $('#' + form + '_dialog').dialog('close');
             }

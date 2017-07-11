@@ -1,30 +1,18 @@
 <?php
-/**
- * $_comment
- *
- * @category   Maestro
- * @package    UFJF
- * @subpackage $_package
- * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version    
- * @since      
- */
-
-
 
 class DocumentController extends MController {
-
-    public function main() {
-        $this->render("formBase");
-    }
 
     public function lookupData(){
         $model = new fnbr\models\Document();
         $criteria = $model->listForLookup($this->data->q);
         $this->renderJSON($model->gridDataAsJSON($criteria));
     }
-    
+    /*
+
+    public function main() {
+        $this->render("formBase");
+    }
+
     public function formFind() {
         $Document= new fnbr\models\Document($this->data->id);
         $filter->idDocument = $this->data->idDocument;
@@ -77,5 +65,6 @@ class DocumentController extends MController {
             $go = '>Document/formFind';
             $this->renderPrompt('information',"Document [{$this->data->idDocument}] removido.", $go);
     }
+    */
 
 }

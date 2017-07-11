@@ -5,7 +5,7 @@ class MLookupLayerGroup extends MControl
 
     public function generate()
     {
-        $url = Manager::getAppURL('', 'structure/layergroup/lookupData');
+        $url = Manager::getAppURL('', 'data/structure/layergroup/lookupData');
         $onLoad = <<<EOT
         
         $('#{$this->property->id}').combogrid({

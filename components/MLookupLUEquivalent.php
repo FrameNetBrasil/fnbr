@@ -5,7 +5,7 @@ class MLookupLUEquivalent extends MControl
 
     public function generate()
     {
-        $url = Manager::getAppURL('', 'lu/lookupEquivalent');
+        $url = Manager::getAppURL('', 'data/lu/lookupEquivalent');
         $onLoad = <<<EOT
         
         $('#{$this->property->id}').combogrid({

@@ -1,7 +1,6 @@
 <?php
 
-use  fnbr\models\Base,
-    fnbr\auth\models\User;
+use fnbr\auth\models\User;
 
 class LoginController extends \MController
 {
@@ -23,7 +22,6 @@ class LoginController extends \MController
             $this->data->datasource = Manager::getConf('fnbr.db'); //$this->renderPrompt('error', 'Inform database name.');
         }
         Manager::setConf('fnbr.db', $this->data->datasource);
-        Manager::getSession()->mfndb = $this->data->datasource;
         $user = new User();
         $user->getByLogin($this->data->user);
         $groups = $user->getArrayGroups();

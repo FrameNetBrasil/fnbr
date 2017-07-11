@@ -64,7 +64,7 @@ class StructureSemanticTypeService extends MService
             $node = array();
             $node['idSemanticType'] = $row['idSemanticType'];
             $node['idEntity'] = $row['idEntity'];
-            $node['name'] = $row['domainName'] . $row['name'];
+            $node['name'] = $row['domainName'] . '.' . $row['name'];
             $result[] = $node;
         }
         return $result;

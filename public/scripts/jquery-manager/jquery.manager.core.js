@@ -148,6 +148,12 @@ var manager = {
         json: function (context) {
             var response = context.response;
             //console.log(response);
+            if (response.type == 'page') {
+                var element = '#' + context.element;
+                var html = response.data;
+                $(element).html(html);
+                manager._handleResponse.parse(element);
+            }
             if (response.type == 'prompt') {
                 manager.doPrompt(response.data);
             }

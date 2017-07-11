@@ -8,5 +8,3 @@ class MDomain extends MSelection {
     }
 
 }
-
-?>

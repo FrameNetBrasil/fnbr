@@ -70,7 +70,7 @@ class MainController extends \MController
 
     public function auth0Callback()
     {
-        $goMain = Manager::getURL('main');
+        $goMain = "=main";//Manager::getURL('main');
         try {
             $this->data->domain = Manager::getConf('login.AUTH0_DOMAIN');
             $this->data->client_id = Manager::getConf('login.AUTH0_CLIENT_ID');
@@ -97,7 +97,7 @@ class MainController extends \MController
             } elseif ($status == 'logged') {
                 $this->redirect(Manager::getURL('main'));
             } else {
-                $this->renderPrompt('error', _M('Login failed; contact administrator.'));
+                $this->renderPrompt('error', _M('Login failed; contact administrator.', $goMain));
             }
         } catch (Exception $e) {
 			mdump($e->getMessage());

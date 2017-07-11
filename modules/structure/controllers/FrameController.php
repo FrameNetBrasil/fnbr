@@ -1,9 +1,5 @@
 <?php
 
-
-
-
-
 class FrameController extends MController
 {
 

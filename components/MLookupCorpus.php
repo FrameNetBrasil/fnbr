@@ -5,7 +5,7 @@ class MLookupCorpus extends MControl
 
     public function generate()
     {
-        $url = Manager::getAppURL('', 'corpus/lookupData');
+        $url = Manager::getAppURL('', 'data/corpus/lookupData');
         $onLoad = <<<EOT
         
         $('#{$this->property->id}').combogrid({

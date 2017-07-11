@@ -1,28 +1,16 @@
 <?php
-/**
- * $_comment
- *
- * @category   Maestro
- * @package    UFJF
- * @subpackage $_package
- * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version    
- * @since      
- */
-
-
 
 class TemplateController extends MController {
-
-    public function main() {
-        $this->render("formBase");
-    }
 
     public function lookupData(){
         $model = new fnbr\models\Template();
         $criteria = $model->listForLookup($this->data->id);
         $this->renderJSON($model->gridDataAsJSON($criteria));
+    }
+/*
+
+    public function main() {
+        $this->render("formBase");
     }
 
     public function formFind() {
@@ -77,5 +65,5 @@ class TemplateController extends MController {
             $go = '>Template/formFind';
             $this->renderPrompt('information',"Template [{$this->data->idTemplate}] removido.", $go);
     }
-
+*/
 }

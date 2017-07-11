@@ -70,7 +70,7 @@ EOT;
 			console.log(lexemes);
 			$('#lexemes').attr('value','json:' + JSON.stringify(lexemes));
 
-            manager.doAction('@{$app}/structure/frame/newLemma|formNewLemma');
+            manager.doAction('@structure/frame/newLemma|formNewLemma');
         }
 
 EOT;
