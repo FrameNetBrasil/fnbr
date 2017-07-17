@@ -22,7 +22,7 @@
         <script type="text/javascript" src="{{$manager->getStaticURL($manager->getApp(), 'scripts/jquery-2.1.1.min.js')}}"></script>
         
         <!-- Carrega o tema e suas dependências -->
-        {{var $includes = file_get_contents($manager->getThemeURL()."assets.ink")}}
+        {{var $includes = file_get_contents($manager->getThemePath()."/assets.ink")}}
         {{var $lines = explode(PHP_EOL,$includes)}}
         {{foreach $lines as $line}}
             {{var $line = trim($line)}}
