@@ -10,6 +10,12 @@ class UserData extends MMenuBar {
 
         $login = Manager::getLogin();
         if ($login) {
+
+            $menuBarItem = new MMenuBarItem(array("id" => "menuDatasource", "label" => Manager::getConf('fnbr.db'), "iconCls" => 'fa fa-database fa16px'));
+            $menu = new MMenu(array("id" => "mmenuDataSource"));
+            $menuBarItem->addControl($menu);
+            $this->addControl($menuBarItem);
+
             $user = $login->getUser();
             $menuBarItem = new MMenuBarItem(array("id" => "menuLevel", "label" => $user->getUserLevel(), "iconCls" => 'fa fa-user fa16px'));
             $menu = new MMenu(array("id" => "mmenuLevel"));
