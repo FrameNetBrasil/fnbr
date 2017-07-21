@@ -74,6 +74,8 @@ class UserData extends MMenuBar {
                 $menuBarItem[$i]->addControl($menu);
                 $this->addControl($menuBarItem[$i]);
             }
+            $signIn = new MLinkButton(['id'=>'btnSignIn','text'=>'Sign In', 'iconCls'=>'fa fa-user fa16px', 'plain'=>true, 'action'=>'>main/main']);
+            $this->addControl($signIn);
         }
     }
     
