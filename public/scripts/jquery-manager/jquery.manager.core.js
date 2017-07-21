@@ -116,6 +116,9 @@ var manager = {
             } else {
                 var dataType = jqXHR;
             }
+			if (dataType == 'plain') {
+				dataType = 'html';
+			}
             context['response'] = response;
             manager._handleResponse[dataType](context);
         },
