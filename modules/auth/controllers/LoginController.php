@@ -25,7 +25,7 @@ class LoginController extends \MController
         $user = new User();
         $user->getByLogin($this->data->user);
         $groups = $user->getArrayGroups();
-        if ($groups['ADMIN']) {
+        //if ($groups['ADMIN']) {
             $auth = Manager::getAuth();
             $this->data->result = $auth->authenticate($this->data->user, $this->data->challenge, $this->data->response);
             if ($this->data->result) {
@@ -46,9 +46,9 @@ class LoginController extends \MController
             } else {
                 $this->renderPrompt('error', 'Login or password not valid.');
             }
-        } else {
-            $this->renderPrompt('error', 'Login or password not valid.');
-        }
+        //} else {
+        //    $this->renderPrompt('error', 'Login or password not valid.');
+        //}
     }
 
 }
