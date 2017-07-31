@@ -158,6 +158,8 @@ class Base {
 
     static public function getAnnotationStatus($approvement = false, $validation = '1') {
         $level = \Manager::getSession()->fnbrLevel;
+        $login = \Manager::getLogin();
+        $level = $login->getUser()->getUserLevel();
         if ($level == 'ADMIN') {
             $level = 'MASTER';
         }
@@ -202,6 +204,9 @@ class Base {
                 'ADMIN' => 'ast_ms_app',
             ];
         }
+        mdump('======================');
+        mdump($level);
+        mdump('======================');
         $entry = $entries[$level];
         return $entry;
     }

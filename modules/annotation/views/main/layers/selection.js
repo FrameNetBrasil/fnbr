@@ -28,11 +28,11 @@
                             data: annotation.instantiationType
                         }
                     };
-                    var labels = annotation.labelTypes[row.idLayer];
+                    var labels = annotation.layerLabels[row.idLayer];
                     var fes = []; var i = 0;
-                    for (idLabel in labels) {
-                        if ((labels[idLabel]['coreType'] == 'cty_core') || (labels[idLabel]['coreType'] == 'cty_core-unexpressed')) {
-                            //console.log(idLabel);
+                    jQuery.each(labels, function (i, idLabel) {
+                        var label = annotation.labelTypes[idLabel];
+                        if ((label['coreType'] == 'cty_core') || (label['coreType'] == 'cty_core-unexpressed')) {
                             var value = '';
                             if (typeof annotation.nis[row.idLayer] != 'undefined') {
                                 if (typeof annotation.nis[row.idLayer][idLabel] != 'undefined') {
@@ -41,7 +41,7 @@
                             }
                             fes[i++] = {idLayer: row.idLayer, idLayerType:row.idLayerType, name:idLabel, value:value, editor:comboEditor};
                         }
-                    }
+                    });
                     $('#pg').propertygrid({data: fes});
                     $('#pg').propertygrid({idLayer: row.idLayer});
                     $('#pg').propertygrid({

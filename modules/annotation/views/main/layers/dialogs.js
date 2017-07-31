@@ -25,11 +25,11 @@
                     //console.log(annotation.labelTypes[row.idLayer][idLabel]);
                     nis[row.idLayer] = nis[row.idLayer] || {};
                     nis[row.idLayer][idLabel] = {
-                        fe: annotation.labelTypes[row.idLayer][idLabel]['label'],
+                        fe: annotation.labelTypes[idLabel]['label'],
                         idInstantiationType: row.value,
                         label: annotation.instantiationTypeObj[row.value],
                         //idSentenceWord:  annotation.niFields[row.idLayer].substr(2),
-                        idColor: annotation.labelTypes[row.idLayer][idLabel]['idColor']
+                        idColor: annotation.labelTypes[idLabel]['idColor']
                     };
                 }
             }
