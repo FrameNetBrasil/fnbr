@@ -23,6 +23,10 @@ return [
     'ui' => [
         'actions' => 'actions.fnbr.php',
     ],
+/* Google
+Client ID: 504765666583-2b71hdracgsv4nj6ecqom8fuk3th68ho.apps.googleusercontent.com
+Client Secret key: puU86vzlOcRpvI4s7UXf_1xx
+*/
     'login' => [
         'handler' => 'auth0',
         'AUTH0_CLIENT_ID' => 'UorLBpOPNNMP6HF7wfqQMOxFg3YqKzEk',
@@ -44,6 +48,7 @@ return [
         'smtpPort' => 587,
     ],
     'mad' => [
+        'namespace' => "fnbr\\auth",
         'module' => "auth",
         'access' => "Access",
         'group' => "Group",

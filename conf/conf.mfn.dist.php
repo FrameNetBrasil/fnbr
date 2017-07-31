@@ -44,6 +44,7 @@ return [
         'smtpPort' => 587,
     ],
     'mad' => [
+        'namespace' => "fnbr\\auth",
         'module' => "auth",
         'access' => "Access",
         'group' => "Group",
