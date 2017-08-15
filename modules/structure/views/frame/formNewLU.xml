@@ -8,7 +8,7 @@
             <mlabel text="Enter lemma (as word.pos) / Language"/>
             <mhcontainer style="padding:5px">
                 <mtextfield id="lemma" width="200px" value="$this->data->lemma" placeholder="{{_M('Lemma')}}" />
-                <include component="mlanguage.php" id="idLanguage"/>
+                <include component="MLanguage.php" id="idLanguage"/>
             </mhcontainer>
         </fields>
         <tools>

@@ -204,9 +204,6 @@ class Base {
                 'ADMIN' => 'ast_ms_app',
             ];
         }
-        mdump('======================');
-        mdump($level);
-        mdump('======================');
         $entry = $entries[$level];
         return $entry;
     }

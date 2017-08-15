@@ -56,8 +56,13 @@ class TypeInstance extends map\TypeInstanceMap {
         return $criteria;
     }
 
-    public function listAnnotationStatus($filter){
-        $criteria = $this->getCriteria()->select('idTypeInstance as idAnnotationStatus, entry, entries.name as name, idColor, color.name as colorName, color.rgbFg, color.rgbBg')->orderBy('entry');
+    public function listAnnotationStatus($filter, $fields = ''){
+        $criteria = $this->getCriteria();
+        if ($fields != '') {
+            $criteria->select($fields);
+        } else {
+            $criteria->select('idTypeInstance as idAnnotationStatus, entry, entries.name as name, idColor, color.name as colorName, color.rgbFg, color.rgbBg')->orderBy('entry');
+        }
         Base::entryLanguage($criteria);
         $criteria->where("entry like 'ast_%'");
         if ($filter->entry){

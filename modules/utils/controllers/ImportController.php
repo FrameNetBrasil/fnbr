@@ -1,9 +1,5 @@
 <?php
 
-
-
-
-
 class ImportController extends MController
 {
 
@@ -27,14 +23,14 @@ class ImportController extends MController
     public function importWSDoc(){
         try {
             if ($this->data->idDocument != '') {
-                $files = \Maestro\Utils\Mutil::parseFiles('uploadFile');
+                $files = Mutil::parseFiles('uploadFile');
                 $model = new fnbr\models\Corpus($this->data->idCorpus);
                 if ($this->data->tags == 'N') {
                     $model->uploadSentences($this->data, $files[0]);
                 } else {
                     $model->uploadSentencesPenn($this->data, $files[0]);
                 }
-                $this->renderPrompt('information','OK');
+                $this->renderPrompt('information','Sentences loaded successfully.');
             } else {
                 throw new \Exception("No Document");
             }
@@ -53,10 +49,10 @@ class ImportController extends MController
     
     public function importLexWf(){
         try {
-            $files = \Maestro\Utils\Mutil::parseFiles('uploadFile');
+            $files = Mutil::parseFiles('uploadFile');
             $model = new fnbr\models\Lexeme();
             $model->uploadLexemeWordform($this->data, $files[0]);
-            $this->renderPrompt('information','OK');
+            $this->renderPrompt('information','Wordforms loaded successfully.');
         } catch (EMException $e) {
             $this->renderPrompt('error',$e->getMessage());
         }
@@ -82,10 +78,10 @@ class ImportController extends MController
     
     public function importFullText(){
         try {
-            $files = \Maestro\Utils\Mutil::parseFiles('uploadFile');
+            $files = Mutil::parseFiles('uploadFile');
             $model = new fnbr\models\Document($this->data->idDocument);
             $model->uploadFullText($this->data, $files[0]);
-            $this->renderPrompt('information','OK');
+            $this->renderPrompt('information','Fulltext loaded successfully.');
         } catch (EMException $e) {
             $this->renderPrompt('error',$e->getMessage());
         }
@@ -100,7 +96,7 @@ class ImportController extends MController
     public function importFrames(){
         try {
             $service = Manager::getAppService('data');
-            $files = \Maestro\Utils\Mutil::parseFiles('uploadFile');
+            $files = Mutil::parseFiles('uploadFile');
             $json = file_get_contents($files[0]->getTmpName());
             $service->importFramesFromJSON($json);
             $this->renderPrompt('information','OK');
@@ -119,7 +115,7 @@ class ImportController extends MController
 
     public function importMWE(){
         try {
-            $files = \Maestro\Utils\Mutil::parseFiles('uploadFile');
+            $files = Mutil::parseFiles('uploadFile');
             $model = new fnbr\models\Lemma();
             $mfile = $model->uploadMWE($this->data, $files[0]);
             $this->renderFile($mfile);

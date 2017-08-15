@@ -39,9 +39,9 @@ class AnnotationSet extends map\AnnotationSetMap
     public function setIdAnnotationStatus($value)
     {
         if (substr($value, 0, 3) == 'ast') {
-            $as = new TypeInstance();
+            $ti = new TypeInstance();
             $filter = (object)['entry' => $value];
-            $idStatus = $as->listAnnotationStatus($filter)->asQuery()->getResult()[0]['idAnnotationStatus'];
+            $idStatus = $ti->listAnnotationStatus($filter)->asQuery()->getResult()[0]['idAnnotationStatus'];
         } else {
             $idStatus = $value;
         }
@@ -533,7 +533,7 @@ HERE;
         }
     }
 
-    public function setTimeline()
+    public function newTimeline()
     {
         $timeline = 'as_' . md5($this->getIdSubCorpus() . $this->getIdSentence());
         parent::setTimeLine(Base::newTimeLine($timeline, 'S'));
@@ -541,7 +541,9 @@ HERE;
 
     public function save()
     {
-        $this->setTimeline();
+        if ($this->timeline == '') {
+            $this->newTimeline();
+        }
         parent::save();
     }
 
@@ -581,7 +583,7 @@ HERE;
                             }
                         }
                     } else {
-                        $delCriteria = $label->getDeleteCriteria()->where("idLayer = {$idLayer}")->delete();
+                        $label->getDeleteCriteria()->where("idLayer = {$idLayer}")->delete();
                     }
                     $i = -1;
                     $l = 0;
@@ -642,9 +644,9 @@ HERE;
             }
             $transaction->commit();
             return $hasFE;
-        } catch (EModelException $e) {
+        } catch (\Exception $e) {
             $transaction->rollback();
-            throw new EModelException($e->getMessage());
+            throw new \Exception($e->getMessage());
         }
     }
 

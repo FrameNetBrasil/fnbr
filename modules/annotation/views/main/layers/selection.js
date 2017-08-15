@@ -29,9 +29,11 @@
                         }
                     };
                     var labels = annotation.layerLabels[row.idLayer];
-                    var fes = []; var i = 0;
+                    console.log(labels);
+                    var fes = []; var i = 0; var j = 0;
                     jQuery.each(labels, function (i, idLabel) {
                         var label = annotation.labelTypes[idLabel];
+                        console.log(label);
                         if ((label['coreType'] == 'cty_core') || (label['coreType'] == 'cty_core-unexpressed')) {
                             var value = '';
                             if (typeof annotation.nis[row.idLayer] != 'undefined') {
@@ -39,9 +41,10 @@
                                     value = annotation.nis[row.idLayer][idLabel]['idInstantiationType'];
                                 }
                             }
-                            fes[i++] = {idLayer: row.idLayer, idLayerType:row.idLayerType, name:idLabel, value:value, editor:comboEditor};
+                            fes[j++] = {idLayer: row.idLayer, idLayerType:row.idLayerType, name:idLabel, value:value, editor:comboEditor};
                         }
                     });
+                    console.log(fes);
                     $('#pg').propertygrid({data: fes});
                     $('#pg').propertygrid({idLayer: row.idLayer});
                     $('#pg').propertygrid({

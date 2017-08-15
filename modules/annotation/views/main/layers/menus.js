@@ -152,8 +152,14 @@
                 dataType: "json",
                 success: function (data, textStatus, jqXHR) {
                     //console.log('success');
-                    if (jQuery.isEmptyObject(data)) {
-                        $('#dlgSubCorpusList').html('** No matching lemma **');
+                    if (data.length == 0) {
+                        //$('#dlgSubCorpusList').html('** No matching lemma **');
+                        $('#dlgSubCorpusList').datalist({
+                            data: [{idLU: 0, fullName: '** No matching lemma **'}],
+                            valueField: 'idLU',
+                            textField: 'fullName',
+                            lines: true
+                        });
                     } else {
                         console.log(data);
                         $('#dlgSubCorpusField').attr('value',field);
@@ -166,22 +172,6 @@
                     }
                 }
             });
-        }
-
-        annotation.dlgSubCorpusSave = function() {
-            var field = $('#dlgSubCorpusField').attr('value');
-            var wf = annotation.words[annotation.chars[field]['word']];
-            var lu = $('#dlgSubCorpusList').datalist('getSelected');
-            console.log(lu);
-            console.log(wf);
-            $('#dlgSubCorpus').dialog('close');
-            $('#dlgSubCorpus').dialog('destroy',true);
-            if (lu.mwe != '0') {
-                annotation.addMWEManualSubcorpus(wf, lu.idLU, annotation.idSentence);
-            } else {
-                annotation.addManualSubcorpus(lu.idLU, annotation.idSentence, wf.startChar, wf.endChar);
-            }
-
         }
 
         annotation.ASMenu = null;

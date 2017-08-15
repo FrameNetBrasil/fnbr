@@ -626,20 +626,28 @@ class AnnotationService extends MService
     {
         $annotationSet = new fnbr\models\AnnotationSet();
         $transaction = $annotationSet->beginTransaction();
-        $idAS = [];
-        $hasFE = $annotationSet->putLayers($layers);
-        foreach ($layers as $layer) {
-            $idAnnotationSet = $layer->idAnnotationSet;
-            $idAS[$idAnnotationSet] = $idAnnotationSet;
-        }
-        foreach ($idAS as $idAnnotationSet) {
-            if ($hasFE[$idAnnotationSet]) {
-                $annotationSet->getById($idAnnotationSet);
-                $annotationSet->setIdAnnotationStatus(fnbr\models\Base::getAnnotationStatus());
-                $annotationSet->save();
+        try {
+            $idAS = [];
+            $hasFE = $annotationSet->putLayers($layers);
+            foreach ($layers as $layer) {
+                $idAnnotationSet = $layer->idAnnotationSet;
+                $idAS[$idAnnotationSet] = $idAnnotationSet;
             }
+            $typeInstance = new fnbr\models\TypeInstance();
+            $annotationStatus = $typeInstance->listAnnotationStatus('', 'entry, idTypeInstance')->asQuery()->chunkResult('entry', 'idTypeInstance');
+            $idAnnotationStatus = $annotationStatus[fnbr\models\Base::getAnnotationStatus()];
+            foreach ($idAS as $idAnnotationSet) {
+                if ($hasFE[$idAnnotationSet]) {
+                    $annotationSet->getById($idAnnotationSet);
+                    $annotationSet->setIdAnnotationStatus($idAnnotationStatus);
+                    $annotationSet->save();
+                }
+            }
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollback();
+            throw new \Exception('Save failed: ' . $e->getMessage());
         }
-        $transaction->commit();
     }
 
     public function addFELayer($idAnnotationSet)

@@ -62,7 +62,7 @@ class WordForm extends map\WordFormMap
             //return $criteria->asQuery()->chunkResult('idLU', 'fullName');
             return $criteria->asQuery()->asObjectArray();
         } else {
-            return new \stdClass();
+            return [];
         }
     }
 

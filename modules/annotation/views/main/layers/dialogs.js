@@ -125,6 +125,22 @@
             $('#dlgASComments').dialog('close');
         }
 
+        annotation.dlgSubCorpusSave = function() {
+            var lu = $('#dlgSubCorpusList').datalist('getSelected');
+            if (lu.idLU > 0) {
+                console.log(lu);
+                var field = $('#dlgSubCorpusField').attr('value');
+                var wf = annotation.words[annotation.chars[field]['word']];
+                console.log(wf);
+                $('#dlgSubCorpus').dialog('close');
+                $('#dlgSubCorpus').dialog('destroy', true);
+                if (lu.mwe != '0') {
+                    annotation.addMWEManualSubcorpus(wf, lu.idLU, annotation.idSentence);
+                } else {
+                    annotation.addManualSubcorpus(lu.idLU, annotation.idSentence, wf.startChar, wf.endChar);
+                }
+            }
+        }
 
         annotation.dlgCxnOpen = function() {
             $('#cxnGrid').datagrid({singleSelect:true, url: {{$manager->getURL('annotation/main/cxnGridData')}}});
