@@ -90,6 +90,32 @@ class Lexeme extends map\LexemeMap {
             throw new \Exception($e->getMessage());
         }
     }
+
+    private function createLexemeWordform($row, $wf, $POS, $idLanguage) {
+        $fields = explode(' ', $row);
+        $idPOS = $POS[$fields[1]];
+        if ($idPOS != '') {
+            $l = str_replace("'","\'", $fields[2]);
+            $lexeme = $this->getCriteria()->select('idLexeme')
+                ->where("(name = '{$l}' collate utf8mb4_general_ci) and (idPOS = {$idPOS}) and (idLanguage = {$idLanguage})")->asQuery()->getResult();
+            $idLexeme = $lexeme[0]['idLexeme'];
+            if ($idLexeme == '') {
+                $this->setPersistent(false);
+                $this->setData((object)['name' => $fields[2], 'idLanguage' => $idLanguage, 'idPOS' => $idPOS]);
+                parent::save();
+                $idLexeme = $this->getId();
+            }
+            $w = str_replace("'","\'", $fields[0]);
+            $wordform = $wf->getCriteria()->select('idWordform')
+                ->where("(form = '{$w}' collate utf8mb4_general_ci) and (idLexeme = {$idLexeme})")->asQuery()->getResult();
+            $idWordform = $wordform[0]['idWordform'];
+            if ($idWordform == '') {
+                $wf->setPersistent(false);
+                $wf->setData((object)['form' => $fields[0], 'idLexeme' => $idLexeme]);
+                $wf->save();
+            }
+        }
+    }
     
     /**
      * Upload de lexeme+wordform em texto simples (wordform POS lexeme)
@@ -112,29 +138,7 @@ class Lexeme extends map\LexemeMap {
                 if (($row == '') || (substr($row, 0, 2) == "//")) {
                     continue;
                 }
-                $fields = explode(' ', $row);
-                $idPOS = $POS[$fields[1]];
-                if ($idPOS != '') {
-                    $l = str_replace("'","\'", $fields[2]);
-                    $lexeme = $this->getCriteria()->select('idLexeme')
-                            ->where("(name = '{$l}' collate utf8mb4_general_ci) and (idPOS = {$idPOS}) and (idLanguage = {$idLanguage})")->asQuery()->getResult();
-                    $idLexeme = $lexeme[0]['idLexeme'];
-                    if ($idLexeme == '') {
-                        $this->setPersistent(false);
-                        $this->setData((object)['name' => $fields[2], 'idLanguage' => $idLanguage, 'idPOS' => $idPOS]);
-                        parent::save();
-                        $idLexeme = $this->getId();
-                    }
-                    $w = str_replace("'","\'", $fields[0]);
-                    $wordform = $wf->getCriteria()->select('idWordform')
-                            ->where("(form = '{$w}' collate utf8mb4_general_ci) and (idLexeme = {$idLexeme})")->asQuery()->getResult();
-                    $idWordform = $wordform[0]['idWordform'];
-                    if ($idWordform == '') {
-                        $wf->setPersistent(false);
-                        $wf->setData((object)['form' => $fields[0], 'idLexeme' => $idLexeme]);
-                        $wf->save();
-                    }
-                }
+                $this->createLexemeWordform($row, $wf, $POS, $idLanguage);
             }
             $transaction->commit();
         } catch (\EModelException $e) {
@@ -145,6 +149,36 @@ class Lexeme extends map\LexemeMap {
         return $result;
     }
 
+    /**
+     * Register lexeme+wordform from an array of lines as (wordform POS lexeme)
+     * Parâmetro data informa: idLanguage
+     * @param type $data
+     * @param type $array
+     */
+    public function registerLexemeWordform($data, $rows) {
+        $idLanguage = $data->idLanguage;
+        $pos = new POS();
+        $POS = $pos->listAll()->asQuery()->chunkResult('POS','idPOS');
+        $wf = new WordForm();
+        $transaction = $this->beginTransaction();
+        try {
+            $lineNum = 0;
+            foreach ($rows as $row) {
+                $lineNum++;
+                $row = trim($row);
+                if (($row == '') || (substr($row, 0, 2) == "//")) {
+                    continue;
+                }
+                $this->createLexemeWordform($row, $wf, $POS, $idLanguage);
+            }
+            $transaction->commit();
+        } catch (\EModelException $e) {
+            // rollback da transação em caso de algum erro
+            $transaction->rollback();
+            throw new EModelException($e->getMessage() . ' LineNum: '. $lineNum);
+        }
+        return $result;
+    }
     /**
      * Upload de lexeme+wordform em texto simples (wordform POS lexeme)
      * Parâmetro data informa: idLanguage

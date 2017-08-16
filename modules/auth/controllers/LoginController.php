@@ -13,7 +13,8 @@ class LoginController extends \MController
     public function logout()
     {
         Manager::getAuth()->logout();
-        $this->redirect(Manager::getURL('main'));
+        $main = Manager::getURL('main');
+        $this->redirect($main);
     }
 
     public function authenticate()

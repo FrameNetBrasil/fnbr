@@ -179,6 +179,12 @@ class AnnotationSet extends map\AnnotationSetMap
         return $wordsChars;
     }
 
+    public function allowManyAnnotationSet() {
+        $allow = \Manager::checkAccess('MASTER', A_EXECUTE) || \Manager::checkAccess('ANNO', A_EXECUTE);
+        $allow = $allow || (\Manager::checkAccess('READER', A_EXECUTE));
+        return $allow;
+    }
+
     public function getAnnotationSets($idSentence)
     {
         $as = new ViewAnnotationSet();
@@ -187,7 +193,7 @@ class AnnotationSet extends map\AnnotationSetMap
             ->where("idSentence = {$idSentence}");
         $criteriaLU->setDistinct(true);
         $criteriaLU->associationAlias("subcorpuslu.lu.frame.entries", "frameEntries");
-        if ((!\Manager::checkAccess('MASTER', A_EXECUTE)) && (!\Manager::checkAccess('ANNO', A_EXECUTE))) {
+        if (!$this->allowManyAnnotationSet()) {
             $criteriaLU->where("idAnnotationSet = {$this->getId()}");
         }
         Base::entryLanguage($criteriaLU, "frameEntries.");
@@ -197,7 +203,7 @@ class AnnotationSet extends map\AnnotationSetMap
             ->where("idSentence = {$idSentence}");
         $criteriaCxn->setDistinct(true);
         $criteriaCxn->associationAlias("subcorpuscxn.construction.entries", "cxnEntries");
-        if ((!\Manager::checkAccess('MASTER', A_EXECUTE)) && (!\Manager::checkAccess('ANNO', A_EXECUTE))) {
+        if (!$this->allowManyAnnotationSet()) {
             $criteriaCxn->where("idAnnotationSet = {$this->getId()}");
         }
         Base::entryLanguage($criteriaCxn, "cxnEntries.");
@@ -215,7 +221,7 @@ class AnnotationSet extends map\AnnotationSetMap
         $criteria->select('layers.idLayer, layers.layertype.entries.name as name, idAnnotationSet');
         $criteria->where("idSentence = {$idSentence}");
         Base::entryLanguage($criteria, 'layers.layertype');
-        if ((!\Manager::checkAccess('MASTER', A_EXECUTE)) && (!\Manager::checkAccess('ANNO', A_EXECUTE))) {
+        if (!$this->allowManyAnnotationSet()) {
             $criteria->where("idAnnotationSet = {$this->getId()}");
         }
         return $criteria->asQuery()->getResult();
@@ -226,7 +232,7 @@ class AnnotationSet extends map\AnnotationSetMap
         $criteria = $this->getCriteria();
         $criteria->select('layers.idLayer, layers.labels.idLabel, layers.labels.idLabelType');
         $criteria->where("idSentence = {$idSentence}");
-        if ((!\Manager::checkAccess('MASTER', A_EXECUTE)) && (!\Manager::checkAccess('ANNO', A_EXECUTE))) {
+        if (!$this->allowManyAnnotationSet()) {
             $criteria->where("idAnnotationSet = {$this->getId()}");
         }
         return $criteria->asQuery()->getResult();
@@ -247,7 +253,7 @@ class AnnotationSet extends map\AnnotationSetMap
         //$criteria->where("lu.lemma.pos.entry = p.entry");
         $criteria->where("lt.entry = 'lty_gf'");
         $criteria->where("(GenericLabel.idLanguage = s.idLanguage)");
-        if ((!\Manager::checkAccess('MASTER', A_EXECUTE)) && (!\Manager::checkAccess('ANNO', A_EXECUTE))) {
+        if (!$this->allowManyAnnotationSet()) {
             $criteria->where("idAnnotationSet = {$this->getId()}");
         }
         $criteria->orderBy('idAnnotationSet, l.idLayer, GenericLabel.name');
@@ -265,7 +271,7 @@ class AnnotationSet extends map\AnnotationSetMap
         $criteria->where("idSentence = {$idSentence}");
         $criteria->where("lt.entry <> 'lty_gf'");
         $criteria->where("(genericlabel.idLanguage = s.idLanguage)");
-        if ((!\Manager::checkAccess('MASTER', A_EXECUTE)) && (!\Manager::checkAccess('ANNO', A_EXECUTE))) {
+        if (!$this->allowManyAnnotationSet()) {
             $criteria->where("idAnnotationSet = {$this->getId()}");
         }
         $criteria->orderBy('idAnnotationSet, l.idLayer, genericlabel.name');
@@ -274,7 +280,7 @@ class AnnotationSet extends map\AnnotationSetMap
 
     public function getLabelTypesFE($idSentence, $forceId = false)
     {
-        if (((!\Manager::checkAccess('MASTER', A_EXECUTE)) && (!\Manager::checkAccess('ANNO', A_EXECUTE))) || $forceId) {
+        if (!$this->allowManyAnnotationSet() || $forceId) {
             $condition = "AND (a.idAnnotationSet = {$this->getId()})";
         }
 
@@ -308,7 +314,7 @@ HERE;
 
     public function getLabelTypesCE($idSentence)
     {
-        if ((!\Manager::checkAccess('MASTER', A_EXECUTE)) && (!\Manager::checkAccess('ANNO', A_EXECUTE))) {
+        if (!$this->allowManyAnnotationSet()) {
             $condition = "AND (a.idAnnotationSet = {$this->getId()})";
         }
 
@@ -340,7 +346,7 @@ HERE;
 
     public function getLayerNameCnxFrame($idSentence)
     {
-        if ((!\Manager::checkAccess('MASTER', A_EXECUTE)) && (!\Manager::checkAccess('ANNO', A_EXECUTE))) {
+        if (!$this->allowManyAnnotationSet()) {
             $condition = "AND (a.idAnnotationSet = {$this->getId()})";
         }
 
@@ -384,7 +390,7 @@ HERE;
 
     public function getLabelTypesCEFE($idSentence)
     {
-        if ((!\Manager::checkAccess('MASTER', A_EXECUTE)) && (!\Manager::checkAccess('ANNO', A_EXECUTE))) {
+        if (!$this->allowManyAnnotationSet()) {
             $condition = "AND (a.idAnnotationSet = {$this->getId()})";
         }
 
@@ -417,7 +423,7 @@ HERE;
 
     public function getNI($idSentence, $idLanguage)
     {
-        if ((!\Manager::checkAccess('MASTER', A_EXECUTE)) && (!\Manager::checkAccess('ANNO', A_EXECUTE))) {
+        if (!$this->allowManyAnnotationSet()) {
             $condition = "AND (a.idAnnotationSet = {$this->getId()})";
         }
 
@@ -466,9 +472,36 @@ HERE;
         return $query;
     }
 
+    public function getLayersOrderByTarget($idSentence)
+    {
+        if (!$this->allowManyAnnotationSet()) {
+            $condition = "AND (a.idAnnotationSet = {$this->getId()})";
+        }
+        $idLanguage = \Manager::getSession()->idLanguage;
+        $cmd = <<<HERE
+
+        SELECT a.idAnnotationSet
+        FROM View_AnnotationSet a
+            INNER JOIN View_Layer l ON (a.idAnnotationSet = l.idAnnotationSet)
+            INNER JOIN View_EntryLanguage el on (l.entry = el.entry)
+            LEFT JOIN Label lb ON (l.idLayer=lb.idLayer)
+            LEFT JOIN GenericLabel gl ON (lb.idLabelType=gl.idEntity)
+            LEFT JOIN View_FrameElement fe ON (lb.idLabelType=fe.idEntity)
+            LEFT JOIN View_ConstructionElement ce ON (lb.idLabelType=ce.idEntity)
+        WHERE (el.idLanguage = {$idLanguage} )
+            {$condition} AND  (l.entry = 'lty_target')
+            AND (a.idSentence = {$idSentence} )
+        ORDER BY ifnull(lb.startChar,-1), a.idAnnotationSet
+
+HERE;
+
+        $query = $this->getDb()->getQueryCommand($cmd);
+        return $query;
+    }
+
     public function getLayersData($idSentence)
     {
-        if ((!\Manager::checkAccess('MASTER', A_EXECUTE)) && (!\Manager::checkAccess('ANNO', A_EXECUTE))) {
+        if (!$this->allowManyAnnotationSet()) {
             $condition = "AND (a.idAnnotationSet = {$this->getId()})";
         }
         $idLanguage = \Manager::getSession()->idLanguage;

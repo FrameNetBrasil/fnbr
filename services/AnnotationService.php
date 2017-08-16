@@ -461,18 +461,28 @@ class AnnotationService extends MService
         $idAnnotationSet = $params->idAnnotationSet;
 
         $as = new fnbr\models\AnnotationSet($idAnnotationSet);
-        $idLU = $as->getSubCorpus()->getIdLU();
-        $idCxn = $as->getSubCorpus()->getIdCxn();
+        if (($idAnnotationSet == '') || ($idAnnotationSet == '0')) {
+            $idLU = $idCxn = NULL;
+        } else {
+            $idLU = $as->getSubCorpus()->getIdLU();
+            $idCxn = $as->getSubCorpus()->getIdCxn();
+        }
         $isCxn = ($idLU == NULL) && ($idCxn != NULL);
 
         $result = array();
         $queryLayersData = $as->getLayersData($idSentence);
         $unorderedRows = $queryLayersData->getResult();
 
+        $layersOrderedByTarget = $as->getLayersOrderByTarget($idSentence)->getResult();
+
         // get the annotationsets
         $aSet = array();
-        foreach ($unorderedRows as $row) {
-            $aSet[$row['idAnnotationSet']][] = $row;
+        foreach($layersOrderedByTarget as $layersOrdered) {
+            foreach ($unorderedRows as $row) {
+                if ($layersOrdered['idAnnotationSet'] == $row['idAnnotationSet']) {
+                    $aSet[$row['idAnnotationSet']][] = $row;
+                }
+            }
         }
         // reorder rows to put Target on top of each annotatioset
         $rows = array();

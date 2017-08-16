@@ -48,6 +48,7 @@ return [
             'exportDocWf' => ['Export Doc-Wf', 'utils/export/formExportDocWf', 'fa fa-download fa16px', 'ADMIN', A_ACCESS, []],
             'importLexWf' => ['Import Wf-Lexeme', 'utils/import/formImportLexWf', 'fa fa-upload fa16px', 'MASTER', A_ACCESS, []],
             'wflex' => ['Search Wf-Lexeme', 'admin/wflex/main', 'fa fa-cog fa16px', '', A_ACCESS, []],
+            'registerWfLex' => ['Register Wf-Lexeme', 'utils/register/formRegisterLexWf', 'fa fa-edit fa16px', 'MASTER', A_ACCESS, []],
             'importMWE' => ['Import MWE', 'utils/import/formImportMWE', 'fa fa-upload fa16px', 'MASTER', A_ACCESS, []],
             'importFullText' => ['Import FullText', 'utils/import/formImportFullText', 'fa fa-upload fa16px', 'ADMIN', A_ACCESS, []],
             'exportFrames' => ['Export Frames', 'utils/export/formExportFrames', 'fa fa-download fa16px', 'ADMIN', A_ACCESS, []],
@@ -61,7 +62,7 @@ return [
         ]],
         'profile' => ['Profile', 'main/profile', 'fa fa-info fa16px', '', A_ACCESS, [
             'myprofile' => ['My Profile', 'profile/formMyProfile', 'fa fa-credit-card fa16px', '', A_ACCESS, []],
-            'logout' => ['Logout', 'auth/login/logout', 'fa fa-sign-out fa16px', '', A_ACCESS, []],
+            'logout' => ['Logout', 'main/logout', 'fa fa-sign-out fa16px', '', A_ACCESS, []],
         ]],
     ]]
 ];

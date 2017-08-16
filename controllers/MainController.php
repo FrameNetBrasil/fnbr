@@ -68,6 +68,16 @@ class MainController extends \MController
         $this->render('formLogin');
     }
 
+    public function logout()
+    {
+        Manager::getAuth()->logout();
+        $main = Manager::getURL('main');
+        if (Manager::getConf('login.handler') == 'auth0') {
+            $main = Manager::getConf('login.logout') . urlencode(Manager::getBaseURL(true));
+        }
+        $this->redirect($main);
+    }
+
     public function auth0Callback()
     {
         $goMain = "=main";//Manager::getURL('main');

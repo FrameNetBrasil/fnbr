@@ -63,7 +63,7 @@ return [
         ]],
         'profile' => ['Profile', 'main/profile', 'fa fa-info fa16px', '', A_ACCESS, [
             'myprofile' => ['My Profile', 'profile/formMyProfile', 'fa fa-credit-card fa16px', '', A_ACCESS, []],
-            'logout' => ['Logout', 'auth/login/logout', 'fa fa-sign-out fa16px', '', A_ACCESS, []],
+            'logout' => ['Logout', 'main/logout', 'fa fa-sign-out fa16px', '', A_ACCESS, []],
         ]],
     ]]
 ];

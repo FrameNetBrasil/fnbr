@@ -29,6 +29,7 @@ return [
         'AUTH0_DOMAIN' => 'framenetbr.auth0.com',
         'AUTH0_CLIENT_SECRET' => 'FKqctCzv0QILbPXgerC_mdfRxzWNHdeUchxwQAYePrhngLwC4cVCe2QFWpY-vvU9',
         'AUTH0_CALLBACK_URL' => 'http://kenobi.cpd.ufjf.br/maestro3/index.php/fnbr/main/auth0Callback'
+        'logout' => 'https://framenetbr.auth0.com/v2/logout?returnTo=',
     ],
     'theme' => [
         'name' => 'mfn',

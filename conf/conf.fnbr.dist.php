@@ -32,7 +32,8 @@ Client Secret key: puU86vzlOcRpvI4s7UXf_1xx
         'AUTH0_CLIENT_ID' => 'UorLBpOPNNMP6HF7wfqQMOxFg3YqKzEk',
         'AUTH0_DOMAIN' => 'framenetbr.auth0.com',
         'AUTH0_CLIENT_SECRET' => 'FKqctCzv0QILbPXgerC_mdfRxzWNHdeUchxwQAYePrhngLwC4cVCe2QFWpY-vvU9',
-        'AUTH0_CALLBACK_URL' => 'http://kenobi.cpd.ufjf.br/auth0/callback.php'
+        'AUTH0_CALLBACK_URL' => 'http://kenobi.cpd.ufjf.br/auth0/callback.php',
+        'logout' => 'https://framenetbr.auth0.com/v2/logout?returnTo=',
     ],
     'theme' => [
         'name' => 'fnbr',
