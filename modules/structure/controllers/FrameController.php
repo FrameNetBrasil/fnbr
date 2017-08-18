@@ -246,7 +246,7 @@ class FrameController extends MController
     public function deleteConstraintFE()
     {
         try {
-            $model = Constraint::create($this->data->id);
+            $model = fnbr\models\Constraint::create($this->data->id);
             $model->delete();
             $this->renderPrompt('information', 'Constraint deleted.', "!structure.reloadFrameParent();");
         } catch (\Exception $e) {
