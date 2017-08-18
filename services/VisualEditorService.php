@@ -1,9 +1,12 @@
 <?php
 
-
-
 class VisualEditorService extends MService
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->setData();
+    }
 
     public function listFrames($data, $idLanguage = '')
     {
@@ -120,7 +123,7 @@ class VisualEditorService extends MService
             $node = array();
             $node['id'] = $id;
             $node['label'] = $row['name'];
-            $node['color'] = Manager::getConf("mfn.color.{$id}");
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
             $node['idType'] = 'rgp_frame_relations';
             $result->$id = $node;
         }
@@ -140,7 +143,7 @@ class VisualEditorService extends MService
             $node = array();
             $node['id'] = $id;
             $node['label'] = $row['name'];
-            $node['color'] = Manager::getConf("mfn.color.{$id}");
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
             $node['idType'] = 'rgp_cxn_relations';
             $result->$id = $node;
         }
@@ -168,7 +171,7 @@ class VisualEditorService extends MService
             $node = array();
             $node['id'] = $id;
             $node['label'] = $row['name'];
-            $node['color'] = Manager::getConf("mfn.color.{$id}");
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
             $node['idType'] = 'rel_evokes';
             $result->$id = $node;
         }
@@ -229,7 +232,7 @@ class VisualEditorService extends MService
             $node = array();
             $node['id'] = $id;
             $node['label'] = $row['name'];
-            $node['color'] = Manager::getConf("mfn.color.{$id}");
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
             $node['idType'] = 'rgp_frame_relations';
             $result->$id = $node;
         }
