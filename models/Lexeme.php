@@ -102,6 +102,7 @@ class Lexeme extends map\LexemeMap {
             if ($idLexeme == '') {
                 $this->setPersistent(false);
                 $this->setData((object)['name' => $fields[2], 'idLanguage' => $idLanguage, 'idPOS' => $idPOS]);
+                $this->setTimeline();
                 parent::save();
                 $idLexeme = $this->getId();
             }
@@ -186,44 +187,21 @@ class Lexeme extends map\LexemeMap {
      * @param type $file
      */
     public function uploadLexemeWordformOffline($data) {
-        //$data = \Manager::getData();
         $idLanguage = $data->idLanguage;
-        $rows = $data->rows;
         $pos = new POS();
         $POS = $pos->listAll()->asQuery()->chunkResult('POS','idPOS');
         $wf = new WordForm();
         $transaction = $this->beginTransaction();
         try {
             $lineNum = 0;
+            $rows = $data->rows;
             foreach ($rows as $row) {
                 $lineNum++;
                 $row = trim($row);
                 if (($row == '') || (substr($row, 0, 2) == "//")) {
                     continue;
                 }
-                $fields = explode(' ', $row);
-                $idPOS = $POS[$fields[1]];
-                if ($idPOS != '') {
-                    $l = str_replace("'","\'", $fields[2]);
-                    $lexeme = $this->getCriteria()->select('idLexeme')
-                        ->where("(name = '{$l}' collate utf8mb4_general_ci) and (idPOS = {$idPOS}) and (idLanguage = {$idLanguage})")->asQuery()->getResult();
-                    $idLexeme = $lexeme[0]['idLexeme'];
-                    if ($idLexeme == '') {
-                        $this->setPersistent(false);
-                        $this->setData((object)['name' => $fields[2], 'idLanguage' => $idLanguage, 'idPOS' => $idPOS]);
-                        parent::save();
-                        $idLexeme = $this->getId();
-                    }
-                    $w = str_replace("'","\'", $fields[0]);
-                    $wordform = $wf->getCriteria()->select('idWordform')
-                        ->where("(form = '{$w}' collate utf8mb4_general_ci) and (idLexeme = {$idLexeme})")->asQuery()->getResult();
-                    $idWordform = $wordform[0]['idWordform'];
-                    if ($idWordform == '') {
-                        $wf->setPersistent(false);
-                        $wf->setData((object)['form' => $fields[0], 'idLexeme' => $idLexeme]);
-                        $wf->saveOffline();
-                    }
-                }
+                $this->createLexemeWordform($row, $wf, $POS, $idLanguage);
             }
             $transaction->commit();
         } catch (\EModelException $e) {

@@ -61,7 +61,7 @@ class ImportController extends MController
     public function importLexWfOffline(){
         try {
             $model = new fnbr\models\Lexeme();
-            $model->uploadLexemeWordformOffline();
+            $model->uploadLexemeWordformOffline($this->data);
             //$this->renderJSON(json_encode('ok'));
         } catch (EMException $e) {
             $this->renderJSON(json_encode('error'));
