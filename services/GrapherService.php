@@ -75,7 +75,7 @@ class GrapherService extends MService
         $frames = $frame->listByFilter($filter)->asQuery()->getResult(\FETCH_ASSOC);
         $result = array();
         foreach ($frames as $row) {
-            if (strpos($row['name'], '#') === false) {
+            //if (strpos($row['name'], '#') === false) {
                 $node = array();
                 $node['id'] = 'f' . $row['idEntity'];
                 $node['text'] = $row['name'];
@@ -83,7 +83,7 @@ class GrapherService extends MService
                 $node['iconCls'] = 'icon-blank fa fa-square fa16px entity_frame';
                 $node['entry'] = $row['entry'];
                 $result[] = $node;
-            }
+            //}
         }
         return $result;
     }
