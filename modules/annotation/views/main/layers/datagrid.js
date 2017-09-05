@@ -42,7 +42,7 @@
         ];
 
         $('#layers').datagrid({
-            url:{{$manager->getURL('annotation/main/layersData')}} + "/" + {{$data->idSentence}} + "/" + {{$data->idAnnotationSet}},
+            url:{{$manager->getURL('annotation/main/layersData')}} + "/" + {{$data->idSentence}} + "/" + {{$data->idAnnotationSet}} + "/" + {{$data->type}},
             method:'get',
             collapsible:true,
             fitColumns: false,

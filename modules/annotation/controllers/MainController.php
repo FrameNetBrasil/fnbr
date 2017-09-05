@@ -117,8 +117,9 @@ class MainController extends MController
     {
         $this->data->idSentence = $this->data->id;
         $this->data->idAnnotationSet = Manager::getContext()->get(1);
+        $this->data->type = Manager::getContext()->get(2);
         $annotation = Manager::getAppService('annotation');
-        $this->data->idSentence = $this->data->id;
+        mdump($this->data);
         $this->data->layersData = $annotation->getLayersData($this->data, $this->idLanguage);
         $this->renderJson($this->data->layersData);
     }

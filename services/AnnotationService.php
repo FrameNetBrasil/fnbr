@@ -473,20 +473,26 @@ class AnnotationService extends MService
         $queryLayersData = $as->getLayersData($idSentence);
         $unorderedRows = $queryLayersData->getResult();
 
-        $layersOrderedByTarget = $as->getLayersOrderByTarget($idSentence)->getResult();
-
         // get the annotationsets
-        $aSet = array();
-        foreach($layersOrderedByTarget as $layersOrdered) {
-            foreach ($unorderedRows as $row) {
-                if ($layersOrdered['idAnnotationSet'] == $row['idAnnotationSet']) {
-                    $aSet[$row['idAnnotationSet']][] = $row;
+        if ($params->type != 'x') {
+            $layersOrderedByTarget = $as->getLayersOrderByTarget($idSentence)->getResult();
+            $aSet = array();
+            foreach ($layersOrderedByTarget as $layersOrdered) {
+                foreach ($unorderedRows as $row) {
+                    if ($layersOrdered['idAnnotationSet'] == $row['idAnnotationSet']) {
+                        $aSet[$row['idAnnotationSet']][] = $row;
+                    }
                 }
+            }
+        } else {
+            foreach ($unorderedRows as $row) {
+                $aSet[$row['idAnnotationSet']][] = $row;
             }
         }
         // reorder rows to put Target on top of each annotatioset
         $rows = array();
         $idHeaderLayer = -1;
+
         foreach ($aSet as $asRows) {
             $hasTarget = false;
             foreach ($asRows as $row) {
@@ -514,7 +520,7 @@ class AnnotationService extends MService
                 }
             }
         }
-
+        mdump($rows);
         // CE-FE
         $ltCEFE = new fnbr\models\LayerType();
         $ltCEFE->getByEntry('lty_cefe');
