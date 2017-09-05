@@ -19,7 +19,12 @@ class MLookupFE extends MControl
             columns:[[
                 {field:'idFrameElement', hidden:true},
                 {field:'name', title:'Name', width:202}
-            ]]
+            ]],
+            onChange: function (newValue, oldValue) {
+                if (newValue == '') {
+                    $('#{$this->property->id}').combogrid('setValue', '');
+                }
+            }
         });
 
 EOT;

@@ -2,7 +2,7 @@
 <view>
     <mformdialog id="formUpdateLU">
         <javascript file="{{ $this->view->getPath() . '/formUpdateLU.js' }}"/>
-        <property title="$this->data->title"  onClose="structure.reloadFrame();"/>
+        <property title="$this->data->title"  onClose="structure.reloadFrameParent();"/>
         <fields>
             <mhiddenfield id="lu_idLU" value="$this->data->id"/>
             <mhiddenfield id="lu_idFrame"/>
