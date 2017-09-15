@@ -100,6 +100,7 @@
             }
             console.log(rowIndex);
             console.log(field);
+            var cursorRowIndex = rowIndex;
             var rows = $('#layers').datagrid('getRows');
             var row = rows[rowIndex];
             //console.log(row);
@@ -122,10 +123,12 @@
             if (start == -1) {
                 if ((row.layerTypeEntry == 'lty_gf') || (row.layerTypeEntry == 'lty_pt')) {
                     // se já tiver anotação na camada FE na coluna escolhida, usa os limites do FE
+                    var tempCursorRowIndex = rowIndex;
                     if (row.idLayerType != 1) {
                         for (r in rows) {
                             var tempRow = rows[r];
                             if ((tempRow.idLayerType == 1) && (tempRow.idAnnotationSet == row.idAnnotationSet)) {
+                                tempCursorRowIndex = r;
                                 var idLabel = tempRow[field];
                                 console.log('idLabel = ' + idLabel);
                                 if (idLabel) {
@@ -140,6 +143,9 @@
                                 }
                             }
                         }
+                    }
+                    if (start == -1) {
+                        cursorRowIndex = tempCursorRowIndex;
                     }
                 }
             }
@@ -161,17 +167,17 @@
                 }
             }
             if (start > -1) {
-                annotation.clearSelection(rowIndex);
+                annotation.clearSelection(cursorRowIndex);
                 for (var i = start; i <= end; i++) {
                     var f = 'wf' + i;//columns[i];
-                    $( "tr[datagrid-row-index|='" + rowIndex +  "'] > td[field=" + f + "]" ).addClass( "cellSelected" );
+                    $( "tr[datagrid-row-index|='" + cursorRowIndex +  "'] > td[field=" + f + "]" ).addClass( "cellSelected" );
                     annotation.currentSelection.fields[f] = true;
                 }
                 annotation.currentSelection.start = start;
                 annotation.currentSelection.end = end;
             }
-            annotation.currentSelection.rowIndex = rowIndex;
-            annotation.cursor.rowIndex = rowIndex;
+            annotation.currentSelection.rowIndex = cursorRowIndex;
+            annotation.cursor.rowIndex = cursorRowIndex;
             annotation.cursor.field = annotation.currentSelection.start;
         }
 

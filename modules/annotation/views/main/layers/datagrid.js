@@ -14,12 +14,41 @@
         }
 
         annotation.setFields = function(selection, value) {
-            $('#layers').datagrid('beginEdit', selection.rowIndex);
+            var rows = $('#layers').datagrid('getRows');
+            var row = rows[selection.rowIndex];
+            var rowIndexGF = null;
+            var rowIndexPT = null;
+            if ((value == '') && (row.idLayerType == 1)) {
+               for (r in rows) {
+                   var tempRow = rows[r];
+                   if ((tempRow.layerTypeEntry == 'lty_gf') && (tempRow.idAnnotationSet == row.idAnnotationSet)) {
+                      rowIndexGF = r;
+                   }
+                   if ((tempRow.layerTypeEntry == 'lty_pt') && (tempRow.idAnnotationSet == row.idAnnotationSet)) {
+                       rowIndexPT = r;
+                   }
+               }
+            }
             var i = 0; var wf = ''; var word = {};
+            $('#layers').datagrid('beginEdit', selection.rowIndex);
             for (field in selection.fields) {
-                $('#layers').datagrid('getRows')[selection.rowIndex][field] = value;
+                row[field] = value;
             }
             $('#layers').datagrid('endEdit', selection.rowIndex);
+            if ((value == '') && rowIndexGF) {
+                $('#layers').datagrid('beginEdit', rowIndexGF);
+                for (field in selection.fields) {
+                    rows[rowIndexGF][field] = value;
+                }
+                $('#layers').datagrid('endEdit', rowIndexGF);
+            }
+            if ((value == '') && rowIndexPT) {
+                $('#layers').datagrid('beginEdit', rowIndexPT);
+                for (field in selection.fields) {
+                    rows[rowIndexPT][field] = value;
+                }
+                $('#layers').datagrid('endEdit', rowIndexPT);
+            }
             annotation.clearSelection(selection.rowIndex);
             annotation.dirtyData();
         }

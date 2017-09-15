@@ -628,7 +628,7 @@ HERE;
                                 continue;
                             }
                             $pos = (int)(substr($key, 2));
-                            if (($idLabelType != $l) || ($pos > $o)) {
+                            if (($idLabelType != $l) || ($pos != $o)) {
                                 $i++;
                                 $labels[$i] = (object)['idLabelType' => $idLabelType, 'startChar' => $pos, 'endChar' => $pos];
                                 $l = $idLabelType;
