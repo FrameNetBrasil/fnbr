@@ -283,7 +283,7 @@ class CxnController extends MController
 
     public function deleteConstraint() {
         try {
-            $model = Constraint::create($this->data->id);
+            $model = fnbr\models\Constraint::create($this->data->id);
             $model->delete();
             $this->renderPrompt('information', 'Constraint deleted.', "!structure.reloadCxnParent();");
         } catch (\Exception $e) {
@@ -292,10 +292,13 @@ class CxnController extends MController
     }
 
     public function graphCxn() {
-        $cxn = Construction::create($this->data->id);
+        $this->data->isMaster = Manager::checkAccess('MASTER', A_EXECUTE) ? 'true' : 'false';
+        $cxn = fnbr\models\Construction::create($this->data->id);
         $this->data->cxnName = $cxn->getName();
         $grapher = Manager::getAppService('grapher');
         $this->data->relationData = $grapher->getRelationData();
+        $this->data->relationEntry = MUtil::php2js($this->data->relationData);
+
         $this->render();
     }
 

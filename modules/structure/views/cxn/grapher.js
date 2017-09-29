@@ -1,5 +1,12 @@
+
+<script type="text/javascript">
+
 var grapher = {
+    isMaster: {{$data->isMaster|noescape}},
     currentyEntity: null,
+    relationEntry: {{$data->relationEntry|noescape}},
+    relationData: [],
+    relations: [],
     onDblClick: function(node) {
         console.log(node);
         this.show(node.id, true);
@@ -9,7 +16,14 @@ var grapher = {
     }
 };
 
-grapher.graph = function (element) {
+var i = 0;
+for (relation in grapher.relationEntry) {
+    grapher.relationData[i] = grapher.relationEntry[relation];
+    grapher.relations[i] = grapher.relationEntry[relation]['id'];
+    i++;
+}
+
+grapher.graph = function (element, relations) {
 
     var $element = $('#' + element);
     var w = $element.innerWidth() - 10;
@@ -17,8 +31,8 @@ grapher.graph = function (element) {
 
     var type = {
         cxn: {symbol:"circle", size:260},
-        cx: {symbol:"circle", size:260},
         frame: {symbol:"square", size:260},
+        cx: {symbol:"circle", size:260},
         fr: {symbol:"square", size:260},
         fe: {symbol:"circle", size:80},
         ce: {symbol:"circle", size:80},
@@ -144,6 +158,21 @@ grapher.graph = function (element) {
         return false;
     }
     
+    // Per-type markers, as they don't inherit styles.
+    vis.append("defs").selectAll("marker")
+        .data(relations)
+        .enter().append("marker")
+        .attr("id", function(d) { return d; })
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 18)
+        .attr("refY", 0)
+        .attr("markerWidth", 6)
+        .attr("markerHeight", 6)
+        .attr("orient", "auto")
+        .append("path")
+        .attr("class", function(d) { return d; })
+        .attr("d", "M0,-3L8,0L0,3");
+    
     function dblclick() {
         grapher.onDblClick(d3.select(this).data()[0]);
     }
@@ -227,5 +256,5 @@ grapher.graph = function (element) {
     update();
 }
 
-
+</script>
 

@@ -42,14 +42,14 @@ class Construction extends map\ConstructionMap {
         $criteria = $this->getCriteria()->select('entries.name as name');
         $criteria->where("idConstruction = {$this->getId()}");
         Base::entryLanguage($criteria);
-        return $criteria->asQuery()->fields('name');
+        return $criteria->asQuery()->getResult()[0]['name'];
     }
 
     public function getNick() {
         $criteria = $this->getCriteria()->select('entries.nick as nick');
         $criteria->where("idConstruction = {$this->getId()}");
         Base::entryLanguage($criteria);
-        return $criteria->asQuery()->fields('nick');
+        return $criteria->asQuery()->getResult()[0]['nick'];
     }
 
     public function listAll()
@@ -257,11 +257,16 @@ HERE;
             'name' => $this->getName(),
             'entry' => $this->getEntry(),
             'nick' => $this->getNick() ?: $this->getName(),
-            'typeSystem' => 'CX',
+            'typeSystem' => 'CXN',
             'source' => '',
             'label' => ''
         ];
-
+        $typeSystem = [
+            'CX' => 'CXN',
+            'FR' => 'FRAME',
+            'FE' => 'FE',
+            'CE' => 'CE'
+        ];
         $vce = new ViewConstructionElement();
         $ces = $vce->listCEByIdConstruction($this->getId())->getResult();
         $vc = new ViewConstraint();
@@ -283,7 +288,7 @@ HERE;
                     'name' => $constraint['name'],
                     'entry' => $constraint['entry'],
                     'nick' => $constraint['nick'] ?: $constraint['name'],
-                    'typeSystem' => $constraint['type'],
+                    'typeSystem' => $typeSystem[$constraint['type']],
                     'source' => $constraint['idConstrained'],
                     'label' => 'rel_elementof'
                 ];
@@ -298,7 +303,7 @@ HERE;
                 'name' => $cxn['name'],
                 'entry' => $cxn['cxnEntry'],
                 'nick' => $cxn['nick'] ?: $cxn['name'],
-                'typeSystem' => 'CX',
+                'typeSystem' => 'CXN',
                 'source' => $idEntity,
                 'label' => 'rel_inheritance_cxn'
             ];
@@ -324,7 +329,7 @@ HERE;
                 'name' => $frame['name'],
                 'entry' => $frame['frameEntry'],
                 'nick' => $frame['nick'] ?: $frame['name'],
-                'typeSystem' => 'FR',
+                'typeSystem' => 'FRAME',
                 'source' => $idEntity,
                 'label' => 'rel_evokes'
             ];

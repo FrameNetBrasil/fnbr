@@ -62,8 +62,8 @@ class ConstructionElement extends map\ConstructionElementMap {
     {
         $criteria = $this->getCriteria()->select('idEntity,entries.name as name')->orderBy('entries.name');
         Base::entryLanguage($criteria);
-        Base::relation($criteria, 'ConstructionElement', 'construction', 'rel_elementof');
-        $criteria->where("construction.idEntity = {$idEntityCxn}");
+        Base::relation($criteria, 'ConstructionElement', 'Construction', 'rel_elementof');
+        $criteria->where("Construction.idEntity = {$idEntityCxn}");
         return $criteria;
     }
 
