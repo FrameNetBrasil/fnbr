@@ -218,6 +218,7 @@ class AnnotationService extends MService
         $idSentence = $params->idSentence;
         $idAnnotationSet = $params->idAnnotationSet;
         $annotationType = $params->type;
+        $language = \fnbr\models\Base::languages()[$idLanguage];
 
         $layers = [
             "words" => NULL,
@@ -292,10 +293,17 @@ class AnnotationService extends MService
         );
 
         foreach ($chars as $i => $char) {
+            $width = 13;
+            if ($language == 'jp') {
+                if ($char['char'] == ' ') {
+                    continue;
+                }
+                $width = 18;
+            }
             $columns[] = array(
                 "hidden" => 'false',
                 "field" => 'wf' . $i,
-                "width" => 13,
+                "width" => $width,
                 "resizable" => "false",
                 "title" => $char['char'],
                 "formatter" => "annotation.cellFormatter",
