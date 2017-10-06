@@ -401,7 +401,7 @@ HERE;
         parent::setTimeLine(Base::newTimeLine($timeline, 'S'));
     }
 
-    public function save($data)
+    public function save()
     {
         $this->setTimeline();
         parent::save();
