@@ -111,6 +111,17 @@ class LU extends map\LUMap
         return $criteria;
     }
 
+    public function listForLookupEquivalent($filter = null)
+    {
+        $criteria = $this->getCriteria()->select("idLU, concat(frame.entries.name,'.',name) as fullname")->orderBy('frame.entries.name,name');
+        Base::relation($criteria, 'LU', 'Frame frame', 'rel_evokes');
+        $criteria->where("lemma.idLanguage = entry.idLanguage");
+        $fullname = $filter ? $filter->fullname : '';
+        $fullname = (strlen($fullname) > 2) ? $fullname: '-none-';
+        $criteria->where("upper(name) LIKE upper('{$fullname}%')");
+        return $criteria;
+    }
+
     public function listForConstraint($array)
     {
         $idLanguage = \Manager::getSession()->idLanguage;

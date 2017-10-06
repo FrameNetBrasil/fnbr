@@ -16,7 +16,7 @@ class LUController extends MController {
         $filter = (object)[
             'fullname' => $this->data->q
         ];
-        $criteria = $model->listForLookup($filter);
+        $criteria = $model->listForLookupEquivalent($filter);
         $this->renderJSON($model->gridDataAsJSON($criteria));
     }
 
