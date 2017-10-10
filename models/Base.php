@@ -78,7 +78,11 @@ class Base {
 
     static public function createEntity($type, $prefix) {
         $entity = new Entity();
-        $entity->setAlias($prefix . '_' . substr(uniqid(), -6));
+        do {
+            $alias = $prefix . '_' . substr(uniqid(), -6);
+            $entity->getByAlias($alias);
+        } while ($entity->getIdEntity() != '');
+        $entity->setAlias($alias);
         $entity->setType(strtoupper($type));
         $entity->save();
         return $entity;
