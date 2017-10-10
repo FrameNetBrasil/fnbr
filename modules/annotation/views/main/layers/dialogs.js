@@ -181,6 +181,12 @@
             var idASInfo = annotation.annotationSets[idAnnotationSet];
             //$('#dlgASInfo').dialog({href: {{$manager->getURL('annotation/main/formASComments')}} + "/" + annotation.idASComments });
             $('#dlgASInfo_idAnnotationSet').html(idAnnotationSet);
+            if (idASInfo['type'] == 'lu') {
+                $('#dlgASInfo_type').html('Frame.LU');
+            }
+            if (idASInfo['type'] == 'cxn') {
+                $('#dlgASInfo_type').html('Construction');
+            }
             $('#dlgASInfo_name').html(idASInfo['name']);
             $('#dlgASInfo').dialog('doLayout');
             $('#dlgASInfo').dialog('open');

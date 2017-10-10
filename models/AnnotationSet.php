@@ -189,7 +189,7 @@ class AnnotationSet extends map\AnnotationSetMap
     {
         $as = new ViewAnnotationSet();
         $criteriaLU = $as->getCriteria()
-            ->select("idAnnotationSet, concat(frameEntries.name, '.', view_lu.name) as name")
+            ->select("idAnnotationSet, concat(frameEntries.name, '.', view_lu.name) as name, 'lu' as type")
             ->where("idSentence = {$idSentence}");
         $criteriaLU->setDistinct(true);
         $criteriaLU->associationAlias("subcorpuslu.lu.frame.entries", "frameEntries");
@@ -199,7 +199,7 @@ class AnnotationSet extends map\AnnotationSetMap
         Base::entryLanguage($criteriaLU, "frameEntries.");
 
         $criteriaCxn = $as->getCriteria()
-            ->select("idAnnotationSet, cxnEntries.name as name")
+            ->select("idAnnotationSet, cxnEntries.name as name, 'cxn' as type")
             ->where("idSentence = {$idSentence}");
         $criteriaCxn->setDistinct(true);
         $criteriaCxn->associationAlias("subcorpuscxn.construction.entries", "cxnEntries");

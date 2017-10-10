@@ -345,6 +345,7 @@ class AnnotationService extends MService
             $result[$row['idAnnotationSet']] = [
                 'idAnnotationSet' => $row['idAnnotationSet'],
                 'name' => $row['name'],
+                'type' => $row['type'],
                 'show' => true
             ];
         }
@@ -481,22 +482,25 @@ class AnnotationService extends MService
         $queryLayersData = $as->getLayersData($idSentence);
         $unorderedRows = $queryLayersData->getResult();
 
-        // get the annotationsets
-        if ($params->type != 'x') {
-            $layersOrderedByTarget = $as->getLayersOrderByTarget($idSentence)->getResult();
-            $aSet = array();
-            foreach ($layersOrderedByTarget as $layersOrdered) {
-                foreach ($unorderedRows as $row) {
-                    if ($layersOrdered['idAnnotationSet'] == $row['idAnnotationSet']) {
-                        $aSet[$row['idAnnotationSet']][] = $row;
-                    }
+        // get the annotationsets - first ordered by target then the other which has no target (cxn)
+        $layersOrderedByTarget = $as->getLayersOrderByTarget($idSentence)->getResult();
+        $aSet = [];
+        $aTarget = [];
+        foreach ($layersOrderedByTarget as $layersOrdered) {
+            $aTarget[$layersOrdered['idAnnotationSet']] = 1;
+            foreach ($unorderedRows as $row) {
+                if ($layersOrdered['idAnnotationSet'] == $row['idAnnotationSet']) {
+                    $aSet[$row['idAnnotationSet']][] = $row;
                 }
             }
-        } else {
-            foreach ($unorderedRows as $row) {
+
+        }
+        foreach ($unorderedRows as $row) {
+            if ($aTarget[$row['idAnnotationSet']] == '') {
                 $aSet[$row['idAnnotationSet']][] = $row;
             }
         }
+
         // reorder rows to put Target on top of each annotatioset
         $rows = array();
         $idHeaderLayer = -1;
@@ -528,7 +532,7 @@ class AnnotationService extends MService
                 }
             }
         }
-        mdump($rows);
+        //mdump($rows);
         // CE-FE
         $ltCEFE = new fnbr\models\LayerType();
         $ltCEFE->getByEntry('lty_cefe');
