@@ -26,7 +26,7 @@
             $('#dlgMWE').dialog('open');
         }
 
-        annotation.dlgMWEClose = function() {
+        annotation.dlgMWESave = function() {
             var idLU = $('#mweIdLU').val();
             var idSentence = $('#mweIdSentence').val();
             var startChar = 4000;

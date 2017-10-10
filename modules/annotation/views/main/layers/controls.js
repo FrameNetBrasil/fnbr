@@ -36,8 +36,24 @@
         $('#dlgMWE').dialog({
             modal:true,
             closed:true,
-            onClose:annotation.dlgMWEClose,
+            toolbar:'#dlgMWE_tools',
             idField:'idWord'
+        });
+
+        $('#dlgMWESave').linkbutton({
+            iconCls:'icon-save',
+            plain:true,
+            size:null,
+            onClick: annotation.dlgMWESave
+        });
+
+        $('#dlgMWEClose').linkbutton({
+            iconCls:'icon-cancel',
+            plain:true,
+            size:null,
+            onClick: function() {
+                $('#dlgMWE').dialog('close');
+            }
         });
 
         $('#mwe').datagrid({
@@ -188,9 +204,26 @@
         $('#dlgCxn').dialog({
             modal:true,
             closed:true,
-            onClose:annotation.dlgCxnClose,
+            toolbar:'#dlgCxn_tools',
             idField:'idConstruction'
         });
+
+        $('#dlgCxnSave').linkbutton({
+            iconCls:'icon-save',
+            plain:true,
+            size:null,
+            onClick: annotation.dlgCxnSave
+        });
+
+        $('#dlgCxnClose').linkbutton({
+            iconCls:'icon-cancel',
+            plain:true,
+            size:null,
+            onClick: function() {
+                $('#dlgCxn').dialog('close');
+            }
+        });
+
 
         $('#cxnGrid').datagrid({
             scrollbarSize:18

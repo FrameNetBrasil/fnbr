@@ -148,7 +148,7 @@
             $('#dlgCxn').dialog('open');
         }
 
-        annotation.dlgCxnClose = function() {
+        annotation.dlgCxnSave = function() {
             if (!annotation.checkSavedData()) {
                 return;
             }

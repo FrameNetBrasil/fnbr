@@ -193,7 +193,6 @@
                     annotation.dlgASOpenRemove();
                 }
             },
-            /*
             {
                 text:'Add Cxn',
                 iconCls:'fa fa-plus-square-o fa16px',
@@ -201,7 +200,6 @@
                     annotation.dlgCxnOpen();
                 }
             },
-            */
             {
                 text:'Label Help',
                 iconCls:'fa fa-question fa16px',
