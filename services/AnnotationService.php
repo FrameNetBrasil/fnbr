@@ -646,6 +646,7 @@ class AnnotationService extends MService
         foreach ($line as $idLine => $layer) {
             $data[] = $layer;
         }
+        //mdump($data);
         return json_encode($data);
         //return $data;
     }

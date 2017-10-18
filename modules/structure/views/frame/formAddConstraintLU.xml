@@ -18,7 +18,7 @@
                     <include component="MLookupSemanticType.php" id="idSemanticType"/>
                 </div>
                 <div title="LU &lt; Equivalent &gt; LU" style="overflow:auto;padding:10px;">
-                    <label>Equivalent Frame.LU (minimum 3 letters to search)</label>
+                    <label>Equivalent Frame.LU (minimum 3 letters of LU name to search)</label>
                     <include component="MLookupLUEquivalent.php" id="idLUEquivalent"/>
                 </div>
             </maccordion>
