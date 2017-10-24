@@ -22,7 +22,7 @@
                     theme.dialog.refresh('formNewCxnDialog', {
                         toolbar: null,
                         width: 510,
-                        url: 'fnbr20/entry/gridUpdate/cxn_' + $('#cxn_entry').textbox('getValue')   
+                        url: 'structure/entry/gridUpdate/cxn_' + $('#cxn_entry').textbox('getValue')
                     });
                 }
             }, 'formNewCxn');
