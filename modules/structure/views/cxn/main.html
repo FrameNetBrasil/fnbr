@@ -87,7 +87,11 @@
             $('#structureCenterPane').html('');
             var node = $('#cxnTree').tree('getSelected');
             if (node) {
-                $('#cxnTree').tree('reload', node.target);
+                if (node.id == 'root') {
+                    $('#cxnTree').tree({queryParams: {cxn: ''}});
+                } else {
+                    $('#cxnTree').tree('reload', node.target);
+                }
             }
         }
 

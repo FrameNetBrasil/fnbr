@@ -1,6 +1,6 @@
 <?php
 
-
+use fnbr\models\Base;
 
 class StructureCxnService extends MService
 {

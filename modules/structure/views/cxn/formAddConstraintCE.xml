@@ -12,9 +12,11 @@
                     <include component="MLookupConstruction.php" id="idConstruction"/>
                 </div>
                 <div title="CE > Frame" style="overflow:auto;padding:10px;">
+                    <label>(minimum 3 letters of Frame name to search)</label>
                     <include component="MLookupFrame.php" id="idFrame"/>
                 </div>
                 <div title="CE > Frame Family" style="overflow:auto;padding:10px;">
+                    <label>(minimum 3 letters of Frame name to search)</label>
                     <include component="MLookupFrame.php" id="idFrameFamily"/>
                 </div>
                 <div title="CE > CE_before" style="overflow:auto;padding:10px;">
