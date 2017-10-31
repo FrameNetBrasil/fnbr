@@ -59,6 +59,7 @@ return [
             'en' => ['English', 'main/changeLanguage/en', 'fnbrFlagEn', '', A_ACCESS, []],
             'pt' => ['Portuguese', 'main/changeLanguage/pt', 'fnbrFlagPt', '', A_ACCESS, []],
             'es' => ['Spanish', 'main/changeLanguage/es', 'fnbrFlagEs', '', A_ACCESS, []],
+            'fr' => ['French', 'main/changeLanguage/fr', 'fnbrFlagFr', '', A_ACCESS, []],
         ]],
         'profile' => ['Profile', 'main/profile', 'fa fa-info fa16px', '', A_ACCESS, [
             'myprofile' => ['My Profile', 'profile/formMyProfile', 'fa fa-credit-card fa16px', '', A_ACCESS, []],

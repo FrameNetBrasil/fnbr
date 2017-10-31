@@ -7,12 +7,16 @@
                 <mhiddenfield id="idLU" value="$this->data->idLU"/>
                 <mlabel text="$this->data->lu"/>
             </div>
-            <maccordion id="aa" style="width:400px;height:200px;">
+            <maccordion id="aa" style="width:400px;height:250px;">
                 <div title="LU &lt; Qualia &gt; LU" style="overflow:auto;padding:10px;">
                     <div><mlabel text="Qualia Relation"/></div>
                     <include component="MLookupQualiaRelation.php" id="relation"/>
                     <div><mlabel text="LU"/></div>
                     <include component="MLookupLU.php" id="idLUQualia"/>
+                </div>
+                <div title="LU &lt; Metonymy &gt; LU" style="overflow:auto;padding:10px;">
+                    <div><label>Frame.LU (minimum 3 letters of Frame name to search)</label></div>
+                    <include component="MLookupLU.php" id="idLUMetonymy"/>
                 </div>
                 <div title="LU > Semantic Type" style="overflow:auto;padding:10px;">
                     <include component="MLookupSemanticType.php" id="idSemanticType"/>

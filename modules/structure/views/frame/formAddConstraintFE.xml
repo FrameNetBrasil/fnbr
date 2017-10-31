@@ -21,6 +21,14 @@
                     <div><mlabel text="FE"/></div>
                     <include component="MLookupFEQualia.php" id="idFEQualia"/>
                 </div>
+                <div title="FE &lt; Metonymy &gt; FE" style="overflow:auto;padding:10px;">
+                    <div><mlabel text="FE"/></div>
+                    <include component="MLookupFEMetonymy.php" id="idFEMetonymy"/>
+                </div>
+                <div title="FE &lt; Metonymy &gt; LU" style="overflow:auto;padding:10px;">
+                    <div><label>Frame.LU (minimum 3 letters of Frame name to search)</label></div>
+                    <include component="MLookupLU.php" id="idLUMetonymy"/>
+                </div>
             </maccordion>
         </fields>
         <tools>

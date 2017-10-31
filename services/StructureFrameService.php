@@ -559,6 +559,16 @@ class StructureFrameService extends MService
                 $feQualia = new fnbr\models\FrameElement($data->idFEQualia);
                 Base::createEntityRelation($fe->getIdEntity(), $data->relation, $feQualia->getIdEntity());
             }
+            if ($data->idFEMetonymy != '') {
+                $fe = new fnbr\models\FrameElement($data->idFrameElement);
+                $feMetonymy = new fnbr\models\FrameElement($data->idFEMetonymy);
+                Base::createEntityRelation($fe->getIdEntity(), 'rel_festandsforfe', $feMetonymy->getIdEntity());
+            }
+            if ($data->idLUMetonymy != '') {
+                $fe = new fnbr\models\FrameElement($data->idFrameElement);
+                $lu = new fnbr\models\LU($data->idLUMetonymy);
+                Base::createEntityRelation($fe->getIdEntity(), 'rel_festandsforlu', $lu->getIdEntity());
+            }
             $transaction->commit();
         } catch (\Exception $e) {
             $transaction->rollback();
@@ -574,6 +584,11 @@ class StructureFrameService extends MService
                 $lu = new fnbr\models\LU($data->idLU);
                 $luQualia = new fnbr\models\LU($data->idLUQualia);
                 Base::createEntityRelation($lu->getIdEntity(), $data->relation, $luQualia->getIdEntity());
+            }
+            if ($data->idLUMetonymy != '') {
+                $lu = new fnbr\models\LU($data->idLU);
+                $luMetonymy = new fnbr\models\LU($data->idLUMetonymy);
+                Base::createEntityRelation($lu->getIdEntity(), 'rel_lustandsforlu', $luMetonymy->getIdEntity());
             }
             if ($data->idSemanticType != '') {
                 $lu = new fnbr\models\LU($data->idLU);
