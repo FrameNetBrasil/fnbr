@@ -208,8 +208,17 @@ class FrameElement extends map\FrameElementMap
 
     public function listConstraints()
     {
+        $constraints = [];
         $constraint = new ViewConstraint();
-        return $constraint->getByIdConstrained($this->getIdEntity());
+        $frameConstraints = $constraint->getByIdConstrained($this->getIdEntity());
+        foreach ($frameConstraints as $frameConstraint) {
+            $constraints[] = $frameConstraint;
+        }
+        $metonymyConstraints = $constraint->listFEMetonymyConstraints($this->getIdEntity());
+        foreach ($metonymyConstraints as $metonymyConstraint) {
+            $constraints[] = $metonymyConstraint;
+        }
+        return $constraints;
     }
 
     public function listForExport($idFrame)

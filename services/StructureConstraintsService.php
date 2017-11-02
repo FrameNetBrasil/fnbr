@@ -13,7 +13,7 @@ class StructureConstraintsService extends MService
         mdump($constraints);
         foreach ($constraints as $constraint) {
             $node = [];
-            $node['id'] = 'x' . $constraint['idConstraint'];
+            $node['id'] = 'x' . strtolower($constraint['type']) . '_' . $fe->getIdEntity() . '_' .$constraint['idConstraint'];
             $node['text'] = $constraint['name'];
             $node['state'] = 'closed';
             $node['iconCls'] = 'icon-blank fa-icon fa fa-crosshairs';

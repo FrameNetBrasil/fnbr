@@ -15,7 +15,7 @@
                     <include component="MLookupLU.php" id="idLUQualia"/>
                 </div>
                 <div title="LU &lt; Metonymy &gt; LU" style="overflow:auto;padding:10px;">
-                    <div><label>Frame.LU (minimum 3 letters of Frame name to search)</label></div>
+                    <div><label>Frame.LU (minimum 3 letters of LU name to search)</label></div>
                     <include component="MLookupLU.php" id="idLUMetonymy"/>
                 </div>
                 <div title="LU > Semantic Type" style="overflow:auto;padding:10px;">

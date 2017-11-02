@@ -234,7 +234,8 @@ class FrameController extends MController
     public function formDeleteConstraintFE()
     {
         $structure = Manager::getAppService('structureconstraints');
-        $hasChild = $structure->constraintHasChild($this->data->id);
+        list($type, $idEntityFE, $idEntityConstraint) = explode('_', $this->data->id);
+        $hasChild = $structure->constraintHasChild($idEntityConstraint);
         if (!$hasChild) {
             $ok = "^structure/frame/deleteConstraintFE/" . $this->data->id;
             $this->renderPrompt('confirmation', 'Warning: Constraint will be deleted! Continue?', $ok);
@@ -246,8 +247,15 @@ class FrameController extends MController
     public function deleteConstraintFE()
     {
         try {
-            $model = fnbr\models\Constraint::create($this->data->id);
-            $model->delete();
+            list($type, $idEntityFE, $idEntityConstraint) = explode('_', $this->data->id);
+            $model = fnbr\models\Constraint::create($idEntityConstraint);
+            if ($type == 'fr') {
+                $model->delete();
+            } elseif ($type == 'fe') {
+                $model->deleteConstraintMetonymyFEFE($idEntityFE, $idEntityConstraint);
+            } elseif ($type == 'lu') {
+                $model->deleteConstraintMetonymyFELU($idEntityFE, $idEntityConstraint);
+            }
             $this->renderPrompt('information', 'Constraint deleted.', "!structure.reloadFrameParent();");
         } catch (\Exception $e) {
             $this->renderPrompt('error', "Delete Constraint failed.", "!structure.reloadFrame();");

@@ -149,6 +149,10 @@ class LU extends map\LUMap
         foreach ($equivalenceConstraints as $equivalence) {
             $constraints[] = $equivalence;
         }
+        $metonymyConstraints = $constraint->listLUMetonymyConstraints($this->getIdEntity());
+        foreach ($metonymyConstraints as $metonymy) {
+            $constraints[] = $metonymy;
+        }
         return $constraints;
     }
 

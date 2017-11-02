@@ -36,7 +36,7 @@ return [
             'fullgrapher' => ['Frames & CxN', 'grapher/grapher/main', 'fa fa-link fa16px', '', '', []],
             'domaingrapher' => ['Frames by Domain', 'grapher/domain/main', 'fa fa-link fa16px', '', '', []],
         ]],
-        'editor' => ['Editor', 'main/visualeditor', 'fa fa-arrows fa16px', 'ADMIN', A_ACCESS, [
+        'editor' => ['Editor', 'main/visualeditor', 'fa fa-arrows fa16px', 'MASTER', A_ACCESS, [
             'frameeditor' => ['Frame Relation', 'visualeditor/frame/main', 'fa fa-list-alt fa16px', 'MASTER', A_ACCESS, []],
             'corenesseditor' => ['Coreness', 'visualeditor/frame/coreness', 'fa fa-th-list fa16px', 'MASTER', A_ACCESS, []],
             'cxneditor' => ['CxN Relation', 'visualeditor/cxn/main', 'fa fa-list-alt fa16px', 'MASTER', A_ACCESS, []],

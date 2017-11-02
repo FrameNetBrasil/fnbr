@@ -64,4 +64,11 @@ class Constraint extends map\EntityMap
         $transaction->commit();
     }
 
+    public function deleteConstraintMetonymyFEFE($idEntity1FE, $idEntity2FE) {
+        Base::deleteEntityRelation($idEntity1FE, 'rel_festandsforfe', $idEntity2FE);
+    }
+
+    public function deleteConstraintMetonymyFELU($idEntityFE, $idEntityLU) {
+        Base::deleteEntityRelation($idEntityFE, 'rel_festandsforlu', $idEntityLU);
+    }
 }

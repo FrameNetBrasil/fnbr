@@ -255,7 +255,7 @@ class CxnController extends MController
             $structure->addConstraintsCX($this->data);
             $this->renderPrompt('information', 'Constraint added.');
         } catch (\Exception $e) {
-            $this->renderPrompt('error', "Add Constraint failed.");
+            $this->renderPrompt('error', "Add Constraint failed." . $e->getMessage());
         }
     }
 

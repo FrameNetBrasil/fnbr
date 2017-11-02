@@ -32,6 +32,9 @@ class ViewConstraint extends map\ViewConstraintMap
         'rel_evokes' => 'evk',
         'rel_hasdomain' => 'dom',
         'rel_luequivalence' => 'equ',
+        'rel_festandsforfe' => 'mfe',
+        'rel_festandsforlu' => 'mlu',
+        'rel_lustandsforlu' => 'mlu',
     ];
 
     public $type = [
@@ -50,6 +53,9 @@ class ViewConstraint extends map\ViewConstraintMap
         'rel_evokes' => 'FR',
         'rel_hasdomain' => 'DO',
         'rel_luequivalence' => 'LU',
+        'rel_festandsforfe' => 'FE',
+        'rel_festandsforlu' => 'LU',
+        'rel_lustandsforlu' => 'LU',
     ];
 
     public static function config()
@@ -204,6 +210,29 @@ HERE;
         return $constraints;
     }
 
+    public function listLUMetonymyConstraints($idEntityLU)
+    {
+        $idLanguage = \Manager::getSession()->idLanguage;
+
+        $cmd = <<<HERE
+        SELECT r.idEntity2 as idConstraint,
+            relatedLU.name  AS name,
+            r.relationtype  AS metonymy
+        FROM View_Relation r
+        JOIN LU relatedLU ON (r.idEntity2 = relatedLU.idEntity)
+        WHERE (r.idEntity1 = {$idEntityLU})
+            AND (r.relationType = 'rel_lustandsforlu')
+
+HERE;
+        $query = $this->getDb()->getQueryCommand($cmd);
+        $constraints = $query->getResult();
+        foreach ($constraints as $i => $constraint) {
+            $constraints[$i]['name'] = $this->prefix[$constraint['metonymy']] . '_' . $constraints[$i]['name'];
+            $constraints[$i]['type'] = $this->type[$constraint['metonymy']];
+        }
+        return $constraints;
+    }
+
     public function listLUDomainConstraints($idEntityLU)
     {
         $idLanguage = \Manager::getSession()->idLanguage;
@@ -253,4 +282,31 @@ HERE;
         return $constraints;
     }
 
+    public function listFEMetonymyConstraints($idEntityFE)
+    {
+        $idLanguage = \Manager::getSession()->idLanguage;
+
+        $cmd = <<<HERE
+        SELECT r.idEntity2 as idConstraint,
+            e.name  AS feName,
+            relatedLU.name as luName,
+            r.relationtype  AS metonymy
+        FROM View_Relation r
+        LEFT JOIN FrameElement relatedFE ON (r.idEntity2 = relatedFE.idEntity)
+        LEFT JOIN Entry e on (relatedFE.entry = e.entry)
+        LEFT JOIN LU relatedLU ON (r.idEntity2 = relatedLU.idEntity)
+        WHERE (r.idEntity1 = {$idEntityFE})
+            AND ((r.relationType = 'rel_festandsforfe') or (r.relationType = 'rel_festandsforlu'))
+            AND ((e.idLanguage = {$idLanguage}) or (e.idLanguage is null))
+
+HERE;
+        $query = $this->getDb()->getQueryCommand($cmd);
+        $constraints = $query->getResult();
+        foreach ($constraints as $i => $constraint) {
+            $name = ($constraint['luName'] != '') ? $constraint['luName'] : $constraint['feName'];
+            $constraints[$i]['name'] = $this->prefix[$constraint['metonymy']] . '_' . $name;
+            $constraints[$i]['type'] = $this->type[$constraint['metonymy']];
+        }
+        return $constraints;
+    }
 }
