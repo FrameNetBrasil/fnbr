@@ -26,9 +26,17 @@ class Constraint extends map\EntityMap
     {
         $transaction = $this->beginTransaction();
         try {
+            $view = new ViewConstraint();
+            $data = $view->getConstraintData($this->getId());
+            mdump($data);
+            if ($data->entry == 'rel_constraint_constraint') {
+                Base::deleteAllEntityRelation($data->idConstrainedBy);
+                $entity = new Entity($data->idConstrainedBy);
+                $entity->delete();
+            }
             // remove relations
             Base::deleteAllEntityRelation($this->getId());
-            // remove this ce
+            // remove this entity
             parent::delete();
             $transaction->commit();
         } catch (\Exception $e) {
@@ -51,7 +59,11 @@ class Constraint extends map\EntityMap
     public function listConstraintsCN()
     {
         $constraint = new ViewConstraint();
-        return $constraint->listConstraintsCN($this->getId());
+        $cn = $constraint->listConstraintsCNCE($this->getId());
+        if ($cn[0]['name'] == '') {
+            $cn = $constraint->listConstraintsCNCN($this->getId());
+        }
+        return $cn;
     }
 
     public function deleteConstraintLU($idEntityLU, $idEntityConstraint) {

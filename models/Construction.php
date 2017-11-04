@@ -52,6 +52,14 @@ class Construction extends map\ConstructionMap {
         return $criteria->asQuery()->getResult()[0]['nick'];
     }
 
+    public function getByIdEntity($idEntity) {
+        $filter = (object) [
+            'idEntity' => $idEntity
+        ];
+        $criteria = $this->listByFilter($filter);
+        $this->retrieveFromCriteria($criteria);
+    }
+
     public function listAll()
     {
         $criteria = $this->getCriteria()->select('*, entries.name as name')->orderBy('entries.name');
@@ -69,8 +77,15 @@ class Construction extends map\ConstructionMap {
         if ($filter->active == '1') {
             $criteria->where("active = 1");
         }
+        if ($filter->idEntity != '') {
+            $criteria->where("idEntity = {$filter->idEntity}");
+        }
         if ($filter->cxn) {
             $criteria->where("upper(entries.name) LIKE upper('%{$filter->cxn}%')");
+        }
+        if ($filter->name) {
+            $name = (strlen($filter->name) > 1) ? $filter->name: 'none';
+            $criteria->where("upper(entries.name) LIKE upper('{$name}%')");
         }
         return $criteria;
     }
@@ -87,7 +102,7 @@ class Construction extends map\ConstructionMap {
     public function listCE()
     {
         $ce = new ConstructionElement();
-        $criteria = $ce->getCriteria()->select('idConstructionElement, entry, entries.name as name, color.rgbFg, color.rgbBg, color.idColor');
+        $criteria = $ce->getCriteria()->select('idConstructionElement, entry, entries.name as name, color.rgbFg, color.rgbBg, color.idColor, idEntity');
         Base::entryLanguage($criteria);
         Base::relation($criteria, 'ConstructionElement', 'construction', 'rel_elementof');
         $criteria->where("construction.idConstruction = {$this->getId()}");
@@ -105,23 +120,44 @@ class Construction extends map\ConstructionMap {
     {
         $idLanguage = \Manager::getSession()->idLanguage;
         $cmd = <<<HERE
-        SELECT ce.idEntity,  ceentries.name as name
-        FROM View_ConstructionElement ce join entry ceentries on (ce.entry = ceentries.entry)
-        WHERE ceentries.idLanguage = {$idLanguage}
-        AND ce.idConstruction = {$this->getId()}
-        UNION
-        SELECT ce2.idEntity, concat(ce1entries.name,'.',ce2entries.name) name
-        FROM View_ConstructionElement ce1 join View_Constraint cn1 on (ce1.idEntity = cn1.idConstrained)
-        JOIN View_Constraint cn2 on (cn1.idConstraint = cn2.idConstrained)
-        JOIN View_ConstructionElement ce2 on (cn2.idConstrainedBy = ce2.idEntity)
-        JOIN entry ce1entries on (ce1.entry = ce1entries.entry)
-        JOIN entry ce2entries on (ce2.entry = ce2entries.entry)
-        WHERE ce1.idConstruction = {$this->getId()}
-        AND (cn1.entry = 'rel_constraint_cxn')
-        AND (cn2.entry = 'rel_constraint_element')
-        AND (ce1entries.idLanguage = {$idLanguage})
-        AND (ce2entries.idLanguage = {$idLanguage})
-        AND (ce1.idConstruction = {$this->getId()})
+SELECT ce.idEntity,  ceentries.name as name
+    FROM View_ConstructionElement ce 
+    JOIN entry ceentries on (ce.entry = ceentries.entry)
+    WHERE ceentries.idLanguage = {$idLanguage}
+    AND ce.idConstruction = {$this->getId()}
+UNION
+SELECT cn2.idConstraint, concat(ce1entries.name,'.',ce2entries.name) name
+    FROM View_ConstructionElement ce1 
+    JOIN View_Constraint cn1 on (ce1.idEntity = cn1.idConstrained)
+    JOIN View_Constraint cn2 on (cn1.idConstraint = cn2.idConstrained)
+    JOIN View_ConstructionElement ce2 on (cn2.idConstrainedBy = ce2.idEntity)
+    JOIN entry ce1entries on (ce1.entry = ce1entries.entry)
+    JOIN entry ce2entries on (ce2.entry = ce2entries.entry)
+    WHERE (cn1.entry = 'rel_constraint_cxn')
+    AND (cn2.entry = 'rel_constraint_element')
+    AND (ce1entries.idLanguage = {$idLanguage})
+    AND (ce2entries.idLanguage = {$idLanguage})
+    AND (ce1.idConstruction = {$this->getId()})
+UNION
+SELECT cn4.idConstraint, concat(ce1entries.name,'.',ce2entries.name,'.',ce3entries.name) name
+    FROM View_ConstructionElement ce1
+    JOIN View_Constraint cn1 on (ce1.idEntity = cn1.idConstrained)
+    JOIN View_Constraint cn2 on (cn1.idConstraint = cn2.idConstrained)
+    JOIN View_ConstructionElement ce2 on (cn2.idConstrainedBy = ce2.idEntity)
+    JOIN View_Constraint cn3 on (cn2.idConstraint = cn3.idConstrained)
+    JOIN View_Constraint cn4 on (cn3.idConstraint = cn4.idConstrained)
+    JOIN View_ConstructionElement ce3 on (cn4.idConstrainedBy = ce3.idEntity)
+    JOIN entry ce1entries on (ce1.entry = ce1entries.entry)
+    JOIN entry ce2entries on (ce2.entry = ce2entries.entry)
+    JOIN entry ce3entries on (ce3.entry = ce3entries.entry)
+    WHERE (cn1.entry = 'rel_constraint_cxn')
+    AND (cn2.entry = 'rel_constraint_element')
+    AND (cn3.entry = 'rel_constraint_cxn')
+    AND (cn4.entry = 'rel_constraint_element')
+    AND (ce1entries.idLanguage = {$idLanguage})
+    AND (ce2entries.idLanguage = {$idLanguage})
+    AND (ce3entries.idLanguage = {$idLanguage})
+    AND (ce1.idConstruction = {$this->getId()})        
 
 HERE;
 
