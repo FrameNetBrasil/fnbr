@@ -1,6 +1,9 @@
 <div id="structureLayout" style="width:100%;height:100%;">
     <div id="structureNorthPane" data-options="collapsible:false, region:'north', title:'{{_'Constructions'}}'" style="height:70px">
         <div style="float:left;padding:5px">
+            <input id="idDomain" name="domain" placeholder="{{_'Domain'}}">
+        </div>
+        <div style="float:left;padding:5px">
             <input id="cxn" name="cxn" type="text" style="width:200px; padding:5px" placeholder="{{_'Search CxN'}}">
         </div>
         <div style="float:left;padding:5px">
@@ -28,6 +31,7 @@
     <div onclick="structure.deleteCxn()" data-options="iconCls:'icon-remove'">{{_'Delete Cxn'}}</div>
     <div onclick="structure.newCxnElement()" data-options="iconCls:'icon-add'">{{_'New CxnElement'}}</div>
     <div onclick="structure.addConstraint()" data-options="iconCls:'icon-add'">{{_'Add Constraint'}}</div>
+    <div onclick="structure.cxnDomain()" data-options="iconCls:'icon-edit'">{{_'Domains'}}</div>
     <div onclick="structure.importTxt()" data-options="iconCls:'icon-add'">{{_'Import Txt'}}</div>
     <div onclick="structure.viewGraph()" data-options="iconCls:'icon-more'">{{_'View Graph'}}</div>
 </div>
@@ -179,6 +183,15 @@
             manager.doGet({{$manager->getURL('structure/cxn/formDeleteConstraint')}} + '/' + id,'structureCenterPane');
         }
 
+        structure.cxnDomain = function (id) {
+            if ($.type(id) === "undefined") {
+                id = structure.node.id.substr(1);
+            }
+            $('#structureCenterPane').html('');
+            manager.doGet({{$manager->getURL('structure/cxn/formCxnDomain')}} + '/' + id,'structureCenterPane');
+        }
+
+
         structure.contextMenuFrame = function(e, node) {
             if (!structure.isMaster) {
                 return;
@@ -245,6 +258,19 @@
                     });
                 }
         })
+
+        $('#idDomain').combobox({
+            data: JSON.parse({{$data->domain}}),
+            prompt: {{_'Select Domain'}},
+            valueField:'idDomain',
+            textField:'name',
+            onSelect: function() {
+                $('#cxnTree').tree({queryParams: {idDomain: $('#idDomain').combobox('getValue')}});
+            },
+            onChange: function() {
+                $('#cxnTree').tree({queryParams: {idDomain: $('#idDomain').combobox('getValue')}});
+            }
+        });
 
         $('#cxnTree').tree({
             url: {{$manager->getURL('structure/cxn/cxnTree')}},

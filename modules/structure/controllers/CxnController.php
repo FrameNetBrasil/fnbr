@@ -14,6 +14,8 @@ class CxnController extends MController
     public function main()
     {
         $this->data->isMaster = Manager::checkAccess('MASTER', A_EXECUTE) ? 'true' : 'false';
+        $domain = new fnbr\models\Domain();
+        $this->data->domain = $domain->gridDataAsJson($domain->listForSelection(), true);
         $this->render();
     }
 
@@ -185,6 +187,17 @@ class CxnController extends MController
         } catch (EMException $e) {
             $this->renderPrompt('error', $e->getMessage());
         }
+    }
+
+    public function formCxnDomain()
+    {
+        $model = new fnbr\models\Construction($this->data->id);
+        $this->data->object = $model->getData();
+        $this->data->idConstruction = $model->getIdConstruction();
+        $this->data->form = "formCxnDomain";
+        $this->data->close = "!$('#formCxnDomain_dialog').dialog('close');";
+        $this->data->title = 'Cxn: ' . $model->getEntry() . '  [' . $model->getName() . ']';
+        $this->render();
     }
 
     public function formAddConstraintCX()

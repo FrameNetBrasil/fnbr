@@ -25,4 +25,17 @@ class DomainController extends MController
             $this->renderPrompt('error', $e->getMessage());
         }
     }
+
+    public function saveCxnDomain()
+    {
+        try {
+            $structure = Manager::getAppService('structuredomain');
+            $structure->saveConstructionDomain($this->data->idConstruction, $this->data->toSave);
+            $this->renderPrompt('information', "Ok", "$('#{$this->data->idGrid}').datagrid('reload');");
+        } catch (\Exception $e) {
+            $this->renderPrompt('error', $e->getMessage());
+        }
+    }
+
+
 }

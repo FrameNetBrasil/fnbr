@@ -7,8 +7,8 @@ class StructureCxnService extends MService
 
     public function listCxns($data, $idLanguage = '')
     {
-        $cxn = new fnbr\models\Construction();
-        $filter = (object)['ce' => $data->ce, 'cxn' => $data->cxn, 'active' => $data->active, 'idLanguage' => $idLanguage];
+        $cxn = new fnbr\models\ViewConstruction();
+        $filter = (object)['idDomain' => $data->idDomain, 'ce' => $data->ce, 'cxn' => $data->cxn, 'active' => $data->active, 'idLanguage' => $idLanguage];
         $cxns = $cxn->listByFilter($filter)->asQuery()->getResult(\FETCH_ASSOC);
         $result = array();
         foreach ($cxns as $row) {
