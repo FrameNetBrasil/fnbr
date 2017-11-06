@@ -286,50 +286,57 @@ HERE;
     }
 
     public function getStructure() {
-        $structure = [];
+        $typeSystem = [
+            'CX' => 'cxn',
+            'FR' => 'frame',
+            'FE' => 'fe',
+            'CE' => 'ce'
+        ];
         $idEntity = $this->getIdEntity();
-        $structure[] = [
-            'idEntity' => $idEntity,
+        $cxnObject = (object)[
+            'id' => $idEntity,
             'name' => $this->getName(),
             'entry' => $this->getEntry(),
-            'nick' => $this->getNick() ?: $this->getName(),
-            'typeSystem' => 'CXN',
-            'source' => '',
-            'label' => ''
-        ];
-        $typeSystem = [
-            'CX' => 'CXN',
-            'FR' => 'FRAME',
-            'FE' => 'FE',
-            'CE' => 'CE'
+            'type' => 'cxn',
+            'abstract' => $this->getAbstract() ? true : false,
+            'attributes' => [],
+            'relations' => [],
         ];
         $vce = new ViewConstructionElement();
         $ces = $vce->listCEByIdConstruction($this->getId())->getResult();
         $vc = new ViewConstraint();
+        mdump('============='.$this->getEntry());
         foreach($ces as $ce) {
-            $structure[] = [
-                'idEntity' => $ce['idEntity'],
-                'name' => $ce['name'],
-                'entry' => $ce['entry'],
-                'nick' => $ce['name'], //$ce['nick'] ?: $ce['name'],
-                'typeSystem' => 'CE',
-                'source' => $idEntity,
-                'label' => 'rel_elementof'
-            ];
+            $ceObject = (object)[];
+            $cxnObject->attributtes[$ce['entry']] = $ceObject;
+            $ceObject->optional = $ce['optional'] ? true : false;
+            $ceObject->type = 'ce';
             $chain = [];
             $vc->getChainByIdConstrained($ce['idEntity'], $ce['idEntity'], $chain);
+            mdump($chain);
+            $c = (object)[];
+            $d = [];
+            $d[$ce['idEntity']] = $c;
             foreach($chain as $constraint) {
-                $structure[] = [
-                    'idEntity' => $constraint['idConstrainedBy'],
-                    'name' => $constraint['name'],
-                    'entry' => $constraint['entry'],
-                    'nick' => $constraint['nick'] ?: $constraint['name'],
-                    'typeSystem' => $typeSystem[$constraint['type']],
-                    'source' => $constraint['idConstrained'],
-                    'label' => 'rel_elementof'
-                ];
+                if ($constraint['type'] == 'CX') {
+                    $i = $constraint['idConstrainedBy'];
+                    $d[$i]->value = (object)[
+                        'name' => $constraint['entry']
+                    ];
+                }
+                if ($constraint['type'] == 'CE') {
+                    $i = $constraint['idConstrained'];
+                    $j = $constraint['idConstrainedBy'];
+                    $d[$j]->attr[] = $constraint['entry'];
+                    $d[$i] = $d[$j];
+                }
             }
+            mdump($c);
         }
+        $chain = [];
+        $vc->getChainByIdConstrained($idEntity, $idEntity, $chain);
+        mdump($chain);
+        /*
         $er = new EntityRelation();
         $vce = new ViewConstructionElement();
         $inheritance = $this->listInheritanceFromRelations();
@@ -393,7 +400,8 @@ HERE;
                 ];
             }
         }
-        return $structure;
+        */
+        return $cxnObject;
     }
     
     public function save($data)

@@ -1,10 +1,5 @@
 <?php
 
-
-use Maestro\Types\MFile;
-
-
-
 class ExportController extends MController
 {
 
@@ -73,10 +68,12 @@ class ExportController extends MController
 
     public function exportCxnFS(){
         try {
+            $this->data->idLanguage = Manager::getSession()->idLanguage;
             $service = Manager::getAppService('data');
-            $fs =  $service->exportCxnToFS();
-            $fileName = $this->data->fileName . '.txt';
-            $mfile = MFile::file($fs, false, $fileName);
+            $fs =  $service->exportCxnToFS($this->data);
+            $fileName = $this->data->fileName . '.json';
+            mdump($fs);
+            $mfile = \MFile::file($fs, false, $fileName);
             $this->renderFile($mfile);
         } catch (EMException $e) {
             $this->renderPrompt('error',$e->getMessage());

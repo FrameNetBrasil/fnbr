@@ -3,7 +3,6 @@
 use Maestro\Types\MFile;
 
 
-
 class DataService extends MService
 {
 
@@ -145,7 +144,7 @@ class DataService extends MService
             }
             $wordsTemp = explode(' ', $row);
             foreach ($wordsTemp as $word) {
-                $word = str_replace("'","''", $word);
+                $word = str_replace("'", "''", $word);
                 $words[$word] = $word;
             }
         }
@@ -195,27 +194,32 @@ class DataService extends MService
         return $tree;
     }
 
-    private function getFSTreeText($node, &$text, $ident = '') {
-        $text .= $ident . $node['typeSystem'] . '_' . $node['entry'] .  ($node['name'] ? "  [" . $node['name'] . "]" : "") . "\n";
-        foreach($node['children'] as $child) {
+    private function getFSTreeText($node, &$text, $ident = '')
+    {
+        $text .= $ident . $node['typeSystem'] . '_' . $node['entry'] . ($node['name'] ? "  [" . $node['name'] . "]" : "") . "\n";
+        foreach ($node['children'] as $child) {
             $this->getFSTreeText($child, $text, $ident . '    ');
         }
     }
 
-    public function exportCxnToFS()
+    public function exportCxnToFS($data)
     {
-        $fs = '';
+        $viewCxn = new fnbr\models\ViewConstruction();
+        $filter = (object)['idDomain' => $data->idDomain, 'idLanguage' => $data->idLanguage];
+        $cxns = $viewCxn->listByFilter($filter)->asQuery()->getResult(\FETCH_ASSOC);
+        $network = [];
         $construction = new fnbr\models\Construction();
-        $cxns = $construction->listAll()->orderBy('entry')->asQuery()->getResult();
         foreach ($cxns as $cxn) {
-            $idConstruction = $cxn['idConstruction'];
-            $construction->getById($idConstruction);
-            $structure = $construction->getStructure();
-            $tree = $this->getFSTree($structure, $cxn['idEntity']);
-            $this->getFSTreeText($tree, $fs);
-            $fs .= "\n";
+            $construction->getById($cxn['idConstruction']);
+            if ($construction->getActive()) {
+                $structure = $construction->getStructure();
+                $network[$structure->entry] = $structure;
+                //$tree = $this->getFSTree($structure, $cxn['idEntity']);
+                //$this->getFSTreeText($tree, $fs);
+                //$fs .= "\n";
+            }
         }
-        return $fs;
+        return json_encode($network);
     }
 
 }
