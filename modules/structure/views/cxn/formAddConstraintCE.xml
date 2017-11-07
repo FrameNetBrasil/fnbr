@@ -19,10 +19,10 @@
                     <label>(minimum 3 letters of Frame name to search)</label>
                     <include component="MLookupFrame.php" id="idFrameFamily"/>
                 </div>
-                <div title="CE > CE_before" style="overflow:auto;padding:10px;">
+                <div title="CE > before" style="overflow:auto;padding:10px;">
                     <mselection id="idConstructionBefore" options="$this->data->siblingsCE"/>
                 </div>
-                <div title="CE > CE_meets" style="overflow:auto;padding:10px;">
+                <div title="CE > meets" style="overflow:auto;padding:10px;">
                     <mselection id="idConstructionMeets" options="$this->data->siblingsCE"/>
                 </div>
             </maccordion>
