@@ -72,7 +72,6 @@ class ExportController extends MController
             $service = Manager::getAppService('data');
             $fs =  $service->exportCxnToFS($this->data);
             $fileName = $this->data->fileName . '.json';
-            mdump($fs);
             $mfile = \MFile::file($fs, false, $fileName);
             $this->renderFile($mfile);
         } catch (EMException $e) {

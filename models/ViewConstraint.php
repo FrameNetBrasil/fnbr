@@ -101,6 +101,7 @@ HERE;
             $constraints[$i]['type'] = $this->type[$constraint['entry']];
             $constraints[$i]['entry'] = $constraint['cxEntry'];
             $constraints[$i]['relationType'] = $constraint['entry'];
+            $constraints[$i]['idConstraint'] = $constraint['idConstraint'];
         }
         return $constraints;
     }
@@ -112,10 +113,12 @@ HERE;
             $chain[] = [
                 'idConstrained' => $idConstrainedBase,//$constraint['idConstrained'],
                 'idConstrainedBy' => $constraint['idConstrainedBy'],
+                'idConstraint' => $constraint['idConstraint'],
                 'name' => $constraint['name'],
                 'entry' => $constraint['entry'],
                 'nick' => $constraint['nick'],
-                'type' => $constraint['type']
+                'type' => $constraint['type'],
+                'relationType' => $constraint['relationType']
             ];
             $this->getChainByIdConstrained($constraint['idConstraint'], $constraint['idConstrainedBy'], $chain);
         }

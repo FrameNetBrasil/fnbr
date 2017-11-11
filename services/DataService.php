@@ -207,19 +207,20 @@ class DataService extends MService
         $viewCxn = new fnbr\models\ViewConstruction();
         $filter = (object)['idDomain' => $data->idDomain, 'idLanguage' => $data->idLanguage];
         $cxns = $viewCxn->listByFilter($filter)->asQuery()->getResult(\FETCH_ASSOC);
-        $network = [];
         $construction = new fnbr\models\Construction();
+        $network = [];
         foreach ($cxns as $cxn) {
             $construction->getById($cxn['idConstruction']);
             if ($construction->getActive()) {
                 $structure = $construction->getStructure();
                 $network[$structure->entry] = $structure;
-                //$tree = $this->getFSTree($structure, $cxn['idEntity']);
-                //$this->getFSTreeText($tree, $fs);
-                //$fs .= "\n";
             }
         }
-        return json_encode($network);
+        $fs = [
+            'network' => $network
+        ];
+        mdump(json_encode($fs));
+        return json_encode($fs);
     }
 
 }
