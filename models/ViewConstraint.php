@@ -69,29 +69,33 @@ class ViewConstraint extends map\ViewConstraintMap
         $idLanguage = \Manager::getSession()->idLanguage;
 
         $cmd = <<<HERE
-        SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry,
-            ifnull(e2fe.name, ifnull(e2ce.name, ifnull(e2se.name, ifnull(e2ce2.name, e2cne.name)))) AS name,
-            ifnull(e2fe.entry, ifnull(e2ce.entry, ifnull(e2se.entry, ifnull(e2ce2.entry, e2cne.entry)))) AS cxEntry,
-            ifnull(e2fe.nick, ifnull(e2ce.nick, ifnull(e2se.nick, ifnull(e2ce2.nick, e2cne.nick)))) AS nick
-        FROM View_Constraint c
-        LEFT JOIN View_FrameElement e1fe ON (c.idConstrained = e1fe.idEntity)
-        LEFT JOIN View_Construction e1ce ON (c.idConstrained = e1ce.idEntity)
-        LEFT JOIN View_Frame e2f ON (c.idConstrainedBy = e2f.idEntity)
-        LEFT JOIN View_EntryLanguage e2fe ON (e2f.entry = e2fe.entry)
-        LEFT JOIN View_Construction e2c ON (c.idConstrainedBy = e2c.idEntity)
-        LEFT JOIN View_EntryLanguage e2ce ON (e2c.entry = e2ce.entry)
-        LEFT JOIN View_SemanticType e2s ON (c.idConstrainedBy = e2s.idEntity)
-        LEFT JOIN View_EntryLanguage e2se ON (e2s.entry = e2se.entry)
-        LEFT JOIN View_ConstructionElement e2cel ON (c.idConstrainedBy = e2cel.idEntity)
-        LEFT JOIN View_EntryLanguage e2ce2 ON (e2cel.entry = e2ce2.entry)
-        LEFT JOIN View_Constraint e2cn ON (c.idConstrainedBy = e2cn.idConstraint)
-        LEFT JOIN View_EntryLanguage e2cne ON (e2cn.entry = e2cne.entry)
-        WHERE (c.idConstrained = {$idConstrained})
-            AND ((e2fe.idLanguage = {$idLanguage}) or (e2fe.idLanguage is null))
-            AND ((e2ce.idLanguage = {$idLanguage}) or (e2ce.idLanguage is null))
-            AND ((e2se.idLanguage = {$idLanguage}) or (e2se.idLanguage is null))
-            AND ((e2ce2.idLanguage = {$idLanguage}) or (e2ce2.idLanguage is null))
-            AND ((e2cne.idLanguage = {$idLanguage}) or (e2cne.idLanguage is null))
+SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry,
+  ifnull(e2fe.name, ifnull(e2ce.name, ifnull(e2se.name, ifnull(e2ce2.name, ifnull(e3ce.entry,e2cne.name))))) AS name,
+  ifnull(e2fe.entry, ifnull(e2ce.entry, ifnull(e2se.entry, ifnull(e2ce2.entry, ifnull(e3ce.entry,e2cne.entry))))) AS cxEntry,
+  ifnull(e2fe.nick, ifnull(e2ce.nick, ifnull(e2se.nick, ifnull(e2ce2.nick, ifnull(e3ce.nick,e2cne.nick))))) AS nick
+  FROM View_Constraint c
+  LEFT JOIN View_FrameElement e1fe ON (c.idConstrained = e1fe.idEntity)
+  LEFT JOIN View_Construction e1ce ON (c.idConstrained = e1ce.idEntity)
+  LEFT JOIN View_Frame e2f ON (c.idConstrainedBy = e2f.idEntity)
+  LEFT JOIN View_EntryLanguage e2fe ON (e2f.entry = e2fe.entry)
+  LEFT JOIN View_Construction e2c ON (c.idConstrainedBy = e2c.idEntity)
+  LEFT JOIN View_EntryLanguage e2ce ON (e2c.entry = e2ce.entry)
+  LEFT JOIN View_SemanticType e2s ON (c.idConstrainedBy = e2s.idEntity)
+  LEFT JOIN View_EntryLanguage e2se ON (e2s.entry = e2se.entry)
+  LEFT JOIN View_ConstructionElement e2cel ON (c.idConstrainedBy = e2cel.idEntity)
+  LEFT JOIN View_EntryLanguage e2ce2 ON (e2cel.entry = e2ce2.entry)
+  LEFT JOIN View_Constraint e2cn ON (c.idConstrainedBy = e2cn.idConstraint)
+  LEFT JOIN View_EntryLanguage e2cne ON (e2cn.entry = e2cne.entry)
+  LEFT JOIN View_Constraint e3cn ON (c.idConstrainedBy = e3cn.idConstraint)
+  LEFT JOIN View_Construction e3c ON (e3cn.idConstrainedBy = e3c.idEntity)
+  LEFT JOIN View_EntryLanguage e3ce ON (e3c.entry = e3ce.entry)
+  WHERE (c.idConstrained = {$idConstrained})
+      AND ((e2fe.idLanguage = {$idLanguage}) or (e2fe.idLanguage is null))
+      AND ((e2ce.idLanguage = {$idLanguage}) or (e2ce.idLanguage is null))
+      AND ((e2se.idLanguage = {$idLanguage}) or (e2se.idLanguage is null))
+      AND ((e2ce2.idLanguage = {$idLanguage}) or (e2ce2.idLanguage is null))
+      AND ((e2cne.idLanguage = {$idLanguage}) or (e2cne.idLanguage is null))
+      AND ((e3ce.idLanguage = {$idLanguage}) or (e3ce.idLanguage is null))        
 
 HERE;
         $query = $this->getDb()->getQueryCommand($cmd);

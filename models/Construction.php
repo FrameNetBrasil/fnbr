@@ -320,7 +320,7 @@ HERE;
         mdump('=============' . $this->getEntry());
         $d = [];
         $e = [];
-        $cxnConstraints = [];
+        //$cxnConstraints = [];
         foreach ($ces as $ce) {
             $ceObject = (object)[];
             $ceEntry = $ce['entry'];
@@ -339,33 +339,39 @@ HERE;
             $e[$ceIdEntity] = $ceEntry;
             //mdump($chain);
             foreach ($chain as $constraint) {
+                mdump($constraint);
                 if (($constraint['relationType'] == 'rel_constraint_cxn')
                     || ($constraint['relationType'] == 'rel_constraint_element')) {
 
                     $j = $constraint['idConstrainedBy'];
                     $i = $constraint['idConstrained'];
+                    $k = $constraint['idConstraint'];
                     $e[$j] = $constraint['entry'];
                     $d[$e[$j]] = (object)[];
                     //mdump($constraint['type']);
                     //mdump('i=' . $i . '   j=' . $j);
                     //mdump($e);
                     if ($constraint['type'] == 'CX') {
-                        $d[$e[$i]]->value = $d[$e[$j]];
+                        if ($d[$e[$i]]->value == '') {
+                            $d[$e[$i]]->value = [];
+                        }
+                        $d[$e[$i]]->value[] = $d[$e[$j]];
+                        $d[$e[$j]]->id = $k;
                         $d[$e[$j]]->extends = $e[$j];
                         $d[$e[$j]]->attributes = (object)[];
                     }
                     if ($constraint['type'] == 'CE') {
                         $entry = $e[$j];
                         $o = $d[$e[$i]]->attributes->$entry = (object)[
-                            'id' => $constraint['idConstraint'],
+                            'id' => $k,
                             'name' => $constraint['name']
                         ];
                         $d[$e[$j]] = $o;
                     }
                 }
-                if ($constraint['type'] == 'LU') {
-                    $cxnConstraints[] = $constraint['idConstraint'];
-                }
+                //if ($constraint['type'] == 'LU') {
+                //    $cxnConstraints[] = $constraint['idConstraint'];
+                //}
             }
             //mdump($d[$ce['idEntity']]);
         }
@@ -389,7 +395,11 @@ HERE;
             }
             $cxnObject->attributes->$ceEntry = $ceObject;
         }
-        foreach($cxnConstraints as $idConstraint) {
+
+        $chain = [];
+        $vc->getChainByIdConstrained($idEntity, $idEntity, $chain);
+        foreach($chain as $constrainedBy) {
+            $idConstraint = $constrainedBy['idConstrainedBy'];
             if ($cxnObject->constraints == '') {
                 $cxnObject->constraints = (object)[];
             }

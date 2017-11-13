@@ -37,6 +37,9 @@ class Entry extends map\EntryMap {
         if ($filter->entry){
             $criteria->where("entry LIKE '{$filter->entry}%'");
         }
+        if ($filter->entries){
+            $criteria->where("entry","IN", $filter->entries);
+        }
         if ($filter->idLanguage){
             $criteria->where("idLanguage = {$filter->idLanguage}");
         }
