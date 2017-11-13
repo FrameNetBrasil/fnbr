@@ -316,6 +316,9 @@ HERE;
         ];
         $vce = new ViewConstructionElement();
         $ces = $vce->listCEByIdConstruction($this->getId())->getResult();
+        if (count($ces) == 0) {
+            $cxnObject->type = 'pos';
+        }
         $vc = new ViewConstraint();
         mdump('=============' . $this->getEntry());
         $d = [];
@@ -326,15 +329,17 @@ HERE;
             $ceEntry = $ce['entry'];
             $ceIdEntity = $ce['idEntity'];
             $cxnObject->attributes->$ceEntry = $ceObject;
-            $ceObject->optional = $ce['optional'] ? true : false;
-            $ceObject->type = 'ce';
+            //$ceObject->optional = $ce['optional'] ? true : false;
+            //$ceObject->type = 'ce';
             $chain = [];
             $vc->getChainByIdConstrained($ce['idEntity'], $ce['idEntity'], $chain);
             //mdump($chain);
             $d[$ceEntry] = (object)[
                 //'ce' => $ce['entry'],
                 'name' => $ce['name'],
-                'id' => $ceIdEntity
+                'id' => $ceIdEntity,
+                'type' => 'ce',
+                'optional' => $ce['optional'] ? true : false
             ];
             $e[$ceIdEntity] = $ceEntry;
             //mdump($chain);
@@ -410,6 +415,7 @@ HERE;
                 $cxnObject->constraints->$type = [];
             }
             $cxnObject->constraints->$type = [
+                $constraint->entry,
                 $constraint->idConstrained,
                 $constraint->idConstrainedBy
             ];
