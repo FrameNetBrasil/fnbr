@@ -344,7 +344,7 @@ HERE;
             $e[$ceIdEntity] = $ceEntry;
             //mdump($chain);
             foreach ($chain as $constraint) {
-                mdump($constraint);
+                //mdump($constraint);
                 if (($constraint['relationType'] == 'rel_constraint_cxn')
                     || ($constraint['relationType'] == 'rel_constraint_element')) {
 
@@ -361,7 +361,11 @@ HERE;
                             $d[$e[$i]]->value = [];
                         }
                         $d[$e[$i]]->value[] = $d[$e[$j]];
-                        $d[$e[$j]]->id = $k;
+                        if (substr($constraint['name'],0,7) == 'cxn_cxn') {
+                            $d[$e[$j]]->id = $j;
+                        } else {
+                            $d[$e[$j]]->id = $k;
+                        }
                         $d[$e[$j]]->extends = $e[$j];
                         $d[$e[$j]]->attributes = (object)[];
                     }
