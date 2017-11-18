@@ -26,6 +26,8 @@ class ConstructionElementMap extends \MBusinessModel {
                 'idConstructionElement' => array('column' => 'idConstructionElement','key' => 'primary','idgenerator' => 'identity','type' => 'integer'),
                 'entry' => array('column' => 'entry','type' => 'string'),
                 'optional' => array('column' => 'optional','type' => 'boolean'),
+                'head' => array('column' => 'head','type' => 'boolean'),
+                'multiple' => array('column' => 'multiple','type' => 'boolean'),
                 'active' => array('column' => 'active','type' => 'boolean'),
                 'idEntity' => array('column' => 'idEntity','type' => 'integer'),
                 'idColor' => array('column' => 'idColor','type' => 'integer'),
@@ -55,9 +57,19 @@ class ConstructionElementMap extends \MBusinessModel {
     protected $active;
     /**
      *
-     * @var integer
+     * @var boolean
      */
     protected $optional;
+    /**
+     *
+     * @var boolean
+     */
+    protected $head;
+    /**
+     *
+     * @var boolean
+     */
+    protected $multiple;
     /**
      * 
      * @var integer 
@@ -109,9 +121,23 @@ class ConstructionElementMap extends \MBusinessModel {
     }
 
     public function setOptional($value) {
-        mdump(gettype($value));
-        mdump($value);
         $this->optional = ($value ? 1 : 0);
+    }
+
+    public function getHead() {
+        return $this->head;
+    }
+
+    public function setHead($value) {
+        $this->head = ($value ? 1 : 0);
+    }
+
+    public function getMultiple() {
+        return $this->multiple;
+    }
+
+    public function setMultiple($value) {
+        $this->multiple = ($value ? 1 : 0);
     }
 
     public function getIdEntity() {

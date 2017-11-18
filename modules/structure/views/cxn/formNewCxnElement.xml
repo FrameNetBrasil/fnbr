@@ -8,6 +8,8 @@
             <mtextfield id="cxnelement_entry" label="Entry:" prefix="ce_" width="250px"/> 
             <include component="MLookupColor.php" id="cxnelement_idColor" label="Color"/>
             <mbooleanfield id="cxnelement_optional" label="Optional" value="$this->data->optional"/>
+            <mbooleanfield id="cxnelement_head" label="Head" value="$this->data->head"/>
+            <mbooleanfield id="cxnelement_multiple" label="Multiple" value="$this->data->multiple"/>
         </fields>
         <tools>
             <mlinkbutton id="lbCloseCxn" iconCls="icon-cancel" text="{{_M('Close')}}" plain="true" action="$this->data->close"/>
