@@ -50,7 +50,7 @@ return [
             'wflex' => ['Search Wf-Lexeme', 'admin/wflex/main', 'fa fa-cog fa16px', '', A_ACCESS, []],
             'registerWfLex' => ['Register Wf-Lexeme', 'utils/register/formRegisterLexWf', 'fa fa-edit fa16px', 'MASTER', A_ACCESS, []],
             'importMWE' => ['Import MWE', 'utils/import/formImportMWE', 'fa fa-upload fa16px', 'MASTER', A_ACCESS, []],
-            'importFullText' => ['Import FullText', 'utils/import/formImportFullText', 'fa fa-upload fa16px', 'ADMIN', A_ACCESS, []],
+            'importFullText' => ['Import FullText', 'utils/import/formImportFullText', 'fa fa-upload fa16px', 'MASTER', A_ACCESS, []],
             'exportFrames' => ['Export Frames', 'utils/export/formExportFrames', 'fa fa-download fa16px', 'ADMIN', A_ACCESS, []],
             'importFrames' => ['Import Frames', 'utils/import/formImportFrames', 'fa fa-upload fa16px', 'ADMIN', A_ACCESS, []],
             'exportCxnFS' => ['Export Cxn as FS', 'utils/export/formExportCxnFS', 'fa fa-download fa16px', 'ADMIN', A_ACCESS, []],
