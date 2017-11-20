@@ -114,3 +114,15 @@
     height:16px;
     background: url(../images/fi.png) no-repeat center center;
 }
+
+.fnbrFlagHi {
+    width:16px;
+    height:16px;
+    background: url(../images/hi.png) no-repeat center center;
+}
+
+.fnbrFlagUr {
+    width:16px;
+    height:16px;
+    background: url(../images/ur.png) no-repeat center center;
+}
