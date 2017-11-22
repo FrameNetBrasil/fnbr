@@ -300,6 +300,9 @@ class AnnotationService extends MService
                 }
                 $width = 18;
             }
+            if ($language == 'hi') {
+                $width = 18;
+            }
             $columns[] = array(
                 "hidden" => 'false',
                 "field" => 'wf' . $i,
