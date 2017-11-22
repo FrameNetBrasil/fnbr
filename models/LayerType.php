@@ -89,7 +89,7 @@ class LayerType extends map\LayerTypeMap
     
     public function listToLU($lu) {
         $array = array('lty_fe','lty_gf','lty_pt', 'lty_other','lty_target','lty_sent');
-        $lPOS = array('V'=>'lty_verb','N' => 'lty_noun','A' => 'lty_adj','AV'=>'lty_adv','P'=>'lty_prep');
+        $lPOS = array('V'=>'lty_verb','N' => 'lty_noun','A' => 'lty_adj','ADV'=>'lty_adv','P'=>'lty_prep');
         $pos = $lu->getPOS();
         $array[] = $lPOS[$pos];
         $criteria = $this->getCriteria();
