@@ -56,6 +56,7 @@ class LU extends map\LUMap
         $data = parent::getData();
         $data->idFrame = $this->idFrame;
         $criteria = Base::relationCriteria('LU','SemanticType','rel_hastype','SemanticType.idEntity');
+        $criteria->where("LU.idEntity", "=", $this->getIdEntity());
         $idEntitySemanticType = $criteria->asQuery()->getResult()[0]['idEntity'];
         if ($idEntitySemanticType) {
             $st = new SemanticType();
