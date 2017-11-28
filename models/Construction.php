@@ -339,7 +339,9 @@ HERE;
                 'name' => $ce['name'],
                 'id' => $ceIdEntity,
                 'type' => 'ce',
-                'optional' => $ce['optional'] ? true : false
+                'optional' => $ce['optional'] ? true : false,
+                'head' => $ce['head'] ? true : false,
+                'multiple' => $ce['multiple'] ? true : false,
             ];
             $e[$ceIdEntity] = $ceEntry;
             //mdump($chain);
@@ -360,6 +362,7 @@ HERE;
                         if ($d[$e[$i]]->value == '') {
                             $d[$e[$i]]->value = [];
                         }
+                        /*
                         $d[$e[$i]]->value[] = $d[$e[$j]];
                         if (substr($constraint['name'],0,7) == 'cxn_cxn') {
                             $d[$e[$j]]->id = $j;
@@ -368,6 +371,8 @@ HERE;
                         }
                         $d[$e[$j]]->extends = $e[$j];
                         $d[$e[$j]]->attributes = (object)[];
+                        */
+                        $d[$e[$i]]->value[] = $e[$j];
                     }
                     if ($constraint['type'] == 'CE') {
                         $entry = $e[$j];
@@ -459,6 +464,20 @@ HERE;
                 }
                 $parent = new Construction($extend['idConstruction']);
                 $cxnObject->extends[] = $parent->getEntry();
+                $ceceRelations = $er->listCERelations($extend['idEntity'],$idEntity, 'rel_inheritance_cxn')->asQuery()->getResult();
+                mdump($ceceRelations);
+                foreach ($ces as $ce) {
+                    $ceObject = $d[$ce['entry']];
+                    $ceObject->extends = [];
+                    $ceIdEntity = $ce['idEntity'];
+                    foreach($ceceRelations as $ceceRelation) {
+                        mdump('=== ceceRelation');
+                        mdump($ceceRelation);
+                        if ($ceceRelation['subCE'] == $ceIdEntity) {
+                            $ceObject->extends[] = $ceceRelation['superCE'];
+                        }
+                    }
+                }
             }
         }
 

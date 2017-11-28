@@ -108,6 +108,12 @@ class ConstructionElement extends map\ConstructionElementMap {
         return $criteria;
     }
 
+    public function setData($data) {
+        $data->optional = $data->optional ?: 0;
+        $data->multiple = $data->multiple ?: 0;
+        $data->head = $data->head ?: 0;
+        parent::setData($data);
+    }
 
     public function save($data)
     {

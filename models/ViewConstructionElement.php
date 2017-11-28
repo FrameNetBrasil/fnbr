@@ -45,7 +45,7 @@ HERE;
         $idLanguage = \Manager::getSession()->idLanguage;
 
         $cmd = <<<HERE
-        SELECT ce.idConstructionElement, e.name, ce.entry
+        SELECT ce.idConstructionElement, e.name, ce.entry, ce.optional, ce.head, ce.multiple
         FROM View_ConstructionElement ce
             INNER JOIN View_EntryLanguage e ON (e.entry = ce.entry)
         WHERE (e.idLanguage = {$idLanguage})
@@ -60,7 +60,7 @@ HERE;
         $idLanguage = \Manager::getSession()->idLanguage;
 
         $cmd = <<<HERE
-        SELECT ce.idConstructionElement, ce.idEntity, e.name, e.nick, ce.entry
+        SELECT ce.idConstructionElement, ce.idEntity, e.name, e.nick, ce.entry, ce.optional, ce.head, ce.multiple
         FROM View_ConstructionElement ce
             INNER JOIN View_EntryLanguage e ON (e.entry = ce.entry)
         WHERE (e.idLanguage = {$idLanguage})
