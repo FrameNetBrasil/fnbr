@@ -92,6 +92,8 @@ Client Secret key: puU86vzlOcRpvI4s7UXf_1xx
             'rel_agentive_qualia' => '#FFD700',
             'rel_telic_qualia' => '#8B008B',
             'rel_constraint_frame' => '#F5DEB3',
+            'rel_standsfor' => '#808000',
+            'rel_inhibits' => '#FFFF00',
         ],
         'beginnerLayers' => [
             '1'

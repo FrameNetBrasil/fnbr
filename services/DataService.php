@@ -202,8 +202,9 @@ class DataService extends MService
         }
     }
 
-    public function exportCxnToFS($data)
+    public function exportCxnToFS($data = '')
     {
+        $data = $data ?: $this->data;
         $viewCxn = new fnbr\models\ViewConstruction();
         $filter = (object)['idDomain' => $data->idDomain, 'idLanguage' => $data->idLanguage];
         $cxns = $viewCxn->listByFilter($filter)->asQuery()->getResult(\FETCH_ASSOC);

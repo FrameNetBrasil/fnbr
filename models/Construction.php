@@ -193,7 +193,7 @@ HERE;
                 ON (relatedCxn.entry = entry_relatedCxn.entry)
         WHERE (Construction.idConstruction = {$this->getId()})
             AND (RelationType.entry in (
-                'rel_inheritance_cxn'))
+                'rel_inheritance_cxn', 'rel_inhibits'))
            AND (entry_relatedCxn.idLanguage = {$idLanguage} )
         ORDER BY RelationType.entry, entry_relatedCxn.name
             
@@ -478,6 +478,20 @@ HERE;
                         }
                     }
                 }
+            }
+        }
+
+        $inhibits = $this->listDirectRelations();
+        mdump('======================== inhibits');
+        mdump($inhibits);
+        if (is_array($inhibits['rel_inhibits'])) {
+            foreach ($inhibits['rel_inhibits'] as $inhibit) {
+                mdump($inhibit);
+                if ($cxnObject->inhibits == '') {
+                    $cxnObject->inhibits = [];
+                }
+                $inhibited = new Construction($inhibit['idConstruction']);
+                $cxnObject->inhibits[] = $inhibited->getEntry();
             }
         }
 
