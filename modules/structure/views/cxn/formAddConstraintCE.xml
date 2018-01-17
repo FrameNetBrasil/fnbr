@@ -7,7 +7,7 @@
                 <mhiddenfield id="idConstructionElement" value="$this->data->idConstructionElement"/>
                 <mlabel text="$this->data->ce" />
             </mvcontainer>
-            <maccordion id="accordionAddConstraintCE" style="width:400px;height:250px;">
+            <maccordion id="accordionAddConstraintCE" style="width:400px;height:300px;">
                 <div title="CE > Construction" style="overflow:auto;padding:10px;">
                     <include component="MLookupConstruction.php" id="idConstruction"/>
                 </div>
@@ -18,6 +18,18 @@
                 <div title="CE > Frame Family" style="overflow:auto;padding:10px;">
                     <label>(minimum 3 letters of Frame name to search)</label>
                     <include component="MLookupFrame.php" id="idFrameFamily"/>
+                </div>
+                <div title="CE > LU" style="overflow:auto;padding:10px;">
+                    <label>(minimum 3 letters of LU name to search)</label>
+                    <include component="MLookupLU.php" id="idLU"/>
+                </div>
+                <div title="CE > Lemma" style="overflow:auto;padding:10px;">
+                    <label>(minimum 3 letters of Lemma name to search)</label>
+                    <include component="MLookupLemma.php" id="idLemma"/>
+                </div>
+                <div title="CE > Lexeme" style="overflow:auto;padding:10px;">
+                    <label>(minimum 3 letters of Lexeme name to search)</label>
+                    <include component="MLookupLexeme.php" id="idLexeme"/>
                 </div>
                 <div title="CE > before" style="overflow:auto;padding:10px;">
                     <mselection id="idConstructionBefore" options="$this->data->siblingsCE"/>

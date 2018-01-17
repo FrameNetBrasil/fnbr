@@ -296,6 +296,7 @@ HERE;
 
     }
 
+    /*
     public function getStructure()
     {
         $typeSystem = [
@@ -362,16 +363,6 @@ HERE;
                         if ($d[$e[$i]]->value == '') {
                             $d[$e[$i]]->value = [];
                         }
-                        /*
-                        $d[$e[$i]]->value[] = $d[$e[$j]];
-                        if (substr($constraint['name'],0,7) == 'cxn_cxn') {
-                            $d[$e[$j]]->id = $j;
-                        } else {
-                            $d[$e[$j]]->id = $k;
-                        }
-                        $d[$e[$j]]->extends = $e[$j];
-                        $d[$e[$j]]->attributes = (object)[];
-                        */
                         $d[$e[$i]]->value[] = $e[$j];
                     }
                     if ($constraint['type'] == 'CE') {
@@ -471,6 +462,156 @@ HERE;
                     $ceObject->extends = [];
                     $ceIdEntity = $ce['idEntity'];
                     foreach($ceceRelations as $ceceRelation) {
+                        mdump('=== ceceRelation');
+                        mdump($ceceRelation);
+                        if ($ceceRelation['subCE'] == $ceIdEntity) {
+                            $ceObject->extends[] = $ceceRelation['superCE'];
+                        }
+                    }
+                }
+            }
+        }
+
+        $inhibits = $this->listDirectRelations();
+        mdump('======================== inhibits');
+        mdump($inhibits);
+        if (is_array($inhibits['rel_inhibits'])) {
+            foreach ($inhibits['rel_inhibits'] as $inhibit) {
+                mdump($inhibit);
+                if ($cxnObject->inhibits == '') {
+                    $cxnObject->inhibits = [];
+                }
+                $inhibited = new Construction($inhibit['idConstruction']);
+                $cxnObject->inhibits[] = $inhibited->getEntry();
+            }
+        }
+
+        return $cxnObject;
+    }
+    */
+
+    public function getStructure()
+    {
+        $idEntity = $this->getIdEntity();
+        $cxnObject = (object)[
+            'id' => $idEntity,
+            'name' => $this->getName(),
+            'entry' => $this->getEntry(),
+            'type' => 'cxn',
+            'abstract' => $this->getAbstract() ? true : false,
+            'attributes' => (object)[],
+        ];
+        $vce = new ViewConstructionElement();
+        $ces = $vce->listCEByIdConstruction($this->getId())->getResult();
+        if (count($ces) == 0) {
+            $cxnObject->type = 'pos';
+            return $cxnObject;
+        }
+        $vc = new ViewConstraint();
+        mdump('=============' . $this->getEntry());
+        $idConstrainedSet = [];
+        foreach ($ces as $ce) {
+            $idConstrainedSet[] = $ce['idEntity'];
+        }
+        $constraints = $vc->getByIdConstrainedSet($idConstrainedSet);
+        foreach ($ces as $ce) {
+            $ceEntry = $ce['entry'];
+            $ceIdEntity = $ce['idEntity'];
+            $ceEntryByIdEntity[$ce['idEntity']] = $ce['entry'];
+            $ceObject = (object)[
+                'name' => $ce['name'],
+                'id' => $ceIdEntity,
+                'type' => 'ce',
+                'optional' => $ce['optional'] ? true : false,
+                'head' => $ce['head'] ? true : false,
+                'multiple' => $ce['multiple'] ? true : false,
+            ];
+            $cxnObject->attributes->$ceEntry = $ceObject;
+            foreach ($constraints as $constraint) {
+                if ($constraint['idConstrained'] == $ceIdEntity) {
+                    if (($constraint['relationType'] == 'rel_constraint_before')
+                        || ($constraint['relationType'] == 'rel_constraint_meets')) {
+                        if ($ceObject->constraints == '') {
+                            $ceObject->constraints = (object)[];
+                        }
+                        $c = ($constraint['relationType'] == 'rel_constraint_before') ? 'before' : 'meets';
+                        if ($ceObject->constraints->$c == '') {
+                            $ceObject->constraints->$c = [];
+                        }
+                        $ceObject->constraints->$c[] = $constraint['entry'];
+                    }
+                    if ($constraint['relationType'] == 'rel_constraint_cxn') {
+                        if ($ceObject->value == '') {
+                            $ceObject->value = [];
+                        }
+                        $ceObject->value[] = $constraint['entry'];
+                    }
+                }
+            }
+        }
+
+        $chain = [];
+        $vc->getChainByIdConstrained($idEntity, $idEntity, $chain);
+        foreach($chain as $constrainedBy) {
+            $idConstraint = $constrainedBy['idConstrainedBy'];
+            if ($cxnObject->constraints == '') {
+                $cxnObject->constraints = (object)[];
+            }
+            $constraint = $vc->getConstraintData($idConstraint);
+            mdump($constraint);
+            $type = $constraint->entry;
+            if ($cxnObject->constraints->$type == '') {
+                $cxnObject->constraints->$type = [];
+            }
+            $cxnObject->constraints->$type = [
+                $constraint->entry,
+                $constraint->idConstrained,
+                $constraint->idConstrainedBy
+            ];
+        }
+
+        $er = new EntityRelation();
+        $vfe = new ViewFrameElement();
+        $evokes = $this->listEvokesRelations();
+        if (is_array($evokes['rel_evokes'])) {
+            foreach ($evokes['rel_evokes'] as $frame) {
+                if ($cxnObject->evokes == '') {
+                    $cxnObject->evokes = (object)[];
+                }
+                $frameEntry = $frame['frameEntry'];
+                $frameObject = $cxnObject->evokes->$frameEntry = (object)[];
+                $cefeRelation = $er->listCEFERelations($idEntity, $frame['idEntity'], 'rel_evokes')->asQuery()->getResult();
+                foreach ($cefeRelation as $relation) {
+                    $ceEntry = $ceEntryByIdEntity[$relation['idEntity1']];
+                    if ($frameObject->$ceEntry == '') {
+                        $frameObject->$ceEntry = [];
+                    }
+                    $fe = $vfe->getByIdEntity($relation['idEntity2']);
+                    $feEntry = $fe->entry;
+                    $frameObject->$ceEntry[] = $feEntry;
+                }
+            }
+        }
+
+        $extends = $this->listInverseRelations();
+        mdump('======================== extends');
+        mdump($extends);
+        if (is_array($extends['rel_inheritance_cxn'])) {
+            foreach ($extends['rel_inheritance_cxn'] as $extend) {
+                mdump($extend);
+                if ($cxnObject->extends == '') {
+                    $cxnObject->extends = [];
+                }
+                $parent = new Construction($extend['idConstruction']);
+                $cxnObject->extends[] = $parent->getEntry();
+                $ceceRelations = $er->listCERelations($extend['idEntity'], $idEntity, 'rel_inheritance_cxn')->asQuery()->getResult();
+                mdump($ceceRelations);
+                foreach ($ces as $ce) {
+                    $ceEntry = $ce['entry'];
+                    $ceObject = $cxnObject->attributes->$ceEntry;
+                    $ceObject->extends = [];
+                    $ceIdEntity = $ce['idEntity'];
+                    foreach ($ceceRelations as $ceceRelation) {
                         mdump('=== ceceRelation');
                         mdump($ceceRelation);
                         if ($ceceRelation['subCE'] == $ceIdEntity) {

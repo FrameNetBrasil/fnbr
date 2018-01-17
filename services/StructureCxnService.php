@@ -610,6 +610,32 @@ class StructureCxnService extends MService
                 $frame = new fnbr\models\Frame($data->idFrameFamily);
                 Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_framefamily', $ce->getIdEntity(), $frame->getIdEntity());
             }
+            /*
+            if ($data->idWordform != '') {
+                $constraint = Base::createEntity('CN', 'con');
+                $ce = new fnbr\models\ConstructionElement($data->idConstructionElement);
+                $wf = new fnbr\models\Wordform($data->idWordform);
+                Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_wordform', $ce->getIdEntity(), $wf->getIdEntity());
+            }
+            */
+            if ($data->idLexeme != '') {
+                $constraint = Base::createEntity('CN', 'con');
+                $ce = new fnbr\models\ConstructionElement($data->idConstructionElement);
+                $lexeme = new fnbr\models\Lexeme($data->idLexeme);
+                Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_lexeme', $ce->getIdEntity(), $lexeme->getIdEntity());
+            }
+            if ($data->idLemma != '') {
+                $constraint = Base::createEntity('CN', 'con');
+                $ce = new fnbr\models\ConstructionElement($data->idConstructionElement);
+                $lemma = new fnbr\models\Lemma($data->idLemma);
+                Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_lemma', $ce->getIdEntity(), $lemma->getIdEntity());
+            }
+            if ($data->idLU != '') {
+                $constraint = Base::createEntity('CN', 'con');
+                $ce = new fnbr\models\ConstructionElement($data->idConstructionElement);
+                $lu = new fnbr\models\LU($data->idLU);
+                Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_lu', $ce->getIdEntity(), $lu->getIdEntity());
+            }
             if ($data->idConstructionBefore != '') {
                 $constraint = Base::createEntity('CN', 'con');
                 $ce = new fnbr\models\ConstructionElement($data->idConstructionElement);

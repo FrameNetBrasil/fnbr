@@ -28,13 +28,15 @@ class LexemeMap extends \MBusinessModel {
                 'timeline' => array('column' => 'timeline','type' => 'string'),
                 'idPOS' => array('column' => 'idPOS','type' => 'integer'),
                 'idLanguage' => array('column' => 'idLanguage','type' => 'integer'),
+                'idEntity' => array('column' => 'idEntity','type' => 'integer'),
             ),
             'associations' => array(
                 'pos' => array('toClass' => 'fnbr\models\POS', 'cardinality' => 'oneToOne' , 'keys' => 'idPOS:idPOS'), 
                 'wordforms' => array('toClass' => 'fnbr\models\WordForm', 'cardinality' => 'oneToMany' , 'keys' => 'idLexeme:idLexeme'), 
                 'lexemeentries' => array('toClass' => 'fnbr\models\LexemeEntry', 'cardinality' => 'oneToMany' , 'keys' => 'idLexeme:idLexeme'), 
                 'language' => array('toClass' => 'fnbr\models\Language', 'cardinality' => 'oneToOne' , 'keys' => 'idLanguage:idLanguage'), 
-                'timelines' => array('toClass' => 'fnbr\models\Timeline', 'cardinality' => 'oneToMany' , 'keys' => 'timeline:timeline'), 
+                'timelines' => array('toClass' => 'fnbr\models\Timeline', 'cardinality' => 'oneToMany' , 'keys' => 'timeline:timeline'),
+                'entity' => array('toClass' => 'fnbr\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity:idEntity'),
             )
         );
     }
@@ -64,10 +66,16 @@ class LexemeMap extends \MBusinessModel {
      * @var integer 
      */
     protected $idLanguage;
+    /**
+     *
+     * @var integer
+     */
+    protected $idEntity;
 
     /**
      * Associations
      */
+    protected $entity;
     protected $pos;
     protected $wordforms;
     protected $language;
@@ -116,6 +124,40 @@ class LexemeMap extends \MBusinessModel {
     public function setIdLanguage($value) {
         $this->idLanguage = $value;
     }
+
+    public function getIdEntity() {
+        return $this->idEntity;
+    }
+
+    public function setIdEntity($value) {
+        $this->idEntity = $value;
+    }
+
+    /**
+     *
+     * @return Association
+     */
+    public function getEntity() {
+        if (is_null($this->entity)){
+            $this->retrieveAssociation("entity");
+        }
+        return  $this->entity;
+    }
+    /**
+     *
+     * @param Association $value
+     */
+    public function setEntity($value) {
+        $this->entity = $value;
+    }
+    /**
+     *
+     * @return Association
+     */
+    public function getAssociationEntity() {
+        $this->retrieveAssociation("entity");
+    }
+
     /**
      *
      * @return Association
@@ -242,4 +284,3 @@ class LexemeMap extends \MBusinessModel {
 }
 // end - wizard
 
-?>

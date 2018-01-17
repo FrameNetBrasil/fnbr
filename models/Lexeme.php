@@ -31,6 +31,27 @@ class Lexeme extends map\LexemeMap {
         return $this->getName();
     }
 
+    public function getIdEntity()
+    {
+        $idEntity = parent::getIdEntity();
+        if ($idEntity == '') {
+            $entity = new Entity();
+            $alias = 'lexeme_' . $this->name . '_' . $this->idLexeme;
+            $entity->getByAlias($alias);
+            if ($entity->getIdEntity()) {
+                throw new \Exception("This Lexeme already exists!.");
+            } else {
+                $entity->setAlias($alias);
+                $entity->setType('LX');
+                $entity->save();
+                $idEntity = $entity->getId();
+                $this->setIdEntity($idEntity);
+                parent::save();
+            }
+        }
+        return $idEntity;
+    }
+
     public function getByName($name, $idLanguage, $idPOS)
     {
         $criteria = $this->getCriteria()->select("idLexeme, name");
@@ -56,6 +77,15 @@ class Lexeme extends map\LexemeMap {
         if ($filter->language){
             $criteria->where("language.language = '{$filter->language}'");
         }
+        return $criteria;
+    }
+
+    public function listForLookup($lexeme = '')
+    {
+        $idLanguage = \Manager::getSession()->idLanguage;
+        $criteria = $this->getCriteria()->select("idLexeme, concat(name,'  [',pos.entries.name,']','  [',language.language,']') as fullname")->orderBy('name');
+        $criteria->where("pos.entries.idLanguage = {$idLanguage}");
+        $criteria->where("name LIKE '{$lexeme}%'");
         return $criteria;
     }
 

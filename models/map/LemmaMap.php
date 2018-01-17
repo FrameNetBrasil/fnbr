@@ -29,6 +29,7 @@ class LemmaMap extends \MBusinessModel
                 'timeline' => array('column' => 'timeline', 'type' => 'string'),
                 'idPOS' => array('column' => 'idPOS', 'type' => 'integer'),
                 'idLanguage' => array('column' => 'idLanguage', 'type' => 'integer'),
+                'idEntity' => array('column' => 'idEntity','type' => 'integer'),
             ),
             'associations' => array(
                 'pos' => array('toClass' => 'fnbr\models\POS', 'cardinality' => 'oneToOne', 'keys' => 'idPOS:idPOS'),
@@ -36,6 +37,7 @@ class LemmaMap extends \MBusinessModel
                 'lexemeentries' => array('toClass' => 'fnbr\models\LexemeEntry', 'cardinality' => 'oneToMany', 'keys' => 'idLemma:idLemma'),
                 'language' => array('toClass' => 'fnbr\models\Language', 'cardinality' => 'oneToOne' , 'keys' => 'idLanguage:idLanguage'), 
                 'timelines' => array('toClass' => 'fnbr\models\Timeline', 'cardinality' => 'oneToMany', 'keys' => 'timeline:timeline'),
+                'entity' => array('toClass' => 'fnbr\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity:idEntity'),
             )
         );
     }
@@ -69,10 +71,16 @@ class LemmaMap extends \MBusinessModel
      * @var integer 
      */
     protected $idLanguage;
+    /**
+     *
+     * @var integer
+     */
+    protected $idEntity;
 
     /**
      * Associations
      */
+    protected $entity;
     protected $pos;
     protected $lus;
     protected $lexemeentries;
@@ -128,7 +136,39 @@ class LemmaMap extends \MBusinessModel
     public function setIdLanguage($value) {
         $this->idLanguage = $value;
     }
-    
+
+    public function getIdEntity() {
+        return $this->idEntity;
+    }
+
+    public function setIdEntity($value) {
+        $this->idEntity = $value;
+    }
+
+    /**
+     *
+     * @return Association
+     */
+    public function getEntity() {
+        if (is_null($this->entity)){
+            $this->retrieveAssociation("entity");
+        }
+        return  $this->entity;
+    }
+    /**
+     *
+     * @param Association $value
+     */
+    public function setEntity($value) {
+        $this->entity = $value;
+    }
+    /**
+     *
+     * @return Association
+     */
+    public function getAssociationEntity() {
+        $this->retrieveAssociation("entity");
+    }
     /**
      *
      * @return Association
@@ -277,4 +317,3 @@ class LemmaMap extends \MBusinessModel
 }
 
 // end - wizard
-?>

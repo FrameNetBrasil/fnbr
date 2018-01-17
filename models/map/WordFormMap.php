@@ -27,10 +27,12 @@ class WordFormMap extends \MBusinessModel {
                 'form' => array('column' => 'form','type' => 'string'),
                 'timeline' => array('column' => 'timeline','type' => 'string'),
                 'idLexeme' => array('column' => 'idLexeme','type' => 'integer'),
+                'idEntity' => array('column' => 'idEntity','type' => 'integer'),
             ),
             'associations' => array(
                 'lexeme' => array('toClass' => 'fnbr\models\Lexeme', 'cardinality' => 'oneToOne' , 'keys' => 'idLexeme:idLexeme'), 
-                'timelines' => array('toClass' => 'fnbr\models\Timeline', 'cardinality' => 'oneToMany' , 'keys' => 'timeline:timeline'), 
+                'timelines' => array('toClass' => 'fnbr\models\Timeline', 'cardinality' => 'oneToMany' , 'keys' => 'timeline:timeline'),
+                'entity' => array('toClass' => 'fnbr\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity:idEntity'),
             )
         );
     }
@@ -60,10 +62,16 @@ class WordFormMap extends \MBusinessModel {
      * @var integer 
      */
     protected $idLanguage;
+    /**
+     *
+     * @var integer
+     */
+    protected $idEntity;
 
     /**
      * Associations
      */
+    protected $entity;
     protected $lexeme;
     protected $language;
     protected $timelines;
@@ -102,6 +110,31 @@ class WordFormMap extends \MBusinessModel {
 
     public function setIdLexeme($value) {
         $this->idLexeme = $value;
+    }
+    public function getIdEntity() {
+        return $this->idEntity;
+    }
+
+    public function setIdEntity($value) {
+        $this->idEntity = $value;
+    }
+
+    /**
+     *
+     * @return Association
+     */
+    public function getEntity() {
+        if (is_null($this->entity)){
+            $this->retrieveAssociation("entity");
+        }
+        return  $this->entity;
+    }
+    /**
+     *
+     * @param Association $value
+     */
+    public function setEntity($value) {
+        $this->entity = $value;
     }
     /**
      *
@@ -157,4 +190,3 @@ class WordFormMap extends \MBusinessModel {
 }
 // end - wizard
 
-?>

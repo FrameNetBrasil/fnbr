@@ -36,6 +36,27 @@ class Lemma extends map\LemmaMap
         return $this->getIdLemma();
     }
 
+    public function getIdEntity()
+    {
+        $idEntity = parent::getIdEntity();
+        if ($idEntity == '') {
+            $entity = new Entity();
+            $alias = 'lemma_' . $this->name . '_' . $this->idLemma;
+            $entity->getByAlias($alias);
+            if ($entity->getIdEntity()) {
+                throw new \Exception("This Lemma already exists!.");
+            } else {
+                $entity->setAlias($alias);
+                $entity->setType('LM');
+                $entity->save();
+                $idEntity = $entity->getId();
+                $this->setIdEntity($idEntity);
+                parent::save();
+            }
+        }
+        return $idEntity;
+    }
+
     public function getByName($name)
     {
         $criteria = $this->getCriteria()->select("idLemma, name");
