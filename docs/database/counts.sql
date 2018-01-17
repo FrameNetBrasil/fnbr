@@ -24,3 +24,27 @@ join sentence on (annotationset.idsentence = sentence.idsentence)
 where sentence.idlanguage = 1
 
 14067
+
+Numero de as associados as LUs pt no dominio Framenet
+
+select count(*)
+from view_lu lu join frame fr on (lu.idFrame=fr.idFrame)
+where lu.idlanguage=1
+and fr.idEntity in (
+select distinct idEntityRel
+from view_domain
+where entry in ('dom_framenet')
+and entityType='FR'
+and idlanguage = 2
+)
+
+select lu.idlanguage, count(*)
+from view_lu lu join frame fr on (lu.idFrame=fr.idFrame)
+where fr.idEntity in (
+select distinct idEntityRel
+from view_domain
+where entry in ('dom_sports', 'dom_tourism')
+and entityType='FR'
+and idlanguage = 2
+)
+group by lu.idlanguage
