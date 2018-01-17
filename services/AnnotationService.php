@@ -204,7 +204,9 @@ class AnnotationService extends MService
             if ($annotation[$sentence['idSentence']]) {
                 $node['text'] = $this->decorateSentence($sentence['text'], $annotation[$sentence['idSentence']]);
             } else {
-                $node['text'] = $sentence['text'];
+                $targets = $as->listTargetBySentence($sentence['idSentence']);
+                $node['text'] = $this->decorateSentence($sentence['text'], $targets);
+                //$node['text'] = $sentence['text'];
             }
             $node['status'] = $sentence['annotationStatus'];
             $node['rgbBg'] = $sentence['rgbBg'];

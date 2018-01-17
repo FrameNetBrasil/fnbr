@@ -694,15 +694,42 @@ HERE;
             $layer->setRank(1);
             $layer->save();
             if ($lt['entry'] == 'lty_target') {
-                $label = new Label();
-                $label->setMulti(0);
-                $label->setIdInstantiationTypeFromEntry('int_normal');
-                $idLabelType = $layerType->listLabelType((object)['entry' => 'lty_target'])->asQuery()->getResult()[0]['idLabelType'];
-                $label->setIdLabelType($idLabelType);
-                $label->setIdLayer($layer->getId());
-                $label->setStartChar($data->startChar);
-                $label->setEndChar($data->endChar);
-                $label->save();
+                if (isset($data->chars)) {
+                    $startChar = $endChar = 0;
+                    array_push($data->chars, '');
+                    foreach($data->chars as $i => $char) {
+                        if ($char == '') {
+                            if ($startChar != 0) {
+                                $label = new Label();
+                                $label->setMulti(0);
+                                $label->setIdInstantiationTypeFromEntry('int_normal');
+                                $idLabelType = $layerType->listLabelType((object)['entry' => 'lty_target'])->asQuery()->getResult()[0]['idLabelType'];
+                                $label->setIdLabelType($idLabelType);
+                                $label->setIdLayer($layer->getId());
+                                $label->setStartChar($startChar);
+                                $label->setEndChar($endChar);
+                                $label->save();
+                                $startChar = $endChar = 0;
+                            }
+                        } else {
+                            if ($startChar == 0) {
+                                $startChar = $i;
+                            }
+                            $endChar = $i;
+                        }
+                    }
+
+                } else {
+                    $label = new Label();
+                    $label->setMulti(0);
+                    $label->setIdInstantiationTypeFromEntry('int_normal');
+                    $idLabelType = $layerType->listLabelType((object)['entry' => 'lty_target'])->asQuery()->getResult()[0]['idLabelType'];
+                    $label->setIdLabelType($idLabelType);
+                    $label->setIdLayer($layer->getId());
+                    $label->setStartChar($data->startChar);
+                    $label->setEndChar($data->endChar);
+                    $label->save();
+                }
             }
         }
     }

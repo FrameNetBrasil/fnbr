@@ -32,8 +32,12 @@
             var startChar = 4000;
             var endChar = -1;
             var rowsChecked = $('#mwe').datagrid('getChecked');
+            var chars = [];
             for (w in rowsChecked) {
                 word = rowsChecked[w];
+                for(var i = word.startChar; i <= word.endChar; ++i) {
+                    chars[i] = i;
+                }
                 if (word.startChar < startChar) {
                     startChar = word.startChar;
                 }
@@ -41,14 +45,14 @@
                     endChar = word.endChar;
                 }
             }
-            annotation.addManualSubcorpus(idLU, idSentence, startChar, endChar);
+            annotation.addManualSubcorpus(idLU, idSentence, startChar, endChar, chars);
         }
 
-        annotation.addManualSubcorpus  = function (idLU, idSentence, startChar, endChar) {
+        annotation.addManualSubcorpus  = function (idLU, idSentence, startChar, endChar, chars) {
             $.ajax({
                 type: "POST",
                 url: {{$manager->getURL('annotation/main/addManualSubcorpus')}},
-                data: {idLU: idLU, idSentence: idSentence, startChar: startChar, endChar: endChar},
+                data: {idLU: idLU, idSentence: idSentence, startChar: startChar, endChar: endChar, chars: chars},
                 dataType: "json",
                 async: false
             });
