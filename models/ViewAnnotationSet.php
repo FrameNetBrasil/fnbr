@@ -78,5 +78,22 @@ HERE;
         $result = $this->getDb()->getQueryCommand($cmd)->treeResult('idSentence', 'startChar,endChar,rgbFg,rgbBg,instantiationType,feEntry,layerTypeEntry');
         return $result;
     }
+
+    public function listTargetBySentence($idSentence) {
+        $idLanguage = \Manager::getSession()->idLanguage;
+        $cmd = <<<HERE
+        SELECT startChar,endChar,rgbFg,rgbBg,instantiationType
+        FROM view_labelfecetarget
+        WHERE (idSentence = {$idSentence})
+            AND (layerTypeEntry = 'lty_target')
+            AND (idLanguage = {$idLanguage} )
+        ORDER BY idSentence,startChar
+
+HERE;
+        $result = $this->getDb()->getQueryCommand($cmd)->getResult();
+        return $result;
+    }
+
+
 }
 

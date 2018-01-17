@@ -24,7 +24,7 @@
 
         annotation.contextMenu = null;
         annotation.createContextMenu = function (rowIndex, rowData) {
-            //console.log('createContextMenu ' + rowIndex);
+            console.log('createContextMenu ' + rowIndex);
             var menu = 'menu' + rowIndex;
             $menu = $('#' + menu);
             //console.log($menu);
@@ -49,8 +49,10 @@
                 iconCls: 'fa fa-undo'
             });
             var idLayer = rowData['idLayer'];
+            console.log(rowData);
             //console.log('idLayer = ' + idLayer);
             var labels = annotation.layerLabels[idLayer];
+            console.log(labels);
             jQuery.each(labels, function (i, idLabelType) {
                 //console.log(label);
                 var labelType = annotation.labelTypes[idLabelType];
@@ -86,64 +88,6 @@
             if (!annotation.checkSavedData()) {
                 return;
             }
-            //console.log('createHeaderContextMenu ' + field);
-            /*
-            var menu = 'menu' + field;
-            $menu = $('#' + menu);
-            //console.log($menu);
-            if ($menu.length == 0) {
-                $("<div id='" + menu + "'/>").appendTo('body');
-                $menu = $('#' + menu);
-            } else {
-                $menu.html('');
-            }
-            annotation.headerContextMenu = $menu;
-            annotation.headerContextMenu.menu({
-                onClick: function(item){
-                    console.log(item);
-                    if (item.id > 0) {
-                        //console.log(item);
-                        var wf = annotation.words[annotation.chars[item.name]['word']];
-                        if (annotation.lus[item.id].mwe != '0') {
-                            annotation.addMWEManualSubcorpus(wf, item.id, annotation.idSentence);
-                        } else {
-                            annotation.addManualSubcorpus(item.id, annotation.idSentence, wf.startChar, wf.endChar);
-                        }
-                        //console.log(wf);
-                    }
-                }
-            });
-            var wf = annotation.words[annotation.chars[field]['word']];
-            $.ajax({
-                type: "POST",
-                url: {{$manager->getURL('annotation/main/headerMenu')}},
-                data: {wordform: wf.word},
-                dataType: "json",
-                success: function (data, textStatus, jqXHR) {
-                    //console.log('success');
-                    if (jQuery.isEmptyObject(data)) {
-                        annotation.headerContextMenu.menu('appendItem', {
-                            id: 0,
-                            text: '** No matching lemma **',
-                            name: '0',
-                            iconCls: 'fa fa-caret-right'
-                        });
-                    } else {
-                        console.log(data);
-                        jQuery.each(data, function (i, lu) {
-                            console.log(lu);
-                            annotation.lus[lu.idLU] = lu;
-                            annotation.headerContextMenu.menu('appendItem', {
-                                id: lu.idLU,
-                                text: lu.fullName,
-                                //name: field,
-                                iconCls: 'fa fa-caret-right'
-                            });
-                        });
-                    }
-                }
-            });
-            */
             var wf = annotation.words[annotation.chars[field]['word']];
             $.ajax({
                 type: "POST",
@@ -189,6 +133,9 @@
             annotation.ASMenu = $menu;
             annotation.ASMenu.menu({
                 onClick: function(item){
+                    if (!annotation.checkSavedData()) {
+                        return;
+                    }
                     //console.log(item);
                     var data = {idAnnotationSet: item.name, idSentence: annotation.idSentence};
                     if (item.id == 'addFE') {
@@ -201,6 +148,7 @@
                                 }
                             }
                         });
+                        /*
                         $.ajax({type: "POST", url: {{$manager->getURL('annotation/main/getFELabels')}}, data: data, dataType: "json",
                             success: function (data) {
                                 for (item in data) {
@@ -210,10 +158,12 @@
                                 }
                             }
                         });
+                        */
                     } else if (item.id == 'delFE') {
                         $.ajax({type: "POST", url: {{$manager->getURL('annotation/main/delFELayer')}}, data: data, dataType: "json"});
                     }
-                    $('#layers').datagrid('reload');
+                    //$('#layers').datagrid('reload');
+                    annotation.refresh();
                 }
             });
             annotation.ASMenu.menu('appendItem', {
