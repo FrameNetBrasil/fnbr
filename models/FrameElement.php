@@ -152,7 +152,7 @@ class FrameElement extends map\FrameElementMap
 
     public function listForReport($idFrame = '')
     {
-        $criteria = $this->getCriteria()->select('idFrameElement,entries.name as name, entries.description as description, entries.nick as nick, typeinstance.entry as coreType')->orderBy('entries.name');
+        $criteria = $this->getCriteria()->select('idFrameElement,entry,entries.name as name, entries.description as description, entries.nick as nick, typeinstance.entry as coreType')->orderBy('entries.name');
         Base::entryLanguage($criteria);
         Base::relation($criteria, 'FrameElement', 'TypeInstance', 'rel_hastype');
         if ($idFrame) {
@@ -181,7 +181,19 @@ class FrameElement extends map\FrameElementMap
         $criteria->where("frame.idEntity = {$idEntityFrame}");
         return $criteria;
     }
-    
+
+    public function listFE2SemanticType($idFrameElement = '')
+    {
+        $idLanguage = \Manager::getSession()->idLanguage;
+        $id = ($idFrameElement ?: $this->getId());
+        $criteria = $this->getCriteria()->select('SemanticType.idEntity, SemanticType.entry, Entry.name');
+        Base::relation($criteria, 'FrameElement fe', 'SemanticType', 'rel_hassemtype');
+        $criteria->join("SemanticType","Entry","SemanticType.entry = Entry.entry");
+        $criteria->where("Entry.idLanguage = {$idLanguage}");
+        $criteria->where("fe.idFrameElement = {$id}");
+        return $criteria;
+    }
+
     public function listFE2FERelation($idFrameElement = '', $relationType = 'rel_coreset')
     {
         $id = ($idFrameElement ?: $this->getId());

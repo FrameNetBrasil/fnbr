@@ -22,7 +22,12 @@
                 <tbody>
                     {{foreach $data->fe['core'] as $fe}}
                         <tr>
-                            <td class="fe"><span class="fe_{{$fe['lower']|noescape}}">{{$fe['name']}} [{{$fe['nick']}}]</span></td>
+                            <td class="fe">
+                                <span class="fe_{{$fe['lower']|noescape}}">{{$fe['name']}} [{{$fe['nick']}}]</span>
+                                {{foreach $fe['relations'] as $relation}}
+                                <br><b>{{$relation[0]}}:&nbsp;</b>{{$relation[1]}}
+                                {{/foreach}}
+                            </td>
                             <td class="fedef">{{$fe['description']|noescape}}</td>
                         </tr>
                         <tr>
@@ -56,7 +61,12 @@
                 <tbody>
                     {{foreach $data->fe['noncore'] as $fe}}
                         <tr>
-                            <td class="fe"><span class="fe_{{$fe['lower']|noescape}}">{{$fe['name']}} [{{$fe['nick']}}]</span></td>
+                            <td class="fe">
+                                <span class="fe_{{$fe['lower']|noescape}}">{{$fe['name']}} [{{$fe['nick']}}]</span>
+                                {{foreach $fe['relations'] as $relation}}
+                                <br><b>{{$relation[0]}}:&nbsp;</b>{{$relation[1]}}
+                                {{/foreach}}
+                            </td>
                             <td class="fedef">{{$fe['description']|noescape}}</td>
                         </tr>
                         <tr>

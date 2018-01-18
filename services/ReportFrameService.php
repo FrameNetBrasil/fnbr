@@ -69,7 +69,20 @@ class ReportFrameService extends MService
         $styles = $frameElement->getStylesByFrame($idFrame);
         $fes = $frameElement->listForReport($idFrame)->asQuery()->getResult();
         $core = [];
+        $noncore = [];
+        $feByEntry = [];
         foreach ($fes as $fe) {
+            $feByEntry[$fe['entry']] = $fe;
+        }
+        foreach ($fes as $fe) {
+            $frameElement->getById($fe['idFrameElement']);
+            $relations = $this->getRelationsFE($frameElement);
+            $fe['relations'] = [];
+            foreach($relations as $rel => $aRelation) {
+                foreach($aRelation as $relation) {
+                    $fe['relations'][] = [$rel, $feByEntry[$relation]['name'] ?: $relation];
+                }
+            }
             $fe['lower'] = strtolower($fe['name']);
             $fe['description'] = $this->decorate($fe['description'], $styles);
             if ($fe['coreType'] == 'cty_core') {
@@ -117,6 +130,26 @@ class ReportFrameService extends MService
             }
         }
         ksort($relations);
+        return $relations;
+    }
+
+    public function getRelationsFE($frameElement)
+    {
+        $relations = [];
+        $coreSet = $frameElement->listCoreSet()->asQuery()->getResult();
+        $excludes = $frameElement->listExcludes()->asQuery()->getResult();
+        $requires = $frameElement->listRequires()->asQuery()->getResult();
+        $st = $frameElement->listFE2SemanticType()->asQuery()->getResult();
+        foreach($requires as $row) {
+            $relations['requires'][] = $row['entry'];
+        }
+        foreach($excludes as $row) {
+            $relations['excludes'][] = $row['entry'];
+        }
+        foreach($st as $row) {
+            $relations['semantic_type'][] = $row['name'];
+        }
+
         return $relations;
     }
 
