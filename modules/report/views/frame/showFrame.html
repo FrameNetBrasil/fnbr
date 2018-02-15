@@ -20,6 +20,9 @@
         <div id="panelFeNuclear" class="easyui-panel" title={{_'repNFE'}} collapsible="false" data-options="fit:true">
             <table id="feNuclear" class="frameElement">
                 <tbody>
+                    <tr>
+                        <td class="header">FE Core:</td>
+                    </tr>
                     {{foreach $data->fe['core'] as $fe}}
                         <tr>
                             <td class="fe">
@@ -40,6 +43,31 @@
                             </td>
                         </tr>
                     {{/foreach}}
+                    {{if $data->fe['core_unexpressed']}}
+                    <tr>
+                        <td class="header">FE Core-Unexpressed:</td>
+                    </tr>
+                    {{foreach $data->fe['core_unexpressed'] as $fe}}
+                    <tr>
+                        <td class="fe">
+                            <span class="fe_{{$fe['lower']|noescape}}">{{$fe['name']}} [{{$fe['nick']}}]</span>
+                            {{foreach $fe['relations'] as $relation}}
+                            <br><b>{{$relation[0]}}:&nbsp;</b>{{$relation[1]}}
+                            {{/foreach}}
+                        </td>
+                        <td class="fedef">{{$fe['description']|noescape}}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td class="example">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fespace">
+                        </td>
+                    </tr>
+                    {{/foreach}}
+                    {{/if}}
                 </tbody>
             </table>
             {{if $data->fecoreset}}
@@ -47,6 +75,7 @@
                 <tbody>
                 <tr>
                     <td class="header">FE Core set(s):</td>
+                </tr>
                 <tr>
                     <td>{{$data->fecoreset}}</td>
                 </tr>

@@ -69,6 +69,7 @@ class ReportFrameService extends MService
         $styles = $frameElement->getStylesByFrame($idFrame);
         $fes = $frameElement->listForReport($idFrame)->asQuery()->getResult();
         $core = [];
+        $coreun = [];
         $noncore = [];
         $feByEntry = [];
         foreach ($fes as $fe) {
@@ -87,6 +88,8 @@ class ReportFrameService extends MService
             $fe['description'] = $this->decorate($fe['description'], $styles);
             if ($fe['coreType'] == 'cty_core') {
                 $core[] = $fe;
+            } else if ($fe['coreType'] == 'cty_core-unexpressed') {
+                $coreun[] = $fe;
             } else {
                 $noncore[] = $fe;
             }
@@ -94,6 +97,7 @@ class ReportFrameService extends MService
         return [
             'styles' => $styles,
             'core' => $core,
+            'core_unexpressed' => $coreun,
             'noncore' => $noncore
         ];
     }
