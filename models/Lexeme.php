@@ -121,7 +121,7 @@ class Lexeme extends map\LexemeMap {
         }
     }
 
-    private function createLexemeWordform($row, $wf, $POS, $idLanguage) {
+    public function createLexemeWordform($row, $wf, $POS, $idLanguage) {
         $fields = explode(' ', $row);
         $idPOS = $POS[$fields[1]];
         if ($idPOS != '') {

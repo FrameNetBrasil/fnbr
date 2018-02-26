@@ -68,6 +68,16 @@ class ImportController extends MController
         }
     }
 
+    public function importLUOffline(){
+        try {
+            $model = new fnbr\models\LU();
+            print_r($this->data);
+            $model->uploadLUOffline($this->data);
+        } catch (EMException $e) {
+            $this->renderJSON(json_encode('error'));
+        }
+    }
+
     public function formImportFullText()
     {
         $language = new fnbr\models\Language(); 

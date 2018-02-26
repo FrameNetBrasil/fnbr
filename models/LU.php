@@ -220,4 +220,70 @@ class LU extends map\LUMap
             throw new \Exception($e->getMessage());
         }
     }
+    /**
+     * Upload LU from simple text file
+     * Line: wordform|lexeme|lemma|frame(english)
+     * Parâmetro data informa: idLanguage
+     * @param type $data
+     * @param type $file
+     */
+    public function uploadLUOffline($data) {
+        $idLanguage = $data->idLanguage;
+        $pos = new POS();
+        $POS = $pos->listAll()->asQuery()->chunkResult('idPOS','POS');
+        $lexeme = new Lexeme();
+        $lemma = new Lemma();
+        $frame = new Frame();
+        $transaction = $this->beginTransaction();
+        try {
+            $lineNum = 0;
+            $rows = $data->rows;
+            foreach ($rows as $row) {
+                $lineNum++;
+                $row = trim($row);
+                if (($row == '') || (substr($row, 0, 2) == "//")) {
+                    continue;
+                }
+                list($wf, $lexemePOS, $lemmaFull, $frameName) = explode('|', $row);
+                $frameEntry = 'frm_' . strtolower($frameName);
+                $frame->getByEntry($frameEntry);
+                $idFrame = $frame->getId();
+                if ($idFrame != '') {
+                    list($lexemeName, $POSName) = explode('.', $lexemePOS);
+                    $line = $wf . ' ' . $POSName . ' ' . $lexemeName;
+                    $lexeme->createLexemeWordform($line, $wf, $POS, $idLanguage);
+                    $lemma = new Lemma();
+                    $lemma->getByNameIdLanguage($lemmaFull, $idLanguage);
+                    list($lemmaName, $lemmaPOS) = explode('.', $lemmaFull);
+                    $lemmaIdPOS = array_search($lemmaPOS, $POS);
+                    $luData = (object)[];
+                    $luData->POS = $POS;
+                    $luData->lemma = (object)[
+                        'name' => $lemmaName,
+                        'idPOS' => $lemmaIdPOS,
+                        'idLanguage' => $idLanguage
+                    ];
+                    $luData->lexemes = [
+                        $lexemeName => (object)[
+                            'POS' => $POSName,
+                            'headWord' => true,
+                            'breakBefore' => false
+                        ]
+                    ];
+                    $luData->lu = (object)[
+                        'idFrame' => $idFrame
+                    ];
+                    print_r($luData);
+                    $lemma->saveForLU($luData);
+                }
+            }
+            $transaction->commit();
+        } catch (\Exception $e) {
+            // rollback da transação em caso de algum erro
+            $transaction->rollback();
+            print_r($e->getMessage() . ' LineNum: '. $lineNum);
+            throw new \Exception($e->getMessage() . ' LineNum: '. $lineNum);
+        }
+    }
+
 }
