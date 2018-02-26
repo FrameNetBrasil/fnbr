@@ -43,6 +43,13 @@ class Frame extends map\FrameMap
         return $criteria->asQuery()->asObjectArray()[0];
     }
 
+    public function getByEntry($entry)
+    {
+        $criteria = $this->getCriteria()->select('*');
+        $criteria->where("entry = '{$entry}'");
+        $this->retrieveFromCriteria($criteria);
+    }
+
     public function getEntryObject()
     {
         $criteria = $this->getCriteria()->select('entries.name, entries.description, entries.nick');

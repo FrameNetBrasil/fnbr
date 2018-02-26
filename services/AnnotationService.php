@@ -176,18 +176,19 @@ class AnnotationService extends MService
         $decorated = "";
         $ni = "";
         $i = 0;
-        $sentence = utf8_decode($sentence);
+        //$sentence = utf8_decode($sentence);
         foreach ($labels as $label) {
             $style = 'background-color:#' . $label['rgbBg'] . ';color:#' . $label['rgbFg'] . ';';
             if ($label['startChar'] >= 0) {
-                $decorated .= substr($sentence, $i, $label['startChar'] - $i);
-                $decorated .= "<span style='{$style}'>" . substr($sentence, $label['startChar'], $label['endChar'] - $label['startChar'] + 1) . "</span>";
+                $decorated .= mb_substr($sentence, $i, $label['startChar'] - $i);
+                $decorated .= "<span style='{$style}'>" . mb_substr($sentence, $label['startChar'], $label['endChar'] - $label['startChar'] + 1) . "</span>";
                 $i = $label['endChar'] + 1;
             } else { // null instantiation
                 $ni .= "<span style='{$style}'>" . $label['instantiationType'] . "</span> " . $decorated;
             }
         }
-        $decorated = utf8_encode($ni . $decorated . substr($sentence, $i));
+        //$decorated = utf8_encode($ni . $decorated . substr($sentence, $i));
+        $decorated = $ni . $decorated . mb_substr($sentence, $i);
         return $decorated;
     }
 
