@@ -1,0 +1,7 @@
+気分|気分.N|気分.N|Feeling
+
+素晴らしい|素晴らしい.A|素晴らしい.A|Desirability
+
+連続|連続.N|連続.N|Process_continue
+思っ|思う.V|思う.V|Cogitation
+通し|通す.V|通す.V|Means
