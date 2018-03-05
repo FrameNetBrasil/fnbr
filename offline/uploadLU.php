@@ -2,7 +2,7 @@
 include "offline.php";
 //require_once($dir . '/apps/fnbr/vendor/autoload.php');
 
-$app = 'mfn';
+$app = 'fnbr';
 $db = 'mfn';
 Manager::setConf('fnbr.db', $db);
 
