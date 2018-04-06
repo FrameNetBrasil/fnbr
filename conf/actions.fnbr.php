@@ -14,6 +14,7 @@ return [
             'framestructure' => ['Frame', 'structure/frame/main', 'fa fa-list-alt fa16px', '', A_ACCESS, []],
             'corpusstructure' => ['Corpus', 'structure/corpus/main', 'fa fa-th-large fa16px', 'MASTER', A_ACCESS, []],
             'cxnstructure' => ['Construction', 'structure/cxn/main', 'fa fa-th fa16px', 'MASTER', A_ACCESS, []],
+            'lemmas' => ['Lemmas', 'structure/lemma/main', 'fa fa-chess-board fa16px', 'MASTER', A_ACCESS, []],
             'templatestructure' => ['Template', 'structure/template/main', 'fa fa-files-o fa16px', 'MASTER', A_ACCESS, []],
             'semantictypestructure' => ['Semantic Type', 'structure/semantictype/main', 'fa fa-life-ring fa16px', 'MASTER', A_ACCESS, []],
             'relationgroupstructure' => ['Relation Group', 'structure/relationgroup/main', 'fa fa-sitemap fa16px', 'MASTER', A_ACCESS, []],

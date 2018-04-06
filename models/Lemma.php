@@ -78,7 +78,7 @@ class Lemma extends map\LemmaMap
             $criteria->where("idLemma LIKE '{$filter->idLemma}%'");
         }
         if ($filter->lemma) {
-            $criteria->where("lemma = '{$filter->lemma}'");
+            $criteria->where("name = '{$filter->lemma}'");
         }
         return $criteria;
     }
@@ -94,6 +94,28 @@ class Lemma extends map\LemmaMap
     {
         $criteria = $this->getCriteria()->select("idLemma, concat(name,'  [',language.language,']') as fullname")->orderBy('name');
         $criteria->where("name LIKE '{$lemma}%'");
+        return $criteria;
+    }
+
+    public function listForTree($filter)
+    {
+        $criteria = $this->getCriteria()->select('*')->orderBy('name');
+        if ($filter->idLemma) {
+            $criteria->where("idLemma = {$filter->idLemma}");
+        }
+        if ($filter->lemma) {
+            $criteria->where("name LIKE '{$filter->lemma}%'");
+        }
+        if ($filter->idLanguage) {
+            $criteria->where("idLanguage = {$filter->idLanguage}");
+        }
+        return $criteria;
+    }
+
+    public function listLexemes($idLemma)
+    {
+        $criteria = $this->getCriteria()->select('lexemeentries.idLexemeEntry,lexemeentries.lexeme.idLexeme,lexemeentries.lexeme.name,lexemeentries.lexeme.pos.POS')->orderBy('name');
+        $criteria->where("idLemma = {$idLemma}");
         return $criteria;
     }
 
@@ -142,6 +164,27 @@ class Lemma extends map\LemmaMap
             }
             $transaction->commit();
             return $lu->getId();
+        } catch (\Exception $e) {
+            $transaction->rollback();
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public function saveData($data)
+    {
+        try {
+            $transaction = $this->beginTransaction();
+            if (($p = strpos($data->name, '.')) !== false) {
+                $POS = substr($data->name, $p + 1);
+                $pos = new POS();
+                $pos->getByPOS($POS);
+                $data->idPOS = $pos->getIdPOS();
+                $this->setData($data);
+                $this->setTimeline();
+                parent::save();
+                $this->getIdEntity();
+            }
+            $transaction->commit();
         } catch (\Exception $e) {
             $transaction->rollback();
             throw new \Exception($e->getMessage());
