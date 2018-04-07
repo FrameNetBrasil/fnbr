@@ -50,35 +50,16 @@ class LemmaController extends MController
         try {
             $model = new fnbr\models\Lemma();
             $model->saveData($this->data->lemma);
-            $this->renderResponse('ok', 'Lemma created.');
+            $this->renderPrompt('ok', 'Lemma created.',"!$('#formNewLemma_dialog').dialog('close');");
         } catch (\Exception $e) {
-            $this->renderResponse('error', $e->getMessage());
-        }
-    }
-
-    public function formUpdateLemma()
-    {
-        $model = new fnbr\models\Lemma($this->data->id);
-        $this->data->object = $model->getData();
-        $this->data->title = 'Lemma: ' . $model->getEntry() . '  [' . $model->getName() . ']';
-        $this->render();
-    }
-
-    public function updateLemma()
-    {
-        try {
-            $model = new fnbr\models\Lemma($this->data->lemma->idLemma);
-            $model->updateEntry($this->data->lemma->entry);
-            $this->renderResponse('ok', 'Lemma updated.');
-        } catch (\Exception $e) {
-            $this->renderResponse('error', $e->getMessage());
+            $this->renderPrompt('error', $e->getMessage());
         }
     }
 
     public function formDeleteLemma()
     {
-        $ok = ">structure/lemma/deleteLemma/" . $this->data->id;
-        $this->renderPrompt('confirmation', 'Atenção: O Lemma e todos os LemmaElements serão removidos! Continua?', $ok);
+        $ok = "^structure/lemma/deleteLemma/" . $this->data->id;
+        $this->renderPrompt('confirmation', 'Atenção: O Lemma será removido! Continua?', $ok);
     }
 
     public function deleteLemma()
@@ -86,73 +67,49 @@ class LemmaController extends MController
         try {
             $structure = Manager::getAppService('structurelemma');
             $structure->deleteLemma($this->data->id);
-            $this->renderResponse('information', 'OK', "!structure.reloadLemma();");
+            $this->renderPrompt('information', 'OK', "!structure.reloadRoot();");
         } catch (\Exception $e) {
-            $this->renderResponse('error', $e->getMessage());
+            $this->renderPrompt('error', $e->getMessage());
         }
 
     }
 
-    public function formNewLemmaElement()
+    public function formNewLexeme()
     {
         $this->data->idLemma = $this->data->id;
         $model = new fnbr\models\Lemma($this->data->idLemma);
-        $this->data->lemma = $model->getEntry() . '  [' . $model->getName() . ']';
-        $this->data->save = "@structure/lemma/newLemmaElement|formNewLemmaElement";
-        $this->data->close = "!$('#formNewLemmaElement_dialog').dialog('close');";
-        $this->data->title = _M('new LemmaElement');
+        $this->data->name = $model->getName();
+        $this->data->language = $model->getLanguage()->getLanguage();
+        $this->data->save = "@structure/lemma/newLexeme|formNewLexeme";
+        $this->data->close = "!$('#formNewLexeme_dialog').dialog('close');";
+        $this->data->title = _M('new Lexeme');
         $this->render();
     }
 
-    public function newLemmaElement()
+    public function newLexeme()
     {
         try {
-            $model = new fnbr\models\LemmaElement();
-            $this->data->lemmaelement->entry = 'fe_' . $this->data->lemmaelement->entry;
-            $model->setData($this->data->lemmaelement);
-            $model->save($this->data->lemmaelement);
-            $this->renderPrompt('information', 'OK', "structure.editEntry('{$this->data->lemmaelement->entry}');");
+            $structure = Manager::getAppService('structurelemma');
+            $structure->addLexemeEntry($this->data);
+            //$model->save($this->data->lemmaelement);
+            $this->renderPrompt('information', 'OK', "!$('#formNewLexeme_dialog').dialog('close');");
         } catch (\Exception $e) {
             $this->renderPrompt('error', $e->getMessage());
         }
     }
 
-
-    public function formUpdateLemmaElement()
+    public function formDeleteLexeme()
     {
-        $model = new fnbr\models\LemmaElement($this->data->id);
-        $this->data->object = $model->getData();
-        $this->data->save = "@structure/lemma/updateLemmaElement|formUpdateLemmaElement";
-        $this->data->close = "!$('#formUpdateLemmaElement_dialog').dialog('close');";
-        $this->data->title = 'LemmaElement: ' . $model->getEntry() . '  [' . $model->getName() . ']';
-        $this->render();
+        $ok = "^structure/lemma/deleteLexeme/" . $this->data->id;
+        $this->renderPrompt('confirmation', 'Warning: Lexeme will be removed from Lemma! Continue?', $ok);
     }
 
-    public function updateLemmaElement()
+    public function deleteLexeme()
     {
         try {
-            $model = new fnbr\models\LemmaElement($this->data->lemmaelement->idLemmaElement);
-            $model->updateEntry($this->data->lemmaelement->entry);
-            $model->setData($this->data->lemmaelement);
-            $model->save($this->data->lemmaelement);
-            $this->renderPrompt('information', 'OK', "structure.editEntry('{$this->data->lemmaelement->entry}');");
-        } catch (\Exception $e) {
-            $this->renderPrompt('error', $e->getMessage());
-        }
-    }
-
-    public function formDeleteLemmaElement()
-    {
-        $ok = "^structure/lemma/deleteLemmaElement/" . $this->data->id;
-        $this->renderPrompt('confirmation', 'Warning: LemmaElement will be removed! Continue?', $ok);
-    }
-
-    public function deleteLemmaElement()
-    {
-        try {
-            $model = new fnbr\models\LemmaElement($this->data->id);
-            $model->safeDelete();
-            $this->renderPrompt('information', 'LemmaElement removed.', "!structure.reloadLemma();");
+            $model = new fnbr\models\LexemeEntry($this->data->id);
+            $model->delete();
+            $this->renderPrompt('information', 'Lexeme removed.', "!structure.reloadParent();");
         } catch (\Exception $e) {
             $this->renderPrompt('error', $e->getMessage());
         }

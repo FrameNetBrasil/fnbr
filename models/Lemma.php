@@ -4,7 +4,7 @@
  *
  * @category   Maestro
  * @package    UFJF
- *  @subpackage fnbr
+ * @subpackage fnbr
  * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
  * @license    http://siga.ufjf.br/license
  * @version
@@ -51,7 +51,9 @@ class Lemma extends map\LemmaMap
                 $entity->save();
                 $idEntity = $entity->getId();
                 $this->setIdEntity($idEntity);
-                parent::save();
+                if ($this->isPersistent()) {
+                    parent::save();
+                }
             }
         }
         return $idEntity;
@@ -114,14 +116,32 @@ class Lemma extends map\LemmaMap
 
     public function listLexemes($idLemma)
     {
-        $criteria = $this->getCriteria()->select('lexemeentries.idLexemeEntry,lexemeentries.lexeme.idLexeme,lexemeentries.lexeme.name,lexemeentries.lexeme.pos.POS')->orderBy('name');
+        $criteria = $this->getCriteria()->select('lexemeentries.idLexemeEntry,lexemeentries.lexeme.idLexeme,lexemeentries.lexeme.name,lexemeentries.lexeme.pos.POS,lexemeentries.lexemeOrder')->orderBy('name');
         $criteria->where("idLemma = {$idLemma}");
         return $criteria;
     }
 
-    public function setTimeline() {
+    public function setTimeline()
+    {
         $timeline = 'lem_' . md5($this->getName() . $this->getIdPOS() . $this->getIdLanguage());
         parent::setTimeLine(Base::newTimeLine($timeline, 'S'));
+    }
+
+    public function hasLU()
+    {
+        return (count($this->getLus()) > 0);
+    }
+
+    public function addLexemeEntry($data)
+    {
+        $lexemeEntry = new LexemeEntry();
+        $lexemeEntry->setIdLemma($data->idLemma);
+        $lexemeEntry->setPersistent(false);
+        $lexemeEntry->setIdLexeme($data->idLexeme);
+        $lexemeEntry->setBreakBefore((boolean)$data->breakBefore ? '1' : '0');
+        $lexemeEntry->setHeadWord((boolean)$data->headWord ? '1' : '0');
+        $lexemeEntry->setLexemeOrder($data->lexemeOrder);
+        $lexemeEntry->save();
     }
 
     public function saveForLU($data)
@@ -216,6 +236,22 @@ class Lemma extends map\LemmaMap
         }
     }
 
+    public function delete()
+    {
+        try {
+            $transaction = $this->beginTransaction();
+            $idEntity = $this->getIdEntity();
+            Base::entityTimelineDelete($idEntity);
+            parent::delete();
+            $entity = new Entity($idEntity);
+            $entity->delete();
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollback();
+            throw new \Exception($e->getMessage());
+        }
+    }
+
     /**
      * Upload de MWE+POS em texto simples (MWE POS)
      *
@@ -256,7 +292,7 @@ class Lemma extends map\LemmaMap
                 if ($idPOS != '') {
                     $ok = true;
                     $dataLemma = new \StdClass();
-                    for($i = 0; $i < $n; $i++) {
+                    for ($i = 0; $i < $n; $i++) {
                         $field = $fields[$i];
                         $mwe = explode('.', $field);
                         mdump($mwe);
@@ -305,14 +341,14 @@ class Lemma extends map\LemmaMap
                             $result[] = 'existent: ' . $row . ' as ' . "'{$name}'";
                         }
                     } else {
-                        $result[] = 'failed: '. $row . ' msg: ' . $msgFail;
+                        $result[] = 'failed: ' . $row . ' msg: ' . $msgFail;
                     }
                 } else {
-                    $result[] = 'failed: '. $row . ' msg: no idPOS for ' . $fields[$n];
+                    $result[] = 'failed: ' . $row . ' msg: no idPOS for ' . $fields[$n];
                 }
             }
             $output = implode("\r\n", $result);
-            $mfile = MFile::file("\xEF\xBB\xBF".  $output, false, $fileResult);
+            $mfile = MFile::file("\xEF\xBB\xBF" . $output, false, $fileResult);
             $transaction->commit();
         } catch (\EModelException $e) {
             // rollback da transação em caso de algum erro

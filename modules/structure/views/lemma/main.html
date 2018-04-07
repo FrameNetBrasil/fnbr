@@ -23,8 +23,7 @@
     <div onclick="structure.addLexeme()" data-options="iconCls:'icon-add'">{{_'Add Lexeme'}}</div>
 </div>
 <div id="menuLexeme" style="display:none, width:120px;">
-    <div onclick="structure.editLexeme()" data-options="iconCls:'icon-edit'">{{_'Edit Lexeme'}}</div>
-    <div onclick="structure.deleteLemmaLexeme()" data-options="iconCls:'icon-remove'">{{_'Remove Lexeme'}}</div>
+    <div onclick="structure.deleteLexeme()" data-options="iconCls:'icon-remove'">{{_'Remove Lexeme'}}</div>
 </div>
 
 <script type="text/javascript">
@@ -69,11 +68,20 @@
             $('#structureCenterPane').html('');
             var node = $('#lemmasTree').tree('getSelected');
             if (node) {
-                $('#lemmasTree').tree('reload', node.target);
+                if (node.id == 'root') {
+                    $('#lemmasTree').tree({queryParams: {lemma: $('#lemma').textbox('getValue')}});
+                } else {
+                    $('#lemmasTree').tree('reload', node.target);
+                }
             }
         }
 
-        structure.reloadLemmaParent = function () {
+        structure.reloadRoot = function () {
+            $('#structureCenterPane').html('');
+            $('#lemmasTree').tree({queryParams: {lemma: $('#lemma').textbox('getValue')}});
+        }
+
+        structure.reloadParent = function () {
             $('#structureCenterPane').html('');
             var node = $('#lemmasTree').tree('getSelected');
             var parent = $('#lemmasTree').tree('getParent', node.target);
@@ -92,20 +100,12 @@
             manager.doGet({{$manager->getURL('structure/lemma/formNewLexeme')}} + '/' + idLemma,'structureCenterPane');
         }
 
-        structure.editLexeme = function (id) {
+        structure.deleteLexeme = function (id) {
             if ($.type(id) === "undefined") {
                 id = structure.node.id.substr(1);
             }
             $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('structure/lemma/formUpdateLexeme')}} + '/' + id,'structureCenterPane');
-        }
-
-        structure.deleteLemmaLexeme = function (id) {
-            if ($.type(id) === "undefined") {
-                id = structure.node.id.substr(1);
-            }
-            $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('structure/lemma/formDeleteLemmaLexeme')}} + '/' + id,'structureCenterPane');
+            manager.doGet({{$manager->getURL('structure/lemma/formDeleteLexeme')}} + '/' + id,'structureCenterPane');
         }
 
         structure.contextMenuLemma = function(e, node) {

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <view>
-    <mformdialog id="formNewLemma" >
+    <mformdialog id="formNewLemma" onClose="structure.reloadLemma();">
         <property title="{{_M('New Lemma')}}" />
         <options modal="true"/>
         <fields>
