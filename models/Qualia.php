@@ -1,23 +1,25 @@
 <?php
 /**
- * 
+ *
  *
  * @category   Maestro
  * @package    UFJF
- *  @subpackage fnbr
+ * @subpackage fnbr
  * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
  * @license    http://siga.ufjf.br/license
- * @version    
- * @since      
+ * @version
+ * @since
  */
 
 namespace fnbr\models;
 
-class Qualia extends map\QualiaMap {
+class Qualia extends map\QualiaMap
+{
 
-    public static function config() {
+    public static function config()
+    {
         return array(
-            'log' => array(  ),
+            'log' => array(),
             'validators' => array(
                 'info' => array('notnull'),
                 'idEntity' => array('notnull'),
@@ -25,29 +27,81 @@ class Qualia extends map\QualiaMap {
             'converters' => array()
         );
     }
-    
-    public function getDescription(){
+
+    public function getDescription()
+    {
         return $this->getInfo();
     }
 
-    public function listByFilter($filter){
+    public function listByFilter($filter)
+    {
         $criteria = $this->getCriteria()->select('*')->orderBy('idTypeInstance');
-        if ($filter->idTypeInstance){
+        if ($filter->idTypeInstance) {
             $criteria->where("idTypeInstance LIKE '{$filter->idTypeInstance}%'");
         }
         return $criteria;
     }
-    
-    public function save()
+
+    public function listByFrame($idFrame, $idLanguage = '')
     {
-        Base::entityTimelineSave($this->getIdEntity());
-        parent::save();
+        $cmd = <<<HERE
+        SELECT q.idQualia, concat(t.entry, ' [',q.info,']') name
+        FROM Qualia q
+        JOIN TypeInstance t on (q.idTypeInstance = t.idTypeInstance)
+        JOIN View_Relation r on (r.idEntity1 = q.idEntity)
+        JOIN Frame f on (r.idEntity2 = f.idEntity)
+        WHERE (r.relationType = 'rel_qualia_frame') 
+          AND (f.idFrame = {$idFrame})
+        ORDER BY t.entry
+
+HERE;
+        $result = $this->getDb()->getQueryCommand($cmd)->chunkResult('idQualia', 'name');
+        return $result;
+    }
+
+    public function saveData($data)
+    {
+        $transaction = $this->beginTransaction();
+        try {
+            $frame = new Frame($data->idFrame);
+            $alias = $data->type . '_' . $data->idFrame . '_' . $data->idFE1 . '_' . $data->idFE2;
+            $entity = new Entity();
+            $entity->setAlias($alias);
+            $entity->setType('QR');  // Qualia Relation
+            $entity->save();
+            Base::createEntityRelation($entity->getId(), 'rel_qualia_frame', $frame->getIdEntity());
+            $fe1 = new FrameElement($data->idFE1);
+            $fe2 = new FrameElement($data->idFE2);
+            Base::createEntityRelation($entity->getId(), 'rel_qualia_lu1_fe', $fe1->getIdEntity());
+            Base::createEntityRelation($entity->getId(), 'rel_qualia_lu2_fe', $fe2->getIdEntity());
+            $this->setIdEntity($entity->getId());
+            Base::entityTimelineSave($this->getIdEntity());
+            $typeInstance = new TypeInstance();
+            $this->setIdTypeInstance($typeInstance->getIdQualiaTypeByEntry($data->type));
+            $this->setInfo($data->info);
+            parent::save();
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollback();
+            throw new \Exception($e->getMessage());
+        }
     }
 
     public function delete()
     {
-        Base::entityTimelineDelete($this->getIdEntity());
-        parent::delete();
+        $transaction = $this->beginTransaction();
+        try {
+            $idEntity = $this->getIdEntity();
+            Base::entityTimelineDelete($idEntity);
+            Base::deleteAllEntityRelation($idEntity);
+            parent::delete();
+            $entity = new Entity($idEntity);
+            $entity->delete();
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollback();
+            throw new \Exception($e->getMessage());
+        }
     }
 
 }

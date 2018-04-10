@@ -54,6 +54,16 @@ class StructureFrameService extends MService
             $node['iconCls'] = 'icon-blank fa fa-hashtag fa12px entity_lu';
             $result[] = $node;
         }
+        $qualia = new fnbr\models\Qualia();
+        $qualias = $qualia->listByFrame($idFrame, $idLanguage);
+        foreach ($qualias as $idQualia => $name) {
+            $node = array();
+            $node['id'] = 'q' . $idQualia;
+            $node['text'] = $name;
+            $node['state'] = 'closed';
+            $node['iconCls'] = 'icon-blank fas fa-compress fa12px entity_lu';
+            $result[] = $node;
+        }
         return json_encode($result);
     }
 

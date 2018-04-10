@@ -71,6 +71,12 @@ class TypeInstance extends map\TypeInstanceMap {
         return $criteria;
     }
 
+    public function getIdQualiaTypeByEntry($entry){
+        $criteria = $this->getCriteria()->select('idTypeInstance')->orderBy('info');
+        $criteria->where("entry = '{$entry}'");
+        return  $criteria->asQuery()->getResult()[0]['idTypeInstance'];
+    }
+
     public function getIdInstantiationTypeByEntry($entry){
         $criteria = $this->getCriteria()->select('idTypeInstance as idInstantiationType')->orderBy('info');
         $criteria->where("entry = '{$entry}'");
