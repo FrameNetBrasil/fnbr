@@ -32,7 +32,10 @@ class StructureLemmaService extends MService
         foreach ($lexemes as $lexeme) {
             $node = array();
             $node['id'] = 'x' . $lexeme['idLexemeEntry'];
-            $node['text'] = $lexeme['name'] . '.' . strtolower($lexeme['POS']) . ' [' . $lexeme['lexemeOrder'] . ']';
+            $order = ' [' . $lexeme['lexemeOrder'] . ']';
+            $head = $lexeme['headWord'] ? ' [hw]' : '';
+            $break = $lexeme['breakBeforeheadWord'] ? ' [bb]' : '';
+            $node['text'] = $lexeme['name'] . '.' . strtolower($lexeme['POS']) . $order . $head . $break;
             $node['state'] = 'closed';
             $node['iconCls'] = 'icon-blank fa-icon far fa-snowflake';
             $result[] = $node;

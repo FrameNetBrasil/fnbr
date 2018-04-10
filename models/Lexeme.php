@@ -83,9 +83,12 @@ class Lexeme extends map\LexemeMap {
     public function listForLookup($lexeme = '')
     {
         $idLanguage = \Manager::getSession()->idLanguage;
+        $name = trim($lexeme);
+        $name = (strlen($lexeme) == strlen($name)) ? $name . '%' : $name;
         $criteria = $this->getCriteria()->select("idLexeme, concat(name,'  [',pos.entries.name,']','  [',language.language,']') as fullname")->orderBy('name');
+        $criteria->where("idLanguage = {$idLanguage}");
         $criteria->where("pos.entries.idLanguage = {$idLanguage}");
-        $criteria->where("name LIKE '{$lexeme}%'");
+        $criteria->where("name LIKE '{$name}'");
         return $criteria;
     }
 

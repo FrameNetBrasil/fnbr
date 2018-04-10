@@ -92,10 +92,11 @@ class Lemma extends map\LemmaMap
         return $criteria;
     }
 
-    public function listForLookup($lemma = '')
+    public function listForLookup($lemma = '', $idLanguage = '1')
     {
         $criteria = $this->getCriteria()->select("idLemma, concat(name,'  [',language.language,']') as fullname")->orderBy('name');
         $criteria->where("name LIKE '{$lemma}%'");
+        $criteria->where("idLanguage = {$idLanguage}");
         return $criteria;
     }
 
@@ -116,7 +117,7 @@ class Lemma extends map\LemmaMap
 
     public function listLexemes($idLemma)
     {
-        $criteria = $this->getCriteria()->select('lexemeentries.idLexemeEntry,lexemeentries.lexeme.idLexeme,lexemeentries.lexeme.name,lexemeentries.lexeme.pos.POS,lexemeentries.lexemeOrder')->orderBy('name');
+        $criteria = $this->getCriteria()->select('lexemeentries.idLexemeEntry,lexemeentries.lexeme.idLexeme,lexemeentries.lexeme.name,lexemeentries.lexeme.pos.POS,lexemeentries.lexemeOrder,lexemeentries.headWord,lexemeentries.breakBefore')->orderBy('name');
         $criteria->where("idLemma = {$idLemma}");
         return $criteria;
     }
