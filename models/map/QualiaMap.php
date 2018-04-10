@@ -13,7 +13,7 @@
 
 namespace fnbr\models\map;
 
-class TypeInstanceMap extends \MBusinessModel {
+class QualiaMap extends \MBusinessModel {
 
     
     public static function ORMMap() {
@@ -21,21 +21,16 @@ class TypeInstanceMap extends \MBusinessModel {
         return array(
             'class' => \get_called_class(),
             'database' => \Manager::getConf('fnbr.db'),
-            'table' => 'typeinstance',
+            'table' => 'qualia',
             'attributes' => array(
-                'idTypeInstance' => array('column' => 'idTypeInstance','key' => 'primary','idgenerator' => 'identity','type' => 'integer'),
-                'entry' => array('column' => 'entry','type' => 'string'),
+                'idQualia' => array('column' => 'idQualia','key' => 'primary','idgenerator' => 'identity','type' => 'integer'),
                 'info' => array('column' => 'info','type' => 'string'),
-                'flag' => array('column' => 'flag','type' => 'integer'),
-                'idType' => array('column' => 'idType','type' => 'integer'),
-                'idColor' => array('column' => 'idColor','type' => 'integer'),
+                'idTypeInstance' => array('column' => 'idTypeInstance','type' => 'integer'),
                 'idEntity' => array('column' => 'idEntity','type' => 'integer'),
             ),
             'associations' => array(
-                'type' => array('toClass' => 'fnbr\models\Type', 'cardinality' => 'oneToOne' , 'keys' => 'idType:idType'), 
-                'color' => array('toClass' => 'fnbr\models\Color', 'cardinality' => 'oneToOne' , 'keys' => 'idColor:idColor'), 
-                'entity' => array('toClass' => 'fnbr\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity:idEntity'), 
-                'entries' => array('toClass' => 'fnbr\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
+                'typeinstance' => array('toClass' => 'fnbr\models\TypeInstance', 'cardinality' => 'oneToOne' , 'keys' => 'idTypeInstance:idTypeInstance'),
+                'entity' => array('toClass' => 'fnbr\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity:idEntity'),
             )
         );
     }
@@ -44,12 +39,7 @@ class TypeInstanceMap extends \MBusinessModel {
      * 
      * @var integer 
      */
-    protected $idTypeInstance;
-    /**
-     * 
-     * @var string 
-     */
-    protected $entry;
+    protected $idQualia;
     /**
      * 
      * @var string 
@@ -59,17 +49,7 @@ class TypeInstanceMap extends \MBusinessModel {
      * 
      * @var integer 
      */
-    protected $flag;
-    /**
-     * 
-     * @var integer 
-     */
-    protected $idType;
-    /**
-     * 
-     * @var integer 
-     */
-    protected $idColor;
+    protected $idTypeInstance;
     /**
      * 
      * @var integer 
@@ -79,29 +59,19 @@ class TypeInstanceMap extends \MBusinessModel {
     /**
      * Associations
      */
-    protected $type;
-    protected $color;
+    protected $typeinstance;
     protected $entity;
-    protected $entries;
-    
+
 
     /**
      * Getters/Setters
      */
-    public function getIdTypeInstance() {
-        return $this->idTypeInstance;
+    public function getIdQualia() {
+        return $this->idQualia;
     }
 
-    public function setIdTypeInstance($value) {
-        $this->idTypeInstance = $value;
-    }
-
-    public function getEntry() {
-        return $this->entry;
-    }
-
-    public function setEntry($value) {
-        $this->entry = $value;
+    public function setIdQualia($value) {
+        $this->idQualia = $value;
     }
 
     public function getInfo() {
@@ -112,28 +82,12 @@ class TypeInstanceMap extends \MBusinessModel {
         $this->info = $value;
     }
 
-    public function getFlag() {
-        return $this->flag;
+    public function getIdTypeInstance() {
+        return $this->idTypeInstance;
     }
 
-    public function setFlag($value) {
-        $this->flag = $value;
-    }
-
-    public function getIdType() {
-        return $this->idType;
-    }
-
-    public function setIdType($value) {
-        $this->idType = $value;
-    }
-
-    public function getIdColor() {
-        return $this->idColor;
-    }
-
-    public function setIdColor($value) {
-        $this->idColor = $value;
+    public function setIdTypeInstance($value) {
+        $this->idTypeInstance = $value;
     }
 
     public function getIdEntity() {
@@ -147,49 +101,25 @@ class TypeInstanceMap extends \MBusinessModel {
      *
      * @return Association
      */
-    public function getType() {
-        if (is_null($this->type)){
-            $this->retrieveAssociation("type");
+    public function getTypeInstance() {
+        if (is_null($this->typeinstance)){
+            $this->retrieveAssociation("typeinstance");
         }
-        return  $this->type;
+        return  $this->typeinstance;
     }
     /**
      *
      * @param Association $value
      */
-    public function setType($value) {
-        $this->type = $value;
+    public function setTypeInstance($value) {
+        $this->typeinstance = $value;
     }
     /**
      *
      * @return Association
      */
-    public function getAssociationType() {
-        $this->retrieveAssociation("type");
-    }
-    /**
-     *
-     * @return Association
-     */
-    public function getColor() {
-        if (is_null($this->color)){
-            $this->retrieveAssociation("color");
-        }
-        return  $this->color;
-    }
-    /**
-     *
-     * @param Association $value
-     */
-    public function setColor($value) {
-        $this->color = $value;
-    }
-    /**
-     *
-     * @return Association
-     */
-    public function getAssociationColor() {
-        $this->retrieveAssociation("color");
+    public function getAssociationTypeInstance() {
+        $this->retrieveAssociation("typeinstance");
     }
     /**
      *
@@ -215,34 +145,5 @@ class TypeInstanceMap extends \MBusinessModel {
     public function getAssociationEntity() {
         $this->retrieveAssociation("entity");
     }
-    /**
-     *
-     * @return Association
-     */
-    public function getEntries() {
-        if (is_null($this->entries)){
-            $this->retrieveAssociation("entries");
-        }
-        return  $this->entries;
-    }
-    /**
-     *
-     * @param Association $value
-     */
-    public function setEntries($value) {
-        $this->entries = $value;
-    }
-    /**
-     *
-     * @return Association
-     */
-    public function getAssociationEntries() {
-        $this->retrieveAssociation("entries");
-    }
-
-    
-
 }
 // end - wizard
-
-?>
