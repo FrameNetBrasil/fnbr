@@ -71,6 +71,13 @@ class TypeInstance extends map\TypeInstanceMap {
         return $criteria;
     }
 
+    public function listQualiaType(){
+        $criteria = $this->getCriteria()->select('idTypeInstance as idQualiaType, entry, entries.name as name')->orderBy('entries.name');
+        Base::entryLanguage($criteria);
+        $criteria->where("entry like 'qla_%'");
+        return $criteria;
+    }
+
     public function getIdQualiaTypeByEntry($entry){
         $criteria = $this->getCriteria()->select('idTypeInstance')->orderBy('info');
         $criteria->where("entry = '{$entry}'");

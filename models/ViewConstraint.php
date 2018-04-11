@@ -28,10 +28,10 @@ class ViewConstraint extends map\ViewConstraintMap
         'rel_constraint_meets' => 'mee',
         'rel_constraint_element' => 'ele',
         'rel_constraint_constraint' => 'cnt',
-        'rel_constitutive_qualia' => 'cst',
-        'rel_agentive_qualia' => 'agt',
-        'rel_telic_qualia' => 'tlc',
-        'rel_formal_qualia' => 'fml',
+        'rel_qualia_constitutive' => 'cst',
+        'rel_qualia_agentive' => 'agt',
+        'rel_qualia_telic' => 'tlc',
+        'rel_qualia_formal' => 'fml',
         'rel_evokes' => 'evk',
         'rel_hasdomain' => 'dom',
         'rel_luequivalence' => 'equ',
@@ -52,10 +52,10 @@ class ViewConstraint extends map\ViewConstraintMap
         'rel_constraint_meets' => 'CE',
         'rel_constraint_element' => 'CE',
         'rel_constraint_constraint' => 'CN',
-        'rel_constitutive_qualia' => 'LU',
-        'rel_agentive_qualia' => 'LU',
-        'rel_telic_qualia' => 'LU',
-        'rel_formal_qualia' => 'LU',
+        'rel_qualia_constitutive' => 'LU',
+        'rel_qualia_agentive' => 'LU',
+        'rel_qualia_telic' => 'LU',
+        'rel_qualia_formal' => 'LU',
         'rel_evokes' => 'FR',
         'rel_hasdomain' => 'DO',
         'rel_luequivalence' => 'LU',
@@ -260,11 +260,13 @@ HERE;
         $idLanguage = \Manager::getSession()->idLanguage;
 
         $cmd = <<<HERE
-        SELECT r.idEntity2 as idConstraint,
+        SELECT r.idEntityRelation as idConstraint,
             relatedLU.name  AS name,
-            r.relationtype  AS qualia
+            r.relationtype  AS qualia,
+            IFNULL(q.info,'-') AS qualiarelation
         FROM View_Relation r
         JOIN LU relatedLU ON (r.idEntity2 = relatedLU.idEntity)
+        LEFT JOIN Qualia q on (r.idEntity3 = q.idEntity)
         WHERE (r.idEntity1 = {$idEntityLU})
             AND (r.relationGroup = 'rgp_qualia')
 
@@ -274,6 +276,7 @@ HERE;
         foreach ($constraints as $i => $constraint) {
             $constraints[$i]['name'] = $this->prefix[$constraint['qualia']] . '_' . $constraints[$i]['name'];
             $constraints[$i]['type'] = $this->type[$constraint['qualia']];
+            $constraints[$i]['relation'] = $constraint['qualiarelation'];
         }
         return $constraints;
     }

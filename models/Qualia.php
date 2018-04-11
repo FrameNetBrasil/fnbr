@@ -59,6 +59,63 @@ HERE;
         return $result;
     }
 
+    public function listFEs($idLanguage = '1')
+    {
+        $idQualia = $this->getId();
+        $cmd = <<<HERE
+        SELECT fe.idFrameElement, concat('lu1: ',e.name) name
+        FROM Qualia q
+        JOIN View_Relation r on (r.idEntity1 = q.idEntity)
+        JOIN FrameElement fe on (r.idEntity2 = fe.idEntity)
+        JOIN Entry e on (fe.entry = e.entry)
+        WHERE (r.relationType = 'rel_qualia_lu1_fe') 
+          AND (q.idQualia = {$idQualia})
+          AND (e.idLanguage = {$idLanguage})
+        UNION
+        SELECT fe.idFrameElement, concat('lu2: ',e.name) name
+        FROM Qualia q
+        JOIN View_Relation r on (r.idEntity1 = q.idEntity)
+        JOIN FrameElement fe on (r.idEntity2 = fe.idEntity)
+        JOIN Entry e on (fe.entry = e.entry)
+        WHERE (r.relationType = 'rel_qualia_lu2_fe') 
+          AND (q.idQualia = {$idQualia})
+          AND (e.idLanguage = {$idLanguage})
+
+HERE;
+        $result = $this->getDb()->getQueryCommand($cmd)->chunkResult('idFrameElement', 'name');
+        return $result;
+    }
+
+    public function listForLookup($type, $idLanguage = '1')
+    {
+        $cmd = <<<HERE
+        SELECT q.idQualia, concat(q.info, ' [',e.name,']') name
+        FROM Qualia q
+        JOIN TypeInstance t on (q.idTypeInstance = t.idTypeInstance)
+        JOIN View_Relation r on (r.idEntity1 = q.idEntity)
+        JOIN Frame f on (r.idEntity2 = f.idEntity)
+        JOIN Entry e on (f.entry = e.entry)
+        WHERE (r.relationType = 'rel_qualia_frame') 
+          AND (t.entry = '{$type}')
+          AND (e.idLanguage = {$idLanguage})
+        ORDER BY t.entry
+
+HERE;
+        $query = $this->getDb()->getQueryCommand($cmd);
+        return $query;
+    }
+
+    public function listLUQualia($idLU)
+    {
+        $constraint = new ViewConstraint();
+        $lu = new LU($idLU);
+        $qualiaConstraints = $constraint->listLUQualiaConstraints($lu->getIdEntity());
+        foreach ($qualiaConstraints as $qualia) {
+            $constraints[] = $qualia;
+        }
+        return $constraints;
+    }
+
     public function saveData($data)
     {
         $transaction = $this->beginTransaction();
@@ -87,6 +144,27 @@ HERE;
         }
     }
 
+    public function saveRelation($data)
+    {
+        $transaction = $this->beginTransaction();
+        try {
+            $lu1 = new LU($data->idLU1);
+            $lu2 = new LU($data->idLU2);
+            $this->getById($data->idQualia);
+            $relationType = [
+                'qla_formal' => 'rel_qualia_formal',
+                'qla_agentive' => 'rel_qualia_agentive',
+                'qla_telic' => 'rel_qualia_telic',
+                'qla_constitutive' => 'rel_qualia_constitutive',
+            ];
+            Base::createEntityRelation($lu1->getIdEntity(), $relationType[$data->type], $lu2->getIdEntity(), $this->getIdEntity());
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollback();
+            throw new \Exception($e->getMessage());
+        }
+    }
+
     public function delete()
     {
         $transaction = $this->beginTransaction();
@@ -97,6 +175,19 @@ HERE;
             parent::delete();
             $entity = new Entity($idEntity);
             $entity->delete();
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollback();
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public function deleteRelation($idRelation)
+    {
+        $transaction = $this->beginTransaction();
+        try {
+            $relation = new EntityRelation($idRelation);
+            $relation->delete();
             $transaction->commit();
         } catch (\Exception $e) {
             $transaction->rollback();

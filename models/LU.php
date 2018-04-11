@@ -138,10 +138,10 @@ class LU extends map\LUMap
     {
         $constraint = new ViewConstraint();
         $constraints = $constraint->listLUSTConstraints($this->getIdEntity());
-        $qualiaConstraints = $constraint->listLUQualiaConstraints($this->getIdEntity());
-        foreach ($qualiaConstraints as $qualia) {
-            $constraints[] = $qualia;
-        }
+        //$qualiaConstraints = $constraint->listLUQualiaConstraints($this->getIdEntity());
+        //foreach ($qualiaConstraints as $qualia) {
+        //    $constraints[] = $qualia;
+        //}
         $domainConstraints = $constraint->listLUDomainConstraints($this->getIdEntity());
         foreach ($domainConstraints as $domain) {
             $constraints[] = $domain;
