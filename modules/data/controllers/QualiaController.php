@@ -22,4 +22,13 @@ class QualiaController extends MController
         $this->renderJSON($json);
     }
 
+    public function lookupRelationForGrid()
+    {
+        $idLanguage = Manager::getSession()->idLanguage;
+        $model = new fnbr\models\Qualia();
+        $criteria = $model->listRelationForGrid($this->data, $idLanguage);
+        $json = $model->gridDataAsJSON($criteria);
+        $this->renderJSON($json);
+    }
+
 }

@@ -22,7 +22,8 @@
 </div>
 <div id="menuQualiaRootFrames" style="display:none, width:120px;">
     <div onclick="structure.reloadFrame()" data-options="iconCls:'icon-reload'">{{_'Reload Frames'}}</div>
-    <div onclick="structure.showAll()" data-options="iconCls:'icon-reload'">{{_'Show all'}}</div>
+    <div onclick="structure.showStructure()" data-options="iconCls:'icon-more'">{{_'Show Structure'}}</div>
+    <div onclick="structure.showRelations()" data-options="iconCls:'icon-more'">{{_'Show Relations'}}</div>
 </div>
 <div id="menuQualiaFrame" style="display:none, width:120px;">
     <div onclick="structure.frameQualiaFormal()" data-options="iconCls:'icon-edit'">{{_'Formal'}}</div>
@@ -61,19 +62,14 @@
 
         structure.currentParent = null;
 
-        structure.showAll = function () {
+        structure.showStructure = function () {
             $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('report/qualia/showAll')}}, 'structureCenterPane');
+            manager.doGet({{$manager->getURL('report/qualia/showStructure')}}, 'structureCenterPane');
         }
 
-        structure.showLU = function (idLU) {
-            $('#reportCenterPane').html('');
-            manager.doGet({{$manager->getURL('report/lu/showLU')}} + '/' + idLU, 'structureCenterPane');
-        }
-
-        structure.showFrame = function (idFrame) {
+        structure.showRelations = function () {
             $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('report/frame/showFrame')}} + '/' + idFrame, 'structureCenterPane');
+            manager.doGet({{$manager->getURL('report/qualia/showRelations')}}, 'structureCenterPane');
         }
 
         structure.reloadFrame = function () {
@@ -93,7 +89,9 @@
                 var parent = $('#framesTree').tree('getParent', node.target) || structure.currentParent;
                 structure.currentParent = parent;
                 console.log(parent);
-                $('#framesTree').tree('reload', parent.target);
+                if (parent) {
+                    $('#framesTree').tree('reload', parent.target);
+                }
             }
         }
 

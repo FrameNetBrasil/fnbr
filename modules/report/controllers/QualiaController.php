@@ -22,22 +22,16 @@ class QualiaController extends MController
         $this->render();
     }
 
-    public function showAll() {
+    public function showStructure() {
         $typeInstance = new fnbr\models\TypeInstance();
         $this->data->qualiaType = $typeInstance->gridDataAsJson($typeInstance->listQualiaType(), true);
-
-        /*
-        $idFrame = $this->data->id;
-        $report = Manager::getAppService('reportframe');
-        $frame = new fnbr\models\Frame($idFrame);
-        $this->data->frame->entry = $frame->getEntryObject();
-        $this->data->fe = $report->getFEData($idFrame);
-        $this->data->fecoreset = $report->getFECoreSet($frame);
-        $this->data->frame->entry->description = $report->decorate($this->data->frame->entry->description, $this->data->fe['styles']);
-        $this->data->relations = $report->getRelations($frame);
-        $this->data->lus = $report->getLUs($frame, $this->idLanguage );
-        */
         $this->render();
     }
-    
+
+    public function showRelations() {
+        $typeInstance = new fnbr\models\TypeInstance();
+        $this->data->qualiaType = $typeInstance->gridDataAsJson($typeInstance->listQualiaType(), true);
+        $this->render();
+    }
+
 }

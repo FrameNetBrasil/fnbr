@@ -122,7 +122,7 @@ HERE;
         $whereType = ($data->idQualiaType == '') ? '' : "AND (t.idTypeInstance = {$data->idQualiaType})";
         $whereFrame = ($data->frame == '') ? '' : "AND (upper(e.name) like upper('{$data->frame}%'))";
         $cmd = <<<HERE
-SELECT q.idQualia, et.name qualiaType, e.name frame, e1.name fe1, e2.name fe2
+SELECT q.idQualia, q.info, et.name qualiaType, e.name frame, e1.name fe1, e2.name fe2
   FROM Qualia q
   JOIN TypeInstance t on (q.idTypeInstance = t.idTypeInstance)
   JOIN Entry et on (t.entry = et.entry)
@@ -144,6 +144,29 @@ SELECT q.idQualia, et.name qualiaType, e.name frame, e1.name fe1, e2.name fe2
           AND (e2.idLanguage = {$idLanguage})
           AND (et.idLanguage = {$idLanguage})
         ORDER BY 2,3,4
+
+HERE;
+        $query = $this->getDb()->getQueryCommand($cmd);
+        return $query;
+    }
+
+    public function listRelationForGrid($data, $idLanguage = '1')
+    {
+        $whereType = ($data->idQualiaType == '') ? '' : "AND (t.idTypeInstance = {$data->idQualiaType})";
+        $whereLU1 = ($data->lu1 == '') ? '' : "AND (upper(lu1.name) like upper('{$data->lu1}%'))";
+        $whereLU2 = ($data->lu2 == '') ? '' : "AND (upper(lu2.name) like upper('{$data->lu2}%'))";
+        $whereRelation = ($data->relation == '') ? '' : "AND (upper(q.info) like upper('{$data->relation}%'))";
+        $cmd = <<<HERE
+select r.idEntityRelation, substr(r.relationType, 12,20) qualiaType, lu1.name lu1, q.info relation, lu2.name lu2
+from View_Relation r
+JOIN View_LU lu1 on (r.idEntity1 = lu1.idEntity)
+JOIN View_LU lu2 on (r.idEntity2 = lu2.idEntity)
+JOIN TypeInstance t on (t.entry = concat('qla_',substr(r.relationType, 12,20)))
+LEFT JOIN Qualia q on (r.idEntity3 = q.idEntity)
+where (r.relationGroup = 'rgp_qualia')
+AND (lu1.idLanguage = {$idLanguage})
+AND (lu2.idLanguage = {$idLanguage}) {$whereType} {$whereLU1} {$whereLU2} {$whereRelation}
+order by 2,3,4
 
 HERE;
         $query = $this->getDb()->getQueryCommand($cmd);
