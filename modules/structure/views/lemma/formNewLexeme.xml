@@ -6,7 +6,10 @@
         <fields>
             <mhiddenfield id="lexeme_idLemma" value = "$this->data->idLemma"/>
             <mlabel text="{{'Lemma:  &lt;b&gt;' . $this->data->name . '&lt;/b&gt;  [' . $this->data->language . ']' }}"/>
-            <include component="MLookupLexeme.php" id="lexeme_idLexeme" label="Lexeme"/>
+            <mlabel text="Select lexeme (minimum 3 chars)"/>
+            <mhcontainer style="padding:5px">
+                <include component="MLookupLexeme.php" id="lexeme_idLexeme" label=""/>
+            </mhcontainer>
             <mtextfield id="lexeme_lexemeOrder" label="Order:" width="50px"/>
             <mbooleanfield id="lexeme_breakBefore" label="BreakBefore:" width="50px"/>
             <mbooleanfield id="lexeme_headWord" label="HeadWord:" width="50px"/>

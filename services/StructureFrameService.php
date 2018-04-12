@@ -60,6 +60,7 @@ class StructureFrameService extends MService
     public function listFEsLUsQualias($idFrame, $idLanguage)
     {
         $result = array();
+        /*
         $icon = [
             "cty_core" => "fa fa-circle",
             "cty_peripheral" => "fa fa-dot-circle-o",
@@ -78,6 +79,7 @@ class StructureFrameService extends MService
             $node['iconCls'] = 'icon-blank fa-icon ' . $icon[$fe['coreType']];
             $result[] = $node;
         }
+        */
         $lu = new fnbr\models\ViewLU();
         $lus = $lu->listByFrame($idFrame, $idLanguage)->asQuery()->chunkResult('idLU', 'name');
         foreach ($lus as $idLU => $name) {

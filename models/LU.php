@@ -51,6 +51,13 @@ class LU extends map\LUMap
         $this->setIdFrame($result[0]['idFrame']);
     }
 
+    public function getByIdEntity($idEntity)
+    {
+        $criteria = $this->getCriteria();
+        $criteria->where("idEntity = {$idEntity}");
+        $this->retrieveFromCriteria($criteria);
+    }
+
     public function getData()
     {
         $data = parent::getData();

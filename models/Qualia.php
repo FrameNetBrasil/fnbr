@@ -33,6 +33,17 @@ class Qualia extends map\QualiaMap
         return $this->getInfo();
     }
 
+    public function getTypeFromRelation($relation) {
+        $type = [
+            'rel_qualia_formal' => 'qla_formal',
+            'rel_qualia_agentive' => 'qla_agentive',
+            'rel_qualia_telic' => 'qla_telic',
+            'rel_qualia_constitutive' => 'qla_constitutive'
+        ];
+        $relationEntry = $relation->getRelationtype()->getEntry();
+        return $type[$relationEntry];
+    }
+
     public function listByFilter($filter)
     {
         $criteria = $this->getCriteria()->select('*')->orderBy('idTypeInstance');
@@ -88,17 +99,51 @@ HERE;
 
     public function listForLookup($type, $idLanguage = '1')
     {
+        $whereType = ($type == '*') ? '' : "AND (t.entry = '{$type}')";
+        $name= ($type == '*') ? "concat(substr(t.entry,5,10),': ', q.info, ' [',e.name,']') name" : "concat(q.info, ' [',e.name,']') name";
         $cmd = <<<HERE
-        SELECT q.idQualia, concat(q.info, ' [',e.name,']') name
+        SELECT q.idQualia, {$name}
         FROM Qualia q
         JOIN TypeInstance t on (q.idTypeInstance = t.idTypeInstance)
         JOIN View_Relation r on (r.idEntity1 = q.idEntity)
         JOIN Frame f on (r.idEntity2 = f.idEntity)
         JOIN Entry e on (f.entry = e.entry)
-        WHERE (r.relationType = 'rel_qualia_frame') 
-          AND (t.entry = '{$type}')
+        WHERE (r.relationType = 'rel_qualia_frame')  {$whereType}
           AND (e.idLanguage = {$idLanguage})
-        ORDER BY t.entry
+        ORDER BY t.entry, q.info
+
+HERE;
+        $query = $this->getDb()->getQueryCommand($cmd);
+        return $query;
+    }
+
+    public function listForGrid($data, $idLanguage = '1')
+    {
+        $whereType = ($data->idQualiaType == '') ? '' : "AND (t.idTypeInstance = {$data->idQualiaType})";
+        $whereFrame = ($data->frame == '') ? '' : "AND (upper(e.name) like upper('{$data->frame}%'))";
+        $cmd = <<<HERE
+SELECT q.idQualia, et.name qualiaType, e.name frame, e1.name fe1, e2.name fe2
+  FROM Qualia q
+  JOIN TypeInstance t on (q.idTypeInstance = t.idTypeInstance)
+  JOIN Entry et on (t.entry = et.entry)
+  JOIN View_Relation r on (r.idEntity1 = q.idEntity)
+  JOIN Frame f on (r.idEntity2 = f.idEntity)
+  JOIN Entry e on (f.entry = e.entry)
+  JOIN View_Relation r1 on (r1.idEntity1 = q.idEntity)
+  JOIN FrameElement fe1 on (r1.idEntity2 = fe1.idEntity)
+  JOIN Entry e1 on (fe1.entry = e1.entry)
+  JOIN View_Relation r2 on (r2.idEntity1 = q.idEntity)
+  JOIN FrameElement fe2 on (r2.idEntity2 = fe2.idEntity)
+  JOIN Entry e2 on (fe2.entry = e2.entry)
+        WHERE (r.relationType = 'rel_qualia_frame') 
+          AND (r1.relationType = 'rel_qualia_lu1_fe')
+          AND (r2.relationType = 'rel_qualia_lu2_fe')
+          {$whereType} {$whereFrame}
+          AND (e.idLanguage = {$idLanguage})
+          AND (e1.idLanguage = {$idLanguage})
+          AND (e2.idLanguage = {$idLanguage})
+          AND (et.idLanguage = {$idLanguage})
+        ORDER BY 2,3,4
 
 HERE;
         $query = $this->getDb()->getQueryCommand($cmd);
@@ -195,4 +240,17 @@ HERE;
         }
     }
 
+    public function updateRelation($idRelation)
+    {
+        $transaction = $this->beginTransaction();
+        try {
+            $relation = new EntityRelation($idRelation);
+            $relation->setIdEntity3($this->getIdEntity());
+            $relation->save();
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollback();
+            throw new \Exception($e->getMessage());
+        }
+    }
 }

@@ -20,25 +20,27 @@
         
     </div>
 </div>
-<div id="menuRootFrames" style="display:none, width:120px;">
+<div id="menuQualiaRootFrames" style="display:none, width:120px;">
     <div onclick="structure.reloadFrame()" data-options="iconCls:'icon-reload'">{{_'Reload Frames'}}</div>
+    <div onclick="structure.showAll()" data-options="iconCls:'icon-reload'">{{_'Show all'}}</div>
 </div>
-<div id="menuFrame" style="display:none, width:120px;">
+<div id="menuQualiaFrame" style="display:none, width:120px;">
     <div onclick="structure.frameQualiaFormal()" data-options="iconCls:'icon-edit'">{{_'Formal'}}</div>
     <div onclick="structure.frameQualiaAgentive()" data-options="iconCls:'icon-edit'">{{_'Agentive'}}</div>
     <div onclick="structure.frameQualiaTelic()" data-options="iconCls:'icon-edit'">{{_'Telic'}}</div>
     <div onclick="structure.frameQualiaConstitutive()" data-options="iconCls:'icon-edit'">{{_'Constitutive'}}</div>
 </div>
-<div id="menuLU" style="display:none, width:120px;">
+<div id="menuQualiaLU" style="display:none, width:120px;">
     <div onclick="structure.luQualiaFormal()" data-options="iconCls:'icon-edit'">{{_'Formal'}}</div>
     <div onclick="structure.luQualiaAgentive()" data-options="iconCls:'icon-edit'">{{_'Agentive'}}</div>
     <div onclick="structure.luQualiaTelic()" data-options="iconCls:'icon-edit'">{{_'Telic'}}</div>
     <div onclick="structure.luQualiaConstitutive()" data-options="iconCls:'icon-edit'">{{_'Constitutive'}}</div>
 </div>
-<div id="menuQualia" style="display:none, width:120px;">
+<div id="menuQualiaQualia" style="display:none, width:120px;">
     <div onclick="structure.frameDeleteQualia()" data-options="iconCls:'icon-remove'">{{_'Delete Qualia'}}</div>
 </div>
-<div id="menuQualiaRelation" style="display:none, width:120px;">
+<div id="menuQualiaQualiaRelation" style="display:none, width:120px;">
+    <div onclick="structure.luChangeQualia()" data-options="iconCls:'icon-edit'">{{_'Change Qualia Structure'}}</div>
     <div onclick="structure.luDeleteQualia()" data-options="iconCls:'icon-remove'">{{_'Delete Qualia Relation'}}</div>
 </div>
 
@@ -56,6 +58,13 @@
         $('#structureLayout').layout({
             fit:true
         });
+
+        structure.currentParent = null;
+
+        structure.showAll = function () {
+            $('#structureCenterPane').html('');
+            manager.doGet({{$manager->getURL('report/qualia/showAll')}}, 'structureCenterPane');
+        }
 
         structure.showLU = function (idLU) {
             $('#reportCenterPane').html('');
@@ -77,11 +86,13 @@
 
         structure.reloadParent = function () {
             $('#structureCenterPane').html('');
-            var node = $('#framesTree').tree('getSelected');
-            var parent = $('#framesTree').tree('getParent', node.target);
+            var node = $('#framesTree').tree('getSelected') || structure.node;
             console.log(node);
-            console.log(parent);
             if (node) {
+                $('#framesTree').tree('select', node.target);
+                var parent = $('#framesTree').tree('getParent', node.target) || structure.currentParent;
+                structure.currentParent = parent;
+                console.log(parent);
                 $('#framesTree').tree('reload', parent.target);
             }
         }
@@ -160,6 +171,14 @@
             manager.doGet({{$manager->getURL('structure/qualia/formLUQualiaConstitutive')}} + '/' + id,'structureCenterPane');
         }
 
+        structure.luChangeQualia = function (id) {
+            if ($.type(id) === "undefined") {
+                id = structure.node.id.substr(1);
+            }
+            $('#structureCenterPane').html('');
+            manager.doGet({{$manager->getURL('structure/qualia/formChangeQualiaStructure')}} + '/' + id,'structureCenterPane');
+        }
+
         structure.luDeleteQualia = function (id) {
             if ($.type(id) === "undefined") {
                 id = structure.node.id.substr(1);
@@ -172,7 +191,7 @@
         // end Qualia
 
 
-        structure.contextMenuFrame = function(e, node) {
+        structure.contextMenuQualia = function(e, node) {
             e.preventDefault();
             console.log(node);
             structure.node = node;
@@ -180,15 +199,15 @@
             if (structure.isMaster) {
                 $(this).tree('select', node.target);
                 if (node.id == 'root') {
-                    $menu = $('#menuRootFrames');
+                    $menu = $('#menuQualiaRootFrames');
                 } else if (node.id.charAt(0) == 'f') {
-                    $menu = $('#menuFrame');
+                    $menu = $('#menuQualiaFrame');
                 } else if (node.id.charAt(0) == 'l') {
-                    $menu = $('#menuLU');
+                    $menu = $('#menuQualiaLU');
                 } else if (node.id.charAt(0) == 'q') {
-                    $menu = $('#menuQualia');
+                    $menu = $('#menuQualiaQualia');
                 } else if (node.id.charAt(0) == 'y') {
-                    $menu = $('#menuQualiaRelation');
+                    $menu = $('#menuQualiaQualiaRelation');
                 }
                 if ($menu != '') {
                     $menu.menu('show', {
@@ -199,11 +218,11 @@
             }
         }
 
-        $('#menuRootFrames').menu({});
-        $('#menuFrame').menu({});
-        $('#menuLU').menu({});
-        $('#menuQualia').menu({});
-        $('#menuQualiaRelation').menu({});
+        $('#menuQualiaRootFrames').menu({});
+        $('#menuQualiaFrame').menu({});
+        $('#menuQualiaLU').menu({});
+        $('#menuQualiaQualia').menu({});
+        $('#menuQualiaQualiaRelation').menu({});
 
         $('#lu').textbox({
             //buttonText:{{_'Search'}},
@@ -257,7 +276,7 @@
                     structure.showLU(node.id.substr(1));
                 }
             },
-            onContextMenu: structure.contextMenuFrame
+            onContextMenu: structure.contextMenuQualia
         });
     });
 </script>

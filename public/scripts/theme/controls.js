@@ -204,7 +204,6 @@ var theme = {
             var f1 = maction.getAction('', action1);
             if ((this.type == 'question') || (this.type == 'confirm')) {
                 var f2 = maction.getAction('', action2);
-                console.log("if (r) { " + f1 + "} else { " + f2 + "}");
                 var f = new Function("r", "if (r) { " + f1 + "} else { " + f2 + "}");
                 $.messager.confirm(this.title, this.msg, f);
             } else {

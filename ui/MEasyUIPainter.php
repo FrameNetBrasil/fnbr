@@ -505,7 +505,7 @@ EOT;
         //$control->property->id = 'mprompt';
         $action1 = MAction::parseAction(addslashes($control->property->action1));
         $action2 = MAction::parseAction(addslashes($control->property->action2));
-        $this->page->onLoad("console.log(manager.action);");
+        //$this->page->onLoad("console.log(manager.action);");
         $this->page->onLoad("var {$control->property->id} = theme.prompt('{$control->property->id}','{$dataJson}',\"{$action1}\",\"{$action2}\");");
         $show = ($control->property->show === false) ? false : true;
         if ($show) {

@@ -1,0 +1,68 @@
+    <table id="qualiaGrid" style="width:100%">
+        <thead>
+        <tr>
+            <th data-options="field:'idQualia', hidden:true">idQualia</th>
+            <th data-options="field:'qualiaType'" width="10%">Type</th>
+            <th data-options="field:'frame'" width="20%">Frame</th>
+            <th data-options="field:'fe1'" width="20%">LU1</th>
+            <th data-options="field:'fe2'" width="20%">LU2</th>
+        </tr>
+        </thead>
+    </table>
+    <div id="qualiaGridToolbar" style="display:none;height:40px">
+        <div style="float:left;padding:5px">
+            <input id="qualiaGridIdQualiaType" name="qualiaGridIdQualiaType" placeholder="{{_'Qualia Type'}}">
+        </div>
+        <div style="float:left;padding:5px">
+            <input id="qualiaGridFrame" name="frame" type="text" style="width:200px; padding:5px" placeholder="{{_'Search Frame'}}">
+        </div>
+    </div>
+
+<script type="text/javascript">
+    $(function () {
+
+        $('#qualiaGridFrame').textbox({
+            //buttonText:{{_'Search'}},
+            buttonIcon: 'icon-search',
+            iconAlign:'right',
+            prompt: {{_'Search Frame'}},
+        onClickButton: function() {
+            $('#qualiaGrid').datagrid('load',{
+                frame: $('#qualiaGridFrame').textbox('getValue')
+            });
+        }
+    });
+
+        $('#qualiaGridIdQualiaType').combobox({
+            data: JSON.parse({{$data->qualiaType}}),
+        prompt: {{_'Select Qualia Type'}},
+        valueField:'idQualiaType',
+            textField:'name',
+            onSelect: function() {
+            $('#qualiaGrid').datagrid('load',{
+                idQualiaType: $('#qualiaGridIdQualiaType').combobox('getValue')
+            });
+        },
+        onChange: function() {
+            $('#qualiaGrid').datagrid('load',{
+                idQualiaType: $('#qualiaGridIdQualiaType').combobox('getValue')
+            });
+        }
+    });
+
+
+        $('#qualiaGrid').datagrid({
+            title: 'Qualia Structure',
+            //singleSelect: true,
+            //collapsible: true,
+            fit: true,
+            //nowrap: false,
+            //checkOnSelect: false,
+            //selectOnCheck: false,
+            idField: 'idQualia',
+            toolbar: '#qualiaGridToolbar',
+            url: {{$manager->getURL('data/qualia/lookupForGrid')}},
+            method: 'get'
+        });
+    });
+</script>

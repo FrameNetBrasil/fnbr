@@ -9,14 +9,14 @@ class MLookupQualiaFrame extends MControl
         $onLoad = <<<EOT
         
         $('#{$this->property->id}').combogrid({
-            panelWidth:180,
+            panelWidth:230,
             url: '{$url}',
             idField:'idQualia',
             textField:'name',
             mode:'remote',
             fitColumns:true,
             columns:[[
-                {field:'name', title:'Name', width:162}
+                {field:'name', title:'Name', width:230}
             ]]
         });
 

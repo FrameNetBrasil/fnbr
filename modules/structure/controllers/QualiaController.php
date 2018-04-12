@@ -211,4 +211,35 @@ class QualiaController extends MController
 
     }
 
+    public function formChangeQualiaStructure()
+    {
+        $this->data->title = 'LU Qualia Structure';
+        $this->data->idEntityRelation = $this->data->id;
+        $relation = new fnbr\models\EntityRelation($this->data->idEntityRelation);
+        $qualia = new fnbr\models\Qualia();
+        $this->data->qualiaType = $qualia->getTypeFromRelation($relation);
+        $this->data->relationType = 'Relation Type: ' . substr($this->data->qualiaType, 4, 20);
+        $LU1 = new fnbr\models\LU();
+        $LU1->getByIdEntity($relation->getIdEntity1());
+        $this->data->lu1 = 'LU1: ' . $LU1->getFullName();
+        $LU2 = new fnbr\models\LU();
+        $LU2->getByIdEntity($relation->getIdEntity2());
+        $this->data->lu2 = 'LU2: ' . $LU2->getFullName();
+        $this->data->close = "!$('#formChangeQualiaStructure_dialog').dialog('close');";
+        $this->data->save = "@structure/qualia/changeQualiaStructure|formChangeQualiaStructure";
+        $this->render();
+    }
+
+    public function changeQualiaStructure()
+    {
+        try {
+            $qualia = new fnbr\models\Qualia($this->data->idQualia);
+            $qualia->updateRelation($this->data->idEntityRelation);
+            $this->renderPrompt('information', 'OK', "!structure.reloadParent();");
+        } catch (\Exception $e) {
+            $this->renderPrompt('error', $e->getMessage());
+        }
+
+    }
+
 }
