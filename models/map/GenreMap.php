@@ -25,10 +25,12 @@ class GenreMap extends \MBusinessModel {
             'attributes' => array(
                 'idGenre' => array('column' => 'idGenre','key' => 'primary','idgenerator' => 'identity','type' => 'integer'),
                 'entry' => array('column' => 'entry','type' => 'string'),
+                'idGenreType' => array('column' => 'idGenreType','type' => 'integer','key' => 'foreign'),
             ),
             'associations' => array(
-                'documents' => array('toClass' => 'fnbr\models\Document', 'cardinality' => 'oneToMany' , 'keys' => 'idGenre:idGenre'), 
-                'entries' => array('toClass' => 'fnbr\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
+                'genreType' => array('toClass' => 'fnbr\models\GenreType', 'cardinality' => 'oneToOne' , 'keys' => 'idGenreType:idGenreType'),
+                'documents' => array('toClass' => 'fnbr\models\Document', 'cardinality' => 'oneToMany' , 'keys' => 'idGenre:idGenre'),
+                'entries' => array('toClass' => 'fnbr\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'),
             )
         );
     }
@@ -43,13 +45,19 @@ class GenreMap extends \MBusinessModel {
      * @var string 
      */
     protected $entry;
+    /**
+     *
+     * @var integer
+     */
+    protected $idGenreType;
 
     /**
      * Associations
      */
     protected $documents;
     protected $entries;
-    
+    protected $genreType;
+
 
     /**
      * Getters/Setters
@@ -68,6 +76,13 @@ class GenreMap extends \MBusinessModel {
 
     public function setEntry($value) {
         $this->entry = $value;
+    }
+    public function getIdGenreType() {
+        return $this->idGenreType;
+    }
+
+    public function setIdGenreType($value) {
+        $this->idGenreType = $value;
     }
     /**
      *
@@ -117,10 +132,32 @@ class GenreMap extends \MBusinessModel {
     public function getAssociationEntries() {
         $this->retrieveAssociation("entries");
     }
+    /**
+     *
+     * @return Association
+     */
+    public function getGenreType() {
+        if (is_null($this->genreType)){
+            $this->retrieveAssociation("genreType");
+        }
+        return  $this->genreType;
+    }
+    /**
+     *
+     * @param Association $value
+     */
+    public function setGenreType($value) {
+        $this->genreType = $value;
+    }
+    /**
+     *
+     * @return Association
+     */
+    public function getAssociationGenreType() {
+        $this->retrieveAssociation("genreType");
+    }
 
     
 
 }
 // end - wizard
-
-?>

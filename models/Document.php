@@ -5,7 +5,7 @@
  *
  * @category   Maestro
  * @package    UFJF
- *  @subpackage fnbr
+ * @subpackage fnbr
  * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
  * @license    http://siga.ufjf.br/license
  * @version
@@ -118,7 +118,7 @@ class Document extends map\DocumentMap
                 $entry = new Entry();
                 $entry->newEntry($this->getEntry());
             }
-            $this->setIdGenre(1); // not informed
+            //$this->setIdGenre(1); // not informed
             $this->setTimeLine(Base::newTimeLine($this->getEntry(), 'S'));
             parent::save();
             $transaction->commit();
@@ -260,13 +260,85 @@ class Document extends map\DocumentMap
         $annotationSet->save();
     }
 
+    /**
+     * Upload XML - xml doc with <p> and <s> - UTF8
+     * @param type $data
+     * @param type $file
+     * @return type
+     * @throws EModelException
+     */
+    public function uploadXML($data, $file)
+    {
+        $idLanguage = $data->idLanguage;
+        $transaction = $this->beginTransaction();
+        try {
+            $fileName = $file->getTmpName();
+            // carrega o XML
+            if (file_exists($fileName)) {
+                $xml = simplexml_load_file($fileName);
+                if ($xml === FALSE) {
+                    throw new \EModelException('Error processing XML file.');
+                }
+                $json = json_encode($xml);
+                $array = json_decode($json, TRUE);
+            } else {
+                throw new \EModelException('Failed to open XML file.');
+            }
+            //mdump($array);
+            $text = [];
+            foreach ($array['p'] as $p => $par) {
+                $sentences = [];
+                foreach ($par as $s => $l) {
+                    if (is_array($l)) {
+                        foreach ($l as $x => $l1) {
+                            //mdump($p . ' - ' . $x . ' - ' . $l1);
+                            $sentences[] = $l1;
+                        }
+                    } else {
+                        //mdump($p . ' - ' . '0' . ' - ' . $l);
+                        $sentences[] = $l;
+                    }
+                }
+                $text[] = $sentences;
+            }
+            mdump($text);
+
+            $this->createSubCorpusFullText($data);
+            foreach($text as $p => $sentences) {
+                $paragraphNum = $p + 1;
+                $paragraph = $this->createParagraph($paragraphNum);
+                $sentenceNum = 0;
+                foreach($sentences as $s => $sentence)  {
+                    $row = str_replace("\t", " ", $sentence);
+                    $row = str_replace("\n", " ", $row);
+                    $row = trim($row);
+                    if ($row == '') {
+                        continue;
+                    }
+                    $sentenceNum = $sentenceNum + 1;
+                    mdump($paragraphNum . ' - ' . $sentenceNum . ' - ' . $text);
+                    $sentence = $this->createSentence($paragraph, $sentenceNum, $row, $idLanguage);
+                    $data->idSentence = $sentence->getId();
+                    $this->createAnnotationFullText($data);
+                }
+            }
+
+            $transaction->commit();
+        } catch (\EModelException $e) {
+            // rollback da transação em caso de algum erro
+            $transaction->rollback();
+            throw new EModelException($e->getMessage());
+        }
+        return $result;
+    }
+
     public function listAnnotationReport($options, $sort = 'frame', $order = 'asc')
     {
         $idLanguage = \Manager::getSession()->idLanguage;
 
         $none = ($options['fe'] == 0) && ($options['gf'] == 0) && ($options['pt'] == 0) && ($options['ni'] == 0);
 
-        if($none) {
+        if ($none) {
             $feSelect = "";
             $feFrom = <<<HERE
 INNER JOIN view_labelfecetarget vl on (annotationset.idAnnotationSet = vl.idAnnotationset)
@@ -281,7 +353,7 @@ HERE;
             $feGroupBy = "";
         }
 
-        if($options['fe']) {
+        if ($options['fe']) {
             $feSelect = "fe.entry feEntry, e3.name fe,";
             $feFrom = <<<HERE
 INNER JOIN view_labelfecetarget vl on (annotationset.idAnnotationSet = vl.idAnnotationset)
@@ -296,7 +368,7 @@ HERE;
             $feGroupBy = ", fe.entry, e3.name";
         }
 
-        if($options['gf']) {
+        if ($options['gf']) {
             $gfSelect = "gl1.name gf,";
             $gfFrom = <<<HERE
 LEFT JOIN layer l1 on (annotationset.idAnnotationSet = l1.idAnnotationset)
@@ -314,7 +386,7 @@ HERE;
             $gfGroupBy = ", gl1.name";
         }
 
-        if($options['pt']) {
+        if ($options['pt']) {
             $ptSelect = "gl2.name pt,";
             $ptFrom = <<<HERE
 LEFT JOIN layer l2 on (annotationset.idAnnotationSet = l2.idAnnotationset)
@@ -335,7 +407,7 @@ HERE;
             $ptGroupBy = ", gl2.name";
         }
 
-        if($options['ni']) {
+        if ($options['ni']) {
             $niSelect = "vl.instantiationType ni,";
             $niFrom = "";
             $niWhere = <<<HERE

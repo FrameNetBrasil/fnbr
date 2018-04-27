@@ -18,7 +18,7 @@ $_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'] . "{$app}/utils/import/importL
 $configFile = Manager::getHome() . "/apps/{$app}/conf/conf.php";
 Manager::loadConf($configFile);
 Manager::setConf('logs.level', 2);
-Manager::setConf('logs.port', 0);
+Manager::setConf('logs.port', 9998);
 
 mdump("fileName = " . $fileName);
 mdump("idLanguage = " . $idLanguage);

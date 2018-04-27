@@ -69,7 +69,7 @@ class QualiaController extends MController
         $this->render('formQualia');
     }
 
-    public function formQualiaAgentivel()
+    public function formQualiaAgentive()
     {
         $this->data->title = 'Agentive Qualia';
         $this->data->qualiaType = 'qla_agentive';

@@ -241,6 +241,7 @@ class LU extends map\LUMap
         $lexeme = new Lexeme();
         $lemma = new Lemma();
         $frame = new Frame();
+        $wf = new WordForm();
         $transaction = $this->beginTransaction();
         try {
             $lineNum = 0;
@@ -251,22 +252,25 @@ class LU extends map\LUMap
                 if (($row == '') || (substr($row, 0, 2) == "//")) {
                     continue;
                 }
-                list($wf, $lexemePOS, $lemmaFull, $frameName) = explode('|', $row);
+                list($wordform, $lexemePOS, $lemmaFull, $frameName) = explode('|', $row);
                 $frameEntry = 'frm_' . strtolower($frameName);
                 $frame->getByEntry($frameEntry);
                 $idFrame = $frame->getId();
                 if ($idFrame != '') {
                     list($lexemeName, $POSName) = explode('.', $lexemePOS);
-                    $line = $wf . ' ' . $POSName . ' ' . $lexemeName;
+                    $line = $wordform . ' ' . $POSName . ' ' . $lexemeName;
+                    list($lemmaName, $lemmaPOS) = explode('.', $lemmaFull);
+                    $lemmaFullLower = $lemmaName . '.' . strtolower($lemmaPOS);
+                    print_r($line . ' lemma = ' . $lemmaFullLower . "\n");
+
                     $lexeme->createLexemeWordform($line, $wf, $POS, $idLanguage);
                     $lemma = new Lemma();
                     $lemma->getByNameIdLanguage($lemmaFull, $idLanguage);
-                    list($lemmaName, $lemmaPOS) = explode('.', $lemmaFull);
                     $lemmaIdPOS = array_search($lemmaPOS, $POS);
                     $luData = (object)[];
                     $luData->POS = $POS;
                     $luData->lemma = (object)[
-                        'name' => $lemmaName,
+                        'name' => $lemmaFullLower,
                         'idPOS' => $lemmaIdPOS,
                         'idLanguage' => $idLanguage
                     ];
@@ -282,6 +286,7 @@ class LU extends map\LUMap
                     ];
                     print_r($luData);
                     $lemma->saveForLU($luData);
+
                 }
             }
             $transaction->commit();

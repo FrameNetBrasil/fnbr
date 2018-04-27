@@ -29,19 +29,31 @@ class Genre extends map\GenreMap {
         return $this->getEntry();
     }
 
+    public function listAll()
+    {
+        $criteria = $this->getCriteria()->select('idGenre, entries.name as name')->orderBy('entries.name');
+        Base::entryLanguage($criteria);
+        return $criteria;
+    }
+
     public function listByFilter($filter){
-        $criteria = $this->getCriteria()->select('*')->orderBy('idGenre');
+        $criteria = $this->getCriteria()->select('idGenre,idGenreType, entry, entries.name name')->orderBy('idGenre');
         if ($filter->idGenre){
             $criteria->where("idGenre = {$filter->idGenre}");
+        }
+        if ($filter->idGenreType){
+            $criteria->where("idGenreType = {$filter->idGenreType}");
         }
         if ($filter->entry){
             $criteria->where("entry LIKE '%{$filter->entry}%'");
         }
+        Base::entryLanguage($criteria);
         return $criteria;
     }
     
     public function save($data)
     {
+        $this->setData($data);
         $transaction = $this->beginTransaction();
         try {
             if (!$this->isPersistent()) {

@@ -1,21 +1,22 @@
 <?php
 
-class MLookupLayerGroup extends MControl
+class MLookupGenre extends MControl
 {
 
     public function generate()
     {
-        $url = Manager::getAppURL('', 'data/layergroup/lookupData');
+        $url = Manager::getAppURL('', 'data/genre/lookupData');
         $onLoad = <<<EOT
         
         $('#{$this->property->id}').combogrid({
             panelWidth:180,
             url: '{$url}',
-            idField:'idLayerGroup',
+            idField:'idGenre',
             textField:'name',
             mode:'remote',
             fitColumns:true,
             columns:[[
+                {field:'idGenre', hidden:true},
                 {field:'name', title:'Name', width:162}
             ]]
         });

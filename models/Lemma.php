@@ -40,19 +40,21 @@ class Lemma extends map\LemmaMap
     {
         $idEntity = parent::getIdEntity();
         if ($idEntity == '') {
-            $entity = new Entity();
-            $alias = 'lemma_' . $this->name . '_' . $this->idLemma;
-            $entity->getByAlias($alias);
-            if ($entity->getIdEntity()) {
-                throw new \Exception("This Lemma already exists!.");
-            } else {
-                $entity->setAlias($alias);
-                $entity->setType('LM');
-                $entity->save();
-                $idEntity = $entity->getId();
-                $this->setIdEntity($idEntity);
-                if ($this->isPersistent()) {
-                    parent::save();
+            if ($this->idLemma != '') {
+                $entity = new Entity();
+                $alias = 'lemma_' . $this->name . '_' . $this->idLemma;
+                $entity->getByAlias($alias);
+                if ($entity->getIdEntity()) {
+                    throw new \Exception("This Lemma already exists!.");
+                } else {
+                    $entity->setAlias($alias);
+                    $entity->setType('LM');
+                    $entity->save();
+                    $idEntity = $entity->getId();
+                    $this->setIdEntity($idEntity);
+                    if ($this->isPersistent()) {
+                        parent::save();
+                    }
                 }
             }
         }
@@ -117,7 +119,7 @@ class Lemma extends map\LemmaMap
 
     public function listLexemes($idLemma)
     {
-        $criteria = $this->getCriteria()->select('lexemeentries.idLexemeEntry,lexemeentries.lexeme.idLexeme,lexemeentries.lexeme.name,lexemeentries.lexeme.pos.POS,lexemeentries.lexemeOrder,lexemeentries.headWord,lexemeentries.breakBefore')->orderBy('name');
+        $criteria = $this->getCriteria()->select('lexemeentries.idLexemeEntry,lexemeentries.lexeme.idLexeme,lexemeentries.lexeme.name,lexemeentries.lexeme.pos.POS,lexemeentries.lexemeOrder,lexemeentries.headWord,lexemeentries.breakBefore')->orderBy('name,lexemeentries.lexemeOrder');
         $criteria->where("idLemma = {$idLemma}");
         return $criteria;
     }
@@ -151,14 +153,17 @@ class Lemma extends map\LemmaMap
             $transaction = $this->beginTransaction();
             $this->setData($data->lemma);
             $this->setTimeline();
+            print_r("save lemma\n");
             parent::save();
 
             $lu = new LU();
             $data->lu->idLemma = $this->getId();
             $data->lu->active = '1';
             $data->lu->name = $data->lemma->name;
+            print_r("save lu\n");
             $lu->save($data->lu);
             $frame = Frame::create($data->lu->idFrame);
+            print_r("save relation\n");
             Base::createEntityRelation($lu->getIdEntity(), 'rel_evokes', $frame->getIdEntity());
 
             $lexemeEntry = new LexemeEntry();
@@ -181,6 +186,8 @@ class Lemma extends map\LemmaMap
                 $lexemeEntry->setBreakBefore((boolean)$le->breakBefore ? '1' : '0');
                 $lexemeEntry->setHeadWord((boolean)$le->headWord ? '1' : '0');
                 $lexemeEntry->setLexemeOrder($order++);
+                print_r("save lexemeentry\n");
+
                 $lexemeEntry->save();
             }
             $transaction->commit();
@@ -202,6 +209,7 @@ class Lemma extends map\LemmaMap
                 $data->idPOS = $pos->getIdPOS();
                 $this->setData($data);
                 $this->setTimeline();
+                mdump('======'.$this->idLemma);
                 parent::save();
                 $this->getIdEntity();
             }

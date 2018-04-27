@@ -143,7 +143,7 @@ SELECT q.idQualia, q.info, et.name qualiaType, e.name frame, e1.name fe1, e2.nam
           AND (e1.idLanguage = {$idLanguage})
           AND (e2.idLanguage = {$idLanguage})
           AND (et.idLanguage = {$idLanguage})
-        ORDER BY 2,3,4
+        ORDER BY 3,2,4
 
 HERE;
         $query = $this->getDb()->getQueryCommand($cmd);

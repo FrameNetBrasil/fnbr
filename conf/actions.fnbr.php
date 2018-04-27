@@ -22,6 +22,7 @@ return [
             'relationtypestructure' => ['Relation Type', 'structure/relationtype/main', 'fa fa-crosshairs fa16px', 'MASTER', A_ACCESS, []],
             'layergroupstructure' => ['Layer Group', 'structure/layergroup/main', 'fa fa-sitemap fa16px', 'MASTER', A_ACCESS, []],
             'layertypestructure' => ['Layer Type', 'structure/layertype/main', 'fa fa-crosshairs fa16px', 'MASTER', A_ACCESS, []],
+            'genre' => ['Genre', 'structure/genre/main', 'fas fa-book fa16px', 'MASTER', A_ACCESS, []],
         ]],
         'annotation' => ['Annotation', 'annotation/main', 'fa fa-align-justify fa16px', '', A_ACCESS, [
             'lexicalAnnotation' => ['Frame Mode', 'annotation/main/formLexicalAnnotation', 'fa fa-file-text-o fa16px', '', A_ACCESS, []],
@@ -53,6 +54,7 @@ return [
             'registerWfLex' => ['Register Wf-Lexeme', 'utils/register/formRegisterLexWf', 'fa fa-edit fa16px', 'MASTER', A_ACCESS, []],
             'importMWE' => ['Import MWE', 'utils/import/formImportMWE', 'fa fa-upload fa16px', 'MASTER', A_ACCESS, []],
             'importFullText' => ['Import FullText', 'utils/import/formImportFullText', 'fa fa-upload fa16px', 'MASTER', A_ACCESS, []],
+            'importXMLDoc' => ['Import XML Doc', 'utils/import/formImportXMLDoc', 'fa fa-upload fa16px', 'MASTER', A_ACCESS, []],
             'exportFrames' => ['Export Frames', 'utils/export/formExportFrames', 'fa fa-download fa16px', 'ADMIN', A_ACCESS, []],
             'importFrames' => ['Import Frames', 'utils/import/formImportFrames', 'fa fa-upload fa16px', 'ADMIN', A_ACCESS, []],
             'exportCxnFS' => ['Export Cxn as FS', 'utils/export/formExportCxnFS', 'fa fa-download fa16px', 'ADMIN', A_ACCESS, []],

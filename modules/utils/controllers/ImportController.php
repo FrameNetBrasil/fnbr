@@ -135,4 +135,22 @@ class ImportController extends MController
         }
     }
 
+    public function formImportXMLDoc()
+    {
+        $language = new fnbr\models\Language();
+        $this->data->languages = $language->listAll()->asQuery()->chunkResult('idLanguage','language');
+        $this->data->action = '@utils/import/importXMLDoc';
+        $this->render();
+    }
+
+    public function importXMLDoc(){
+        try {
+            $files = Mutil::parseFiles('uploadFile');
+            $model = new fnbr\models\Document($this->data->idDocument);
+            $model->uploadXML($this->data, $files[0]);
+            $this->renderPrompt('information','Fulltext loaded successfully.');
+        } catch (EMException $e) {
+            $this->renderPrompt('error',$e->getMessage());
+        }
+    }
 }
