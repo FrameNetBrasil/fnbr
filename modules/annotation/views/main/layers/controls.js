@@ -177,6 +177,63 @@
             }
         });
 
+        $('#dlgUDTree').dialog({
+            modal:true,
+            closed:true,
+            toolbar:'#dlgUDTree_tools',
+            border:true,
+            doSize:true,
+            UDTreeCurrent: null,
+            onOpen: function() {
+                console.log('opening');
+                var UDTreeCurrent = UDTree.UDTreeCurrent;
+                console.log(UDTreeCurrent);
+                if (UDTreeCurrent != null) {
+                    console.log(UDTree);
+                    if (UDTree.start !== undefined) {
+                        console.log('starting');
+                        UDTree.start(UDTreeCurrent);
+                    }
+                }
+
+            },
+            onClose: function() {
+                UDTree.destroy();
+            }
+        });
+
+        $('#dlgUDTreeRefresh').linkbutton({
+            iconCls:'icon-reload',
+            plain:true,
+            size:null,
+            onClick: function() {
+                if (UDTree.refreshTree !== undefined) {
+                    UDTree.refreshTree();
+                }
+            }
+        });
+
+        $('#dlgUDTreeSave').linkbutton({
+            iconCls:'icon-save',
+            plain:true,
+            size:null,
+            onClick: function() {
+                if (UDTree.saveTree !== undefined) {
+                    console.log('saving');
+                    UDTree.saveTree();
+                }
+            }
+        });
+
+        $('#dlgUDTreeClose').linkbutton({
+            iconCls:'icon-cancel',
+            plain:true,
+            size:null,
+            onClick: function() {
+                $('#dlgUDTree').dialog('close');
+            }
+        });
+
         $('#dlgValidation').dialog({
             modal:true,
             closed:true,

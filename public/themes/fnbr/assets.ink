@@ -4,6 +4,8 @@ scripts/jquery-easyui-1.5.2/themes/default/easyui.css
 scripts/jquery-easyui-1.5.2/themes/icon.css
 scripts/jointJS/joint.min.css
 scripts/trumbowyg/ui/trumbowyg.css
+scripts/jsplumb/jsplumbtoolkit-defaults.css
+scripts/jsplumb/jsplumbtoolkit-demo.css
 
 ;Carrega os scripts externos usados pelo tema
 scripts/jquery-manager/jquery.manager.core.js
@@ -31,6 +33,7 @@ scripts/jointJS/joint.shapes.frame.js
 scripts/jointJS/joint.shapes.entity.js
 scripts/jquery.md5.js
 scripts/trumbowyg/trumbowyg.min.js
+scripts/jsplumb/jsplumb.js
 
 ;Carrega os scripts usados pelo painter.php
 scripts/theme/extensions.js

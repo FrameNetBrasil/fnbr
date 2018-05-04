@@ -16,7 +16,13 @@ var annotation = {
         instantiationTypeObj: {{$data->instantiationTypeObj|noescape}}
     };
 
-    $(function () {
+var UDTree = {
+    element: 'UDTreeCanvas',
+    UDTreeCurrent: null
+}
+
+
+$(function () {
 
         annotation.idSubCorpus = {{$data->idSubCorpus}};
 
@@ -47,6 +53,8 @@ var annotation = {
         annotation.layerLabels = {{$data->layers['layerLabels']|noescape}};
 
         annotation.nis = {{$data->layers['nis']|noescape}};
+
+        annotation.UDTreeLayer = {{$data->layers['UDTreeLayer']|noescape}};
 
         annotation.data = {{$data->layers['data']|noescape}};
 

@@ -215,5 +215,58 @@
         }
 
 
+        annotation.UDTree = function (rowIndex) {
+            if (!annotation.checkSavedData()) {
+                return;
+            }
+            //console.log(annotation.layerLabels[idLayer]);
+            var rows = $('#layers').datagrid('getRows');
+            var row = rows[rowIndex];
+            var idLayer = row.idLayer;
+            console.log(row);
+            var words = {};
+            var idLabelPrev = -1;
+            for (field in row) {
+                if (field.substr(0, 2) == 'wf') {
+                    idLabel = row[field];
+                    pchar = field.substr(2, 5);
+                    char = annotation.chars[field].char;
+                    console.log(pchar + ' ' + idLabel);
+                    if (idLabel != idLabelPrev) {
+                        words[idLabel] = {};
+                        words[idLabel]['start'] = pchar;
+                        words[idLabel]['name'] = annotation.labelTypes[idLabel].label;
+                        words[idLabel]['word'] = '';
+                        idLabelPrev = idLabel;
+                    }
+                    words[idLabel]['end'] = pchar;
+                    words[idLabel]['word'] = words[idLabel]['word']  + char;
+                }
+            }
+            console.log(words);
+            var UDTreeCurrent = {};
+            if (annotation.UDTreeCurrent === undefined) {
+                if (annotation.UDTreeLayer[idLayer] !== undefined) {
+                    UDTreeCurrent = annotation.UDTreeLayer[idLayer];
+                }
+            }
+            annotation.UDTreeCurrent = {};
+            for (idLabel in words) {
+                var word = words[idLabel];
+                annotation.UDTreeCurrent[idLabel] = {
+                    id: idLabel,
+                    start: word.start,
+                    length: word.end - word.start + 1,
+                    ud: word.name,
+                    name: word.word,
+                    parent: UDTreeCurrent[idLabel] ? UDTreeCurrent[idLabel] : null
+                };
+            }
+            console.log(annotation.UDTreeCurrent);
+            UDTree.UDTreeCurrent = annotation.UDTreeCurrent;
+            $('#dlgUDTree').dialog('doLayout');
+            $('#dlgUDTree').dialog('open');
+        }
+
     });
 </script>

@@ -9,7 +9,11 @@
             var rows=$('#layers').datagrid("getRows");
             var row = rows[rowIndex];
             console.log(row);
+            console.log(field);
             if (row.idLayerType == 0){
+                return;
+            }
+            if ((row.idLayerType == 25) && (field == 'layer')) {
                 return;
             }
             if (row.layerTypeEntry.substr(0,8) == 'lty_cefe'){

@@ -448,9 +448,24 @@ class AnnotationService extends MService
             ];
         }
 
+        // UDTree
+        $UDTreeLayer = [];
+        $UDTreeLayer['none'] = '';
+        /*
+        $queryUDTree = $as->getUDTree($idSentence);
+        $rows = $queryUDTree->getResult();
+        foreach ($rows as $row) {
+            if (!isset($UDTree[$row['idLayer']])) {
+                $UDTree[$row['idLayer']][$row['idLabel']] = $row['idLabelParent'];
+            }
+        }
+        */
+
+
 //mdump($result);
         $layers['labelTypes'] = MUtil::php2js($result);//json_encode($result);
         $layers['layerLabels'] = MUtil::php2js($layerLabels);//json_encode($result);
+        $layers['UDTreeLayer'] = MUtil::php2js($UDTreeLayer);
 
         // get NIs
         //$niFields = array();

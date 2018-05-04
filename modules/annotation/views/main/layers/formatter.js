@@ -63,6 +63,11 @@
                 text = text + "<a class='fa fa-info-circle fa16px' style=':hover {color:green};text-decoration:none;' onclick='annotation.ASInfo(" + row.idAnnotationSet + ")'>&nbsp</a>";
                 text = text + "<a class='fa fa-comment-o fa16px' style=':hover {color:green};text-decoration:none;' onclick='annotation.ASComments(" + row.idAnnotationSet + ")'>&nbsp</a>" + annotation.annotationSets[row.idAnnotationSet]['name'];
             }
+            if (row.layerTypeEntry == 'lty_udrelation'){
+                console.log(row);
+                console.log(index);
+                text = text + "&nbsp<a class='fa fa-sitemap fa16px' onclick='annotation.UDTree(" + index + ")'>&nbsp</a>";
+            }
             return text;
         }
 
