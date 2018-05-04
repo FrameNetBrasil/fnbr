@@ -89,6 +89,9 @@ class LemmaController extends MController
     public function newLexeme()
     {
         try {
+            if (trim($this->data->lexeme->lexemeOrder) == '') {
+                throw new \Exception("Order is required.");
+            }
             $structure = Manager::getAppService('structurelemma');
             $structure->addLexemeEntry($this->data);
             //$model->save($this->data->lemmaelement);
