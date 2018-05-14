@@ -158,6 +158,7 @@ class Lemma extends map\LemmaMap
                 $this->setTimeline();
                 print_r("save lemma\n");
                 parent::save();
+                $this->getIdEntity();
             }
 
             $lu = new LU();

@@ -272,7 +272,7 @@ class LU extends map\LUMap
                         print_r('line = ' . $line . "\n");
 
                         $lexeme->createLexemeWordform($line, $wf, $POS, $idLanguage);
-                        $lemma->getByNameIdLanguage($lemmaFull, $idLanguage);
+                        $lemma->getByNameIdLanguage($lemmaFullLower, $idLanguage);
                         $lemmaIdPOS = array_search($lemmaPOS, $POS);
                         $luData = (object)[];
                         $luData->POS = $POS;
