@@ -289,35 +289,8 @@ class FrameController extends MController
             $lu->save($this->data->lu);
             $frame = fnbr\models\Frame::create($this->data->lu->idFrame);
             fnbr\models\Base::createEntityRelation($lu->getIdEntity(), 'rel_evokes', $frame->getIdEntity());
-            //$this->renderPrompt('information', 'OK', "!$('#formNewLU_dialog').dialog('close'); structure.reloadFrame();");
             $updateLU = "!manager.doAction('@" . Manager::getApp() . "/structure/frame/formUpdateLU/{$lu->getId()}|formNewLU');";
             $this->renderPrompt('information', 'OK, LU created; go to edition.', $updateLU . "$('#formNewLU_dialog').dialog('close');");
-            /*
-            if (strpos($this->data->lemma, '.') === false) {
-                throw new \Exception('Wrong format for Lemma.');
-            }
-            if ($this->data->idLanguage == '') {
-                throw new \Exception('Language not informed.');
-            }
-            $lemma = new fnbr\models\Lemma();
-            $result = $lemma->getByNameIdLanguage(mb_strtolower($this->data->lemma), $this->data->idLanguage)->asQuery()->getResult();
-            mdump($result);
-            if (count($result) == 0) {
-                $createLemma = "!manager.doAction('@" . Manager::getApp() . "/structure/frame/formNewLemma|formNewLU');$('#formNewLU_dialog').dialog('close');";
-                $this->renderPrompt('confirmation', "Lemma [{$this->data->lemma}] doesn't exist. Create it?", $createLemma, "!$('#formNewLU_dialog').dialog('close');");
-            } else {
-                $lu = new fnbr\models\LU();
-                $this->data->lu->idLemma = $result[0]['idLemma'];
-                $this->data->lu->active = '1';
-                $this->data->lu->name = $this->data->lemma;
-                $lu->save($this->data->lu);
-                $frame = fnbr\models\Frame::create($this->data->lu->idFrame);
-                fnbr\models\Base::createEntityRelation($lu->getIdEntity(), 'rel_evokes', $frame->getIdEntity());
-                //$this->renderPrompt('information', 'OK', "!$('#formNewLU_dialog').dialog('close'); structure.reloadFrame();");
-                $updateLU = "!manager.doAction('@" . Manager::getApp() . "/structure/frame/formUpdateLU/{$lu->getId()}|formNewLU');";
-                $this->renderPrompt('information', 'OK', $updateLU . "$('#formNewLU_dialog').dialog('close');");
-            }
-            */
         } catch (\Exception $e) {
             $this->renderPrompt('error', $e->getMessage());
         }

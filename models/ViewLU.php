@@ -36,6 +36,14 @@ class ViewLU extends map\ViewLUMap {
         return $criteria;
     }
 
+    public function listByLemmaFrame($lemma, $idFrame)
+    {
+        $criteria = $this->getCriteria()->select('*');
+        $criteria->where("idFrame = {$idFrame}");
+        $criteria->where("lemmaName = '{$lemma}'");
+        return $criteria;
+    }
+
     public function listByIdEntityFrame($idEntityFrame, $idLanguage = '')
     {
         $criteria = $this->getCriteria()->select('*')->orderBy('name');

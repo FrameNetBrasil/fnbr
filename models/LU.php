@@ -5,7 +5,7 @@
  *
  * @category   Maestro
  * @package    UFJF
- *  @subpackage fnbr
+ * @subpackage fnbr
  * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
  * @license    http://siga.ufjf.br/license
  * @version
@@ -62,7 +62,7 @@ class LU extends map\LUMap
     {
         $data = parent::getData();
         $data->idFrame = $this->idFrame;
-        $criteria = Base::relationCriteria('LU','SemanticType','rel_hastype','SemanticType.idEntity');
+        $criteria = Base::relationCriteria('LU', 'SemanticType', 'rel_hastype', 'SemanticType.idEntity');
         $criteria->where("LU.idEntity", "=", $this->getIdEntity());
         $idEntitySemanticType = $criteria->asQuery()->getResult()[0]['idEntity'];
         if ($idEntitySemanticType) {
@@ -114,7 +114,7 @@ class LU extends map\LUMap
         Base::entryLanguage($criteria, 'frame');
         $criteria->where("lemma.idLanguage = {$idLanguage}");
         $fullname = $filter ? $filter->fullname : '';
-        $fullname = (strlen($fullname) > 2) ? $fullname: '-none-';
+        $fullname = (strlen($fullname) > 2) ? $fullname : '-none-';
         $criteria->where("upper(name) LIKE upper('{$fullname}%')");
         return $criteria;
     }
@@ -125,7 +125,7 @@ class LU extends map\LUMap
         Base::relation($criteria, 'LU', 'Frame frame', 'rel_evokes');
         $criteria->where("lemma.idLanguage = entry.idLanguage");
         $fullname = $filter ? $filter->fullname : '';
-        $fullname = (strlen($fullname) > 2) ? $fullname: '-none-';
+        $fullname = (strlen($fullname) > 2) ? $fullname : '-none-';
         $criteria->where("upper(name) LIKE upper('{$fullname}%')");
         return $criteria;
     }
@@ -227,6 +227,7 @@ class LU extends map\LUMap
             throw new \Exception($e->getMessage());
         }
     }
+
     /**
      * Upload LU from simple text file
      * Line: wordform|lexeme|lemma|frame(english)
@@ -234,14 +235,16 @@ class LU extends map\LUMap
      * @param type $data
      * @param type $file
      */
-    public function uploadLUOffline($data) {
+    public function uploadLUOffline($data)
+    {
         $idLanguage = $data->idLanguage;
         $pos = new POS();
-        $POS = $pos->listAll()->asQuery()->chunkResult('idPOS','POS');
+        $POS = $pos->listAll()->asQuery()->chunkResult('idPOS', 'POS');
         $lexeme = new Lexeme();
         $lemma = new Lemma();
         $frame = new Frame();
         $wf = new WordForm();
+        $viewLU = new ViewLU();
         $transaction = $this->beginTransaction();
         try {
             $lineNum = 0;
@@ -252,49 +255,53 @@ class LU extends map\LUMap
                 if (($row == '') || (substr($row, 0, 2) == "//")) {
                     continue;
                 }
+                print_r(' row = ' . $row . "\n");
                 list($wordform, $lexemePOS, $lemmaFull, $frameName) = explode('|', $row);
                 $frameEntry = 'frm_' . strtolower($frameName);
                 $frame->getByEntry($frameEntry);
                 $idFrame = $frame->getId();
                 if ($idFrame != '') {
-                    list($lexemeName, $POSName) = explode('.', $lexemePOS);
-                    $line = $wordform . ' ' . $POSName . ' ' . $lexemeName;
                     list($lemmaName, $lemmaPOS) = explode('.', $lemmaFull);
                     $lemmaFullLower = $lemmaName . '.' . strtolower($lemmaPOS);
-                    print_r($line . ' lemma = ' . $lemmaFullLower . "\n");
+                    print_r(' lemma = ' . $lemmaFullLower . "\n");
+                    //verifica se a LU já existe
+                    $lu = $viewLU->listByLemmaFrame($lemmaFullLower, $idFrame)->asQuery()->getResult();
+                    if ($lu['idLU'][0] ==  '') {
+                        list($lexemeName, $POSName) = explode('.', $lexemePOS);
+                        $line = $wordform . ' ' . $POSName . ' ' . $lexemeName;
+                        print_r('line = ' . $line . "\n");
 
-                    $lexeme->createLexemeWordform($line, $wf, $POS, $idLanguage);
-                    $lemma = new Lemma();
-                    $lemma->getByNameIdLanguage($lemmaFull, $idLanguage);
-                    $lemmaIdPOS = array_search($lemmaPOS, $POS);
-                    $luData = (object)[];
-                    $luData->POS = $POS;
-                    $luData->lemma = (object)[
-                        'name' => $lemmaFullLower,
-                        'idPOS' => $lemmaIdPOS,
-                        'idLanguage' => $idLanguage
-                    ];
-                    $luData->lexemes = [
-                        $lexemeName => (object)[
-                            'POS' => $POSName,
-                            'headWord' => true,
-                            'breakBefore' => false
-                        ]
-                    ];
-                    $luData->lu = (object)[
-                        'idFrame' => $idFrame
-                    ];
-                    print_r($luData);
-                    $lemma->saveForLU($luData);
-
+                        $lexeme->createLexemeWordform($line, $wf, $POS, $idLanguage);
+                        $lemma->getByNameIdLanguage($lemmaFull, $idLanguage);
+                        $lemmaIdPOS = array_search($lemmaPOS, $POS);
+                        $luData = (object)[];
+                        $luData->POS = $POS;
+                        $luData->lemma = (object)[
+                            'name' => $lemmaFullLower,
+                            'idPOS' => $lemmaIdPOS,
+                            'idLanguage' => $idLanguage
+                        ];
+                        $luData->lexemes = [
+                            $lexemeName => (object)[
+                                'POS' => $POSName,
+                                'headWord' => true,
+                                'breakBefore' => false
+                            ]
+                        ];
+                        $luData->lu = (object)[
+                            'idFrame' => $idFrame
+                        ];
+                        print_r($luData);
+                        $lemma->saveForLU($luData);
+                    }
                 }
             }
             $transaction->commit();
         } catch (\Exception $e) {
             // rollback da transação em caso de algum erro
             $transaction->rollback();
-            print_r($e->getMessage() . ' LineNum: '. $lineNum);
-            throw new \Exception($e->getMessage() . ' LineNum: '. $lineNum);
+            print_r($e->getMessage() . ' LineNum: ' . $lineNum . "\n");
+            throw new \Exception($e->getMessage() . ' LineNum: ' . $lineNum);
         }
     }
 

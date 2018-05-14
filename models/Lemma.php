@@ -72,7 +72,7 @@ class Lemma extends map\LemmaMap
     {
         $criteria = $this->getCriteria()->select("idLemma, name");
         $criteria->where("(name = lower('{$name}')) and (idLanguage = {$idLanguage})");
-        return $criteria;
+        $this->retrieveFromCriteria($criteria);
     }
 
     public function listByFilter($filter)
@@ -151,10 +151,14 @@ class Lemma extends map\LemmaMap
     {
         try {
             $transaction = $this->beginTransaction();
-            $this->setData($data->lemma);
-            $this->setTimeline();
-            print_r("save lemma\n");
-            parent::save();
+
+            $newLemma = ($this->getId() == '');
+            if ($newLemma) {
+                $this->setData($data->lemma);
+                $this->setTimeline();
+                print_r("save lemma\n");
+                parent::save();
+            }
 
             $lu = new LU();
             $data->lu->idLemma = $this->getId();
@@ -166,29 +170,31 @@ class Lemma extends map\LemmaMap
             print_r("save relation\n");
             Base::createEntityRelation($lu->getIdEntity(), 'rel_evokes', $frame->getIdEntity());
 
-            $lexemeEntry = new LexemeEntry();
-            $lexemeEntry->setIdLemma($this->getId());
-            $order = 1;
-            foreach ($data->lexemes as $name => $le) {
-                $le->idPOS = array_search($le->POS, $data->POS);
+            if ($newLemma) {
+                $lexemeEntry = new LexemeEntry();
+                $lexemeEntry->setIdLemma($this->getId());
+                $order = 1;
+                foreach ($data->lexemes as $name => $le) {
+                    $le->idPOS = array_search($le->POS, $data->POS);
 
-                $lexeme = new Lexeme();
-                $criteria = $lexeme->getByName($name, $data->lemma->idLanguage, $le->idPOS);
-                $lexeme->retrieveFromCriteria($criteria);
-                if ($lexeme->getId() == '') {
-                    $lexeme->setName(mb_strtolower($name));
-                    $lexeme->setIdLanguage($data->lemma->idLanguage);
-                    $lexeme->setIdPOS($le->idPOS);
-                    $lexeme->save();
+                    $lexeme = new Lexeme();
+                    $criteria = $lexeme->getByName($name, $data->lemma->idLanguage, $le->idPOS);
+                    $lexeme->retrieveFromCriteria($criteria);
+                    if ($lexeme->getId() == '') {
+                        $lexeme->setName(mb_strtolower($name));
+                        $lexeme->setIdLanguage($data->lemma->idLanguage);
+                        $lexeme->setIdPOS($le->idPOS);
+                        $lexeme->save();
+                    }
+                    $lexemeEntry->setPersistent(false);
+                    $lexemeEntry->setIdLexeme($lexeme->getId());
+                    $lexemeEntry->setBreakBefore((boolean)$le->breakBefore ? '1' : '0');
+                    $lexemeEntry->setHeadWord((boolean)$le->headWord ? '1' : '0');
+                    $lexemeEntry->setLexemeOrder($order++);
+                    print_r("save lexemeentry\n");
+
+                    $lexemeEntry->save();
                 }
-                $lexemeEntry->setPersistent(false);
-                $lexemeEntry->setIdLexeme($lexeme->getId());
-                $lexemeEntry->setBreakBefore((boolean)$le->breakBefore ? '1' : '0');
-                $lexemeEntry->setHeadWord((boolean)$le->headWord ? '1' : '0');
-                $lexemeEntry->setLexemeOrder($order++);
-                print_r("save lexemeentry\n");
-
-                $lexemeEntry->save();
             }
             $transaction->commit();
             return $lu->getId();

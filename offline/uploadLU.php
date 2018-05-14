@@ -4,7 +4,6 @@ include "offline.php";
 
 $app = 'fnbr';
 $db = 'mfn';
-Manager::setConf('fnbr.db', $db);
 
 $idLanguage = $argv[1];
 $fileName = $argv[2];
@@ -19,6 +18,8 @@ $configFile = Manager::getHome() . "/apps/{$app}/conf/conf.php";
 Manager::loadConf($configFile);
 Manager::setConf('logs.level', 2);
 Manager::setConf('logs.port', 9998);
+
+Manager::setConf('fnbr.db', $db);
 
 mdump("fileName = " . $fileName);
 mdump("idLanguage = " . $idLanguage);
