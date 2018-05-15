@@ -239,13 +239,13 @@ class LU extends map\LUMap
     {
         $idLanguage = $data->idLanguage;
         $pos = new POS();
-        $POS = $pos->listAll()->asQuery()->chunkResult('idPOS', 'POS');
+        $POS = $pos->listAll()->asQuery()->chunkResult('POS', 'idPOS');
         $lexeme = new Lexeme();
         $lemma = new Lemma();
         $frame = new Frame();
         $wf = new WordForm();
-        $viewLU = new ViewLU();
         $transaction = $this->beginTransaction();
+        $c1 = $c2 = 0;
         try {
             $lineNum = 0;
             $rows = $data->rows;
@@ -255,6 +255,7 @@ class LU extends map\LUMap
                 if (($row == '') || (substr($row, 0, 2) == "//")) {
                     continue;
                 }
+                print_r(' ================= ' . "\n");
                 print_r(' row = ' . $row . "\n");
                 list($wordform, $lexemePOS, $lemmaFull, $frameName) = explode('|', $row);
                 $frameEntry = 'frm_' . strtolower($frameName);
@@ -264,38 +265,53 @@ class LU extends map\LUMap
                     list($lemmaName, $lemmaPOS) = explode('.', $lemmaFull);
                     $lemmaFullLower = $lemmaName . '.' . strtolower($lemmaPOS);
                     print_r(' lemma = ' . $lemmaFullLower . "\n");
-                    //verifica se a LU já existe
-                    $lu = $viewLU->listByLemmaFrame($lemmaFullLower, $idFrame)->asQuery()->getResult();
-                    if ($lu['idLU'][0] ==  '') {
-                        list($lexemeName, $POSName) = explode('.', $lexemePOS);
-                        $line = $wordform . ' ' . $POSName . ' ' . $lexemeName;
-                        print_r('line = ' . $line . "\n");
+                    list($lexemeName, $POSName) = explode('.', $lexemePOS);
+                    $POSNameUpper = strtoupper($POSName);
+                    $line = $wordform . ' ' . $POSNameUpper . ' ' . $lexemeName;
+                    print_r('line = ' . $line . "\n");
 
-                        $lexeme->createLexemeWordform($line, $wf, $POS, $idLanguage);
-                        $lemma->getByNameIdLanguage($lemmaFullLower, $idLanguage);
-                        $lemmaIdPOS = array_search($lemmaPOS, $POS);
-                        $luData = (object)[];
-                        $luData->POS = $POS;
-                        $luData->lemma = (object)[
+                    $idLexeme = $lexeme->createLexemeWordform($line, $wf, $POS, $idLanguage);
+                    //verifica se o Lemma já existe
+                    $lemma = new Lemma();
+                    $lemma->getByNameIdLanguage($lemmaFullLower, $idLanguage);
+                    if ($lemma->getId() == '') {
+                        $lemmaData = (object)[];
+                        $lemmaIdPOS = $POS[$POSNameUpper];
+                        $lemmaData->lemma = (object)[
                             'name' => $lemmaFullLower,
                             'idPOS' => $lemmaIdPOS,
                             'idLanguage' => $idLanguage
                         ];
-                        $luData->lexemes = [
-                            $lexemeName => (object)[
-                                'POS' => $POSName,
+                        $lemmaData->lexeme = [
+                            $lexemeName => [
+                                'id' => $idLexeme,
                                 'headWord' => true,
                                 'breakBefore' => false
                             ]
                         ];
-                        $luData->lu = (object)[
+                        //print_r($lemmaData);
+                        $lemma->save($lemmaData);
+                        $c1++;
+                    }
+                    //verifica se a LU já existe
+                    $entity = new Entity();
+                    $alias = 'lu_' . $lemma->getName() . '_' . $idFrame . '_' . $lemma->getIdLemma();
+                    $entity->getByAlias($alias);
+                    print_r('alias = ' . $alias . "  identity = " . $entity->getIdEntity() . "\n");
+                    if ($entity->getIdEntity() == '') {
+                        $luData = (object)[
                             'idFrame' => $idFrame
                         ];
-                        print_r($luData);
+                        print_r("creating LU " . $lemma->getName() . '  Frame: ' . $idFrame . "\n");
                         $lemma->saveForLU($luData);
+                        $c2++;
                     }
                 }
             }
+            print_r("***********\n");
+            print_r('** created Lemma  = ' . $c1 . "\n");
+            print_r('** created LU  = ' . $c2 . "\n");
+            print_r("***********\n");
             $transaction->commit();
         } catch (\Exception $e) {
             // rollback da transação em caso de algum erro

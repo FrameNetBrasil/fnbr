@@ -127,6 +127,7 @@ class Lexeme extends map\LexemeMap {
     public function createLexemeWordform($row, $wf, $POS, $idLanguage) {
         $fields = explode(' ', $row);
         $idPOS = $POS[$fields[1]];
+        //print_r('idPOS = ' . $idPOS . "\n");
         if ($idPOS != '') {
             $l = str_replace("'","\'", $fields[2]);
             $lexeme = $this->getCriteria()->select('idLexeme')
@@ -149,6 +150,7 @@ class Lexeme extends map\LexemeMap {
                 $wf->save();
             }
         }
+        return $idLexeme;
     }
     
     /**

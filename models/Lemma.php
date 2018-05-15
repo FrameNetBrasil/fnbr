@@ -152,51 +152,16 @@ class Lemma extends map\LemmaMap
         try {
             $transaction = $this->beginTransaction();
 
-            $newLemma = ($this->getId() == '');
-            if ($newLemma) {
-                $this->setData($data->lemma);
-                $this->setTimeline();
-                print_r("save lemma\n");
-                parent::save();
-                $this->getIdEntity();
-            }
-
             $lu = new LU();
-            $data->lu->idLemma = $this->getId();
-            $data->lu->active = '1';
-            $data->lu->name = $data->lemma->name;
+            $data->idLemma = $this->getId();
+            $data->active = '1';
+            $data->name = $this->getName();
             print_r("save lu\n");
-            $lu->save($data->lu);
-            $frame = Frame::create($data->lu->idFrame);
+            $lu->save($data);
+            $frame = Frame::create($data->idFrame);
             print_r("save relation\n");
             Base::createEntityRelation($lu->getIdEntity(), 'rel_evokes', $frame->getIdEntity());
 
-            if ($newLemma) {
-                $lexemeEntry = new LexemeEntry();
-                $lexemeEntry->setIdLemma($this->getId());
-                $order = 1;
-                foreach ($data->lexemes as $name => $le) {
-                    $le->idPOS = array_search($le->POS, $data->POS);
-
-                    $lexeme = new Lexeme();
-                    $criteria = $lexeme->getByName($name, $data->lemma->idLanguage, $le->idPOS);
-                    $lexeme->retrieveFromCriteria($criteria);
-                    if ($lexeme->getId() == '') {
-                        $lexeme->setName(mb_strtolower($name));
-                        $lexeme->setIdLanguage($data->lemma->idLanguage);
-                        $lexeme->setIdPOS($le->idPOS);
-                        $lexeme->save();
-                    }
-                    $lexemeEntry->setPersistent(false);
-                    $lexemeEntry->setIdLexeme($lexeme->getId());
-                    $lexemeEntry->setBreakBefore((boolean)$le->breakBefore ? '1' : '0');
-                    $lexemeEntry->setHeadWord((boolean)$le->headWord ? '1' : '0');
-                    $lexemeEntry->setLexemeOrder($order++);
-                    print_r("save lexemeentry\n");
-
-                    $lexemeEntry->save();
-                }
-            }
             $transaction->commit();
             return $lu->getId();
         } catch (\Exception $e) {
@@ -234,6 +199,7 @@ class Lemma extends map\LemmaMap
             $this->setData($data->lemma);
             $this->setTimeline();
             parent::save();
+            $this->getIdEntity();
             $lexemeEntry = new LexemeEntry();
             $lexemeEntry->setIdLemma($this->getId());
             $order = 1;

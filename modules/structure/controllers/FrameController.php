@@ -442,6 +442,7 @@ class FrameController extends MController
         }
     }
 
+    /*
     public function newLemma()
     {
         try {
@@ -455,6 +456,7 @@ class FrameController extends MController
             $this->renderPrompt('error', $e->getMessage());
         }
     }
+    */
 
 
     public function formNewLexeme()
