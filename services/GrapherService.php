@@ -464,38 +464,19 @@ class GrapherService extends MService
         return $relations;
     }
 
-    public function getCxnStructure($idCxn)
+    public function getCxnStructure($idCxn, $chosen, $level = 1)
     {
         $construction = new \fnbr\models\Construction($idCxn);
-        $structure = $construction->getStructure();
-        $nodes = [];
-        $links = [];
-        foreach ($structure as $node) {
-            if (($node['label'] != 'rel_inheritance_cxn')) {
-                $nodes[$node['idEntity']] = (object)[
-                    'id' => $node['idEntity'],
-                    'name' => $node['name'],
-                    //'typeSystem' => $node['typeSystem'],
-                    'type' => strtolower($node['typeSystem'])
-                ];
-                if ($node['source']) {
-                    $links[] = [
-                        'source' => $node['source'],
-                        'target' => $node['idEntity'],
-                        'type' => $node['label']
-                    ];
-                }
-            }
-        }
-        $relations = [];
-        foreach ($links as $link) {
-            $relations[] = [
-                'source' => $nodes[$link['source']],
-                'target' => $nodes[$link['target']],
-                'type' => $link['type']
-            ];
-        }
-        return json_encode($relations);
+        $chosen = [
+            'rel_inheritance' => 'rel_inheritance',
+            'rel_subframe' => 'rel_subframe',
+            'rel_using' => 'rel_using',
+            'rel_inheritance_cxn' => 'rel_inheritance_cxn',
+            'rel_inhibits' => 'rel_inhibits',
+            'rel_daughter_of' => 'rel_daughter_of',
+            'rel_evokes' => 'rel_evokes'
+        ];
+        return $this->getRelations($construction->getIdEntity(), $chosen, $level);
     }
 
     ///
