@@ -7,7 +7,7 @@ class GrapherService extends MService
 
     public function getRelationData()
     {
-        $relation = new RelationType();
+        $relation = new \fnbr\models\RelationType();
         $result = new \StdClass;
         $relations = $relation->listByFilter((object)['group' => 'rgp_frame_relations'])->asQuery()->getResult();
         foreach ($relations as $row) {
@@ -70,7 +70,7 @@ class GrapherService extends MService
 
     public function listFrames($data, $idLanguage = '')
     {
-        $frame = new ViewFrame();
+        $frame = new \fnbr\models\ViewFrame();
         $filter = (object)['lu' => $data->lu, 'fe' => $data->fe, 'frame' => $data->frame, 'idDomain' => $data->idDomain, 'idLanguage' => $idLanguage];
         $frames = $frame->listByFilter($filter)->asQuery()->getResult(\FETCH_ASSOC);
         $result = array();
@@ -90,7 +90,7 @@ class GrapherService extends MService
 
     public function getFrame($id)
     {
-        $frame = new Frame();
+        $frame = new \fnbr\models\Frame();
         $filter = (object)['idFrame' => $id];
         $result = $frame->listByFilter($filter)->asQuery()->getResult();
         return json_encode($result[0]);
@@ -98,7 +98,7 @@ class GrapherService extends MService
 
     public function listCxns($data, $idLanguage = '')
     {
-        $cxn = new Construction();
+        $cxn = new \fnbr\models\Construction();
         $filter = (object)['cxn' => $data->cxn, 'idLanguage' => $idLanguage];
         $cxns = $cxn->listByFilter($filter)->asQuery()->getResult(\FETCH_ASSOC);
         $result = array();
@@ -118,7 +118,7 @@ class GrapherService extends MService
 
     public function getCxn($id)
     {
-        $cxn = new Construction();
+        $cxn = new \fnbr\models\Construction();
         $filter = (object)['idConstruction' => $id];
         $result = $cxn->listByFilter($filter)->asQuery()->getResult();
         return json_encode($result[0]);
@@ -148,7 +148,7 @@ class GrapherService extends MService
     {
         $relations = array_merge($this->getEntityDirectRelations($idEntity, $chosen), $this->getEntityInverseRelations($idEntity, $chosen));
         if (count($relations == 0)) {
-            $entity = new Entity($idEntity);
+            $entity = new \fnbr\models\Entity($idEntity);
             $node = (object)[
                 'id' => $idEntity,
                 'type' => $entity->getTypeNode(),
@@ -161,7 +161,7 @@ class GrapherService extends MService
 
     public function getEntityDirectRelations($idEntity, $chosen)
     {
-        $entity = new Entity($idEntity);
+        $entity = new \fnbr\models\Entity($idEntity);
         $relations = [];
         $node0 = (object)[
             'id' => $idEntity,
@@ -186,7 +186,7 @@ class GrapherService extends MService
 
     public function getEntityInverseRelations($idEntity, $chosen)
     {
-        $entity = new Entity($idEntity);
+        $entity = new \fnbr\models\Entity($idEntity);
         $relations = [];
         $node1 = (object)[
             'id' => $idEntity,
@@ -235,7 +235,7 @@ class GrapherService extends MService
 
     public function getElementsRelationByEntity($idEntity)
     {
-        $entity = new Entity($idEntity);
+        $entity = new \fnbr\models\Entity($idEntity);
         $relations = [];
         $node0 = (object)[
             'id' => $idEntity,
@@ -259,7 +259,7 @@ class GrapherService extends MService
 
     public function getElement2ElementRelation($elements1, $elements2, $type)
     {
-        $entity = new Entity();
+        $entity = new \fnbr\models\Entity();
         $elementRelations = $entity->listElement2ElementRelation($elements1, $elements2, $type);
         foreach ($elementRelations as $entry => $row) {
             $node0 = (object)[
@@ -329,7 +329,7 @@ class GrapherService extends MService
 
     public function getFrameRelationsByFrame($idFrame, $chosen)
     {
-        $frame = new Frame($idFrame);
+        $frame = new \fnbr\models\Frame($idFrame);
         $relations = array_merge($this->getDirectRelations($frame, $chosen), $this->getInverseRelations($frame, $chosen));
         return $relations;
     }
@@ -345,7 +345,7 @@ class GrapherService extends MService
                 foreach ($base as $rel) {
                     if ($rel['source']->idFrame == $id) {
                         $idFrame = $rel['target']->idFrame;
-                        $frame = new Frame($idFrame);
+                        $frame = new \fnbr\models\Frame($idFrame);
                         $add = $this->getDirectRelations($frame, $chosen);
                         $relations = array_merge($relations, $add);
                     }
@@ -438,7 +438,7 @@ class GrapherService extends MService
 
     public function getCxnRelationsByCxn($idCxn, $chosen)
     {
-        $cxn = new Construction($idCxn);
+        $cxn = new \fnbr\models\Construction($idCxn);
         $relations = array_merge($this->getDirectRelationsCxn($cxn, $chosen), $this->getInverseRelationsCxn($cxn, $chosen), $this->getEvokesRelationsCxn($cxn, $chosen));
         return $relations;
     }
@@ -454,7 +454,7 @@ class GrapherService extends MService
                 foreach ($base as $rel) {
                     if ($rel['source']->idCxn == $id) {
                         $idCxn = $rel['target']->idCxn;
-                        $cxn = new Construction($idCxn);
+                        $cxn = new \fnbr\models\Construction($idCxn);
                         $add = $this->getDirectRelationsCxn($cxn, $chosen);
                         $relations = array_merge($relations, $add);
                     }
@@ -466,7 +466,7 @@ class GrapherService extends MService
 
     public function getCxnStructure($idCxn)
     {
-        $construction = new Construction($idCxn);
+        $construction = new \fnbr\models\Construction($idCxn);
         $structure = $construction->getStructure();
         $nodes = [];
         $links = [];
@@ -516,7 +516,7 @@ class GrapherService extends MService
     public function getEntityDomainDirectRelations($inEntities, $chosen, $idDomain)
     {
         $relations = [];
-        $entity = new Entity();
+        $entity = new \fnbr\models\Entity();
         $directRelations = $entity->listDomainDirectRelations($inEntities, $idDomain);
         foreach ($directRelations as $entry => $row) {
             if ($chosen[$row['relationType']]) {
@@ -539,7 +539,7 @@ class GrapherService extends MService
     public function getEntityDomainInverseRelations($inEntities, $chosen, $idDomain)
     {
         $relations = [];
-        $entity = new Entity();
+        $entity = new \fnbr\models\Entity();
         $inverseRelations = $entity->listDomainInverseRelations($inEntities, $idDomain);
         foreach ($inverseRelations as $entry => $row) {
             if ($chosen[$row['relationType']]) {
@@ -562,7 +562,7 @@ class GrapherService extends MService
     public function getEntityDomainNoneRelations($inEntities, $idDomain)
     {
         $relations = [];
-        $entity = new Entity();
+        $entity = new \fnbr\models\Entity();
         $noneRelations = $entity->listDomainNoneRelations($inEntities, $idDomain);
         foreach ($noneRelations as $entry => $row) {
             $node0 = (object)[
@@ -662,7 +662,7 @@ class GrapherService extends MService
 
     public function getDomainRelationData()
     {
-        $relation = new RelationType();
+        $relation = new \fnbr\models\RelationType();
         $result = new \StdClass;
         $relations = $relation->listByFilter((object)['group' => 'rgp_frame_relations'])->asQuery()->getResult();
         foreach ($relations as $row) {
