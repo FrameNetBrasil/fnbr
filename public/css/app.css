@@ -30,6 +30,12 @@
     z-index: 999;
 }
 
+.fnbrFlag-- {
+    width:16px;
+    height:16px;
+    background: url(../images/00.png) no-repeat center center;
+}
+
 .fnbrFlagPt {
     width:16px;
     height:16px;

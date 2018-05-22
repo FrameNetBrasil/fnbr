@@ -60,6 +60,7 @@ return [
             'exportCxnFS' => ['Export Cxn as FS', 'utils/export/formExportCxnFS', 'fa fa-download fa16px', 'ADMIN', A_ACCESS, []],
         ]],
         'language' => ['Language', 'main/language', 'fa fa-flag-checkered fa16px', '', A_ACCESS, [
+            '--' => ['Entry', 'main/changeLanguage/--', 'fnbrFlag--', '', A_ACCESS, []],
             'en' => ['English', 'main/changeLanguage/en', 'fnbrFlagEn', '', A_ACCESS, []],
             'pt' => ['Portuguese', 'main/changeLanguage/pt', 'fnbrFlagPt', '', A_ACCESS, []],
             'es' => ['Spanish', 'main/changeLanguage/es', 'fnbrFlagEs', '', A_ACCESS, []],
