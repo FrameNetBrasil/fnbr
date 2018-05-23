@@ -156,7 +156,8 @@
 
     function addFESentences(feEntry) {
         manager.doAjax({{$manager->getURL('api/reportlu/getSentences')}}, function (data) {
-            $.each(data, function(index, sentence ) {
+            var sentences = JSON.parse(data);
+            $.each(sentences, function(index, sentence ) {
                 var id = "sentence" + sentence.idSentence;
                 if ($('#' + id).length) {
                     //$(sentence.text).replaceAll('#' + id);
@@ -170,7 +171,8 @@
 
     function addASSentences(asSet) {
         manager.doAjax({{$manager->getURL('api/reportlu/getSentences')}}, function (data) {
-            $.each(data, function(index, sentence ) {
+            var sentences = JSON.parse(data);
+            $.each(sentences, function(index, sentence ) {
                 var id = "sentence" + sentence.idSentence;
                 if ($('#' + id).length) {
                     //$(sentence.text).replaceAll('#' + id);

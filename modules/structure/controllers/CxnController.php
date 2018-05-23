@@ -170,8 +170,8 @@ class CxnController extends MController
     {
         $model = new fnbr\models\Construction($this->data->id);
         $this->data->cxn = $model->getEntry() . '  [' . $model->getName() . ']';
-        $this->data->languages = Base::languages();
-        $this->data->message = _M("Importação de arquivo de texto simples (uma sentença por linha).");
+        $this->data->languages = fnbr\models\Base::languages();
+        $this->data->message = _M("Importing from a plain text file - one sentence by line.");
         $this->data->save = "@structure/cxn/importTxt|formImportTxt";
         $this->data->close = "!$('#formImportTxt_dialog').dialog('close')";
         $this->render();
@@ -180,7 +180,7 @@ class CxnController extends MController
     public function importTxt()
     {
         try {
-            $files = \Maestro\Utils\Mutil::parseFiles('uploadFile');
+            $files = Mutil::parseFiles('uploadFile');
             $model = new fnbr\models\Corpus();
             $result = $model->uploadCxnSimpleText($this->data, $files[0]);
             $this->renderPrompt('information', 'OK');

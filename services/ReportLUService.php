@@ -127,7 +127,7 @@ class ReportLUService extends MService
             $node['rgbBg'] = $sentence['rgbBg'];
             $result[] = $node;
         }
-        return $result;
+        return json_encode($result);
     }
 
     public function decorateSentence($sentence, $labels)
