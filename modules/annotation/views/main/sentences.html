@@ -12,7 +12,7 @@
     <tr>
         <th data-options="field:'idAnnotationSet', hidden:true">idAnnotationSet</th>
         <th data-options="field:'chkSentence'" checkbox="true"></th>
-        <th data-options="field:'idSentence'" width="8%">idSentence</th>
+        <th data-options="field:'idSentence',sortable:true" width="9%">idSentence</th>
         <th data-options="field:'text' {{if ($data->userLanguage == 'ar')}}, align:'right' {{/if}}" width="81%">Sentence</th>
         <th data-options="field:'status',sortable:true,formatter:asColorBox" width="10%">Status</th>
     </tr>

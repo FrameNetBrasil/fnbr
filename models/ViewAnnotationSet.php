@@ -28,6 +28,9 @@ class ViewAnnotationSet extends map\ViewAnnotationSetMap {
             if ($sortable->field == 'status') {
                 $criteria->orderBy('entries.name ' . $sortable->order);
             }
+            if ($sortable->field == 'idSentence') {
+                $criteria->orderBy('idSentence ' . $sortable->order);
+            }
         }
         Base::entryLanguage($criteria);
         return $criteria;
