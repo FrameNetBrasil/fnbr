@@ -100,7 +100,7 @@ class LayerType extends map\LayerTypeMap
     }
 
     public function listToConstruction() {
-        $array = array('lty_ce','lty_cee','lty_cstrpt','lty_other','lty_sent','lty_govx'); // ? 'lty_pt','lty_gf',
+        $array = array('lty_ce','lty_cee','lty_cstrpt','lty_other','lty_sent','lty_govx','lty_udpos','lty_udrelation'); // ? 'lty_pt','lty_gf',
         $criteria = $this->getCriteria();
         $criteria->select('idLayerType, entry');
         $criteria->where('entry','in', $array);
