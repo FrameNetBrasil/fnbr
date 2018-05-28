@@ -1,14 +1,4 @@
     <table id="qualiaGrid" style="width:100%">
-        <thead>
-        <tr>
-            <th data-options="field:'idQualia', hidden:true">idQualia</th>
-            <th data-options="field:'qualiaType'" width="10%">Type</th>
-            <th data-options="field:'frame'" width="20%">Frame</th>
-            <th data-options="field:'fe1'" width="20%">LU1</th>
-            <th data-options="field:'info'" width="20%">Info</th>
-            <th data-options="field:'fe2'" width="20%">LU2</th>
-        </tr>
-        </thead>
     </table>
     <div id="qualiaGridToolbar" style="display:none;height:40px">
         <div style="float:left;padding:5px">
@@ -18,6 +8,9 @@
             <input id="qualiaGridFrame" name="frame" type="text" style="width:200px; padding:5px" placeholder="{{_'Search Frame'}}">
         </div>
     </div>
+
+{{include 'qualia.css'}}
+
 
 <script type="text/javascript">
     $(function () {
@@ -51,6 +44,12 @@
         }
     });
 
+        var iconFE = {
+            "cty_core": "fa fa-circle",
+            "cty_peripheral": "fa fa-dot-circle-o",
+            "cty_extra-thematic": "fa fa-circle-o",
+            "cty_core-unexpressed": "fas fa-adjust"
+        };
 
         $('#qualiaGrid').datagrid({
             title: 'Qualia Structure',
@@ -63,7 +62,29 @@
             idField: 'idQualia',
             toolbar: '#qualiaGridToolbar',
             url: {{$manager->getURL('data/qualia/lookupForGrid')}},
-            method: 'get'
+            method: 'get',
+            columns:[[
+                {field:'idQualia',title:'idQualia', width:0, hidden:true},
+                {field:'qualiaType',title:'<span class="icon-blank fas fa-arrows-alt-h fa16px">&nbsp;</span> Type', width:'10%',
+                    formatter: function(value,row,index){
+                        return '<span class="' + row['qualiaEntry'] + ' icon-blank fas fa-arrows-alt-h fa16px"></span> ' + value;
+                    }
+                },
+                {field:'frame',title:'<span class="entity_frame icon-blank fa fa-square fa16px"></span>&nbsp;Frame', width:'20%'},
+                {field:'fe1',title:'LU1', width:'20%',
+                    formatter: function(value,row,index){
+                        return '<span class="' + iconFE[row['fe1Type']] + ' icon-blank fa16px"></span> ' + value;
+                    }
+                },
+                {field:'info',title:'Info', width:'20%'},
+                {field:'fe2',title:'LU2', width:'20%',
+                    formatter: function(value,row,index){
+                        return '<span class="' + iconFE[row['fe2Type']] + ' icon-blank fa16px"></span> ' + value;
+                    }
+                },
+                {field:'fe1Type',title:'', hidden:true},
+                {field:'fe2Type',title:'', hidden:true}
+            ]]
         });
     });
 </script>

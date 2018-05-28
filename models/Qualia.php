@@ -122,7 +122,7 @@ HERE;
         $whereType = ($data->idQualiaType == '') ? '' : "AND (t.idTypeInstance = {$data->idQualiaType})";
         $whereFrame = ($data->frame == '') ? '' : "AND (upper(e.name) like upper('{$data->frame}%'))";
         $cmd = <<<HERE
-SELECT q.idQualia, q.info, et.name qualiaType, e.name frame, e1.name fe1, e2.name fe2
+SELECT q.idQualia, q.info, t.entry qualiaEntry, et.name qualiaType, e.name frame, e1.name fe1, e2.name fe2, fe1.typeEntry fe1Type, fe2.typeEntry fe2Type
   FROM Qualia q
   JOIN TypeInstance t on (q.idTypeInstance = t.idTypeInstance)
   JOIN Entry et on (t.entry = et.entry)
@@ -130,10 +130,10 @@ SELECT q.idQualia, q.info, et.name qualiaType, e.name frame, e1.name fe1, e2.nam
   JOIN Frame f on (r.idEntity2 = f.idEntity)
   JOIN Entry e on (f.entry = e.entry)
   JOIN View_Relation r1 on (r1.idEntity1 = q.idEntity)
-  JOIN FrameElement fe1 on (r1.idEntity2 = fe1.idEntity)
+  JOIN View_FrameElement fe1 on (r1.idEntity2 = fe1.idEntity)
   JOIN Entry e1 on (fe1.entry = e1.entry)
   JOIN View_Relation r2 on (r2.idEntity1 = q.idEntity)
-  JOIN FrameElement fe2 on (r2.idEntity2 = fe2.idEntity)
+  JOIN View_FrameElement fe2 on (r2.idEntity2 = fe2.idEntity)
   JOIN Entry e2 on (fe2.entry = e2.entry)
         WHERE (r.relationType = 'rel_qualia_frame') 
           AND (r1.relationType = 'rel_qualia_lu1_fe')

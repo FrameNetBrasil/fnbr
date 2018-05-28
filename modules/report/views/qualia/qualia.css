@@ -1,16 +1,17 @@
-.qualia_formal {
+<style>
+.qla_formal {
     color: #092834;
 }
 
-.qualia_agentive {
+.qla_agentive {
     color: #347B98;
 }
 
-.qualia_telic {
+.qla_telic {
     color: #B2D732;
 }
 
-.qualia_constitutive {
+.qla_constitutive {
     color: #66B032;
 }
-
+</style>
