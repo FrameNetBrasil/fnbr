@@ -699,6 +699,25 @@ class StructureCxnService extends MService
                 $frame = new fnbr\models\Frame($data->idFrameFamily);
                 Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_framefamily', $cn->getId(), $frame->getIdEntity());
             }
+            if ($data->idLexemeCN != '') {
+                $constraint = Base::createEntity('CN', 'con');
+                $cn = new fnbr\models\Constraint($data->idConstraint);
+                $lexeme = new fnbr\models\Lexeme($data->idLexemeCN);
+                Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_lexeme', $cn->getIdEntity(), $lexeme->getIdEntity());
+            }
+            if ($data->idLemmaCN != '') {
+                $constraint = Base::createEntity('CN', 'con');
+                $cn = new fnbr\models\Constraint($data->idConstraint);
+                $lemma = new fnbr\models\Lemma($data->idLemmaCN);
+                Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_lemma', $cn->getIdEntity(), $lemma->getIdEntity());
+            }
+            if ($data->idLUCN != '') {
+                $constraint = Base::createEntity('CN', 'con');
+                $cn = new fnbr\models\Constraint($data->idConstraint);
+                $lu = new fnbr\models\LU($data->idLUCN);
+                Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_lu', $cn->getIdEntity(), $lu->getIdEntity());
+            }
+
             $transaction->commit();
         } catch (\Exception $e) {
             $transaction->rollback();

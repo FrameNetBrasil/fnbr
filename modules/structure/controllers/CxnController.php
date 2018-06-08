@@ -233,7 +233,7 @@ class CxnController extends MController
         $this->data->idConstraint = $this->data->id;
         $model = new fnbr\models\Constraint($this->data->idConstraint);
         $constraintData = $model->getConstraintData();
-        mdump($constraintData);
+        //mdump($constraintData);
         $this->data->showCxnCE = $this->data->showCE = false;
         if ($constraintData->constrainedByType == 'CX') {
             $this->data->showCxnCE = true;
