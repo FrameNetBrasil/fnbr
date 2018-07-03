@@ -108,7 +108,9 @@ class Lemma extends map\LemmaMap
         if ($filter->idLemma) {
             $criteria->where("idLemma = {$filter->idLemma}");
         }
-        if ($filter->lemma) {
+        if ($filter->lexeme) {
+            $criteria->where("lexemeentries.lexeme.name LIKE '{$filter->lexeme}%'");
+        } else if ($filter->lemma) {
             $criteria->where("name LIKE '{$filter->lemma}%'");
         }
         if ($filter->idLanguage) {

@@ -141,7 +141,7 @@
             iconAlign:'right',
             prompt: {{_'Search Lexeme'}},
             onClickButton: function() {
-                $('#lemmasTree').tree({queryParams: {lexeme: $('#fe').textbox('getValue')}});
+                $('#lemmasTree').tree({queryParams: {lexeme: $('#lexeme').textbox('getValue')}});
             }
         });
         $('#lemma').textbox({

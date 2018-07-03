@@ -9,7 +9,8 @@ class StructureLemmaService extends MService
     {
         $lemma = new fnbr\models\Lemma();
         $name = $data->lemma ?: '-';
-        $filter = (object) ['lemma' => $name, 'idLanguage' => $idLanguage];
+        $lexeme = $data->lexeme;
+        $filter = (object) ['lemma' => $name, 'lexeme' => $lexeme, 'idLanguage' => $idLanguage];
         $lemmas = $lemma->listForTree($filter)->asQuery()->getResult(\FETCH_ASSOC);
         $result = array();
         foreach ($lemmas as $row) {
