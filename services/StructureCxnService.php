@@ -40,6 +40,12 @@ class StructureCxnService extends MService
         return json_encode($result);
     }
 
+    public function listAllConstraintElements($idCxn, $idLanguage)
+    {
+        $result = [];
+        return json_encode($result);
+    }
+
     public function listCEsConstraintsCX($idCxn, $idLanguage)
     {
         $result = [];

@@ -249,6 +249,22 @@ class CxnController extends MController
         $this->render();
     }
 
+    public function formAddConstraintCXNew()
+    {
+        $this->data->idConstruction = $this->data->id;
+        $cxn = new fnbr\models\Construction($this->data->idConstruction);
+        $this->data->cxn = 'Cxn: ' . $cxn->getName();
+        $this->data->ces = $cxn->listCEConstraints();
+        mdump($this->data->ces);
+        $this->data->relations = ['rel_evokes' => 'rel_evokes'];
+        mdump($this->data->relations);
+        $this->data->save = "@structure/cxn/addConstraintCX|formAddConstraintCX";
+        $this->data->close = "!$('#formAddConstraintCX_dialog').dialog('close');";
+        $this->data->title = $this->data->title = 'Cxn: ' . $cxn->getName() . '  [' . $cxn->getEntry() . ']: Add Constraints';
+        $this->render();
+    }
+
+
     public function formDeleteConstraint()
     {
         $structure = Manager::getAppService('structureconstraints');
@@ -291,6 +307,16 @@ class CxnController extends MController
             $this->renderPrompt('information', 'Constraint added.');
         } catch (\Exception $e) {
             $this->renderPrompt('error', "Add Constraint failed.");
+        }
+    }
+
+    public function addConstraintCXNew() {
+        mdump($this->data);
+        try {
+            $structure = Manager::getAppService('structurecxn');
+            $this->renderPrompt('information', 'Constraint added.');
+        } catch (\Exception $e) {
+            $this->renderPrompt('error', "Add Constraint failed." . $e->getMessage());
         }
     }
 
