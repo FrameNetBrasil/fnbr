@@ -34,7 +34,7 @@
     <div onclick="structure.cxnDomain()" data-options="iconCls:'icon-edit'">{{_'Domains'}}</div>
     <div onclick="structure.importTxt()" data-options="iconCls:'icon-add'">{{_'Import Txt'}}</div>
     <div onclick="structure.viewGraph()" data-options="iconCls:'icon-more'">{{_'View Graph'}}</div>
-    <div onclick="structure.addConstraintNew()" data-options="iconCls:'icon-add'">*{{_'Add Constraint'}}</div>
+    <div onclick="structure.constraints()" data-options="iconCls:'icon-add'">*{{_'Constraints'}}</div>
 </div>
 <div id="menuCxnElement" style="display:none, width:120px;">
     <div onclick="structure.editCxnElement()" data-options="iconCls:'icon-edit'">{{_'Edit CxnElement'}}</div>
@@ -176,12 +176,12 @@
             }
         }
 
-        structure.addConstraintNew = function (id) {
+        structure.constraints = function (id) {
             if ($.type(id) === "undefined") {
                 id = structure.node.id.substr(1);
             }
             $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('structure/cxn/formAddConstraintCXNew')}} + '/' + id,'structureCenterPane');
+            manager.doGet({{$manager->getURL('structure/cxn/formConstraint')}} + '/' + id,'structureCenterPane');
         }
 
         structure.deleteConstraint = function (id) {

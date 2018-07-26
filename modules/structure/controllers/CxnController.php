@@ -44,6 +44,34 @@ class CxnController extends MController
         $this->renderJson($json);
     }
 
+    public function cxnConstraintTree()
+    {
+        $structure = Manager::getAppService('structurecxn');
+        $json = $structure->listCEsConstraintsCX($this->data->id, $this->idLanguage);
+        /*
+        if ($this->data->id == '') {
+            $children = $structure->listCxns($this->data, $this->idLanguage);
+            $data = (object) [
+                'id' => 'root',
+                'state' => 'open',
+                'text' => 'Constructions',
+                'children' => $children
+            ];
+            $json = json_encode([$data]);
+        } elseif ($this->data->id{0} == 'c') {
+            //$json = $structure->listCEs(substr($this->data->id, 1), $this->idLanguage);
+            $json = $structure->listCEsConstraintsCX(substr($this->data->id, 1), $this->idLanguage);
+        } elseif ($this->data->id{0} == 'e') {
+            $json = $structure->listConstraintsCE(substr($this->data->id, 1), $this->idLanguage);
+        } elseif ($this->data->id{0} == 'x') {
+            $json = $structure->listConstraintsCN(substr($this->data->id, 1), $this->idLanguage);
+        } elseif ($this->data->id{0} == 'n') {
+            $json = $structure->listConstraintsCNCN(substr($this->data->id, 1), $this->idLanguage);
+        }
+        */
+        $this->renderJson($json);
+    }
+
     public function formNewCxn()
     {
         $this->data->title = _M('new Construction');
@@ -249,7 +277,7 @@ class CxnController extends MController
         $this->render();
     }
 
-    public function formAddConstraintCXNew()
+    public function formConstraint()
     {
         $this->data->idConstruction = $this->data->id;
         $cxn = new fnbr\models\Construction($this->data->idConstruction);
@@ -260,7 +288,7 @@ class CxnController extends MController
         mdump($this->data->relations);
         $this->data->save = "@structure/cxn/addConstraintCX|formAddConstraintCX";
         $this->data->close = "!$('#formAddConstraintCX_dialog').dialog('close');";
-        $this->data->title = $this->data->title = 'Cxn: ' . $cxn->getName() . '  [' . $cxn->getEntry() . ']: Add Constraints';
+        $this->data->title = $this->data->title = 'Cxn: ' . $cxn->getName() . '  [' . $cxn->getEntry() . ']: Constraints';
         $this->render();
     }
 
@@ -310,15 +338,6 @@ class CxnController extends MController
         }
     }
 
-    public function addConstraintCXNew() {
-        mdump($this->data);
-        try {
-            $structure = Manager::getAppService('structurecxn');
-            $this->renderPrompt('information', 'Constraint added.');
-        } catch (\Exception $e) {
-            $this->renderPrompt('error', "Add Constraint failed." . $e->getMessage());
-        }
-    }
 
     public function deleteConstraint() {
         try {

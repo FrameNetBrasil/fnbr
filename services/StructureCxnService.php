@@ -43,6 +43,9 @@ class StructureCxnService extends MService
     public function listAllConstraintElements($idCxn, $idLanguage)
     {
         $result = [];
+        $result[] = ['id' => 1, 'name' => 'teste1'];
+        $result[] = ['id' => 2, 'name' => 'teste2'];
+        $result[] = ['id' => 3, 'name' => 'teste3'];
         return json_encode($result);
     }
 
