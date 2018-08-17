@@ -28,6 +28,8 @@ class ViewConstraint extends map\ViewConstraintMap
         'rel_constraint_meets' => 'mee',
         'rel_constraint_element' => 'ele',
         'rel_constraint_constraint' => 'cnt',
+        'rel_constraint_udfeature' => 'udf',
+        'rel_constraint_stlu' => 'slu',
         'rel_qualia_constitutive' => 'cst',
         'rel_qualia_agentive' => 'agt',
         'rel_qualia_telic' => 'tlc',
@@ -52,6 +54,8 @@ class ViewConstraint extends map\ViewConstraintMap
         'rel_constraint_meets' => 'CE',
         'rel_constraint_element' => 'CE',
         'rel_constraint_constraint' => 'CN',
+        'rel_constraint_udfeature' => 'UV',
+        'rel_constraint_stlu' => 'ST',
         'rel_qualia_constitutive' => 'LU',
         'rel_qualia_agentive' => 'LU',
         'rel_qualia_telic' => 'LU',
@@ -131,6 +135,11 @@ UNION
 SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2lun.name, e2lun.name  as cxEntry, e2lun.name as nick
 FROM View_Constraint c
 JOIN LU e2lun ON (c.idConstrainedBy = e2lun.idEntity)
+WHERE (c.idConstrained = {$idConstrained})
+UNION
+SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2udf.info, e2udf.info  as cxEntry, e2udf.info as nick
+FROM View_Constraint c
+JOIN UDFeature e2udf ON (c.idConstrainedBy = e2udf.idEntity)
 WHERE (c.idConstrained = {$idConstrained})
 
 HERE;

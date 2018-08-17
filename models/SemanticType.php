@@ -135,6 +135,14 @@ class SemanticType extends map\SemanticTypeMap {
         return $criteria;
     }
 
+    public function listSTLUforConstraint()
+    {
+        $criteria = $this->getCriteria()->select("idEntity, entries.name");
+        $criteria->where("entry","IN",['sty_positive_judgment_1', 'sty_negative_judgment_1']);
+        Base::entryLanguage($criteria);
+        return $criteria->asQuery();
+    }
+
     public function listForLookupLU()
     {
         $idLanguage = \Manager::getSession()->idLanguage;

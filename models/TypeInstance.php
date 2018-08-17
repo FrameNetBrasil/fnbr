@@ -103,6 +103,19 @@ class TypeInstance extends map\TypeInstanceMap {
         return $criteria;
     }
 
+    public function listUDNumber() {
+        $cmd = <<<HERE
+        SELECT ud.idEntity, ud.info
+        FROM UDFeature ud
+            INNER JOIN TypeInstance ti on (ud.idTypeInstance = ti.idTypeInstance)
+        WHERE (ti.entry = 'udf_number[abs]')
+        ORDER BY ud.info
+HERE;
+
+        $query = $this->getDb()->getQueryCommand($cmd);
+        return $query;
+    }
+
     public function save()
     {
         Base::entityTimelineSave($this->getIdEntity());

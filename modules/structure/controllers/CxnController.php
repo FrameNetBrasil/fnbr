@@ -257,6 +257,12 @@ class CxnController extends MController
         $cxn = $model->getConstruction();
         $this->data->ce = 'CE: ' . $cxn->getName() . '.' . $model->getName();
         $this->data->siblingsCE = $model->listSiblingsCE()->chunkResult('idConstructionElement', 'name');
+        //
+        $structure = Manager::getAppService('structurecxn');
+        $this->data->optionsNumber = $structure->listOptionsNumber();
+        mdump($this->data->optionsNumber);
+        $this->data->optionsSTLU = $structure->listOptionsSTLU();
+        //
         $this->data->save = "@structure/cxn/addConstraintCE|formAddConstraintCE";
         $this->data->close = "!$('#formAddConstraintCE_dialog').dialog('close');";
         $this->data->title = _M('Add Constraint CE');

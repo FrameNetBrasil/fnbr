@@ -518,6 +518,18 @@ class StructureCxnService extends MService
      * Constraints
      */
 
+    public function listOptionsNumber() {
+        $ti = new fnbr\models\TypeInstance();
+        $result = $ti->listUDNumber()->chunkResult('idEntity','info');
+        return $result;
+    }
+
+    public function listOptionsSTLU() {
+        $st = new fnbr\models\SemanticType();
+        $result = $st->listSTLUforConstraint()->chunkResult('idEntity','name');
+        mdump($result);
+        return $result;
+    }
 
     public function listAllConstraintElements($idCxn, $idLanguage)
     {
@@ -697,6 +709,16 @@ class StructureCxnService extends MService
                 $ce = new fnbr\models\ConstructionElement($data->idConstructionElement);
                 $ceMeets = new fnbr\models\ConstructionElement($data->idConstructionMeets);
                 Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_meets', $ce->getIdEntity(), $ceMeets->getIdEntity());
+            }
+            if ($data->idNumber != '') {
+                $constraint = Base::createEntity('CN', 'con');
+                $ce = new fnbr\models\ConstructionElement($data->idConstructionElement);
+                Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_udfeature', $ce->getIdEntity(), $data->idNumber);
+            }
+            if ($data->idSemanticTypeLU != '') {
+                $constraint = Base::createEntity('CN', 'con');
+                $ce = new fnbr\models\ConstructionElement($data->idConstructionElement);
+                Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_stlu', $ce->getIdEntity(), $data->idSemanticTypeLU);
             }
             $transaction->commit();
         } catch (\Exception $e) {
