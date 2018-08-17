@@ -1,29 +1,16 @@
 <div id="constraintPane">
     <div id="constraintTools" class="dialog-toolbar" style="border-top-width: 0px; top: 0px; width: 100%;">
         <a id="btnClose" href="#" class="easyui-linkbutton">Close</a>
-        <a id="btnSave" href="#" class="easyui-linkbutton">Save</a>
+        <a id="btnReload" href="#" class="easyui-linkbutton">Reload</a>
     </div>
     <div id="constraintLayout1" style="width:100%;height:100%;">
         <div id="constraintLeftPane" region="west" split="true" style="width:300px; height: 100%">
             <ul id="cxnConstraintTree"></ul>
         </div>
         <div id="constraintCenterPane" region="center" style="height: 100%">
-            <div id="constraintLayout2" style="width:100%;height:100%;">
-                <div id="constraintCenterNorthPane" region="north" split="false" style="width:100%;height: 50px">
-                    <span>Text</span>
-                </div>
-                <div region="center">
-                    <div id="constraintLayout3" style="width:100%;height:100%;">
-                        <div id="constraintCenterLeftPane" region="west" split="true" border="false" style="width:300px; height: 100%" title="Constraints">
-                            <div id="elementList"></div>
-                        </div>
-                        <div id="constraintCenterCenterPane" region="center" border="false"  style="height: 100%">
+            <div id="constraintTabs">
 
-                        </div>
-                    </div>
-                </div>
             </div>
-
         </div>
     </div>
 </div>
@@ -43,14 +30,6 @@
             fit: true
         });
 
-        $('#constraintLayout2').layout({
-            fit: true
-        });
-
-        $('#constraintLayout3').layout({
-            fit: true
-        });
-
         $('#btnClose').linkbutton({
             iconCls: 'icon-cancel',
             plain: true,
@@ -59,20 +38,27 @@
             }
         });
 
-        $('#btnSave').linkbutton({
-            iconCls: 'icon-save',
+        $('#btnReload').linkbutton({
+            iconCls: 'icon-reload',
             plain: true,
             onClick: function() {
 
             }
         });
 
-        $('#elementList').datalist({
-            url: {{$manager->getURL('structurecxn/listAllConstraintElements')}} + '/' + structure.idCxn,
-            method: 'get',
-            lines: true,
-            valueField: 'id',
-            textField: 'name'
+        $('#constraintTabs').tabs({
+            fit:true,
+            border:false,
+            plain: false,
+            tabPosition: 'left',
+            onSelect:function(title){
+            }
+        });
+
+        $('#constraintTabs').tabs('add',{
+            title:'New Tab',
+            content:'Tab Body',
+            closable:false
         });
 
         $('#cxnConstraintTree').tree({

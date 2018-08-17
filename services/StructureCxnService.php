@@ -4,6 +4,9 @@ use fnbr\models\Base;
 
 class StructureCxnService extends MService
 {
+    /*
+     * CRUD
+     */
 
     public function listCxns($data, $idLanguage = '')
     {
@@ -40,56 +43,45 @@ class StructureCxnService extends MService
         return json_encode($result);
     }
 
-    public function listAllConstraintElements($idCxn, $idLanguage)
+    public function deleteCxn($idCxn)
     {
-        $result = [];
-        $result[] = ['id' => 1, 'name' => 'teste1'];
-        $result[] = ['id' => 2, 'name' => 'teste2'];
-        $result[] = ['id' => 3, 'name' => 'teste3'];
-        return json_encode($result);
-    }
-
-    public function listCEsConstraintsCX($idCxn, $idLanguage)
-    {
-        $result = [];
-        $ces = json_decode($this->listCEs($idCxn, $idLanguage));
-        foreach ($ces as $ce) {
-            $result[] = $ce;
+        mdump('deleteCxn ' . $idCxn);
+        $cxn = new fnbr\models\Construction($idCxn);
+        $transaction = $cxn->beginTransaction();
+        try {
+            $cxnElement = new fnbr\models\ConstructionElement();
+            $filter = (object)['idConstruction' => $idCxn];
+            $ces = $cxnElement->listByFilter($filter)->asQuery()->getResult();
+            foreach ($ces as $ce) {
+                $cxnElement->getById($ce['idConstructionElement']);
+                $cxnElement->delete();
+            }
+            $cxn->delete();
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollback();
+            throw new \exception($e->getMessage());
         }
-        $cxs = json_decode($this->listConstraintsCX($idCxn, $idLanguage));
-        foreach ($cxs as $cx) {
-            $result[] = $cx;
+    }
+
+    public function deleteCxnElement($idCE)
+    {
+        mdump('deleteCE ' . $idCE);
+        $ce = new fnbr\models\ConstructionElement($idCE);
+        $transaction = $ce->beginTransaction();
+        try {
+            $ce->delete();
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollback();
+            throw new \exception($e->getMessage());
         }
-        return json_encode($result);
     }
 
-    public function listConstraintsCE($idConstructionElement, $idLanguage)
-    {
-        $service = Manager::getAppService('structureconstraints');
-        $result = $service->listConstraintsCE($idConstructionElement);
-        return $result;
-    }
 
-    public function listConstraintsCN($idConstraint, $idLanguage)
-    {
-        $service = Manager::getAppService('structureconstraints');
-        $result = $service->listConstraintsCN($idConstraint);
-        return $result;
-    }
-
-    public function listConstraintsCNCN($idConstraint, $idLanguage)
-    {
-        $service = Manager::getAppService('structureconstraints');
-        $result = $service->listConstraintsCNCN($idConstraint);
-        return $result;
-    }
-
-    public function listConstraintsCX($idConstruction, $idLanguage)
-    {
-        $service = Manager::getAppService('structureconstraints');
-        $result = $service->listConstraintsCX($idConstruction);
-        return $result;
-    }
+    /*
+     * Annotation
+     */
 
     public function listSubCorpus($idLU)
     {
@@ -522,39 +514,88 @@ class StructureCxnService extends MService
         return json_encode($result);
     }
 
-    public function deleteCxn($idCxn)
+    /*
+     * Constraints
+     */
+
+
+    public function listAllConstraintElements($idCxn, $idLanguage)
     {
-        mdump('deleteCxn ' . $idCxn);
-        $cxn = new fnbr\models\Construction($idCxn);
-        $transaction = $cxn->beginTransaction();
-        try {
-            $cxnElement = new fnbr\models\ConstructionElement();
-            $filter = (object)['idConstruction' => $idCxn];
-            $ces = $cxnElement->listByFilter($filter)->asQuery()->getResult();
-            foreach ($ces as $ce) {
-                $cxnElement->getById($ce['idConstructionElement']);
-                $cxnElement->delete();
-            }
-            $cxn->delete();
-            $transaction->commit();
-        } catch (\Exception $e) {
-            $transaction->rollback();
-            throw new \exception($e->getMessage());
-        }
+        $result = [];
+        $result[] = ['id' => 1, 'name' => 'teste1'];
+        $result[] = ['id' => 2, 'name' => 'teste2'];
+        $result[] = ['id' => 3, 'name' => 'teste3'];
+        return json_encode($result);
     }
 
-    public function deleteCxnElement($idCE)
+    public function listCEsConstraintsCX($idCxn, $idLanguage)
     {
-        mdump('deleteCE ' . $idCE);
-        $ce = new fnbr\models\ConstructionElement($idCE);
-        $transaction = $ce->beginTransaction();
-        try {
-            $ce->delete();
-            $transaction->commit();
-        } catch (\Exception $e) {
-            $transaction->rollback();
-            throw new \exception($e->getMessage());
+        $result = [];
+        $ces = json_decode($this->listCEs($idCxn, $idLanguage));
+        foreach ($ces as $ce) {
+            $result[] = $ce;
         }
+        $cxs = json_decode($this->listConstraintsCX($idCxn, $idLanguage));
+        foreach ($cxs as $cx) {
+            $result[] = $cx;
+        }
+        return json_encode($result);
+    }
+
+    public function listConstraintsCE($idConstructionElement, $idLanguage)
+    {
+        $service = Manager::getAppService('structureconstraints');
+        $result = $service->listConstraintsCE($idConstructionElement);
+        return $result;
+    }
+
+    public function listConstraintsCN($idConstraint, $idLanguage)
+    {
+        $service = Manager::getAppService('structureconstraints');
+        $result = $service->listConstraintsCN($idConstraint);
+        return $result;
+    }
+
+    public function listConstraintsCNCN($idConstraint, $idLanguage)
+    {
+        $service = Manager::getAppService('structureconstraints');
+        $result = $service->listConstraintsCNCN($idConstraint);
+        return $result;
+    }
+
+    public function listConstraintsCX($idConstruction, $idLanguage)
+    {
+        $service = Manager::getAppService('structureconstraints');
+        $result = $service->listConstraintsCX($idConstruction);
+        return $result;
+    }
+
+    public function treeCX($idConstruction, $idLanguage = '') {
+        $children = [];
+        $ces = $this->listCEs($idConstruction, $idLanguage);
+        foreach ($ces as $ce) {
+            $children[] = $ce;
+        }
+        $cxs = $this->listConstraintsCX($idConstruction, $idLanguage);
+        foreach ($cxs as $cx) {
+            $children[] = $cx;
+        }
+        mdump($children);
+        $cxn = new fnbr\models\ViewConstruction();
+        $filter = (object)['idConstruction' => $idConstruction, 'idLanguage' => $idLanguage];
+        $cxns = $cxn->listByFilter($filter)->asQuery()->getResult(\FETCH_ASSOC);
+        $result = array();
+        foreach ($cxns as $row) {
+            $node = array();
+            $node['id'] = 'c' . $row['idConstruction'];
+            $node['text'] = $row['name'];
+            $node['state'] = 'open';
+            $node['entry'] = $row['entry'];
+            $node['children'] = $children;
+            $result[] = $node;
+        }
+        return $result;
+
     }
 
     public function addConstraintsCX($data)

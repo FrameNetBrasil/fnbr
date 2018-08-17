@@ -47,7 +47,14 @@ class CxnController extends MController
     public function cxnConstraintTree()
     {
         $structure = Manager::getAppService('structurecxn');
-        $json = $structure->listCEsConstraintsCX($this->data->id, $this->idLanguage);
+        $children = $structure->treeCX($this->data->id, $this->idLanguage);
+        $data = (object) [
+            'id' => 'root',
+            'state' => 'open',
+            'text' => 'Construction',
+            'children' => $children
+        ];
+        $json = json_encode([$data]);
         /*
         if ($this->data->id == '') {
             $children = $structure->listCxns($this->data, $this->idLanguage);
@@ -286,7 +293,6 @@ class CxnController extends MController
         mdump($this->data->ces);
         $this->data->relations = ['rel_evokes' => 'rel_evokes'];
         mdump($this->data->relations);
-        $this->data->save = "@structure/cxn/addConstraintCX|formAddConstraintCX";
         $this->data->close = "!$('#formAddConstraintCX_dialog').dialog('close');";
         $this->data->title = $this->data->title = 'Cxn: ' . $cxn->getName() . '  [' . $cxn->getEntry() . ']: Constraints';
         $this->render();

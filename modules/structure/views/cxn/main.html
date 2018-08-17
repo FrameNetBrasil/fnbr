@@ -283,7 +283,7 @@
 
         $('#cxnTree').tree({
             url: {{$manager->getURL('structure/cxn/cxnTree')}},
-            onSelect: function (node) {
+            onClick: function (node) {
                 console.log(node);
                 if (node.id.charAt(0) == 'c') {
                     structure.showCxn(node.id.substr(1));
