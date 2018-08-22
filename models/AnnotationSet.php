@@ -353,7 +353,7 @@ HERE;
         $idLanguage = \Manager::getSession()->idLanguage;
         $transaction = $this->getDb()->beginTransaction();
         $cmd = <<<HERE
-            SELECT concat('lty_cefe_', f.idFrame) as idLayer, f.idFrame, e.name
+            SELECT concat('lty_cefe_', f.idFrame) as idLayer, f.idFrame, e.name, a.idAnnotationSet
             FROM View_AnnotationSet a
                 INNER JOIN View_SubCorpusCxn sc on (a.idSubCorpus = sc.idSubCorpus)
                 INNER JOIN View_Construction c on (sc.idConstruction = c.idConstruction)
