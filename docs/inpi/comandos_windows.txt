@@ -1,0 +1,2 @@
+CertUtil -hashfile nome SHA512 | find /i /v "sha512" | find /i /v "certutil" > temp.txt
+powershell -Command "(gc temp.txt) -replace ' ', '' | Out-File resumo_hash.txt"
