@@ -302,6 +302,14 @@ HERE;
         JOIN LU relatedLU ON (r.idEntity2 = relatedLU.idEntity)
         WHERE (r.idEntity1 = {$idEntityLU})
             AND (r.relationType = 'rel_luequivalence')
+        UNION
+        SELECT r.idEntity1 as idConstraint,
+            relatedLU.name  AS name,
+            r.relationtype  AS equivalence
+        FROM View_Relation r
+        JOIN LU relatedLU ON (r.idEntity1 = relatedLU.idEntity)
+        WHERE (r.idEntity2 = {$idEntityLU})
+            AND (r.relationType = 'rel_luequivalence')
 
 HERE;
         $query = $this->getDb()->getQueryCommand($cmd);
