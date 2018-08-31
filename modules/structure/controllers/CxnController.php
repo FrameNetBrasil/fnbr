@@ -260,8 +260,8 @@ class CxnController extends MController
         //
         $structure = Manager::getAppService('structurecxn');
         $this->data->optionsNumber = $structure->listOptionsNumber();
-        mdump($this->data->optionsNumber);
         $this->data->optionsSTLU = $structure->listOptionsSTLU();
+        $this->data->optionsUDRelation = $structure->listOptionsUDRelation();
         //
         $this->data->save = "@structure/cxn/addConstraintCE|formAddConstraintCE";
         $this->data->close = "!$('#formAddConstraintCE_dialog').dialog('close');";

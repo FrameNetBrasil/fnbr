@@ -154,3 +154,36 @@ insert into UDRelation (info, idEntity, idTypeInstance) values
 ('xcomp',(select idEntity from entity where alias = 'udr_xcomp'),(select idTypeInstance from TypeInstance where entry = 'udr_clauses'));
 
 commit;
+
+--
+-- Acrescentando algumas extensões do ud-portuguese - 20180831
+--
+
+start transaction;
+
+insert into entity (alias, type) values
+('udr_aux_pass', 'UR'),
+('udr_nsubj_pass', 'UR'),
+('udr_obj_pass', 'UR'),
+('udr_acl_relcl', 'UR'),
+('udr_acl_inf', 'UR'),
+('udr_acl_part', 'UR'),
+('udr_csubj_pass', 'UR'),
+('udr_det_poss', 'UR'),
+('udr_expl_pv', 'UR'),
+('udr_xcomp_adj', 'UR');
+
+insert into UDRelation (info, idEntity, idTypeInstance) values
+('aux_pass',(select idEntity from entity where alias = 'udr_aux_pass'),(select idTypeInstance from TypeInstance where entry = 'udr_function_words')),
+('nsubj_pass',(select idEntity from entity where alias = 'udr_nsubj_pass'),(select idTypeInstance from TypeInstance where entry = 'udr_nominals')),
+('obj_pass',(select idEntity from entity where alias = 'udr_obj_pass'),(select idTypeInstance from TypeInstance where entry = 'udr_nominals')),
+('acl_relcl',(select idEntity from entity where alias = 'udr_acl_relcl'),(select idTypeInstance from TypeInstance where entry = 'udr_clauses')),
+('acl_inf',(select idEntity from entity where alias = 'udr_acl_inf'),(select idTypeInstance from TypeInstance where entry = 'udr_clauses')),
+('acl_part',(select idEntity from entity where alias = 'udr_acl_part'),(select idTypeInstance from TypeInstance where entry = 'udr_clauses')),
+('csubj_pass',(select idEntity from entity where alias = 'udr_csubj_pass'),(select idTypeInstance from TypeInstance where entry = 'udr_clauses')),
+('det_poss',(select idEntity from entity where alias = 'udr_det_poss'),(select idTypeInstance from TypeInstance where entry = 'udr_function_words')),
+('expl_pv',(select idEntity from entity where alias = 'udr_expl_pv'),(select idTypeInstance from TypeInstance where entry = 'udr_nominals')),
+('xcomp_adj',(select idEntity from entity where alias = 'udr_xcomp_adj'),(select idTypeInstance from TypeInstance where entry = 'udr_clauses'));
+
+commit;
+

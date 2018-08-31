@@ -531,6 +531,13 @@ class StructureCxnService extends MService
         return $result;
     }
 
+    public function listOptionsUDRelation() {
+        $ud = new fnbr\models\UDRelation();
+        $result = $ud->listForLookup('*')->chunkResult('idUDRelation','info');
+        mdump($result);
+        return $result;
+    }
+
     public function listAllConstraintElements($idCxn, $idLanguage)
     {
         $result = [];
