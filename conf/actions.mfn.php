@@ -44,6 +44,7 @@ return [
             'mailmsg' => ['Mail Message', 'auth/message/formMail', 'fa fa-envelope-o fa16px', '', A_ACCESS, []],
             'importLexWf' => ['Import Wf-Lexeme', 'utils/import/formImportLexWf', 'fa fa-upload fa16px', 'MASTER', A_ACCESS, []],
             'wflex' => ['Search Wf-Lexeme', 'admin/wflex/main', 'fa fa-cog fa16px', '', A_ACCESS, []],
+            'importFullText' => ['Import FullText', 'utils/import/formImportFullText', 'fa fa-upload fa16px', 'ADMIN', A_ACCESS, []],
         ]],
         'language' => ['Language', 'main/language', 'fa fa-flag-checkered fa16px', '', A_ACCESS, [
             'sq' => ['Albanian', 'main/changeLanguage/sq', 'fnbrFlagSq', '', A_ACCESS, []],
@@ -53,6 +54,7 @@ return [
             'fi' => ['Finnish', 'main/changeLanguage/fi', 'fnbrFlagFi', '', A_ACCESS, []],
             'fr' => ['French', 'main/changeLanguage/fr', 'fnbrFlagFr', '', A_ACCESS, []],
             'de' => ['German', 'main/changeLanguage/de', 'fnbrFlagDe', '', A_ACCESS, []],
+            'el' => ['Greek', 'main/changeLanguage/el', 'fnbrFlagEl', '', A_ACCESS, []],
             'hi' => ['Hindi', 'main/changeLanguage/hi', 'fnbrFlagHi', '', A_ACCESS, []],
             'iw' => ['Hebrew', 'main/changeLanguage/iw', 'fnbrFlagIw', '', A_ACCESS, []],
             'it' => ['Italian', 'main/changeLanguage/it', 'fnbrFlagIt', '', A_ACCESS, []],

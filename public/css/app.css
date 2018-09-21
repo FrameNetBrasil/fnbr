@@ -132,3 +132,9 @@
     height:16px;
     background: url(../images/ur.png) no-repeat center center;
 }
+
+.fnbrFlagEl {
+    width:16px;
+    height:16px;
+    background: url(../images/el.png) no-repeat center center;
+}
