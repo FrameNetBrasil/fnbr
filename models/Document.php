@@ -183,7 +183,8 @@ class Document extends map\DocumentMap
             $breakParagraph = $breakSentence = false;
             $p = $paragraphNum = $sentenceNum = 0;
             $text = '';
-            $rows = file($file->getTmpName());
+            $filename = (is_object($file) ? $file->getTmpName() : $file);
+            $rows = file($filename);
             foreach ($rows as $row) {
                 $row = str_replace("\t", " ", $row);
                 $row = str_replace("\n", " ", $row);

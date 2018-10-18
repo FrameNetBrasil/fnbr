@@ -96,7 +96,18 @@ class ImportController extends MController
             $this->renderPrompt('error',$e->getMessage());
         }
     }
-    
+
+    public function importFullTextOffline(){
+        try {
+            $model = new fnbr\models\Document();
+            $model->getByEntry($this->data->documentEntry);
+            $model->uploadFullText($this->data, $this->data->filename);
+            $this->renderPrompt('information','Fulltext loaded successfully.');
+        } catch (EMException $e) {
+            $this->renderPrompt('error',$e->getMessage());
+        }
+    }
+
     public function formImportFrames()
     {
         $this->data->action = '@utils/import/importFrames';
