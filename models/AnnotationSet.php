@@ -443,6 +443,7 @@ HERE;
                 ON (fe.entry = entry_fe.entry)
         WHERE (it.entry <> 'int_normal')
             AND ((entry_fe.idLanguage = {$idLanguage}) or (entry_fe.idLanguage is null))
+            AND ((eit.idLanguage = {$idLanguage}) or (eit.idLanguage is null))
             {$condition}
             AND (a.idSentence = {$idSentence})
 
