@@ -533,7 +533,7 @@ class StructureCxnService extends MService
 
     public function listOptionsUDRelation() {
         $ud = new fnbr\models\UDRelation();
-        $result = $ud->listForLookup('*')->chunkResult('idUDRelation','info');
+        $result = $ud->listForLookupEntity('*')->chunkResult('idEntity','info');
         mdump($result);
         return $result;
     }
@@ -721,6 +721,11 @@ class StructureCxnService extends MService
                 $constraint = Base::createEntity('CN', 'con');
                 $ce = new fnbr\models\ConstructionElement($data->idConstructionElement);
                 Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_udfeature', $ce->getIdEntity(), $data->idNumber);
+            }
+            if ($data->idUDRelation != '') {
+                $constraint = Base::createEntity('CN', 'con');
+                $ce = new fnbr\models\ConstructionElement($data->idConstructionElement);
+                Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_udrelation', $ce->getIdEntity(), $data->idUDRelation);
             }
             if ($data->idSemanticTypeLU != '') {
                 $constraint = Base::createEntity('CN', 'con');
