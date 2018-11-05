@@ -65,6 +65,7 @@ return [
             'es' => ['Spanish', 'main/changeLanguage/es', 'fnbrFlagEs', '', A_ACCESS, []],
             'se' => ['Swedish', 'main/changeLanguage/se', 'fnbrFlagSe', '', A_ACCESS, []],
             'ru' => ['Russian', 'main/changeLanguage/ru', 'fnbrFlagRu', '', A_ACCESS, []],
+            'te' => ['Telugu', 'main/changeLanguage/te', 'fnbrFlagTe', '', A_ACCESS, []],
             'ur' => ['Urdu', 'main/changeLanguage/ur', 'fnbrFlagUr', '', A_ACCESS, []],
         ]],
         'profile' => ['Profile', 'main/profile', 'fa fa-info fa16px', '', A_ACCESS, [
