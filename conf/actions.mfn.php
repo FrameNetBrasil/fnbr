@@ -59,6 +59,7 @@ return [
             'iw' => ['Hebrew', 'main/changeLanguage/iw', 'fnbrFlagIw', '', A_ACCESS, []],
             'it' => ['Italian', 'main/changeLanguage/it', 'fnbrFlagIt', '', A_ACCESS, []],
             'jp' => ['Japanese', 'main/changeLanguage/jp', 'fnbrFlagJp', '', A_ACCESS, []],
+            'kn' => ['Kanada', 'main/changeLanguage/kn', 'fnbrFlagKn', '', A_ACCESS, []],
             'ko' => ['Korean', 'main/changeLanguage/ko', 'fnbrFlagKo', '', A_ACCESS, []],
             'lt' => ['Lithuanian', 'main/changeLanguage/lt', 'fnbrFlagLt', '', A_ACCESS, []],
             'pt' => ['Portuguese', 'main/changeLanguage/pt', 'fnbrFlagPt', '', A_ACCESS, []],
