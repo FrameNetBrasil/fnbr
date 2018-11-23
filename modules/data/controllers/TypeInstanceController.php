@@ -24,4 +24,11 @@ class TypeInstanceController extends MController
         $this->renderJSON($model->gridDataAsJSON($result));
     }
 
+    public function lookupQualiaType()
+    {
+        $model = new fnbr\models\TypeInstance();
+        $result = $model->listQualiaType()->asQuery()->getResult(\FETCH_ASSOC);
+        $this->renderJSON($model->gridDataAsJSON($result));
+    }
+
 }

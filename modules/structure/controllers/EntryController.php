@@ -33,6 +33,8 @@ class EntryController extends MController {
         $this->data->new = "@structure/entry/newLanguage/" . $this->data->id;
         $this->data->title = "Entry: " . $this->data->id;
         $this->data->query = Manager::getAppURL('', 'structure/entry/gridUpdateData/' . $this->data->id);
+        $this->data->close = $this->data->onClose ? $this->data->onClose . ';' : '';
+        mdump($this->data);
         $this->render();
     }
 

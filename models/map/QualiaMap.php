@@ -25,12 +25,14 @@ class QualiaMap extends \MBusinessModel {
             'attributes' => array(
                 'idQualia' => array('column' => 'idQualia','key' => 'primary','idgenerator' => 'identity','type' => 'integer'),
                 'info' => array('column' => 'info','type' => 'string'),
+                'entry' => array('column' => 'entry','type' => 'string'),
                 'idTypeInstance' => array('column' => 'idTypeInstance','type' => 'integer'),
                 'idEntity' => array('column' => 'idEntity','type' => 'integer'),
             ),
             'associations' => array(
                 'typeinstance' => array('toClass' => 'fnbr\models\TypeInstance', 'cardinality' => 'oneToOne' , 'keys' => 'idTypeInstance:idTypeInstance'),
                 'entity' => array('toClass' => 'fnbr\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity:idEntity'),
+                'entries' => array('toClass' => 'fnbr\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'),
             )
         );
     }
@@ -45,6 +47,11 @@ class QualiaMap extends \MBusinessModel {
      * @var string 
      */
     protected $info;
+    /**
+     *
+     * @var string
+     */
+    protected $entry;
     /**
      * 
      * @var integer 
@@ -80,6 +87,14 @@ class QualiaMap extends \MBusinessModel {
 
     public function setInfo($value) {
         $this->info = $value;
+    }
+
+    public function getEntry() {
+        return $this->entry;
+    }
+
+    public function setEntry($value) {
+        $this->entry = $value;
     }
 
     public function getIdTypeInstance() {

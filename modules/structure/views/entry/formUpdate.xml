@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <view>
     <mdialog id="formUpdateDialog" width="500px" state="open">
-        <property title="$this->data->title"/>
+        <property title="$this->data->title" onClose="$this->data->close"/>
         <options modal="true" />
         <include file="gridUpdate.xml"/>
         <!--

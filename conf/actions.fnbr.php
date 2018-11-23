@@ -16,6 +16,7 @@ return [
             'cxnstructure' => ['Construction', 'structure/cxn/main', 'fa fa-th fa16px', 'MASTER', A_ACCESS, []],
             'lemmas' => ['Lemmas', 'structure/lemma/main', 'fa fa-chess-board fa16px', 'MASTER', A_ACCESS, []],
             'qualia' => ['Qualia', 'structure/qualia/main', 'fab fa-connectdevelop fa16px', 'MASTER', A_ACCESS, []],
+            'qualiarelation' => ['Qualia Relation', 'structure/qualiarelation/main', 'fas fa-arrows-alt-h fa16px', 'MASTER', A_ACCESS, []],
             'templatestructure' => ['Template', 'structure/template/main', 'fa fa-files-o fa16px', 'MASTER', A_ACCESS, []],
             'semantictypestructure' => ['Semantic Type', 'structure/semantictype/main', 'fa fa-life-ring fa16px', 'MASTER', A_ACCESS, []],
             'relationgroupstructure' => ['Relation Group', 'structure/relationgroup/main', 'fa fa-sitemap fa16px', 'MASTER', A_ACCESS, []],

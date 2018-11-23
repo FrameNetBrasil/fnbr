@@ -1,30 +1,29 @@
 <?php
 
-class MLookupQualiaRelation extends MControl
+class MLookupQualiaType extends MControl
 {
 
     public function generate()
     {
-        mdump($this->data);
-        $qualiaType = $this->data->qualiaType;
-        $url = Manager::getAppURL('', 'data/qualia/lookupQualiaRelation/' . $qualiaType);
+        $url = Manager::getAppURL('', 'data/typeinstance/lookupQualiaType');
         $onLoad = <<<EOT
         
         $('#{$this->property->id}').combogrid({
-            panelWidth:180,
+            panelWidth:220,
             url: '{$url}',
-            idField:'idQualia',
+            idField:'idQualiaType',
             textField:'name',
             mode:'remote',
             fitColumns:true,
             columns:[[
-                {field:'name', title:'Name', width:162}
+                {field:'idStatusType', hidden:true},
+                {field:'name', title:'Name', width:202}
             ]]
         });
 
 EOT;
         $this->getPage()->onLoad($onLoad);
-        $this->style->width = '250px';
+        $this->style->width = '270px';
         return $this->getPainter()->mtextField($this);
     }
 

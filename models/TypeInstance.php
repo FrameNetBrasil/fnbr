@@ -1,23 +1,25 @@
 <?php
 /**
- * 
+ *
  *
  * @category   Maestro
  * @package    UFJF
- *  @subpackage fnbr
+ * @subpackage fnbr
  * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
  * @license    http://siga.ufjf.br/license
- * @version    
- * @since      
+ * @version
+ * @since
  */
 
 namespace fnbr\models;
 
-class TypeInstance extends map\TypeInstanceMap {
+class TypeInstance extends map\TypeInstanceMap
+{
 
-    public static function config() {
+    public static function config()
+    {
         return array(
-            'log' => array(  ),
+            'log' => array(),
             'validators' => array(
                 'entry' => array('notnull'),
                 'info' => array('notnull'),
@@ -29,34 +31,39 @@ class TypeInstance extends map\TypeInstanceMap {
             'converters' => array()
         );
     }
-    
-    public function getDescription(){
+
+    public function getDescription()
+    {
         return $this->getIdTypeInstance();
     }
 
-    public function listByFilter($filter){
+    public function listByFilter($filter)
+    {
         $criteria = $this->getCriteria()->select('*')->orderBy('idTypeInstance');
-        if ($filter->idTypeInstance){
+        if ($filter->idTypeInstance) {
             $criteria->where("idTypeInstance LIKE '{$filter->idTypeInstance}%'");
         }
         return $criteria;
     }
-    
-    public function listCoreType(){
+
+    public function listCoreType()
+    {
         $criteria = $this->getCriteria()->select('idTypeInstance as idCoreType, entry, entries.name as name')->orderBy('info');
         Base::entryLanguage($criteria);
         $criteria->where("entry like 'cty_%'");
         return $criteria;
     }
 
-    public function listStatusType(){
+    public function listStatusType()
+    {
         $criteria = $this->getCriteria()->select('idTypeInstance as idStatusType, entry, entries.name as name')->orderBy('entries.name');
         Base::entryLanguage($criteria);
         $criteria->where("entry like 'stt_%'");
         return $criteria;
     }
 
-    public function listAnnotationStatus($filter, $fields = ''){
+    public function listAnnotationStatus($filter, $fields = '')
+    {
         $criteria = $this->getCriteria();
         if ($fields != '') {
             $criteria->select($fields);
@@ -65,45 +72,51 @@ class TypeInstance extends map\TypeInstanceMap {
         }
         Base::entryLanguage($criteria);
         $criteria->where("entry like 'ast_%'");
-        if ($filter->entry){
+        if ($filter->entry) {
             $criteria->where("entry LIKE '{$filter->entry}%'");
         }
         return $criteria;
     }
 
-    public function listQualiaType(){
+    public function listQualiaType()
+    {
         $criteria = $this->getCriteria()->select('idTypeInstance as idQualiaType, entry, entries.name as name')->orderBy('entries.name');
         Base::entryLanguage($criteria);
         $criteria->where("entry like 'qla_%'");
         return $criteria;
     }
 
-    public function getIdQualiaTypeByEntry($entry){
+    public function getIdQualiaTypeByEntry($entry)
+    {
         $criteria = $this->getCriteria()->select('idTypeInstance')->orderBy('info');
         $criteria->where("entry = '{$entry}'");
-        return  $criteria->asQuery()->getResult()[0]['idTypeInstance'];
+        return $criteria->asQuery()->getResult()[0]['idTypeInstance'];
     }
 
-    public function getIdInstantiationTypeByEntry($entry){
+    public function getIdInstantiationTypeByEntry($entry)
+    {
         $criteria = $this->getCriteria()->select('idTypeInstance as idInstantiationType')->orderBy('info');
         $criteria->where("entry = '{$entry}'");
-        return  $criteria->asQuery()->getResult()[0]['idInstantiationType'];
-    }    
-
-    public function getIdCoreTypeByEntry($entry){
-        $criteria = $this->getCriteria()->select('idTypeInstance as idCoreType')->orderBy('info');
-        $criteria->where("entry = '{$entry}'");
-        return  $criteria->asQuery()->getResult()[0]['idCoreType'];
+        return $criteria->asQuery()->getResult()[0]['idInstantiationType'];
     }
 
-    public function listBFF(){
+    public function getIdCoreTypeByEntry($entry)
+    {
+        $criteria = $this->getCriteria()->select('idTypeInstance as idCoreType')->orderBy('info');
+        $criteria->where("entry = '{$entry}'");
+        return $criteria->asQuery()->getResult()[0]['idCoreType'];
+    }
+
+    public function listBFF()
+    {
         $criteria = $this->getCriteria()->select('idTypeInstance as idBFF, entry, entries.description as description')->orderBy('info');
         Base::entryLanguage($criteria);
         $criteria->where("entry like 'bff_%'");
         return $criteria;
     }
 
-    public function listUDNumber() {
+    public function listUDNumber()
+    {
         $cmd = <<<HERE
         SELECT ud.idEntity, ud.info
         FROM UDFeature ud

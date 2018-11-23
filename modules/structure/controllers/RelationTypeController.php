@@ -1,9 +1,6 @@
 <?php
 
 
-
-
-
 class RelationTypeController extends MController
 {
 
@@ -36,8 +33,9 @@ class RelationTypeController extends MController
         }
         $this->renderJson($json);
     }
-    
-    public function formNewRelationType(){
+
+    public function formNewRelationType()
+    {
         $nodeId = $this->data->id;
         if ($nodeId{0} == 'm') {
             $this->data->id = substr($this->data->id, 1);
@@ -47,8 +45,9 @@ class RelationTypeController extends MController
         $this->data->title = _M('new fnbr\models\Relation Type');
         $this->render();
     }
-    
-    public function formUpdateRelationType(){
+
+    public function formUpdateRelationType()
+    {
         $model = new fnbr\models\RelationType($this->data->id);
         $this->data->object = $model->getData();
         $this->data->save = "@structure/relationtype/updateRelationType|formUpdateRelationType";
@@ -61,7 +60,7 @@ class RelationTypeController extends MController
     {
         try {
             $model = new fnbr\models\RelationType();
-            $this->data->relationtype->entry = 'rel_' . str_replace('rel_','',strtolower($this->data->relationtype->entry)); 
+            $this->data->relationtype->entry = 'rel_' . str_replace('rel_', '', strtolower($this->data->relationtype->entry));
             $this->data->relationtype->nameEntity1 = $this->data->relationtype->entry . '_nameentity1';
             $this->data->relationtype->nameEntity2 = $this->data->relationtype->entry . '_nameentity2';
             $model->setData($this->data->relationtype);
@@ -71,12 +70,12 @@ class RelationTypeController extends MController
             $this->renderPrompt('error', $e->getMessage());
         }
     }
-    
+
     public function updateRelationType()
     {
         try {
             $model = new fnbr\models\RelationType($this->data->relationtype->idRelationType);
-            $this->data->relationtype->entry = 'rel_' . str_replace('rel_','',strtolower($this->data->relationtype->entry));            
+            $this->data->relationtype->entry = 'rel_' . str_replace('rel_', '', strtolower($this->data->relationtype->entry));
             $model->updateEntry($this->data->relationtype->entry);
             $this->renderPrompt('information', 'OK', "structure.editEntry('{$this->data->relationtype->entry}');");
         } catch (\Exception $e) {
