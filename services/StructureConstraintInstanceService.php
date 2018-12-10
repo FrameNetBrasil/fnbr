@@ -1,25 +1,8 @@
 <?php
 
 
-class StructureConstraintsService extends MService
+class StructureConstraintInstanceService extends MService
 {
-
-    public function listConstraints($filter, $idLanguage)
-    {
-        $result = [];
-        $cn = new fnbr\models\ConstraintType();
-        $constraints = $cn->listByFilter($filter)->asQuery()->getResult(\FETCH_ASSOC);
-        foreach ($constraints as $constraint) {
-            $node = [];
-            $node['id'] = 'c' . $constraint['idEntity'];
-            $node['text'] = $constraint['name'];
-            $node['state'] = 'closed';
-            $node['iconCls'] = 'icon-blank fa-icon fa fa-crosshairs';
-            $result[] = $node;
-        }
-        return $result;
-    }
-
     public function listConstraintsFE($idFrameElement)
     {
         $result = [];
@@ -73,7 +56,7 @@ class StructureConstraintsService extends MService
     public function listConstraintsCN($idConstraint)
     {
         $result = [];
-        $constraint = new fnbr\models\ConstraintType($idConstraint);
+        $constraint = new fnbr\models\ConstraintInstance($idConstraint);
         $constraints = $constraint->listConstraints();
         foreach ($constraints as $constraint) {
             $node = [];
@@ -89,7 +72,7 @@ class StructureConstraintsService extends MService
     public function listConstraintsCNCN($idConstraint)
     {
         $result = [];
-        $constraint = new fnbr\models\ConstraintType($idConstraint);
+        $constraint = new fnbr\models\ConstraintInstance($idConstraint);
         $constraints = $constraint->listConstraintsCN();
         foreach ($constraints as $constraint) {
             $node = [];
@@ -119,10 +102,10 @@ class StructureConstraintsService extends MService
         return json_encode($result);
     }
 
-    public function constraintHasChild($idConstraint)
+    public function constraintHasChild($idConstraintInstance)
     {
         $constraint = new fnbr\models\ViewConstraint();
-        return $constraint->hasChild($idConstraint);
+        return $constraint->hasChild($idConstraintInstance);
     }
 
 }

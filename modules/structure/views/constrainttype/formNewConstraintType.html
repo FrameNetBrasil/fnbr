@@ -1,0 +1,101 @@
+{{var $prefix = 'formNewConstraintType' }}
+
+<div id="{{$prefix}}">
+    <div id="{{$prefix}}Tools">
+        <a href='#' name="{{$prefix}}Close" id="{{$prefix}}Close">
+            Close
+        </a>
+        <a href='#' name="{{$prefix}}Save" id="{{$prefix}}Save">
+            Save
+        </a>
+    </div>
+    <form id="{{$prefix}}Form" method="post">
+        <div class='mFormContainer'>
+            <input type="hidden" name="ct_idConstraintType" id="ct_idConstraintType"/>
+            <div class="mFormRow">
+                <div class="mFormColumn">
+                    <label for="ct_name" class="mFormLabel ">Name</label>
+                </div>
+                <div class="mFormColumn">
+                    <input style="width:250px;" name="ct_name" id="ct_name"/>
+                </div>
+            </div>
+            <div class="mFormRow">
+                <div class="mFormColumn">
+                    <label for="ct_prefix" class="mFormLabel ">Prefix</label>
+                </div>
+                <div class="mFormColumn">
+                    <input style="width:250px;" name="ct_prefix" id="ct_prefix"/>
+                </div>
+            </div>
+            <div class="mFormRow">
+                <div class="mFormColumn">
+                    <label for="ct_typeEntity1" class="mFormLabel ">Type Entity1</label>
+                </div>
+                <div class="mFormColumn">
+                    <input style="width:250px;" name="ct_typeEntity1" id="ct_typeEntity1"/>
+                </div>
+            </div>
+            <div class="mFormRow">
+                <div class="mFormColumn">
+                    <label for="ct_typeEntity2" class="mFormLabel ">Type Entity2</label>
+                </div>
+                <div class="mFormColumn">
+                    <input style="width:250px;" name="ct_typeEntity2" id="ct_typeEntity2"/>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+
+        {{var $idPrefix = '#formNewConstraintType' }}
+
+        $({{$idPrefix}}).dialog({
+            toolbar: {{$idPrefix}} + 'Tools',
+            border: true,
+            modal: true,
+            closed: true,
+            doSize: true,
+            onClose: function () {
+                structure.reload();
+            }
+        });
+
+        $({{$idPrefix}} + 'Save').linkbutton({
+            iconCls: 'icon-save',
+            plain: true,
+            size: null,
+            onClick: function () {
+                $({{$idPrefix}} + 'Form').submit();
+            }
+        });
+
+        $({{$idPrefix}} + 'Close').linkbutton({
+            iconCls: 'icon-cancel',
+            plain: true,
+            size: null,
+            onClick: function () {
+                $({{$idPrefix}}).dialog('close');
+            }
+        });
+
+        $({{$idPrefix}} + 'Form').form({
+            url: {{$manager->getURL('structure/constrainttype/newConstraintType')}},
+            onSubmit: function () {
+                // do some check
+                // return false to prevent submit;
+            },
+            success:function (data) {
+                var data = eval('(' + data + ')');
+                if (data.success) {
+                    $.messager.alert('Info', 'ConstraintType created!', 'info');
+                }
+            }
+        });
+
+    });
+</script>
