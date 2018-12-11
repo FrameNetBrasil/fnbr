@@ -23,8 +23,11 @@ class ViewConstraintMap extends \MBusinessModel {
             'database' => \Manager::getConf('fnbr.db'),
             'table' => 'view_constraint',
             'attributes' => array(
-                'idConstraint' => array('column' => 'idConstraint', 'type' => 'integer','key' => 'primary'),
+                'idConstraintInstance' => array('column' => 'idConstraintInstance', 'type' => 'integer','key' => 'primary'),
                 'entry' => array('column' => 'entry','type' => 'string'),
+                'prefix' => array('column' => 'prefix','type' => 'string'),
+                'idConstraint' => array('column' => 'idConstraint', 'type' => 'integer'),
+                'constraintType' => array('column' => 'constrainedType','type' => 'string'),
                 'idConstrained' => array('column' => 'idConstrained','type' => 'integer'),
                 'constrainedType' => array('column' => 'constrainedType','type' => 'string'),
                 'idConstrainedBy' => array('column' => 'idConstrainedBy','type' => 'integer'),

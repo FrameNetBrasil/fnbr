@@ -1,21 +1,10 @@
 <?php
 
-/**
- *
- *
- * @category   Maestro
- * @package    UFJF
- *  @subpackage fnbr
- * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version
- * @since
- */
-
 namespace fnbr\models;
 
 class ViewConstraint extends map\ViewConstraintMap
 {
+    /*
     public $prefix = [
         'rel_constraint_frame' => 'frm',
         'rel_constraint_semtype' => 'sem',
@@ -69,6 +58,7 @@ class ViewConstraint extends map\ViewConstraintMap
         'rel_festandsforlu' => 'LU',
         'rel_lustandsforlu' => 'LU',
     ];
+    */
 
     public static function config()
     {
@@ -81,42 +71,42 @@ class ViewConstraint extends map\ViewConstraintMap
         $idLanguage = \Manager::getSession()->idLanguage;
 
         $cmd = <<<HERE
-SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2fe.name, e2fe.entry as cxEntry, e2fe.nick
+SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2fe.name, e2fe.entry as cxEntry, e2fe.nick, c.prefix, c.constrainedByType
 FROM View_Constraint c
 JOIN View_Frame e2f ON (c.idConstrainedBy = e2f.idEntity)
 JOIN View_EntryLanguage e2fe ON (e2f.entry = e2fe.entry)
 WHERE (c.idConstrained = {$idConstrained})
 AND (e2fe.idLanguage = {$idLanguage})
 UNION
-SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2ce.name, e2ce.entry as cxEntry, e2ce.nick
+SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2ce.name, e2ce.entry as cxEntry, e2ce.nick, c.prefix, c.constrainedByType
 FROM View_Constraint c
 JOIN View_Construction e2c ON (c.idConstrainedBy = e2c.idEntity)
 JOIN View_EntryLanguage e2ce ON (e2c.entry = e2ce.entry)
 WHERE (c.idConstrained = {$idConstrained})
 AND (e2ce.idLanguage = {$idLanguage})
 UNION
-SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2se.name, e2se.entry as cxEntry, e2se.nick
+SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2se.name, e2se.entry as cxEntry, e2se.nick, c.prefix, c.constrainedByType
 FROM View_Constraint c
 JOIN View_SemanticType e2s ON (c.idConstrainedBy = e2s.idEntity)
 JOIN View_EntryLanguage e2se ON (e2s.entry = e2se.entry)
 WHERE (c.idConstrained = {$idConstrained})
 AND (e2se.idLanguage = {$idLanguage})
 UNION
-SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2ce2.name, e2ce2.entry as cxEntry, e2ce2.nick
+SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2ce2.name, e2ce2.entry as cxEntry, e2ce2.nick, c.prefix, c.constrainedByType
 FROM View_Constraint c
 JOIN View_ConstructionElement e2cel ON (c.idConstrainedBy = e2cel.idEntity)
 JOIN View_EntryLanguage e2ce2 ON (e2cel.entry = e2ce2.entry)
 WHERE (c.idConstrained = {$idConstrained})
 AND (e2ce2.idLanguage = {$idLanguage})
 UNION
-SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2cne.name, e2cne.entry as cxEntry, e2cne.nick
+SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2cne.name, e2cne.entry as cxEntry, e2cne.nick, c.prefix, c.constrainedByType
 FROM View_Constraint c
 JOIN View_Constraint e2cn ON (c.idConstrainedBy = e2cn.idConstraint)
 JOIN View_EntryLanguage e2cne ON (e2cn.entry = e2cne.entry)
 WHERE (c.idConstrained = {$idConstrained})
 AND (e2cne.idLanguage = {$idLanguage})
 UNION
-SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e3ce.name, e3ce.entry as cxEntry, e3ce.nick
+SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e3ce.name, e3ce.entry as cxEntry, e3ce.nick, c.prefix, c.constrainedByType
 FROM View_Constraint c
 JOIN View_Constraint e3cn ON (c.idConstrainedBy = e3cn.idConstraint)
 JOIN View_Construction e3c ON (e3cn.idConstrainedBy = e3c.idEntity)
@@ -124,27 +114,27 @@ JOIN View_EntryLanguage e3ce ON (e3c.entry = e3ce.entry)
 WHERE (c.idConstrained = {$idConstrained})
 AND (e3ce.idLanguage = {$idLanguage})
 UNION
-SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2lex.name, e2lex.name  as cxEntry, e2lex.name as nick
+SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2lex.name, e2lex.name  as cxEntry, e2lex.name as nick, c.prefix, c.constrainedByType
 FROM View_Constraint c
 JOIN Lexeme e2lex ON (c.idConstrainedBy = e2lex.idEntity)
 WHERE (c.idConstrained = {$idConstrained})
 UNION
-SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2lem.name, e2lem.name  as cxEntry, e2lem.name as nick
+SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2lem.name, e2lem.name  as cxEntry, e2lem.name as nick, c.prefix, c.constrainedByType
 FROM View_Constraint c
 JOIN Lemma e2lem ON (c.idConstrainedBy = e2lem.idEntity)
 WHERE (c.idConstrained = {$idConstrained})
 UNION
-SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2lun.name, e2lun.name  as cxEntry, e2lun.name as nick
+SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2lun.name, e2lun.name  as cxEntry, e2lun.name as nick, c.prefix, c.constrainedByType
 FROM View_Constraint c
 JOIN LU e2lun ON (c.idConstrainedBy = e2lun.idEntity)
 WHERE (c.idConstrained = {$idConstrained})
 UNION
-SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2udf.info, e2udf.info  as cxEntry, e2udf.info as nick
+SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2udf.info, e2udf.info  as cxEntry, e2udf.info as nick, c.prefix, c.constrainedByType
 FROM View_Constraint c
 JOIN UDFeature e2udf ON (c.idConstrainedBy = e2udf.idEntity)
 WHERE (c.idConstrained = {$idConstrained})
 UNION
-SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2udr.info, e2udr.info  as cxEntry, e2udr.info as nick
+SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, e2udr.info, e2udr.info  as cxEntry, e2udr.info as nick, c.prefix, c.constrainedByType
 FROM View_Constraint c
 JOIN UDRelation e2udr ON (c.idConstrainedBy = e2udr.idEntity)
 WHERE (c.idConstrained = {$idConstrained})
@@ -153,8 +143,8 @@ HERE;
         $query = $this->getDb()->getQueryCommand($cmd);
         $constraints = $query->getResult();
         foreach ($constraints as $i => $constraint) {
-            $constraints[$i]['name'] = $this->prefix[$constraint['entry']] . '_' . $constraints[$i]['name'];
-            $constraints[$i]['type'] = $this->type[$constraint['entry']];
+            $constraints[$i]['name'] = $constraint['prefix'] . '_' . $constraints[$i]['name'];
+            $constraints[$i]['type'] = $constraint['constrainedByType'];
             $constraints[$i]['entry'] = $constraint['cxEntry'];
             $constraints[$i]['relationType'] = $constraint['entry'];
             $constraints[$i]['idConstraint'] = $constraint['idConstraint'];
@@ -168,7 +158,7 @@ HERE;
         $idLanguage = \Manager::getSession()->idLanguage;
         $idConstrainedSetString = implode(',' , $idConstrainedSet);
         $cmd = <<<HERE
-SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry,
+SELECT c.idConstraint, c.idConstrained, c.idConstrainedBy, c.entry, c.prefix, c.constrainedByType,
   ifnull(e2fe.name, ifnull(e2ce.name, ifnull(e2se.name, ifnull(e2ce2.name, ifnull(e3ce.entry,e2cne.name))))) AS name,
   ifnull(e2fe.entry, ifnull(e2ce.entry, ifnull(e2se.entry, ifnull(e2ce2.entry, ifnull(e3ce.entry,e2cne.entry))))) AS cxEntry,
   ifnull(e2fe.nick, ifnull(e2ce.nick, ifnull(e2se.nick, ifnull(e2ce2.nick, ifnull(e3ce.nick,e2cne.nick))))) AS nick
@@ -200,8 +190,8 @@ HERE;
         $query = $this->getDb()->getQueryCommand($cmd);
         $constraints = $query->getResult();
         foreach ($constraints as $i => $constraint) {
-            $constraints[$i]['name'] = $this->prefix[$constraint['entry']] . '_' . $constraints[$i]['name'];
-            $constraints[$i]['type'] = $this->type[$constraint['entry']];
+            $constraints[$i]['name'] = $constraint['prefix'] . '_' . $constraints[$i]['name'];
+            $constraints[$i]['type'] = $constraint['constrainedByType'];
             $constraints[$i]['entry'] = $constraint['cxEntry'];
             $constraints[$i]['relationType'] = $constraint['entry'];
             $constraints[$i]['idConstraint'] = $constraint['idConstraint'];
@@ -253,7 +243,7 @@ HERE;
 
         $cmd = <<<HERE
         SELECT r.idEntity2 as idConstraint,
-            e.name  AS name
+            e.name  AS name, r.prefix, r.nameEntity2 type
         FROM View_Relation r
         JOIN SemanticType st ON (r.idEntity2 = st.idEntity)
         JOIN Entry e ON (st.entry = e.entry)
@@ -265,8 +255,8 @@ HERE;
         $query = $this->getDb()->getQueryCommand($cmd);
         $constraints = $query->getResult();
         foreach ($constraints as $i => $constraint) {
-            $constraints[$i]['name'] = $this->prefix['rel_constraint_semtype'] . '_' . $constraints[$i]['name'];
-            $constraints[$i]['type'] = $this->type['rel_constraint_semtype'];
+            $constraints[$i]['name'] = $constraint['prefix'] . '_' . $constraints[$i]['name'];
+            $constraints[$i]['type'] = $constraint['type'];
         }
         return $constraints;
     }
@@ -277,7 +267,7 @@ HERE;
 
         $cmd = <<<HERE
         SELECT r.idEntityRelation as idConstraint,
-            relatedLU.name  AS name,
+            relatedLU.name  AS name, r.prefix, r.nameEntity2 type,
             r.relationtype  AS qualia,
             IFNULL(q.info,'-') AS qualiarelation
         FROM View_Relation r
@@ -290,8 +280,8 @@ HERE;
         $query = $this->getDb()->getQueryCommand($cmd);
         $constraints = $query->getResult();
         foreach ($constraints as $i => $constraint) {
-            $constraints[$i]['name'] = $this->prefix[$constraint['qualia']] . '_' . $constraints[$i]['name'];
-            $constraints[$i]['type'] = $this->type[$constraint['qualia']];
+            $constraints[$i]['name'] = $constraint['prefix'] . '_' . $constraints[$i]['name'];
+            $constraints[$i]['type'] = $constraint['type'];
             $constraints[$i]['relation'] = $constraint['qualiarelation'];
         }
         return $constraints;
@@ -303,7 +293,7 @@ HERE;
 
         $cmd = <<<HERE
         SELECT r.idEntity2 as idConstraint,
-            relatedLU.name  AS name,
+            relatedLU.name  AS name, r.prefix, r.nameEntity2 type,
             r.relationtype  AS equivalence
         FROM View_Relation r
         JOIN LU relatedLU ON (r.idEntity2 = relatedLU.idEntity)
@@ -311,7 +301,7 @@ HERE;
             AND (r.relationType = 'rel_luequivalence')
         UNION
         SELECT r.idEntity1 as idConstraint,
-            relatedLU.name  AS name,
+            relatedLU.name  AS name, r.prefix, r.nameEntity2 type,
             r.relationtype  AS equivalence
         FROM View_Relation r
         JOIN LU relatedLU ON (r.idEntity1 = relatedLU.idEntity)
@@ -322,8 +312,8 @@ HERE;
         $query = $this->getDb()->getQueryCommand($cmd);
         $constraints = $query->getResult();
         foreach ($constraints as $i => $constraint) {
-            $constraints[$i]['name'] = $this->prefix[$constraint['equivalence']] . '_' . $constraints[$i]['name'];
-            $constraints[$i]['type'] = $this->type[$constraint['equivalence']];
+            $constraints[$i]['name'] = $constraint['prefix'] . '_' . $constraints[$i]['name'];
+            $constraints[$i]['type'] = $constraint['type'];
         }
         return $constraints;
     }
@@ -334,7 +324,7 @@ HERE;
 
         $cmd = <<<HERE
         SELECT r.idEntity2 as idConstraint,
-            relatedLU.name  AS name,
+            relatedLU.name  AS name, r.prefix, r.nameEntity2 type,
             r.relationtype  AS metonymy
         FROM View_Relation r
         JOIN LU relatedLU ON (r.idEntity2 = relatedLU.idEntity)
@@ -345,8 +335,8 @@ HERE;
         $query = $this->getDb()->getQueryCommand($cmd);
         $constraints = $query->getResult();
         foreach ($constraints as $i => $constraint) {
-            $constraints[$i]['name'] = $this->prefix[$constraint['metonymy']] . '_' . $constraints[$i]['name'];
-            $constraints[$i]['type'] = $this->type[$constraint['metonymy']];
+            $constraints[$i]['name'] = $constraint['prefix'] . '_' . $constraints[$i]['name'];
+            $constraints[$i]['type'] = $constraint['type'];
         }
         return $constraints;
     }
@@ -357,7 +347,7 @@ HERE;
 
         $cmd = <<<HERE
         SELECT r.idEntity2 as idConstraint,
-            relatedLU.name  AS name,
+            relatedLU.name  AS name, r.prefix, r.nameEntity2 type,
             r.relationtype  AS domain
         FROM View_Relation r
         JOIN LU relatedLU ON (r.idEntity2 = relatedLU.idEntity)
@@ -368,8 +358,8 @@ HERE;
         $query = $this->getDb()->getQueryCommand($cmd);
         $constraints = $query->getResult();
         foreach ($constraints as $i => $constraint) {
-            $constraints[$i]['name'] = $this->prefix[$constraint['domain']] . '_' . $constraints[$i]['name'];
-            $constraints[$i]['type'] = $this->type[$constraint['domain']];
+            $constraints[$i]['name'] = $constraint['prefix'] . '_' . $constraints[$i]['name'];
+            $constraints[$i]['type'] = $constraint['type'];
         }
         return $constraints;
     }
@@ -415,8 +405,8 @@ from (
  JOIN View_ConstructionElement ce2 on (cn2.idConstrainedBy = ce2.idEntity)
   JOIN entry ce1entries on (ce1.entry = ce1entries.entry)
   JOIN entry ce2entries on (ce2.entry = ce2entries.entry)
-  WHERE (cn1.entry = 'rel_constraint_cxn')
-  AND (cn2.entry = 'rel_constraint_element')
+  WHERE (cn1.entry = 'con_cxn')
+  AND (cn2.entry = 'con_element')
   AND (ce1entries.idLanguage = {$idLanguage})
   AND (ce2entries.idLanguage = {$idLanguage})
 UNION
@@ -431,10 +421,10 @@ SELECT cn4.idConstraint, concat(ce1entries.name,'.',ce2entries.name,'.',ce3entri
   JOIN entry ce1entries on (ce1.entry = ce1entries.entry)
   JOIN entry ce2entries on (ce2.entry = ce2entries.entry)
   JOIN entry ce3entries on (ce3.entry = ce3entries.entry)
-  WHERE (cn1.entry = 'rel_constraint_cxn')
-  AND (cn2.entry = 'rel_constraint_element')
-  AND (cn3.entry = 'rel_constraint_cxn')
-  AND (cn4.entry = 'rel_constraint_element')
+  WHERE (cn1.entry = 'con_cxn')
+  AND (cn2.entry = 'con_element')
+  AND (cn3.entry = 'con_cxn')
+  AND (cn4.entry = 'con_element')
   AND (ce1entries.idLanguage = {$idLanguage})
   AND (ce2entries.idLanguage = {$idLanguage})
   AND (ce3entries.idLanguage = {$idLanguage})
@@ -458,7 +448,7 @@ HERE;
         $idLanguage = \Manager::getSession()->idLanguage;
 
         $cmd = <<<HERE
-        SELECT r.idEntity2 as idConstraint,
+        SELECT r.idEntity2 as idConstraint,  r.prefix, r.nameEntity2 type,
             e.name  AS feName,
             relatedLU.name as luName,
             r.relationtype  AS metonymy
@@ -475,8 +465,8 @@ HERE;
         $constraints = $query->getResult();
         foreach ($constraints as $i => $constraint) {
             $name = ($constraint['luName'] != '') ? $constraint['luName'] : $constraint['feName'];
-            $constraints[$i]['name'] = $this->prefix[$constraint['metonymy']] . '_' . $name;
-            $constraints[$i]['type'] = $this->type[$constraint['metonymy']];
+            $constraints[$i]['name'] = $constraint['prefix'] . '_' . $name;
+            $constraints[$i]['type'] = $constraint['type'];
         }
         return $constraints;
     }

@@ -55,27 +55,6 @@ class CxnController extends MController
             'children' => $children
         ];
         $json = json_encode([$data]);
-        /*
-        if ($this->data->id == '') {
-            $children = $structure->listCxns($this->data, $this->idLanguage);
-            $data = (object) [
-                'id' => 'root',
-                'state' => 'open',
-                'text' => 'Constructions',
-                'children' => $children
-            ];
-            $json = json_encode([$data]);
-        } elseif ($this->data->id{0} == 'c') {
-            //$json = $structure->listCEs(substr($this->data->id, 1), $this->idLanguage);
-            $json = $structure->listCEsConstraintsCX(substr($this->data->id, 1), $this->idLanguage);
-        } elseif ($this->data->id{0} == 'e') {
-            $json = $structure->listConstraintsCE(substr($this->data->id, 1), $this->idLanguage);
-        } elseif ($this->data->id{0} == 'x') {
-            $json = $structure->listConstraintsCN(substr($this->data->id, 1), $this->idLanguage);
-        } elseif ($this->data->id{0} == 'n') {
-            $json = $structure->listConstraintsCNCN(substr($this->data->id, 1), $this->idLanguage);
-        }
-        */
         $this->renderJson($json);
     }
 
@@ -272,7 +251,7 @@ class CxnController extends MController
     public function formAddConstraintCN()
     {
         $this->data->idConstraint = $this->data->id;
-        $model = new fnbr\models\Constraint($this->data->idConstraint);
+        $model = new fnbr\models\ConstraintType($this->data->idConstraint);
         $constraintData = $model->getConstraintData();
         //mdump($constraintData);
         $this->data->showCxnCE = $this->data->showCE = false;
@@ -307,7 +286,7 @@ class CxnController extends MController
 
     public function formDeleteConstraint()
     {
-        $structure = Manager::getAppService('structureconstraints');
+        $structure = Manager::getAppService('StructureConstraintInstance');
         $hasChild = $structure->constraintHasChild($this->data->id);
         if (!$hasChild) {
             $ok = "^structure/cxn/deleteConstraint/" . $this->data->id;
@@ -320,7 +299,7 @@ class CxnController extends MController
     public function addConstraintCX() {
         mdump($this->data);
         try {
-            $structure = Manager::getAppService('structurecxn');
+            $structure = Manager::getAppService('StructureCxn');
             $structure->addConstraintsCX($this->data);
             $this->renderPrompt('information', 'Constraint added.');
         } catch (\Exception $e) {
@@ -331,7 +310,7 @@ class CxnController extends MController
     public function addConstraintCE() {
         mdump($this->data);
         try {
-            $structure = Manager::getAppService('structurecxn');
+            $structure = Manager::getAppService('StructureCxn');
             $structure->addConstraintsCE($this->data);
             $this->renderPrompt('information', 'Constraint added.');
         } catch (\Exception $e) {
@@ -342,7 +321,7 @@ class CxnController extends MController
     public function addConstraintCN() {
         mdump($this->data);
         try {
-            $structure = Manager::getAppService('structurecxn');
+            $structure = Manager::getAppService('StructureCxn');
             $structure->addConstraintsCN($this->data);
             $this->renderPrompt('information', 'Constraint added.');
         } catch (\Exception $e) {
@@ -353,7 +332,7 @@ class CxnController extends MController
 
     public function deleteConstraint() {
         try {
-            $model = fnbr\models\Constraint::create($this->data->id);
+            $model = fnbr\models\ConstraintInstance::create($this->data->id);
             $model->delete();
             $this->renderPrompt('information', 'Constraint deleted.', "!structure.reloadCxnParent();");
         } catch (\Exception $e) {

@@ -248,7 +248,7 @@ class FrameController extends MController
     {
         try {
             list($type, $idEntityFE, $idEntityConstraint) = explode('_', $this->data->id);
-            $model = fnbr\models\Constraint::create($idEntityConstraint);
+            $model = fnbr\models\ConstraintType::create($idEntityConstraint);
             if ($type == 'fr') {
                 $model->delete();
             } elseif ($type == 'fe') {
@@ -406,7 +406,7 @@ class FrameController extends MController
     {
         try {
             list($idLU, $idEntityConstraint) = explode('_', $this->data->id);
-            $model = new fnbr\models\Constraint();
+            $model = new fnbr\models\ConstraintType();
             $model->deleteConstraintLU($idLU, $idEntityConstraint);
             $this->renderPrompt('information', 'Constraint deleted.', "!structure.reloadFrameParent();");
         } catch (\Exception $e) {

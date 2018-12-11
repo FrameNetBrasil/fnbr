@@ -160,6 +160,17 @@ class Base {
         $transaction->commit();
     }
 
+    static public function createConstraintInstance($idConstraint, $constraintTypeEntry, $idConstrained, $idConstrainedBy) {
+        $ct = new ConstraintType();
+        $ct->getByEntry($constraintTypeEntry);
+        $ci = new ConstraintInstance();
+        $ci->setIdConstraintType($ct->getId());
+        $ci->setIdConstraint($idConstraint);
+        $ci->setIdConstrained($idConstrained);
+        $ci->setIdConstrainedBy($idConstrainedBy);
+        $ci->save();
+    }
+
     static public function getAnnotationStatus($approvement = false, $validation = '1') {
         $level = \Manager::getSession()->fnbrLevel;
         $login = \Manager::getLogin();

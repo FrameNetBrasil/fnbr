@@ -8,7 +8,7 @@ class StructureFrameService extends MService
     public function listFrames($data, $idLanguage = '')
     {
         $frame = new fnbr\models\ViewFrame();
-        $filter = (object) ['idDomain' => $data->idDomain, 'lu' => $data->lu, 'fe' => $data->fe, 'frame' => $data->frame, 'idLanguage' => $idLanguage];
+        $filter = (object)['idDomain' => $data->idDomain, 'lu' => $data->lu, 'fe' => $data->fe, 'frame' => $data->frame, 'idLanguage' => $idLanguage];
         $frames = $frame->listByFilter($filter)->asQuery()->getResult(\FETCH_ASSOC);
         $result = array();
         foreach ($frames as $row) {
@@ -156,13 +156,6 @@ class StructureFrameService extends MService
         return json_encode($result);
     }
 
-    public function listConstraintsFE($idFrameElement, $idLanguage)
-    {
-        $service = Manager::getAppService('structureconstraints');
-        $result = $service->listConstraintsFE($idFrameElement);
-        return $result;
-    }
-
     public function getSubCorpusTitle($idSubCorpus, $idLanguage, $isCxn)
     {
         $sc = $isCxn ? new fnbr\models\ViewSubCorpusCxn() : new fnbr\models\ViewSubCorpusLU();
@@ -173,7 +166,7 @@ class StructureFrameService extends MService
     public function getDocumentTitle($idDocument, $idLanguage)
     {
         $doc = new fnbr\models\Document();
-        $filter = (object) ['idDocument' => $idDocument];
+        $filter = (object)['idDocument' => $idDocument];
         $result = $doc->listByFilter($filter)->asQuery()->getResult();
         return 'Document:' . $result[1];
     }
@@ -495,7 +488,7 @@ class StructureFrameService extends MService
     public function listCnx($cnx = '', $idLanguage = '')
     {
         $construction = new fnbr\models\Construction();
-        $filter = (object) ['cnx' => $cnx, 'idLanguage' => $idLanguage];
+        $filter = (object)['cnx' => $cnx, 'idLanguage' => $idLanguage];
         $constructions = $construction->listByFilter($filter)->asQuery()->chunkResult('idConstruction', 'name');
         $result = array();
         foreach ($constructions as $idCnx => $name) {
@@ -550,7 +543,7 @@ class StructureFrameService extends MService
     public function listCorpus($corpus = '', $idLanguage = '')
     {
         $corpus = new fnbr\models\Corpus();
-        $filter = (object) ['corpus' => $cnx, 'idLanguage' => $idLanguage];
+        $filter = (object)['corpus' => $cnx, 'idLanguage' => $idLanguage];
         $corpora = $corpus->listByFilter($filter)->asQuery()->chunkResult('idCorpus', 'name');
         $result = array();
         foreach ($corpora as $idCorpus => $name) {
@@ -586,7 +579,7 @@ class StructureFrameService extends MService
         $transaction = $frame->beginTransaction();
         try {
             $frameElement = new fnbr\models\FrameElement();
-            $filter = (object) ['idFrame' => $idFrame];
+            $filter = (object)['idFrame' => $idFrame];
             $fes = $frameElement->listByFilter($filter)->asQuery()->getResult();
             foreach ($fes as $fe) {
                 $frameElement->getById($fe['idFrameElement']);
@@ -600,6 +593,18 @@ class StructureFrameService extends MService
         }
     }
 
+    /*
+     * Constraints
+     */
+
+    public function listConstraintsFE($idFrameElement, $idLanguage)
+    {
+        $service = Manager::getAppService('StructureConstraintInstance');
+        $result = $service->listConstraintsFE($idFrameElement);
+        return $result;
+    }
+
+
     public function addConstraintsFE($data)
     {
         try {
@@ -608,13 +613,13 @@ class StructureFrameService extends MService
                 $constraint = Base::createEntity('CN', 'con');
                 $cf = new fnbr\models\FrameElement($data->idFrameElement);
                 $frame = new fnbr\models\Frame($data->idFrame);
-                Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_frame', $cf->getIdEntity(), $frame->getIdEntity());
+                Base::createConstraintInstance($constraint->getIdEntity(), 'con__frame', $cf->getIdEntity(), $frame->getIdEntity());
             }
             if ($data->idSemanticType != '') {
                 $constraint = Base::createEntity('CN', 'con');
                 $cf = new fnbr\models\FrameElement($data->idFrameElement);
                 $st = new fnbr\models\SemanticType($data->idSemanticType);
-                Base::createEntityRelation($constraint->getIdEntity(), 'rel_constraint_semtype', $cf->getIdEntity(), $st->getIdEntity());
+                Base::createConstraintInstance($constraint->getIdEntity(), 'con__semtype', $cf->getIdEntity(), $st->getIdEntity());
             }
             if ($data->idFEQualia != '') {
                 $fe = new fnbr\models\FrameElement($data->idFrameElement);

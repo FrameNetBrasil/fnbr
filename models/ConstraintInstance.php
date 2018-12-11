@@ -1,25 +1,32 @@
 <?php
 
-/**
- *
- *
- * @category   Maestro
- * @package    UFJF
- *  @subpackage fnbr
- * @copyright  Copyright (c) 2003-2012 UFJF (http://www.ufjf.br)
- * @license    http://siga.ufjf.br/license
- * @version
- * @since
- */
-
 namespace fnbr\models;
 
-class Constraint extends map\EntityMap
+
+class ConstraintInstance extends map\ConstraintInstanceMap
 {
 
     public static function config()
     {
-        return [];
+        return array(
+            'log' => array(),
+            'validators' => array(
+                'idConstraintType' => array('notnull'),
+                'idConstraint' => array('notnull'),
+                'idConstrained' => array('notnull'),
+                'idConstrainedBy' => array('notnull'),
+            ),
+            'converters' => array()
+        );
+    }
+
+    public function listByFilter($filter)
+    {
+        $criteria = $this->getCriteria()->select('idConstraintInstance, idConstraintType, idConstraint, idConstrained, idConstrainedBy');
+        if ($filter->idConstraintType) {
+            $criteria->where("idConstraintType = {$filter->idConstraintType}");
+        }
+        return $criteria;
     }
 
     public function delete()
@@ -45,7 +52,8 @@ class Constraint extends map\EntityMap
         }
     }
 
-    public function getConstraintData() {
+    public function getConstraintData()
+    {
         $view = new ViewConstraint();
         return $view->getConstraintData($this->getId());
     }
@@ -66,7 +74,8 @@ class Constraint extends map\EntityMap
         return $cn;
     }
 
-    public function deleteConstraintLU($idEntityLU, $idEntityConstraint) {
+    public function deleteConstraintLU($idEntityLU, $idEntityConstraint)
+    {
         $er = new EntityRelation();
         $transaction = $er->beginTransaction();
         $criteria = $er->getDeleteCriteria();
@@ -76,11 +85,15 @@ class Constraint extends map\EntityMap
         $transaction->commit();
     }
 
-    public function deleteConstraintMetonymyFEFE($idEntity1FE, $idEntity2FE) {
+    public function deleteConstraintMetonymyFEFE($idEntity1FE, $idEntity2FE)
+    {
         Base::deleteEntityRelation($idEntity1FE, 'rel_festandsforfe', $idEntity2FE);
     }
 
-    public function deleteConstraintMetonymyFELU($idEntityFE, $idEntityLU) {
+    public function deleteConstraintMetonymyFELU($idEntityFE, $idEntityLU)
+    {
         Base::deleteEntityRelation($idEntityFE, 'rel_festandsforlu', $idEntityLU);
     }
+
+
 }

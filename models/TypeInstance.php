@@ -78,6 +78,14 @@ class TypeInstance extends map\TypeInstanceMap
         return $criteria;
     }
 
+    public function listConstraintType()
+    {
+        $criteria = $this->getCriteria()->select('idTypeInstance as idConstraintType, entry, entries.name as name')->orderBy('entries.name');
+        Base::entryLanguage($criteria);
+        $criteria->where("entry like 'typ_con_%'");
+        return $criteria;
+    }
+
     public function listQualiaType()
     {
         $criteria = $this->getCriteria()->select('idTypeInstance as idQualiaType, entry, entries.name as name')->orderBy('entries.name');
