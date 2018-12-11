@@ -1,4 +1,5 @@
 <?php
+namespace fnbr\models\map;
 
 class ConstraintInstanceMap extends \MBusinessModel {
 

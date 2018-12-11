@@ -3,7 +3,7 @@
 namespace fnbr\models;
 
 
-class ConstraintInstance extends map\EntityRelationMap
+class ConstraintInstance extends map\ConstraintInstanceMap
 {
 
     public static function config()
@@ -18,6 +18,15 @@ class ConstraintInstance extends map\EntityRelationMap
             ),
             'converters' => array()
         );
+    }
+
+    public function listByFilter($filter)
+    {
+        $criteria = $this->getCriteria()->select('idConstraintInstance, idConstraintType, idConstraint, idConstrained, idConstrainedBy');
+        if ($filter->idConstraintType) {
+            $criteria->where("idConstraintType = {$filter->idConstraintType}");
+        }
+        return $criteria;
     }
 
     public function delete()

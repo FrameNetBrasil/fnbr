@@ -34,82 +34,38 @@ class ConstraintTypeController extends MController
         $this->renderJson($json);
     }
 
-    public function formNewSemanticType()
-    {
-        $nodeId = $this->data->id;
-        if ($nodeId{0} == 'd') {
-            $this->data->idDomain = substr($this->data->id, 1);
-        } else {
-            $this->data->idSuperType = substr($this->data->id, 1);
-        }
-        $this->data->save = "@structure/semantictype/newSemanticType|formNewSemanticType";
-        $this->data->close = "!$('#formNewSemanticType_dialog').dialog('close');";
-        $this->data->title = _M('new fnbr\models\SemanticType');
-        $this->render();
-    }
-
-    public function formUpdateSemanticType()
-    {
-        $model = new fnbr\models\SemanticType($this->data->id);
-        $this->data->object = $model->getData();
-        $this->data->save = "@structure/semantictype/updateSemanticType|formUpdateSemanticType";
-        $this->data->close = "!$('#formUpdateSemanticType_dialog').dialog('close');";
-        $this->data->title = 'SemanticType: ' . $model->getEntry() . '  [' . $model->getName() . ']';
-        $this->render();
-    }
-
-    public function newSemanticType()
+    public function newConstraintType()
     {
         try {
-            $model = new fnbr\models\SemanticType();
-            $this->data->semantictype->entry = 'sty_' . $this->data->semantictype->entry;
-            $model->setData($this->data->semantictype);
-            $model->save($this->data->semantictype);
-            $this->renderPrompt('information', 'OK', "structure.editEntry('{$this->data->semantictype->entry}');");
+            $model = new fnbr\models\ConstraintType();
+            $model->save($this->data->ct);
+            $this->renderJson(json_encode(['success' => true]));
         } catch (\Exception $e) {
             $this->renderPrompt('error', $e->getMessage());
         }
     }
 
-    public function updateSemanticType()
+    public function updateConstraintType()
     {
         try {
-            $model = new fnbr\models\SemanticType($this->data->semantictype->idSemanticType);
-            $model->updateEntry($this->data->semantictype->entry);
-            $this->renderPrompt('information', 'OK', "structure.editEntry('{$this->data->semantictype->entry}');");
+            $model = new fnbr\models\ConstraintType($this->data->ct->idConstraintType);
+            $model->save($this->data->ct);
+            $this->renderJson(json_encode(['success' => true]));
         } catch (\Exception $e) {
             $this->renderPrompt('error', $e->getMessage());
         }
     }
 
-    public function deleteSemanticType()
+    public function deleteConstraintType()
     {
         try {
-            $model = new fnbr\models\SemanticType($this->data->id);
-            $model->delete();
-            $this->renderPrompt('information', "Record removed.", "structure.reloadSemanticType();");
-        } catch (\Exception $e) {
-            $this->renderPrompt('error', $e->getMessage());
-        }
-    }
-
-    public function addEntitySemanticType()
-    {
-        try {
-            $structure = Manager::getAppService('structuresemantictype');
-            $structure->addEntitySemanticType($this->data->idEntity, $this->data->idSemanticType);
-            $this->renderPrompt('information', "Ok", "$('#{$this->data->idGrid}').datagrid('reload');");
-        } catch (\Exception $e) {
-            $this->renderPrompt('error', $e->getMessage());
-        }
-    }
-
-    public function delEntitySemanticType()
-    {
-        try {
-            $structure = Manager::getAppService('structuresemantictype');
-            $structure->delEntitySemanticType($this->data->idEntity, $this->data->toRemove);
-            $this->renderPrompt('information', "Ok", "$('#{$this->data->idGrid}').datagrid('reload');");
+            $model = new fnbr\models\ConstraintType($this->data->id);
+            if ($model->hasInstances()) {
+                $this->renderPrompt('error', "ConstraintType has instances.");
+            } else {
+                $model->delete();
+                $this->renderPrompt('information', "ConstraintType removed.", "structure.reload();");
+            }
         } catch (\Exception $e) {
             $this->renderPrompt('error', $e->getMessage());
         }

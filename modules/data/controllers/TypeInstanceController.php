@@ -31,4 +31,10 @@ class TypeInstanceController extends MController
         $this->renderJSON($model->gridDataAsJSON($result));
     }
 
+    public function lookupConstraintType()
+    {
+        $model = new fnbr\models\TypeInstance();
+        $result = $model->listConstraintType()->asQuery()->getResult(\FETCH_ASSOC);
+        $this->renderJSON($model->gridDataAsJSON($result));
+    }
 }

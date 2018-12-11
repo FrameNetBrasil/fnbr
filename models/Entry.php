@@ -84,7 +84,20 @@ class Entry extends map\EntryMap {
             $this->save();
         }
     }
-    
+
+    public function newEntryByData($data){
+        $languages = Base::languages();
+        foreach($languages as $idLanguage=>$language) {
+            $this->setPersistent(false);
+            $this->setEntry($data->entry);
+            $this->setName($data->name);
+            $this->setDescription($data->description ?: $data->name);
+            $this->setNick($data->nick ?: $data->name);
+            $this->setIdLanguage($idLanguage);
+            $this->save();
+        }
+    }
+
     public function updateEntry($oldEntry, $newEntry){
         $criteria = $this->getUpdateCriteria();
         $criteria->addColumnAttribute('entry');

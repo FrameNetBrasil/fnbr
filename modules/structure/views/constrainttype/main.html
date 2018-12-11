@@ -21,6 +21,7 @@
 </div>
 
 {{include formNewConstraintType.html}}
+{{include formEditConstraintType.html}}
 
 <script type="text/javascript">
 
@@ -45,15 +46,12 @@
         });
 
         structure.dialog = function(idForm, title) {
-            $(idForm).dialog({
-                closed: false
-            });
             $(idForm).dialog('resize',{
                 width:'auto',
                 height:'auto'
             });
-            $(idForm).dialog({'title': title});
             $(idForm).dialog('doLayout');
+            $(idForm).dialog({'title': title});
             $(idForm).dialog('open');
         }
 
@@ -62,21 +60,14 @@
         }
 
         structure.editConstraintType = function () {
-            var id = structure.node.id.substr(1);
-            $('#concept_idConceptElement').val(id);
             structure.dialog("#formEditConstraintType", "Edit ConstraintType");
         }
 
-        structure.delConstraint = function (id) {
+        structure.delConstraintType = function (id) {
             if ($.type(id) === "undefined") {
                 id = structure.node.id.substr(1);
             }
-            manager.doGet({{$manager->getURL('structure/concept/deleteConstraint')}} + '/' + id,'structureCenterPane');
-        }
-
-        structure.delConstraintElement = function () {
-            var nodeId = structure.node.id;
-            manager.doGet({{$manager->getURL('structure/concept/deleteConstraintElement')}} + '/' + nodeId,'structureCenterPane');
+            manager.doGet({{$manager->getURL('structure/constrainttype/deleteconstrainttype')}} + '/' + id,'structureCenterPane');
         }
 
         structure.reload = function () {

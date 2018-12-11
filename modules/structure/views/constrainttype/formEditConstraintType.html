@@ -1,4 +1,4 @@
-{{var $prefix = 'formNewConstraintType' }}
+{{var $prefix = 'formEditConstraintType' }}
 
 <div id="{{$prefix}}">
     <div id="{{$prefix}}Tools">
@@ -10,6 +10,7 @@
         </a>
     </div>
     <form id="{{$prefix}}Form" method="post">
+        <input type="hidden" id="{{$prefix}}_ct_idConstraintType" name="ct_idConstraintType"/>
         <div class='mFormContainer'>
             <div class="mFormRow">
                 <div class="mFormColumn">
@@ -59,7 +60,7 @@
 
     $(function () {
 
-        {{var $idPrefix = '#formNewConstraintType' }}
+        {{var $idPrefix = '#formEditConstraintType' }}
 
         $({{$idPrefix}}).dialog({
             toolbar: {{$idPrefix}} + 'Tools',
@@ -69,8 +70,29 @@
             doSize: true,
             onClose: function () {
                 structure.reload();
+            },
+            onBeforeOpen: function() {
+                var id = structure.node.id.substr(1);
+                console.log('1');
+                $.ajax({
+                    type: "GET",
+                    url: {{$manager->getURL('data/constrainttype/getbyid/')}} + id,
+                    dataType: "json",
+                    async: false,
+                    success: function(data) {
+                        console.log(data);
+                        console.log(data.name);
+                        $({{$idPrefix}} + '_ct_name').textbox('setValue', data.name);
+                        $({{$idPrefix}} + '_ct_prefix').textbox('setValue', data.prefix);
+                        $({{$idPrefix}} + '_ct_typeEntity1').textbox('setValue', data.typeEntity1);
+                        $({{$idPrefix}} + '_ct_typeEntity2').textbox('setValue', data.typeEntity2);
+                        $({{$idPrefix}} + '_ct_idTypeInstance').combogrid('setValue', data.idTypeInstance);
+                    }
+                });
+                return true;
             }
         });
+
 
         $({{$idPrefix}} + 'Save').linkbutton({
             iconCls: 'icon-save',
@@ -108,7 +130,7 @@
         });
 
         $({{$idPrefix}} + 'Form').form({
-            url: {{$manager->getURL('structure/constrainttype/newConstraintType')}},
+            url: {{$manager->getURL('structure/constrainttype/updateConstraintType')}},
             onSubmit: function () {
                 // do some check
                 // return false to prevent submit;
@@ -116,7 +138,7 @@
             success:function (data) {
                 var data = eval('(' + data + ')');
                 if (data.success) {
-                    $.messager.alert('Info', 'ConstraintType created!', 'info');
+                    $.messager.alert('Info', 'ConstraintType updated!', 'info');
                 }
             }
         });
