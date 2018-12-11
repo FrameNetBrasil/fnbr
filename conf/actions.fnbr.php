@@ -18,6 +18,7 @@ return [
             'qualia' => ['Qualia', 'structure/qualia/main', 'fab fa-connectdevelop fa16px', 'MASTER', A_ACCESS, []],
             'qualiarelation' => ['Qualia Relation', 'structure/qualiarelation/main', 'fas fa-arrows-alt-h fa16px', 'MASTER', A_ACCESS, []],
             'constrainttype' => ['Constraint Type', 'structure/constrainttype/main', 'fas fa-box-open fa16px', 'MASTER', A_ACCESS, []],
+            'conceptstructure' => ['Concept', 'structure/concept/main', 'fa fa-life-ring fa16px', '', A_ACCESS, []],
             'templatestructure' => ['Template', 'structure/template/main', 'fa fa-files-o fa16px', 'MASTER', A_ACCESS, []],
             'semantictypestructure' => ['Semantic Type', 'structure/semantictype/main', 'fa fa-life-ring fa16px', 'MASTER', A_ACCESS, []],
             'relationgroupstructure' => ['Relation Group', 'structure/relationgroup/main', 'fa fa-sitemap fa16px', 'MASTER', A_ACCESS, []],
