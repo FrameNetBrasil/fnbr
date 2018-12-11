@@ -25,6 +25,52 @@ class StructureCxnService extends MService
         return $result;
     }
 
+    public function listCxnLanguage($data, $idLanguageFilter = '')
+    {
+        $listLanguages = Base::languagesDescription();
+        mdump($listLanguages);
+        $cxn = new fnbr\models\ViewConstruction();
+        $filter = (object)['idDomain' => $data->idDomain, 'ce' => $data->ce, 'cxn' => $data->cxn, 'active' => $data->active, 'idLanguage' => $idLanguage];
+        $languages = $cxn->listByLanguageFilter($filter)->asQuery()->treeResult('idLanguage', 'idConstruction,name,entry');
+        $result = [];
+        if ($idLanguageFilter == '') {
+            foreach ($languages as $idLanguage => $language) {
+                $nodes = [];
+                foreach ($language as $row) {
+                    $node = [];
+                    $node['id'] = 'c' . $row['idConstruction'];
+                    $node['text'] = $row['name'];
+                    $node['state'] = 'closed';
+                    $node['entry'] = $row['entry'];
+                    $nodes[] = $node;
+                }
+                $lang = $listLanguages[$idLanguage];
+                $flag = 'fnbrFlag' . $lang[0]['description'];
+                $langNode = [
+                    'id' => 'l' . $idLanguage,
+                    'state' => 'closed',
+                    'text' => $lang[0]['description'],
+                    'iconCls' => "icon-blank {$flag}",
+                    'children' => $nodes
+                ];
+                $result[] = $langNode;
+            }
+        } else {
+            mdump($idLanguageFilter);
+            mdump($languages[$idLanguageFilter]);
+            foreach ($languages[$idLanguageFilter] as $row) {
+                $node = [];
+                $node['id'] = 'c' . $row['idConstruction'];
+                $node['text'] = $row['name'];
+                $node['state'] = 'closed';
+                $node['entry'] = $row['entry'];
+                $result[] = $node;
+            }
+            $result = json_encode($result);
+        }
+        return $result;
+    }
+
     public function listCEs($idCxn, $idLanguage)
     {
         $result = array();
@@ -518,22 +564,25 @@ class StructureCxnService extends MService
      * Constraints
      */
 
-    public function listOptionsNumber() {
+    public function listOptionsNumber()
+    {
         $ti = new fnbr\models\TypeInstance();
-        $result = $ti->listUDNumber()->chunkResult('idEntity','info');
+        $result = $ti->listUDNumber()->chunkResult('idEntity', 'info');
         return $result;
     }
 
-    public function listOptionsSTLU() {
+    public function listOptionsSTLU()
+    {
         $st = new fnbr\models\SemanticType();
-        $result = $st->listSTLUforConstraint()->chunkResult('idEntity','name');
+        $result = $st->listSTLUforConstraint()->chunkResult('idEntity', 'name');
         mdump($result);
         return $result;
     }
 
-    public function listOptionsUDRelation() {
+    public function listOptionsUDRelation()
+    {
         $ud = new fnbr\models\UDRelation();
-        $result = $ud->listForLookupEntity('*')->chunkResult('idEntity','info');
+        $result = $ud->listForLookupEntity('*')->chunkResult('idEntity', 'info');
         mdump($result);
         return $result;
     }
@@ -580,7 +629,8 @@ class StructureCxnService extends MService
         return $result;
     }
 
-    public function treeCX($idConstruction, $idLanguage = '') {
+    public function treeCX($idConstruction, $idLanguage = '')
+    {
         $children = [];
         $ces = $this->listCEs($idConstruction, $idLanguage);
         foreach ($ces as $ce) {
@@ -634,6 +684,11 @@ class StructureCxnService extends MService
                 $cxn = new fnbr\models\Construction($data->idConstruction);
                 Base::createConstraintInstance($constraint2->getIdEntity(), 'con__constraint', $cxn->getIdEntity(), $constraint->getIdEntity());
             }
+            if ($data->idConcept != '') {
+                $cxn = new fnbr\models\Construction($data->idConstruction);
+                $concept = new fnbr\models\Concept($data->idConcept);
+                Base::createEntityRelation($cxn->getIdEntity(), 'rel_evokes', $concept->getIdEntity());
+            }
             $transaction->commit();
         } catch (\Exception $e) {
             $transaction->rollback();
@@ -655,7 +710,7 @@ class StructureCxnService extends MService
                 $ces = $cxn->listCE()->asQuery()->getResult();
                 foreach ($ces as $ce) {
                     $constraintEle = Base::createEntity('CN', 'con');
-                    Base::createConstraintInstance($constraintEle->getIdEntity(), 'con__element',$constraintCxn->getIdEntity(), $ce['idEntity']);
+                    Base::createConstraintInstance($constraintEle->getIdEntity(), 'con__element', $constraintCxn->getIdEntity(), $ce['idEntity']);
                 }
             }
             if ($data->idFrame != '') {

@@ -32,6 +32,10 @@
                     <div><mlabel text="Frame"/></div>
                     <include component="MLookupFrame.php" id="idFrame"/>
                 </div>
+                <div title="Cxn &gt; Evokes &gt; Concept" style="overflow:auto;padding:10px;">
+                    <div><mlabel text="Concept"/></div>
+                    <include component="MLookupConcept.php" id="idConcept"/>
+                </div>
             </maccordion>
         </fields>
         <tools>

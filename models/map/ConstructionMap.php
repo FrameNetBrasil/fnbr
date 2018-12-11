@@ -27,10 +27,12 @@ class ConstructionMap extends \MBusinessModel {
                 'entry' => array('column' => 'entry','type' => 'string'),
                 'abstract' => array('column' => 'abstract','type' => 'boolean'),
                 'active' => array('column' => 'active','type' => 'boolean'),
+                'idLanguage' => array('column' => 'idLanguage','type' => 'integer'),
                 'idEntity' => array('column' => 'idEntity','type' => 'integer'),
             ),
             'associations' => array(
-                'entity' => array('toClass' => 'fnbr\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity:idEntity'), 
+                'language' => array('toClass' => 'fnbr\models\Language', 'cardinality' => 'oneToOne' , 'keys' => 'idLanguage:idLanguage'),
+                'entity' => array('toClass' => 'fnbr\models\Entity', 'cardinality' => 'oneToOne' , 'keys' => 'idEntity:idEntity'),
                 'entries' => array('toClass' => 'fnbr\models\Entry', 'cardinality' => 'oneToMany' , 'keys' => 'entry:entry'), 
             )
         );
@@ -63,10 +65,16 @@ class ConstructionMap extends \MBusinessModel {
     protected $idEntity;
 
     /**
+     *
+     * @var integer
+     */
+    protected $idLanguage;
+    /**
      * Associations
      */
     protected $entity;
     protected $entries;
+    protected $language;
     
 
     /**
@@ -110,6 +118,14 @@ class ConstructionMap extends \MBusinessModel {
 
     public function setIdEntity($value) {
         $this->idEntity = $value;
+    }
+
+    public function getIdLanguage() {
+        return $this->idLanguage;
+    }
+
+    public function setIdLanguage($value) {
+        $this->idLanguage = $value;
     }
     /**
      *
@@ -159,10 +175,31 @@ class ConstructionMap extends \MBusinessModel {
     public function getAssociationEntries() {
         $this->retrieveAssociation("entries");
     }
+    /**
+     *
+     * @return Association
+     */
+    public function getLanguage() {
+        if (is_null($this->language)){
+            $this->retrieveAssociation("language");
+        }
+        return  $this->language;
+    }
+    /**
+     *
+     * @param Association $value
+     */
+    public function setLanguage($value) {
+        $this->language = $value;
+    }
+    /**
+     *
+     * @return Association
+     */
+    public function getAssociationLanguage() {
+        $this->retrieveAssociation("language");
+    }
 
     
 
 }
-// end - wizard
-
-?>

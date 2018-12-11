@@ -26,10 +26,12 @@ class ViewConstructionMap extends \MBusinessModel {
                 'idConstruction' => array('column' => 'idConstruction', 'type' => 'integer','key' => 'primary'),
                 'entry' => array('column' => 'entry','type' => 'string'),
                 'active' => array('column' => 'active','type' => 'integer'),
+                'idLanguage' => array('column' => 'idLanguage','type' => 'integer'),
                 'idEntity' => array('column' => 'idEntity','type' => 'integer'),
             ),
             'associations' => array(
                 'entries' => array('toClass' => 'fnbr\models\ViewEntryLanguage', 'cardinality' => 'oneToOne' , 'keys' => 'entry:entry'),
+                'language' => array('toClass' => 'fnbr\models\Language', 'cardinality' => 'oneToOne' , 'keys' => 'idLanguage:idLanguage'),
                 'ces' => array('toClass' => 'fnbr\models\ViewConstructionElement', 'cardinality' => 'oneToMany' , 'keys' => 'idConstruction:idConstruction'),
             )
         );
