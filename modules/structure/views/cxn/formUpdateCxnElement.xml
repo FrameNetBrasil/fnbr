@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
 <view>
     <mformdialog id="formUpdateCxnElement">
-        <property title="$this->data->title" onClose="structure.reloadCxn();"/>
+        <property title="$this->data->title"/>
         <fields>
+            <mhiddenfield id="cxnelement_idConstruction" value="$this->data->idConstruction"/>
             <mhiddenfield id="cxnelement_idConstructionElement" value="$this->data->id"/>
-            <mtextfield id="cxnelement_entry" label="Entry:" width="250px"/> 
+            <mtextfield id="cxnelement_name" label="Name:" width="250px"/>
             <include component="MLookupColor.php" id="cxnelement_idColor" label="Color"/>
             <mbooleanfield id="cxnelement_optional" label="Optional" value="$this->data->optional"/>
             <mbooleanfield id="cxnelement_head" label="Head" value="$this->data->head"/>

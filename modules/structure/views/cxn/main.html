@@ -37,7 +37,7 @@
 </div>
 <div id="menuCxnElement" style="display:none, width:120px;">
     <div onclick="structure.editCxnElement()" data-options="iconCls:'icon-edit'">{{_'Edit CxnElement'}}</div>
-    <div onclick="structure.editEntry()" data-options="iconCls:'icon-edit'">{{_'Edit Entry'}}</div>
+    <div onclick="structure.editEntry()" data-options="iconCls:'icon-edit'">{{_'Edit Entries'}}</div>
     <div onclick="structure.deleteCxnElement()" data-options="iconCls:'icon-remove'">{{_'Delete CxnElement'}}</div>
     <div onclick="structure.addConstraint()" data-options="iconCls:'icon-add'">{{_'Add Constraint'}}</div>
 </div>
@@ -78,6 +78,7 @@
         app: {{$manager->getApp()}},
         isMaster: {{$data->isMaster|noescape}},
         nodeSelected: null,
+        nodeSelectedParent: null,
         node: null
     };
     $(function () {
@@ -125,10 +126,15 @@
 
         structure.reloadCxnParent = function () {
             $('#structureCenterPane').html('');
-            var node = $('#cxnTree').tree('getSelected');
-            var parent = $('#cxnTree').tree('getParent', node.target);
-            if (node) {
-                $('#cxnTree').tree('reload', parent.target);
+            console.log(structure.nodeSelected);
+            if (structure.nodeSelected == null) {
+                var node = $('#cxnTree').tree('getSelected');
+                structure.nodeSelected = node;
+                structure.nodeSelectedParent = $('#cxnTree').tree('getParent', node.target);
+            }
+            console.log(structure.nodeSelectedParent);
+            if (structure.nodeSelectedParent) {
+                $('#cxnTree').tree('reload', structure.nodeSelectedParent.target);
             }
         }
 

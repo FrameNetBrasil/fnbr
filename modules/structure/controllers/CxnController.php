@@ -85,7 +85,7 @@ class CxnController extends MController
     {
         $this->data->idConstruction = $this->data->id;
         $model = new fnbr\models\Construction($this->data->idConstruction);
-        $this->data->cxn = $model->getEntry() . '  [' . $model->getName() . ']';
+        $this->data->cxn = $model->getName();
         $this->data->save = "@structure/cxn/newCxnElement|formNewCxnElement";
         $this->data->close = "!$('#formNewCxnElement_dialog').dialog('close');";
         $this->data->title = _M('new Construction Element');
@@ -96,10 +96,9 @@ class CxnController extends MController
     {
         $model = new fnbr\models\ConstructionElement($this->data->id);
         $this->data->object = $model->getData();
-        mdump($this->data);
         $this->data->save = "@structure/cxn/updateCxnElement|formUpdateCxnElement";
         $this->data->close = "!$('#formUpdateCxnElement_dialog').dialog('close');";
-        $this->data->title = 'CxnElement: ' . $model->getEntry() . '  [' . $model->getName() . ']';
+        $this->data->title = 'CxnElement: ' . $this->data->object->name;
         $this->render();
     }
 
@@ -147,10 +146,8 @@ class CxnController extends MController
     {
         try {
             $model = new fnbr\models\ConstructionElement();
-            $this->data->cxnelement->entry = 'ce_' . strtolower(str_replace('ce_', '', $this->data->cxnelement->entry));
-            $model->setData($this->data->cxnelement);
             $model->save($this->data->cxnelement);
-            $this->renderPrompt('information', 'OK', "structure.editEntry('{$this->data->cxnelement->entry}');");
+            $this->renderPrompt('information', 'OK');
         } catch (\Exception $e) {
             $this->renderPrompt('error', $e->getMessage());
         }
@@ -160,10 +157,8 @@ class CxnController extends MController
     {
         try {
             $model = new fnbr\models\ConstructionElement($this->data->cxnelement->idConstructionElement);
-            $model->updateEntry($this->data->cxnelement->entry);
-            $model->setData($this->data->cxnelement);
             $model->save($this->data->cxnelement);
-            $this->renderPrompt('information', 'OK', "structure.editEntry('{$this->data->cxnelement->entry}');");
+            $this->renderPrompt('information', 'OK', "structure.reloadCxnParent();");
         } catch (\Exception $e) {
             $this->renderPrompt('error', $e->getMessage());
         }

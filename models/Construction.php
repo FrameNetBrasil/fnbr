@@ -480,7 +480,7 @@ HERE;
     {
         $languages = Base::languages();
         $language = $languages[$data->idLanguage];
-        $data->entry = 'cxn_' . $language . '_' . strtolower(str_replace('cxn_', '', $data->name));
+        $data->entry = 'cxn_' . $language . '_' . mb_strtolower(str_replace('cxn_', '', $data->name));
         $data->abstract = $data->abstract ?: false;
         mdump($data);
         $transaction = $this->beginTransaction();
@@ -488,8 +488,8 @@ HERE;
             $entry = new Entry();
             if ($this->isPersistent()) {
                 if ($this->getEntry() != $data->entry) {
-                    Base::updateTimeLine($this->getEntry(), $data->entry);
                     $entity = new Entity($this->getIdEntity());
+                    Base::updateTimeLine($this->getEntry(), $data->entry);
                     $entity->setAlias($data->entry);
                     $entity->save();
                     $entry->updateEntry($this->getEntry(), $data->entry, $data->name);

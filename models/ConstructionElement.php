@@ -27,11 +27,28 @@ class ConstructionElement extends map\ConstructionElementMap {
             'converters' => array()
         );
     }
-    
+
     public function getDescription(){
         return $this->getIdConstructionElement();
     }
-    
+
+    public function getData()
+    {
+        $data = parent::getData();
+        $data = (object)array_merge((array)$data, (array)$this->getEntryObject());
+        $construction = $this->getConstruction();
+        $data->idConstruction = $construction->getIdConstruction();
+        return $data;
+    }
+
+    public function getEntryObject()
+    {
+        $criteria = $this->getCriteria()->select('entries.name, entries.description, entries.nick');
+        $criteria->where("idConstructionElement = {$this->getId()}");
+        Base::entryLanguage($criteria);
+        return $criteria->asQuery()->asObjectArray()[0];
+    }
+
     public function getName()
     {
         $criteria = $this->getCriteria()->select('entries.name as name');
@@ -117,23 +134,36 @@ class ConstructionElement extends map\ConstructionElementMap {
 
     public function save($data)
     {
+        $schema = new Construction($data->idConstruction);
+        $data->entry = 'ce_' . mb_strtolower(str_replace('cxn_', '', $schema->getEntry())) . '_' . mb_strtolower(str_replace('ce_', '', $data->name));
+        $data->optional = $data->optional ?: false;
+        $data->head = $data->head ?: false;
+        $data->multiple = $data->multiple ?: false;
         $transaction = $this->beginTransaction();
         try {
+            $entry = new Entry();
             if ($this->isPersistent()) {
-                $this->setActive(true);
+                mdump('========== persistent!');
+                if ($this->getEntry() != $data->entry) {
+                    $entity = new Entity($this->getIdEntity());
+                    Base::updateTimeLine($this->getEntry(), $data->entry);
+                    $entity->setAlias($data->entry);
+                    $entity->save();
+                    $entry->updateEntry($this->getEntry(), $data->entry, $data->name);
+                }
             } else {
-                $schema = new Construction($data->idConstruction);
+                mdump('========== NOT persistent!');
                 $entity = new Entity();
-                $entity->setAlias($this->getEntry());
+                $entity->setAlias($data->entry);
                 $entity->setType('CE');
                 $entity->save();
                 $entry = new Entry();
-                $entry->newEntry($this->getEntry());
-                Base::createEntityRelation($entity->getId(), 'rel_elementof', $schema->getIdEntity());
+                $entry->newEntry($data->entry, $data->name);
                 $this->setIdEntity($entity->getId());
-                $this->setActive(true);
+                Base::createEntityRelation($entity->getId(), 'rel_elementof', $schema->getIdEntity());
             }
-            Base::entityTimelineSave($this->getIdEntity());
+            $this->setData($data);
+            $this->setActive(true);
             parent::save();
             $transaction->commit();
         } catch (\Exception $e) {
