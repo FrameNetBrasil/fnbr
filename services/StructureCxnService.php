@@ -584,7 +584,7 @@ class StructureCxnService extends MService
         return $result;
     }
 
-    public function listCEsConstraintsCX($idCxn, $idLanguage)
+    public function listCEsConstraintsEvokesCX($idCxn, $idLanguage)
     {
         $result = [];
         $ces = json_decode($this->listCEs($idCxn, $idLanguage));
@@ -594,6 +594,10 @@ class StructureCxnService extends MService
         $cxs = json_decode($this->listConstraintsCX($idCxn, $idLanguage));
         foreach ($cxs as $cx) {
             $result[] = $cx;
+        }
+        $evokes = json_decode($this->listEvokesCX($idCxn, $idLanguage));
+        foreach ($evokes as $evoke) {
+            $result[] = $evoke;
         }
         return json_encode($result);
     }
@@ -623,6 +627,13 @@ class StructureCxnService extends MService
     {
         $service = Manager::getAppService('StructureConstraintInstance');
         $result = $service->listConstraintsCX($idConstruction);
+        return $result;
+    }
+
+    public function listEvokesCX($idConstruction, $idLanguage)
+    {
+        $service = Manager::getAppService('StructureConstraintInstance');
+        $result = $service->listEvokesCX($idConstruction);
         return $result;
     }
 
@@ -684,7 +695,8 @@ class StructureCxnService extends MService
             if ($data->idConcept != '') {
                 $cxn = new fnbr\models\Construction($data->idConstruction);
                 $concept = new fnbr\models\Concept($data->idConcept);
-                Base::createEntityRelation($cxn->getIdEntity(), 'rel_evokes', $concept->getIdEntity());
+                $conceptType = new fnbr\models\TypeInstance($data->idConceptType);
+                Base::createEntityRelation($cxn->getIdEntity(), 'rel_evokes', $concept->getIdEntity(), $conceptType->getIdEntity());
             }
             $transaction->commit();
         } catch (\Exception $e) {

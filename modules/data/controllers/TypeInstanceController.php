@@ -37,4 +37,12 @@ class TypeInstanceController extends MController
         $result = $model->listConstraintType()->asQuery()->getResult(\FETCH_ASSOC);
         $this->renderJSON($model->gridDataAsJSON($result));
     }
+
+    public function lookupConceptType()
+    {
+        $model = new fnbr\models\TypeInstance();
+        $result = $model->listConceptType()->asQuery()->getResult(\FETCH_ASSOC);
+        $this->renderJSON($model->gridDataAsJSON($result));
+    }
+
 }
