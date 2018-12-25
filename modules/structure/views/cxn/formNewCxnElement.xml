@@ -5,7 +5,7 @@
         <fields>
             <mhiddenfield id="cxnelement_idConstruction" value="$this->data->idConstruction"/>
             <mlabel text="$this->data->cxn" label="Cxn:"/>
-            <mtextfield id="cxnelement_entry" label="Entry:" prefix="ce_" width="250px"/> 
+            <mtextfield id="cxnelement_name" label="Name:" width="250px"/>
             <include component="MLookupColor.php" id="cxnelement_idColor" label="Color"/>
             <mbooleanfield id="cxnelement_optional" label="Optional" value="$this->data->optional"/>
             <mbooleanfield id="cxnelement_head" label="Head" value="$this->data->head"/>

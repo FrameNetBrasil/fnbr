@@ -86,6 +86,14 @@ class TypeInstance extends map\TypeInstanceMap
         return $criteria;
     }
 
+    public function listConceptType()
+    {
+        $criteria = $this->getCriteria()->select('idTypeInstance as idConceptType, entry, entries.name as name')->orderBy('entries.name');
+        Base::entryLanguage($criteria);
+        $criteria->where("entry like 'typ_cpt_%'");
+        return $criteria;
+    }
+
     public function listQualiaType()
     {
         $criteria = $this->getCriteria()->select('idTypeInstance as idQualiaType, entry, entries.name as name')->orderBy('entries.name');

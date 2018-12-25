@@ -72,14 +72,14 @@ class Entry extends map\EntryMap {
         return $languages;
     }
     
-    public function newEntry($entry){
+    public function newEntry($entry, $name = null){
         $languages = Base::languages();
         foreach($languages as $idLanguage=>$language) {
             $this->setPersistent(false);
             $this->setEntry($entry);
-            $this->setName($entry);
-            $this->setDescription($entry);
-            $this->setNick($entry);
+            $this->setName($name ?: $entry);
+            $this->setDescription($name ?: $entry);
+            $this->setNick($name ?: $entry);
             $this->setIdLanguage($idLanguage);
             $this->save();
         }
@@ -98,11 +98,17 @@ class Entry extends map\EntryMap {
         }
     }
 
-    public function updateEntry($oldEntry, $newEntry){
+    public function updateEntry($oldEntry, $newEntry, $name = ''){
         $criteria = $this->getUpdateCriteria();
-        $criteria->addColumnAttribute('entry');
         $criteria->where("entry = '{$oldEntry}'");
-        $criteria->update($newEntry);
+        if ($name != '') {
+            $criteria->addColumnAttribute('entry');
+            $criteria->addColumnAttribute('name');
+            $criteria->update([$newEntry, $name]);
+        } else {
+            $criteria->addColumnAttribute('entry');
+            $criteria->update($newEntry);
+        }
     }
     
     public function deleteEntry($entry){

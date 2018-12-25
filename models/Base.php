@@ -14,6 +14,12 @@ class Base {
         return $languages;
     }
 
+    static public function languagesDescription() {
+        $language = new Language();
+        $languages = $language->getCriteria()->select("idLanguage, language, description")->asQuery()->treeResult('idLanguage', 'language,description');
+        return $languages;
+    }
+
     static public function languagesAsJson() {
         $language = new Language();
         $languages = $language->gridDataAsJSON($language->getCriteria()->select("idLanguage, language"), true);

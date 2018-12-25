@@ -23,7 +23,7 @@ class CxnController extends MController
     {
         $structure = Manager::getAppService('structurecxn');
         if ($this->data->id == '') {
-            $children = $structure->listCxns($this->data, $this->idLanguage);
+            $children = $structure->listCxnLanguage($this->data);
             $data = (object) [
                         'id' => 'root',
                         'state' => 'open',
@@ -31,9 +31,10 @@ class CxnController extends MController
                         'children' => $children
             ];
             $json = json_encode([$data]);
+        } elseif ($this->data->id{0} == 'l') {
+            $json = $structure->listCxnLanguage($this->data, substr($this->data->id, 1));
         } elseif ($this->data->id{0} == 'c') {
-            //$json = $structure->listCEs(substr($this->data->id, 1), $this->idLanguage);
-            $json = $structure->listCEsConstraintsCX(substr($this->data->id, 1), $this->idLanguage);
+            $json = $structure->listCEsConstraintsEvokesCX(substr($this->data->id, 1), $this->idLanguage);
         } elseif ($this->data->id{0} == 'e') {
             $json = $structure->listConstraintsCE(substr($this->data->id, 1), $this->idLanguage);
         } elseif ($this->data->id{0} == 'x') {
@@ -61,6 +62,7 @@ class CxnController extends MController
     public function formNewCxn()
     {
         $this->data->title = _M('new Construction');
+        $this->data->save = "@structure/cxn/newCxn|formNewCxn";
         $this->render();
     }
 
@@ -68,7 +70,8 @@ class CxnController extends MController
     {
         $model = new fnbr\models\Construction($this->data->id);
         $this->data->object = $model->getData();
-        $this->data->title = 'Construction: ' . $model->getEntry() . '  [' . $model->getName() . ']';
+        $this->data->title = 'Construction: ' . $this->data->object->name . '  [' . $this->data->object->language . ']';
+        $this->data->save = "@structure/cxn/updateCxn|formUpdateCxn";
         $this->render();
     }
 
@@ -82,7 +85,7 @@ class CxnController extends MController
     {
         $this->data->idConstruction = $this->data->id;
         $model = new fnbr\models\Construction($this->data->idConstruction);
-        $this->data->cxn = $model->getEntry() . '  [' . $model->getName() . ']';
+        $this->data->cxn = $model->getName();
         $this->data->save = "@structure/cxn/newCxnElement|formNewCxnElement";
         $this->data->close = "!$('#formNewCxnElement_dialog').dialog('close');";
         $this->data->title = _M('new Construction Element');
@@ -93,10 +96,9 @@ class CxnController extends MController
     {
         $model = new fnbr\models\ConstructionElement($this->data->id);
         $this->data->object = $model->getData();
-        mdump($this->data);
         $this->data->save = "@structure/cxn/updateCxnElement|formUpdateCxnElement";
         $this->data->close = "!$('#formUpdateCxnElement_dialog').dialog('close');";
-        $this->data->title = 'CxnElement: ' . $model->getEntry() . '  [' . $model->getName() . ']';
+        $this->data->title = 'CxnElement: ' . $this->data->object->name;
         $this->render();
     }
 
@@ -106,16 +108,15 @@ class CxnController extends MController
         $this->renderPrompt('confirmation', 'Atenção: O CxnElement será removido! Continua?', $ok);
     }
 
+
     public function newCxn()
     {
         try {
             $model = new fnbr\models\Construction();
-            $this->data->cxn->entry = 'cxn_' . strtolower(str_replace('cxn_','',$this->data->cxn->entry));
-            $model->setData($this->data->cxn);
-            $model->createNew($this->data->cxn);
-            $this->renderResponse('ok', 'Construction created.');
+            $model->save($this->data->cxn);
+            $this->renderPrompt('ok', 'Construction created.');
         } catch (\Exception $e) {
-            $this->renderResponse('error', $e->getMessage());
+            $this->renderPrompt('error', $e->getMessage());
         }
     }
 
@@ -123,12 +124,10 @@ class CxnController extends MController
     {
         try {
             $model = new fnbr\models\Construction($this->data->cxn->idConstruction);
-            $model->setData($this->data->cxn);
-            $model->updateEntry($this->data->cxn->entry);
-            $this->renderResponse('information', 'OK');
-//            $this->renderPrompt('information', 'Cxn updated.', "structure.editEntry('{$this->data->cxn->entry}');");            
+            $model->save($this->data->cxn);
+            $this->renderPrompt('information', 'OK',"structure.reloadCxnParent();");
         } catch (\Exception $e) {
-            $this->renderResponse('error', $e->getMessage());
+            $this->renderPrompt('error', $e->getMessage());
         }
     }
 
@@ -136,7 +135,7 @@ class CxnController extends MController
         try {
             $structure = Manager::getAppService('structurecxn');
             $structure->deleteCxn($this->data->id);
-            $this->renderPrompt('information', 'Cxn deleted.');
+            $this->renderPrompt('information', 'Cxn deleted.',"structure.reloadCxn();");
         } catch (\Exception $e) {
             $this->renderPrompt('error', "Não é possível remover esta construção.");
         }
@@ -147,10 +146,8 @@ class CxnController extends MController
     {
         try {
             $model = new fnbr\models\ConstructionElement();
-            $this->data->cxnelement->entry = 'ce_' . strtolower(str_replace('ce_', '', $this->data->cxnelement->entry));
-            $model->setData($this->data->cxnelement);
             $model->save($this->data->cxnelement);
-            $this->renderPrompt('information', 'OK', "structure.editEntry('{$this->data->cxnelement->entry}');");
+            $this->renderPrompt('information', 'OK');
         } catch (\Exception $e) {
             $this->renderPrompt('error', $e->getMessage());
         }
@@ -160,10 +157,8 @@ class CxnController extends MController
     {
         try {
             $model = new fnbr\models\ConstructionElement($this->data->cxnelement->idConstructionElement);
-            $model->updateEntry($this->data->cxnelement->entry);
-            $model->setData($this->data->cxnelement);
             $model->save($this->data->cxnelement);
-            $this->renderPrompt('information', 'OK', "structure.editEntry('{$this->data->cxnelement->entry}');");
+            $this->renderPrompt('information', 'OK', "structure.reloadCxnParent();");
         } catch (\Exception $e) {
             $this->renderPrompt('error', $e->getMessage());
         }
