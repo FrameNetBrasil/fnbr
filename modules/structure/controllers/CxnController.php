@@ -36,7 +36,7 @@ class CxnController extends MController
         } elseif ($this->data->id{0} == 'c') {
             $json = $structure->listCEsConstraintsEvokesCX(substr($this->data->id, 1), $this->idLanguage);
         } elseif ($this->data->id{0} == 'e') {
-            $json = $structure->listConstraintsCE(substr($this->data->id, 1), $this->idLanguage);
+            $json = $structure->listConstraintsEvokesCE(substr($this->data->id, 1), $this->idLanguage);
         } elseif ($this->data->id{0} == 'x') {
             $json = $structure->listConstraintsCN(substr($this->data->id, 1), $this->idLanguage);
         } elseif ($this->data->id{0} == 'n') {

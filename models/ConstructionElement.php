@@ -97,6 +97,41 @@ class ConstructionElement extends map\ConstructionElementMap {
         return $constraint->getByIdConstrained($this->getIdEntity());
     }
 
+    public function listEvokesRelations()
+    {
+        $idLanguage = \Manager::getSession()->idLanguage;
+        $cmd = <<<HERE
+
+        
+SELECT entry, name, nick, idEntity, idConcept, conceptEntry
+FROM (        
+        SELECT RelationType.entry, entry_relatedConcept.name, entry_relatedConcept.nick, relatedConcept.idEntity, relatedConcept.idConcept idConcept, relatedConcept.entry as conceptEntry
+        FROM ConstructionElement
+            INNER JOIN Entity entity1
+                ON (ConstructionElement.idEntity = entity1.idEntity)
+            INNER JOIN EntityRelation
+                ON (entity1.idEntity = EntityRelation.idEntity1)
+            INNER JOIN RelationType 
+                ON (EntityRelation.idRelationType = RelationType.idRelationType)
+            INNER JOIN Entity entity2
+                ON (EntityRelation.idEntity2 = entity2.idEntity)
+            INNER JOIN Concept relatedConcept
+                ON (entity2.idEntity = relatedConcept.idEntity)
+            INNER JOIN Entry entry_relatedConcept
+                ON (relatedConcept.entry = entry_relatedConcept.entry)
+        WHERE (ConstructionElement.idConstructionElement = {$this->getId()})
+            AND (RelationType.entry in (
+                'rel_evokes'))
+           AND (entry_relatedConcept.idLanguage = {$idLanguage} )
+) evokes           
+ORDER BY entry, name
+            
+HERE;
+        $result = $this->getDb()->getQueryCommand($cmd)->treeResult('entry', 'name,idEntity,idConcept,conceptEntry');
+        return $result;
+
+    }
+
 
     public function getStylesByCxn($idConstruction)
     {

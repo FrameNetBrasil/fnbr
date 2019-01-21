@@ -602,11 +602,18 @@ class StructureCxnService extends MService
         return json_encode($result);
     }
 
-    public function listConstraintsCE($idConstructionElement, $idLanguage)
+    public function listConstraintsEvokesCE($idConstructionElement, $idLanguage)
     {
-        $service = Manager::getAppService('StructureConstraintInstance');
-        $result = $service->listConstraintsCE($idConstructionElement);
-        return $result;
+        $result = [];
+        $cns = json_decode($this->listConstraintsCE($idConstructionElement));
+        foreach ($cns as $cn) {
+            $result[] = $cn;
+        }
+        $evokes = json_decode($this->listEvokesCE($idConstructionElement));
+        foreach ($evokes as $evoke) {
+            $result[] = $evoke;
+        }
+        return json_encode($result);
     }
 
     public function listConstraintsCN($idConstraint, $idLanguage)
@@ -634,6 +641,20 @@ class StructureCxnService extends MService
     {
         $service = Manager::getAppService('StructureConstraintInstance');
         $result = $service->listEvokesCX($idConstruction);
+        return $result;
+    }
+
+    public function listConstraintsCE($idConstructionElement)
+    {
+        $service = Manager::getAppService('StructureConstraintInstance');
+        $result = $service->listConstraintsCE($idConstructionElement);
+        return $result;
+    }
+
+    public function listEvokesCE($idConstructionElement)
+    {
+        $service = Manager::getAppService('StructureConstraintInstance');
+        $result = $service->listEvokesCE($idConstructionElement);
         return $result;
     }
 
@@ -786,6 +807,12 @@ class StructureCxnService extends MService
                 $constraint = Base::createEntity('CN', 'con');
                 $ce = new fnbr\models\ConstructionElement($data->idConstructionElement);
                 Base::createConstraintInstance($constraint->getIdEntity(), 'con__stlu', $ce->getIdEntity(), $data->idSemanticTypeLU);
+            }
+            if ($data->idConcept != '') {
+                $ce = new fnbr\models\ConstructionElement($data->idConstructionElement);
+                $concept = new fnbr\models\Concept($data->idConcept);
+                $conceptType = new fnbr\models\TypeInstance($data->idConceptType);
+                Base::createEntityRelation($ce->getIdEntity(), 'rel_evokes', $concept->getIdEntity(), $conceptType->getIdEntity());
             }
             $transaction->commit();
         } catch (\Exception $e) {

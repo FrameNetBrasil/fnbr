@@ -120,6 +120,24 @@ class StructureConstraintInstanceService extends MService
         return json_encode($result);
     }
 
+    public function listEvokesCE($idCE)
+    {
+        $result = [];
+        $ce = new fnbr\models\ConstructionElement($idCE);
+        $evokes = $ce->listEvokesRelations();
+        foreach($evokes as $evoke) {
+            foreach ($evoke as $evk) {
+                $node = [];
+                $node['id'] = 'v' . $evk['idEntity'];
+                $node['text'] = 'evk_' . $evk['name'];
+                $node['state'] = 'closed';
+                $node['iconCls'] = 'icon-blank fa-icon fa fa-crosshairs';
+                $result[] = $node;
+            }
+        }
+        return json_encode($result);
+    }
+
     public function constraintHasChild($idConstraintInstance)
     {
         $constraint = new fnbr\models\ViewConstraint();
