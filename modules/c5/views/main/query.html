@@ -19,6 +19,7 @@
         </div>
     </div>
     <div id="c5Area" region="center" style="height: 100%">
+        <table id="resultGrid"/>
     </div>
 </div>
 
@@ -52,7 +53,8 @@
         app: {{$manager->getApp()}},
         isMaster: {{$data->isMaster|noescape}},
         nodeSelected: null,
-        node: null
+        node: null,
+        result: []
     };
     $(function () {
         $('#structureLayout').layout({
@@ -86,7 +88,9 @@
                 if (structure.nodeSelected == null) {
                     $.messager.alert('C5', 'Select Cxn!','error');
                 } else {
-                    $('#c5Area').html('Loading...');
+                    $('#resultGrid').datagrid({
+                        data: []
+                    });
                     var idCxn = structure.nodeSelected.id.substr(1);
                     console.log('node selected = ' + idCxn);
                     var checkedConcepts = $('#conceptsTree').tree('getChecked');
@@ -96,8 +100,20 @@
                     }
 
                     manager.doAjax({{$manager->getURL('api/c5/fullActivationquery')}}, function(data) {
-                        $('#c5Area').html('');
                         console.log(data);
+                        var r = JSON.parse(data);
+                        for(var i = 0; i < r.length; i++) {
+                            result = {
+                                language: r[i].idLanguage,
+                                cxn: r[i].name,
+                                a: r[i].a
+                            };
+                            structure.result.push(result);
+                        }
+                        $('#resultGrid').datagrid({
+                            data: structure.result
+                        });
+
                     }, {idCxn: idCxn, idConcept: idConcept});
 
                 }
@@ -117,5 +133,35 @@
             url: {{$manager->getURL('structure/concept/conceptTree')}},
             checkbox: true
         });
+
+        $('#resultGrid').datagrid({
+            data: structure.result,
+            collapsible:true,
+            fitColumns: false,
+            autoRowHeight: false,
+            nowrap: true,
+            showHeader: true,
+            columns: [[
+                {field:'language',title:'Language',width:100,
+                    styler: function(value,row,index){
+                        if (value == 1){
+                            return {class:'fnbrFlagPortuguese'}
+                        }
+                        if (value == 2){
+                            return {class:'fnbrFlagEnglish'}
+                        }
+                        if (value == 5){
+                            return {class:'fnbrFlagSwedish'}
+                        }
+                    },
+                    formatter: function(value,row,index){
+                        return '';
+                    }
+                },
+                {field:'cxn',title:'Construction',width:300},
+                {field:'a',title:'A',width:150,align:'right',sortable:true}
+            ]]
+        });
+
     });
 </script>

@@ -35,8 +35,25 @@ class C5Service extends MService
         $c5 = new C5\Service\C5Service();
         $c5->setIdConcepts($idConcepts);
         $cxnNodes = $c5->fullActivationQuery($cxn->getIdEntity());
-        mdump($cxnNodes);
-        return '';
+mdump($cxnNodes);
+
+        $idEntity  = array_column($cxnNodes, 'idEntity');
+        $a = array_column($cxnNodes, 'a');
+/*
+        array_multisort($a, SORT_DESC, $idEntity, SORT_ASC, $cxnNodes);
+*/
+        $result = [];
+        foreach($cxnNodes as $cxnNode) {
+            $cxn->getByIdEntity($cxnNode['idEntity']);
+            $result[] = [
+                'idCxn' => $cxn->getIdConstruction(),
+                'idEntity' => $cxn->getIdEntity(),
+                'idLanguage' => $cxn->getIdLanguage(),
+                'name' => $cxn->getName(),
+                'a' => $cxnNode['a']
+            ];
+        }
+        return json_encode($result);
     }
 
 }
