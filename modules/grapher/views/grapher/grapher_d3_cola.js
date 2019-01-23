@@ -29,20 +29,28 @@ grapher.graph = function (element, relations) {
     var h = $element.innerHeight() - 10;
 
     var type = {
-        cxn: {symbol:"circle", size:260},
-        frame: {symbol:"square", size:260},
-        fe: {symbol:"circle", size:80},
-        ce: {symbol:"circle", size:80},
-        st: {symbol:"triangle-up", size:100}
+        cxn: {symbol: d3.symbolCircle, size:260},
+        frame: {symbol: d3.symbolSquare, size:260},
+        fe: {symbol: d3.symbolCircle, size:80},
+        ce: {symbol: d3.symbolCircle, size:80},
+        st: {symbol: d3.symbolTriangle, size:100},
+        cp: {symbol: d3.symbolTriangle, size:100}
     };
     
-    var vis = this.vis = d3.select($element[0]).append("svg")
+    var svg = this.svg = d3.select($element[0]).append("svg")
             .attr("width", w)
             .attr("height", h);
 
     var nodes = [],
         links = [];
 
+    var layout = cola.d3adaptor(d3)
+        .size([w, h])
+        .nodes(nodes)
+        .links(links)
+        .jaccardLinkLengths(40, 0.7)
+        .start(10,15,20);
+/*
     var force = d3.layout.force()
         .nodes(nodes)
         .links(links)
@@ -51,10 +59,11 @@ grapher.graph = function (element, relations) {
         .linkDistance(100)
         .charge(-300)
         .start();
-
-    var drag = force.drag()
+*/
+/*
+    var drag = layout.drag()
         .on("dragstart", dragstart);
-    
+*/
     // Add and remove elements on the graph object
     this.addNode = function (node) {
         console.log(node);
@@ -156,7 +165,7 @@ grapher.graph = function (element, relations) {
     }
     
     // Per-type markers, as they don't inherit styles.
-    vis.append("defs").selectAll("marker")
+    svg.append("defs").selectAll("marker")
         .data(relations)
         .enter().append("marker")
         .attr("id", function(d) { return d; })
@@ -183,70 +192,73 @@ grapher.graph = function (element, relations) {
     }   
 
     var update = function () {
-        vis.selectAll("g").remove();
+        svg.selectAll("g").remove();
         
-        var path = vis.append("g").selectAll("path")
-                .data(force.links())
-                .enter().append("line")
-                .attr("class", function (d) {
-                    return "link " + d.type;
-                })
-                .attr("marker-end", function (d) {
-                    return (d.type == 'rel_elementof' ? "" : "url(#" + d.type + ")");
-                })
-                .on("mouseover", function (d) {
-                    d3.select(this).attr("class", "link " + d.type + ' linkOver');
-                })
-                .on("mouseout", function (d) {
-                    d3.select(this).attr("class", "link " + d.type);
-                })
-                .on("dblclick", clickLink);
+        var link = svg.append("g")
+            .selectAll("line")
+            .data(links)
+            .enter().append("line")
+            .attr("class", function (d) {
+                return "link " + d.type;
+            })
+            .attr("marker-end", function (d) {
+                return (d.type == 'rel_elementof' ? "" : "url(#" + d.type + ")");
+            })
+            .on("mouseover", function (d) {
+                d3.select(this).attr("class", "link " + d.type + ' linkOver');
+            })
+            .on("mouseout", function (d) {
+                d3.select(this).attr("class", "link " + d.type);
+            })
+            .on("dblclick", clickLink);
 
-        var node = vis.append("g").selectAll("path")
-                .data(force.nodes())
-                .enter().append('path')
-                .attr("d", d3.svg.symbol()
-                    .size(function(d) { return d.size;})
-                    .type(function(d) {return d.symbol;})
-                )
-                .attr("class", function (d) {
-                    var cssClass = ((d.id == grapher.currentEntity) ? " nodeSelected" : " nodeNormal") + ' entity_' + d.type;
-                    return cssClass;
-                })
-                .on("dblclick", dblclick)
-                .call(drag);
+        var node = svg.append("g")
+            .selectAll("path")
+            .data(nodes)
+            .enter().append('path')
+            .attr("d", d3.symbol()
+                 .size(function(d) {return d.size;})
+                 .type(function(d) {return d.symbol;})
+            )
+            .attr("class", function (d) {
+                 var cssClass = ((d.id == grapher.currentEntity) ? " nodeSelected" : " nodeNormal") + ' entity_' + d.type;
+                 return cssClass;
+            })
+            .on("click", function (d) { d.fixed = true })
+            .on("dblclick", dblclick)
+            .call(layout.drag);
 
-        var text = vis.append("g").selectAll("text")
-                .data(force.nodes())
-                .enter().append("text")
-                .attr("x", 8)
-                .attr("y", ".31em")
-                .text(function (d) {
-                    return d.name;
-                });
-                
-        force.on("tick", function () {
+        var text = svg.append("g")
+            .selectAll("text")
+            .data(nodes)
+            .enter().append("text")
+            .attr("x", 8)
+            .attr("y", ".31em")
+            .text(function (d) {
+                return d.name;
+            });
 
-            var linkArc = function (d) {
-                var dx = d.target.x - d.source.x,
-                    dy = d.target.y - d.source.y,
-                    dr = Math.sqrt(dx * dx + dy * dy);
-                return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
-            }
 
-            var transform = function (d) {
-                return "translate(" + d.x + "," + d.y + ")";
-            }
-            
-            path.attr("x1", function(d) { return d.source.x; })
+        layout.on("tick", () => {
+            link
+                .attr("x1", function(d) { return d.source.x; })
                 .attr("y1", function(d) { return d.source.y; })
                 .attr("x2", function(d) { return d.target.x; })
-                .attr("y2", function(d) { return d.target.y; });            
-            node.attr("transform", transform);
-            text.attr("transform", transform);
+                .attr("y2", function(d) { return d.target.y; });
+
+            node
+                .attr("transform", function(d) {
+                    return "translate(" + d.x + "," + d.y + ")";
+                });
+
+            text
+                .attr("transform", function(d) {
+                    return "translate(" + d.x + "," + d.y + ")";
+                });
         });
-        // Restart the force layout.
-        force.start();
+
+        layout.start(10,15,20);
+
     }
 
     // Make it all go

@@ -1,5 +1,5 @@
 <div id="structureLayout" style="width:100%;height:100%;">
-    <div id="structureNorthPane" data-options="collapsible:false, region:'north', title:'{{_'Constructions'}}'" style="height:70px">
+    <div id="structureNorthPane" data-options="collapsible:false, region:'north', title:'{{_'C5 Grapher'}}'" style="height:70px">
         <div style="float:left;padding:5px">
             <input id="idDomain" name="domain" placeholder="{{_'Domain'}}">
         </div>
@@ -7,48 +7,20 @@
             <input id="cxn" name="cxn" type="text" style="width:200px; padding:5px" placeholder="{{_'Search CxN'}}">
         </div>
         <div style="float:left;padding:5px">
-            <input id="ce" name="ce" type="text" style="width:200px; padding:5px" placeholder="{{_'Search CE'}}">
-        </div>
-        <div style="float:left;padding:5px">
-            Only Active:
-            <input id="active" name ="active" style="width:200px;height:30px">
+            <a id="btnQuery" href="#" class="easyui-linkbutton">Query</a>
         </div>
     </div>
     <div id="structureLeftPane" region="west" split="true" style="height: 100%">
-        <ul id="cxnTree"></ul>
+        <div  style="height: 50%; overflow:scroll">
+            <ul id="cxnTree"></ul>
+        </div>
+        <div  style="height: 50%; overflow:scroll">
+            <ul id="conceptsTree"></ul>
+        </div>
     </div>
-    <div id="structureCenterPane" region="center" style="height: 100%">
-        
+    <div id="c5Area" region="center" style="height: 100%">
     </div>
 </div>
-<div id="menuRootCxns" style="display:none, width:120px;">
-    <div onclick="structure.reloadCxn()" data-options="iconCls:'icon-reload'">{{_'Reload Cxns'}}</div>
-    <div onclick="structure.newCxn()" data-options="iconCls:'icon-add'">{{_'New Cxn'}}</div>
-</div>
-<div id="menuCxn" style="display:none, width:120px;">
-    <div onclick="structure.editCxn()" data-options="iconCls:'icon-edit'">{{_'Edit Cxn'}}</div>
-    <div onclick="structure.editEntry()" data-options="iconCls:'icon-edit'">{{_'Edit Entries'}}</div>
-    <div onclick="structure.deleteCxn()" data-options="iconCls:'icon-remove'">{{_'Delete Cxn'}}</div>
-    <div onclick="structure.newCxnElement()" data-options="iconCls:'icon-add'">{{_'New CxnElement'}}</div>
-    <div onclick="structure.addConstraint()" data-options="iconCls:'icon-add'">{{_'Add Constraint'}}</div>
-    <div onclick="structure.cxnDomain()" data-options="iconCls:'icon-edit'">{{_'Domains'}}</div>
-    <div onclick="structure.importTxt()" data-options="iconCls:'icon-add'">{{_'Import Txt'}}</div>
-    <div onclick="structure.viewGraph()" data-options="iconCls:'icon-more'">{{_'View Graph'}}</div>
-</div>
-<div id="menuCxnElement" style="display:none, width:120px;">
-    <div onclick="structure.editCxnElement()" data-options="iconCls:'icon-edit'">{{_'Edit CxnElement'}}</div>
-    <div onclick="structure.editEntry()" data-options="iconCls:'icon-edit'">{{_'Edit Entries'}}</div>
-    <div onclick="structure.deleteCxnElement()" data-options="iconCls:'icon-remove'">{{_'Delete CxnElement'}}</div>
-    <div onclick="structure.addConstraint()" data-options="iconCls:'icon-add'">{{_'Add Constraint'}}</div>
-</div>
-<div id="menuCxnConstraint" style="display:none, width:120px;">
-    <div onclick="structure.addConstraint()" data-options="iconCls:'icon-add'">{{_'Add Constraint'}}</div>
-    <div onclick="structure.deleteConstraint()" data-options="iconCls:'icon-remove'">{{_'Delete Constraint'}}</div>
-</div>
-<div id="menuCxnDelConstraint" style="display:none, width:120px;">
-    <div onclick="structure.deleteConstraint()" data-options="iconCls:'icon-remove'">{{_'Delete Constraint'}}</div>
-</div>
-
 
 <style>
     /****
@@ -73,229 +45,19 @@
     }
 </style>
 
+{{include grapher.css}}
+
 <script type="text/javascript">
     var structure = {
         app: {{$manager->getApp()}},
         isMaster: {{$data->isMaster|noescape}},
         nodeSelected: null,
-        nodeSelectedParent: null,
         node: null
     };
     $(function () {
         $('#structureLayout').layout({
             fit:true
         });
-
-        structure.showCxn = function (idCxn) {
-            $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('report/cxn/showCxn')}} + '/' + idCxn, 'structureCenterPane');
-        }
-
-        structure.newCxn = function () {
-            $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('structure/cxn/formNewCxn')}},'structureCenterPane');
-        }
-
-        structure.editCxn = function (id) {
-            if ($.type(id) === "undefined") {
-                id = structure.node.id.substr(1);
-            }
-            $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('structure/cxn/formUpdateCxn')}} + '/' + id,'structureCenterPane');
-        }
-        
-        structure.deleteCxn = function (id) {
-            if ($.type(id) === "undefined") {
-                id = structure.node.id.substr(1);
-            }
-            $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('structure/cxn/formDeleteCxn')}} + '/' + id,'structureCenterPane');
-        }
-
-        structure.reloadCxn = function () {
-            $('#structureCenterPane').html('');
-            var node = $('#cxnTree').tree('getSelected');
-            if (node) {
-                if (node.id == 'root') {
-                    $('#cxnTree').tree({queryParams: {cxn: ''}});
-                } else {
-                    $('#cxnTree').tree('reload', node.target);
-                }
-            }
-        }
-
-        structure.reloadCxnParent = function () {
-            $('#structureCenterPane').html('');
-            console.log(structure.nodeSelected);
-            if (structure.nodeSelected == null) {
-                var node = $('#cxnTree').tree('getSelected');
-                structure.nodeSelected = node;
-                structure.nodeSelectedParent = $('#cxnTree').tree('getParent', node.target);
-            }
-            console.log(structure.nodeSelectedParent);
-            if (structure.nodeSelectedParent) {
-                $('#cxnTree').tree('reload', structure.nodeSelectedParent.target);
-            }
-        }
-
-        structure.editEntry = function (entry, form) {
-            if ($.type(entry) === "undefined") {
-                entry = structure.node.entry;
-            }
-            manager.doAction('^' + structure.app + '/structure/entry/formUpdate/' + entry);
-            if (form) {
-                $('#' + form + '_dialog').dialog('close');
-            }
-        }
-
-        structure.newCxnElement = function (idCxn) {
-            if ($.type(idCxn) === "undefined") {
-                idCxn = structure.node.id.substr(1);
-            }
-            $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('structure/cxn/formNewCxnElement')}} + '/' + idCxn,'structureCenterPane');
-        }
-
-        structure.editCxnElement = function (id) {
-            if ($.type(id) === "undefined") {
-                id = structure.node.id.substr(1);
-            }
-            $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('structure/cxn/formUpdateCxnElement')}} + '/' + id,'structureCenterPane');
-        }
-
-        structure.deleteCxnElement = function (id) {
-            if ($.type(id) === "undefined") {
-                id = structure.node.id.substr(1);
-            }
-            $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('structure/cxn/formDeleteCxnElement')}} + '/' + id,'structureCenterPane');
-        }
-
-        structure.importTxt = function (id) {
-            if ($.type(id) === "undefined") {
-                id = structure.node.id.substr(1);
-            }
-            $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('structure/cxn/formImportTxt')}} + '/' + id,'structureCenterPane');
-        }
-
-        structure.viewGraph = function (id) {
-            if ($.type(id) === "undefined") {
-                id = structure.node.id.substr(1);
-            }
-            $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('structure/cxn/graphCxn')}} + '/' + id,'structureCenterPane');
-        }
-
-        structure.addConstraint = function (id) {
-            console.log(structure.nodeSelected);
-            if ($.type(id) === "undefined") {
-                id = structure.node.id.substr(1);
-            }
-            $('#structureCenterPane').html('');
-            if (structure.node.id.charAt(0) == 'c') {
-                manager.doGet({{$manager->getURL('structure/cxn/formAddConstraintCX')}} + '/' + id,'structureCenterPane');
-            }
-            if (structure.node.id.charAt(0) == 'e') {
-                manager.doGet({{$manager->getURL('structure/cxn/formAddConstraintCE')}} + '/' + id,'structureCenterPane');
-            }
-            if (structure.node.id.charAt(0) == 'x') {
-                manager.doGet({{$manager->getURL('structure/cxn/formAddConstraintCN')}} + '/' + id,'structureCenterPane');
-            }
-        }
-
-        structure.constraints = function (id) {
-            if ($.type(id) === "undefined") {
-                id = structure.node.id.substr(1);
-            }
-            $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('structure/cxn/formConstraint')}} + '/' + id,'structureCenterPane');
-        }
-
-        structure.deleteConstraint = function (id) {
-            if ($.type(id) === "undefined") {
-                id = structure.node.id.substr(1);
-            }
-            $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('structure/cxn/formDeleteConstraint')}} + '/' + id,'structureCenterPane');
-        }
-
-        structure.cxnDomain = function (id) {
-            if ($.type(id) === "undefined") {
-                id = structure.node.id.substr(1);
-            }
-            $('#structureCenterPane').html('');
-            manager.doGet({{$manager->getURL('structure/cxn/formCxnDomain')}} + '/' + id,'structureCenterPane');
-        }
-
-
-        structure.contextMenuFrame = function(e, node) {
-            if (!structure.isMaster) {
-                return;
-            }
-            e.preventDefault();
-            console.log(node);
-            structure.node = node;
-            var $menu = '';
-            $(this).tree('select',node.target);
-            if (node.id == 'root') {
-                $menu = $('#menuRootCxns');
-            } else if (node.id.charAt(0) == 'c') {
-                $menu = $('#menuCxn');
-            } else if (node.id.charAt(0) == 'e') {
-                $menu = $('#menuCxnElement');
-            } else if (node.id.charAt(0) == 'x') {
-                $menu = $('#menuCxnConstraint');
-            } else if (node.id.charAt(0) == 'n') {
-                $menu = $('#menuCxnDelConstraint');
-            }
-            if ($menu != '') {
-                $menu.menu('show',{
-                    left: e.pageX,
-                    top: e.pageY
-                });
-            }
-        }
-
-        $('#menuRootCxns').menu({});
-        $('#menuCxn').menu({});
-        $('#menuCxnElement').menu({});
-        $('#menuCxnConstraint').menu({});
-        $('#menuCxnDelConstraint').menu({});
-
-        $('#ce').textbox({
-            buttonIcon: 'icon-search',
-            iconAlign:'right',
-            prompt: {{_'Search CE'}},
-            onClickButton: function() {
-                $('#cxnTree').tree({queryParams: {ce: $('#ce').textbox('getValue')}});
-            }
-        });
-        $('#cxn').textbox({
-            buttonIcon: 'icon-search',
-            iconAlign:'right',
-            prompt: {{_'Search Cxn'}},
-            onClickButton: function() {
-                $('#cxnTree').tree({queryParams: {cxn: $('#cxn').textbox('getValue')}});
-            }
-        });
-        $('#active').switchbutton({
-                checked: false,
-                onText:'Yes',
-                offText:'No',
-                height: 20,
-                width: 50,
-                onChange: function(checked){
-                    $('#cxnTree').tree({
-                        queryParams: {
-                            cxn: $('#cxn').textbox('getValue'),
-                            ce: $('#ce').textbox('getValue'),
-                            active: (checked ? '1' : '0')
-                        }
-                    });
-                }
-        })
 
         $('#idDomain').combobox({
             data: JSON.parse({{$data->domain}}),
@@ -310,15 +72,73 @@
             }
         });
 
+        $('#cxn').textbox({
+            buttonIcon: 'icon-search',
+            iconAlign:'right',
+            prompt: {{_'Search Cxn'}},
+            onClickButton: function() {
+                $('#cxnTree').tree({queryParams: {cxn: $('#cxn').textbox('getValue')}});
+            }
+        });
+
+        $('#btnQuery').linkbutton({
+            onClick: function() {
+                if (structure.nodeSelected == null) {
+                    $.messager.alert('C5', 'Select Cxn!','error');
+                } else {
+                    $('#c5Area').html('Loading...');
+                    var idCxn = structure.nodeSelected.id.substr(1);
+                    console.log('node selected = ' + idCxn);
+                    var checkedConcepts = $('#conceptsTree').tree('getChecked');
+                    var idConcept = [];
+                    for(var i = 0; i < checkedConcepts.length; i++){
+                        idConcept.push(checkedConcepts[i].id.substr(1));
+                    }
+
+                    manager.doAjax({{$manager->getURL('api/c5/fullActivation')}}, function(data) {
+                        $('#c5Area').html('');
+                        console.log(data);
+                        console.log(d3.select("#c5Area"));
+                        var graphviz = d3.graphviz("#c5Area");
+                        //console.log(s);
+                        console.log('graphviz created');
+                        graphviz.renderDot(data);
+                        console.log('graphviz rendered');
+                    }, {idCxn: idCxn, idConcept: idConcept});
+
+/*
+                    connection.session.call('br.ufjf.framenetbr.c5.fullActivation', [cxn]).then(
+                        function (s) {
+                            //console.log("Result:", res);
+                            console.log(d3.select("#c5Area"));
+                            var graphviz = d3.graphviz("#c5Area");
+                            console.log(s);
+                            console.log('graphviz created');
+                            graphviz.renderDot(s);
+                            console.log('graphviz rendered');
+                        },
+                        function (error) {
+                            console.log("RPC Call Failure: " + error);
+                        }
+                    );
+
+*/
+                }
+            }
+        });
+
         $('#cxnTree').tree({
             url: {{$manager->getURL('structure/cxn/cxnTree')}},
-            onClick: function (node) {
-                console.log(node);
+            onSelect: function (node) {
                 if (node.id.charAt(0) == 'c') {
-                    structure.showCxn(node.id.substr(1));
+                    structure.nodeSelected = node;
                 }
-            },
-            onContextMenu: structure.contextMenuFrame
+            }
+        });
+
+        $('#conceptsTree').tree({
+            url: {{$manager->getURL('structure/concept/conceptTree')}},
+            checkbox: true
         });
     });
 </script>

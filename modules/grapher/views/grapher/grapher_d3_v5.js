@@ -22,7 +22,7 @@ for (relation in grapher.relationEntry) {
     i++;
 }
 
-grapher.graph = function (element, relations) {
+grapher.graph = function (element) {
 
     var $element = $('#' + element);
     var w = $element.innerWidth() - 10;
@@ -41,132 +41,25 @@ grapher.graph = function (element, relations) {
             .attr("width", w)
             .attr("height", h);
 
-    var nodes = [],
-        links = [];
+    // elements for data join
+    var link = svg.append("g")
+        .selectAll("line");
+    var node = svg.append("g")
+        .selectAll("g");
+    //var text = svg.append("g")
+    //    .selectAll("text");
 
-    var layout = cola.d3adaptor(d3)
-        .size([w, h])
-        .nodes(nodes)
-        .links(links)
-        .jaccardLinkLengths(40, 0.7)
-        .start(10,15,20);
-/*
-    var force = d3.layout.force()
-        .nodes(nodes)
-        .links(links)
-        //.gravity(.05)
-        .size([w, h])
-        .linkDistance(100)
-        .charge(-300)
-        .start();
-*/
-/*
-    var drag = layout.drag()
-        .on("dragstart", dragstart);
-*/
-    // Add and remove elements on the graph object
-    this.addNode = function (node) {
-        console.log(node);
-        node.size = type[node.type].size; 
-        node.symbol = type[node.type].symbol; 
-        nodes.push(node);
-        update();
-    }
+    this.nodes = [],
+    this.links = [];
 
-    this.removeNode = function (id) {
-        var i = 0;
-        var n = findNode(id);
-        while (i < links.length) {
-            if ((links[i]['source'] === n) || (links[i]['target'] == n)) {
-                links.splice(i, 1);
-            } else {
-                i++;
-            }
-        }
-        var index = findNodeIndex(id);
-        if (index !== undefined) {
-            nodes.splice(index, 1);
-            update();
-        }
-    }
+    var simulation = d3.forceSimulation()
+        .force("link", d3.forceLink().id(d => d.id))
+        .force("charge", d3.forceManyBody().strength(function(d) { return -500;}))
+        .force("center", d3.forceCenter(w / 2, h / 2));
 
-    this.addLink = function (link) {
-        var sourceNode = findNode(link.source.id);
-        if (sourceNode === undefined) {
-            this.addNode(link.source);
-        } else {
-            link.source = sourceNode;
-        }
-        var targetNode = findNode(link.target.id);
-        if (targetNode === undefined) {
-            this.addNode(link.target);
-        } else {
-            link.target = targetNode;
-        }
-        var existsLink = findLink(link);
-        if (!existsLink) {
-            links.push(link);
-        }
-        console.log(links);
-        update();
-    }
-    
-    this.refreshLink = function (types) {
-        var i = 0;
-        while (i < links.length) {
-            if (types[links[i]['type']] === undefined) {
-                links.splice(i,1);
-            }
-            else i++;
-        }
-        update();
-    }
-    
-    this.clearLink = function () {
-        var i = 0;
-        while (i < links.length) {
-            links.splice(i,1);
-        }
-        update();
-    }
-
-    this.clearNode = function () {
-        var i = 0;
-        while (i < nodes.length) {
-            nodes.splice(i,1);
-        }
-        update();
-    }
-
-    var findNode = function (id) {
-        for (var i = 0; i < nodes.length; i++) {
-            if (nodes[i].id === id) {
-                return nodes[i]
-            }
-        }
-    }
-
-    var findNodeIndex = function (id) {
-        for (var i = 0; i < nodes.length; i++) {
-            if (nodes[i].id === id) {
-                return i
-            }
-        }
-    }
-
-    var findLink = function (link) {
-        for (var i = 0; i < links.length; i++) {
-            var l = links[i];
-            if ((l.source.id === link.source.id) && (l.target.id === link.target.id) && (l.type === link.type)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
     // Per-type markers, as they don't inherit styles.
     svg.append("defs").selectAll("marker")
-        .data(relations)
+        .data(grapher.relations)
         .enter().append("marker")
         .attr("id", function(d) { return d; })
         .attr("viewBox", "0 -5 10 10")
@@ -178,22 +71,212 @@ grapher.graph = function (element, relations) {
         .append("path")
         .attr("class", function(d) { return d; })
         .attr("d", "M0,-3L8,0L0,3");
-    
+
+    this.clearLink = function () {
+        var i = 0;
+        while (i < this.links.length) {
+            this.links.splice(i,1);
+        }
+    }
+
+    this.clearNode = function () {
+        var i = 0;
+        while (i < this.nodes.length) {
+            this.nodes.splice(i,1);
+        }
+    }
+
+    this.clear = function() {
+        this.clearLink();
+        this.clearNode();
+        this.update();
+    }
+
+    this.addNode = function (node) {
+        node.size = type[node.type].size;
+        node.symbol = type[node.type].symbol;
+        this.nodes.push(node);
+    }
+
+    this.addLink = function (link) {
+        var sourceNode = this.findNode(link.source.id);
+        if (sourceNode === undefined) {
+            this.addNode(link.source);
+        } else {
+            link.source = sourceNode;
+        }
+        var targetNode = this.findNode(link.target.id);
+        if (targetNode === undefined) {
+            this.addNode(link.target);
+        } else {
+            link.target = targetNode;
+        }
+        var existsLink = this.findLink(link);
+        if (!existsLink) {
+            this.links.push(link);
+        }
+    }
+
+    this.findNode = function (id) {
+        for (var i = 0; i < this.nodes.length; i++) {
+            if (this.nodes[i].id === id) {
+                return this.nodes[i]
+            }
+        }
+    }
+
+
+    this.findLink = function (link) {
+        for (var i = 0; i < this.links.length; i++) {
+            var l = this.links[i];
+            if ((l.source.id === link.source.id) && (l.target.id === link.target.id) && (l.type === link.type)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     function dblclick() {
         grapher.onDblClick(d3.select(this).data()[0]);
     }
-    
+
     function clickLink() {
         grapher.clickLink(d3.select(this).data()[0]);
     }
 
-    function dragstart(d) {
-        d3.select(this).classed("fixed", d.fixed = true);
-    }   
+    var dragstarted = function (d) {
+        //if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+        //d3.select(this).classed("fixed", d.fixed = true);
+    }
 
-    var update = function () {
+    var dragged = function (d) {
+            d.fx = d3.event.x;
+            d.fy = d3.event.y;
+        }
+
+    var dragended = function (d) {
+            //if (!d3.event.active) simulation.alphaTarget(0);
+//            d.fx = null;
+//            d.fy = null;
+    }
+/*
+    function dragstarted(d) {
+        d3.select(this).classed("fixed", d.fixed = true);
+    }
+*/
+//	follow v4 general update pattern
+    this.update = function () {
+
+        // Update link set based on current state
+        // DATA JOIN
+        link = link.data(this.links);
+
+        // EXIT
+        // Remove old links
+        link.exit().remove();
+
+        // ENTER
+        // Create new links as needed.
+        link = link
+            .enter().append("line")
+            .attr("class", function (d) {
+                return "link " + d.type;
+            })
+            .attr("marker-end", function (d) {
+                return (d.type == 'rel_elementof' ? "" : "url(#" + d.type + ")");
+            })
+            .on("mouseover", function (d) {
+                d3.select(this).attr("class", "link " + d.type + ' linkOver');
+            })
+            .on("mouseout", function (d) {
+                d3.select(this).attr("class", "link " + d.type);
+            })
+            .on("dblclick", clickLink)
+            .merge(link);
+
+        // DATA JOIN
+        node = node.data(this.nodes);
+
+        // EXIT
+        node.exit().remove();
+
+        // ENTER
+        node = node
+            .enter().append('g')
+
+        var symbol = node
+            .append('path')
+            .attr("d", d3.symbol()
+                .size(function(d) {return d.size;})
+                .type(function(d) {return d.symbol;})
+            )
+            .attr("class", function (d) {
+                var cssClass = 'node ' +  ((d.id == grapher.currentEntity) ? " nodeSelected" : " nodeNormal") + ' entity_' + d.type;
+                return cssClass;
+            })
+            .on("dblclick", dblclick)
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended)
+            )
+            .merge(node);
+
+        var text = node
+            .append("text")
+            .text(function(d) {
+                return d.name;
+            })
+            .attr('x', 8)
+            .attr('y', 4);
+
+        /*
+        text = text.data(this.nodes);
+        text.exit().remove();
+        text = text
+            .enter().append("text")
+            .attr("x", 8)
+            .attr("y", ".31em")
+            .attr("class", function (d) {
+                return "text";
+            })
+            .text(function (d) {
+                return d.name;
+            });
+        */
+
+        //	Set nodes, links, and alpha target for simulation
+        simulation
+             .nodes(this.nodes);
+
+        simulation
+            .force("link")
+            .links(this.links);
+
+        simulation.alphaTarget(0.3).restart();
+
+        simulation.on("tick", () => {
+            link
+            .attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+            node
+                .attr("transform", function(d) {
+                    return "translate(" + d.x + "," + d.y + ")";
+                });
+
+            //text
+            //    .attr("transform", function(d) {
+            //        return "translate(" + d.x + "," + d.y + ")";
+            //    });
+        });
+/*
         svg.selectAll("g").remove();
-        
+
         var link = svg.append("g")
             .selectAll("line")
             .data(links)
@@ -226,7 +309,10 @@ grapher.graph = function (element, relations) {
             })
             .on("click", function (d) { d.fixed = true })
             .on("dblclick", dblclick)
-            .call(layout.drag);
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended));
 
         var text = svg.append("g")
             .selectAll("text")
@@ -237,32 +323,16 @@ grapher.graph = function (element, relations) {
             .text(function (d) {
                 return d.name;
             });
+*/
 
 
-        layout.on("tick", () => {
-            link
-                .attr("x1", function(d) { return d.source.x; })
-                .attr("y1", function(d) { return d.source.y; })
-                .attr("x2", function(d) { return d.target.x; })
-                .attr("y2", function(d) { return d.target.y; });
+        //layout.start(10,15,20);
 
-            node
-                .attr("transform", function(d) {
-                    return "translate(" + d.x + "," + d.y + ")";
-                });
-
-            text
-                .attr("transform", function(d) {
-                    return "translate(" + d.x + "," + d.y + ")";
-                });
-        });
-
-        layout.start(10,15,20);
 
     }
 
     // Make it all go
-    update();
+    //update();
 }
 
 </script>

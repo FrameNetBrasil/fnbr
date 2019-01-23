@@ -8,6 +8,8 @@ class C5Service
 {
     private $container;
     private $cxn;
+    private $idCxn;
+    private $idConcepts;
     private $fullNetwork;
     private $typeNetwork;
     private $tokenNetwork;
@@ -37,12 +39,17 @@ class C5Service
 
     public function __construct()
     {
-        $this->container = require '../DI/bootstrap.php';
+        $this->container = require __DIR__ . '/../DI/bootstrap.php';
         $this->initialized = false;
         $this->manager = $this->container->get(Manager::class);
         $this->resourceFull = $this->container->get('ResourceFull');
         $this->words = [];
         $this->currentTetris = 0;
+        $this->idConcepts = [];
+    }
+
+    public function setIdConcepts($idConcepts) {
+        $this->idConcepts = $idConcepts;
     }
 
     public function generateFullNetwork()
@@ -165,33 +172,37 @@ class C5Service
         return $data;
     }
 
-    public function fullActivation($cxn)
+    public function fullActivation($idCxn)
     {
-        $cxn = trim($cxn);
-        if ($cxn != '') {
+        //$cxn = trim($cxn);
+        if ($idCxn != '') {
             try {
                 //temp
                 $this->loadFullNetwork();
                 //
+
                 $this->manager->setLogLevel(2);
                 $this->currentPhase = 1;
-                $this->cxn = $cxn;
+                $this->idCxn = $idCxn;
                 $this->manager->dump($this->cxn);
                 $this->conceptNetwork = $this->manager->createConceptNetwork();
                 $this->conceptNetwork->setTypeNetwork($this->fullNetwork);
-                $this->conceptNetwork->build($cxn);
+                $this->conceptNetwork->build($idCxn);
 
                 //$data = $this->conceptNetwork->getStructureGraphViz();
                 //return $data;
 
-                $end = $this->conceptNetwork->activate($cxn);
+                $end = $this->conceptNetwork->activate($idCxn);
                 while (!$end) {
                     $end = $this->conceptNetwork->activateNext();
                     if ($end) {
                         $data = $this->conceptNetwork->getStructureGraphViz();
                     }
                 }
-                $this->manager->dump($data);
+
+
+                //$this->manager->dump($data);
+
                 return $data;
             } catch (\Exception $e) {
                 print_r($e->getMessage());

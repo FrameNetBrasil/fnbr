@@ -45,8 +45,8 @@ class ResourceFull extends Resource
 
     public function clean()
     {
-        $this->graphService->execute("delete from Link");
-        $this->graphService->execute("delete from Node");
+        $this->graphService->execute("delete from C5Link");
+        $this->graphService->execute("delete from C5Node");
     }
 
     public function loadFull()

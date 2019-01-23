@@ -17,7 +17,7 @@ class Logger extends MonologLogger
     public function __construct($channelName)
     {
         parent::__construct($channelName);
-        $handler = new SocketHandler('127.0.0.1:9999');
+        $handler = new SocketHandler('127.0.0.1:9998');
         $handler->setPersistent(true);
         $this->pushHandler($handler, Logger::DEBUG);
         // the default output format is "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n"

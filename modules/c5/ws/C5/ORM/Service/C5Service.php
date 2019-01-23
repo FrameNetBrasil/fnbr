@@ -57,44 +57,44 @@ where type IN ('CN')
 select idEntity1 idSource, idEntity2 idTarget, relationType
 from view_relation 
 where relationType = 'rel_evokes'
-and (idEntity1 in (select idEntity from node))
-and (idEntity2 in (select idEntity from node))
+and (idEntity1 in (select idEntity from C5Node))
+and (idEntity2 in (select idEntity from C5Node))
 UNION
 select idEntity1 idSource, idEntity2 idTarget, relationType
 from view_relation 
 where relationType = 'rel_elementof'
-and (idEntity1 in (select idEntity from node))
-and (idEntity2 in (select idEntity from node))
+and (idEntity1 in (select idEntity from C5Node))
+and (idEntity2 in (select idEntity from C5Node))
 UNION
 select idEntity2 idSource, idEntity3 idTarget, relationType
 from view_relation 
 where relationType = 'rel_constraint_udrelation'
-and (idEntity2 in (select idEntity from node))
-and (idEntity3 in (select idEntity from node))
+and (idEntity2 in (select idEntity from C5Node))
+and (idEntity3 in (select idEntity from C5Node))
 UNION
 select idEntity2 idSource, idEntity3 idTarget, relationType
 from view_relation 
 where relationType = 'rel_constraint_cxn'
-and (idEntity2 in (select idEntity from node))
-and (idEntity3 in (select idEntity from node))
+and (idEntity2 in (select idEntity from C5Node))
+and (idEntity3 in (select idEntity from C5Node))
 UNION
 select idEntity2 idSource, idEntity3 idTarget, relationType
 from view_relation 
 where relationType = 'rel_constraint_constraint'
-and (idEntity2 in (select idEntity from node))
-and (idEntity3 in (select idEntity from node))
+and (idEntity2 in (select idEntity from C5Node))
+and (idEntity3 in (select idEntity from C5Node))
 UNION
 select idEntity2 idSource, idEntity1 idTarget, relationType
 from view_relation 
 where relationType = 'rel_constraint_before'
-and (idEntity1 in (select idEntity from node))
-and (idEntity2 in (select idEntity from node))
+and (idEntity1 in (select idEntity from C5Node))
+and (idEntity2 in (select idEntity from C5Node))
 UNION
 select idEntity3 idSource, idEntity1 idTarget, relationType
 from view_relation 
 where relationType = 'rel_constraint_before'
-and (idEntity1 in (select idEntity from node))
-and (idEntity3 in (select idEntity from node))
+and (idEntity1 in (select idEntity from C5Node))
+and (idEntity3 in (select idEntity from C5Node))
         ";
         $result = $this->query($cmd);
         return $result;
@@ -104,7 +104,7 @@ and (idEntity3 in (select idEntity from node))
 
     public function getNodeById($id) {
         $cmd = "
-select idNode, id, class, `name`, region, `type`, head, optional from node 
+select idNode, id, class, `name`, region, `type`, head, optional from C5Node 
 where (id = '{$id}')      
         ";
         $result = $this->query($cmd);
@@ -120,7 +120,7 @@ where (id = '{$id}')
         try {
             $command = "
 select distinct n1.id lu1, l1.relation, n2.id r1, l2.relation, n3.id p1, l3.relation, n4.id rel, l4.relation, n5.id p2, l5.relation, n6.id r2, l6.relation, n7.id lu2
-from node n1
+from C5Node n1
 join link l1 on (n1.idnode = l1.idnodesource)
 join node n2 on (l1.idnodetarget = n2.idnode)
 join link l2 on (n2.idnode = l2.idnodesource)
@@ -161,7 +161,7 @@ and (n1.id in ({$list}))
         try {
             $command = "
 select distinct n1.id l, l1.relation, n2.id r, l2.relation, n3.id fe, l3.relation, n4.id frame
-from node n1
+from C5Node n1
 join link l1 on (n1.idnode = l1.idnodesource)
 join node n2 on (l1.idnodetarget = n2.idnode)
 join link l2 on (n2.idnode = l2.idnodesource)
@@ -186,7 +186,7 @@ and (n1.id = '{$idLU}')
         try {
             $command = "
 select distinct n1.id pool, l1.relation, n2.id feature
-from node n1
+from C5Node n1
 join link l1 on (n1.idnode = l1.idnodesource)
 join node n2 on (l1.idnodetarget = n2.idnode)
 where (l1.relation = 'rel_elementof')
@@ -208,7 +208,7 @@ and (n2.id = '{$idFeature}')
         try {
             $command = "
 select distinct n1.id v, l1.relation, n2.id r, l2.relation, n3.id pool
-from node n1
+from C5Node n1
 join link l1 on (n1.idnode = l1.idnodesource)
 join node n2 on (l1.idnodetarget = n2.idnode)
 join link l2 on (n2.idnode = l2.idnodesource)
@@ -235,7 +235,7 @@ and (n3.id = '{$idPool}')
         try {
             $command = "
 select distinct n1.id fe1, l1.relation, n2.id r, l2.relation, n3.id fe2
-from node n1
+from C5Node n1
 join link l1 on (n1.idnode = l1.idnodesource)
 join node n2 on (l1.idnodetarget = n2.idnode)
 join link l2 on (n2.idnode = l2.idnodesource)
@@ -262,7 +262,7 @@ and (n3.id = '{$idPool}')
         try {
             $command = "
 select distinct n1.id v, l1.relation, n2.id r, l2.relation, n3.id pool, l3.relation, n4.id feature
-from node n1
+from C5Node n1
 join link l1 on (n1.idnode = l1.idnodesource)
 join node n2 on (l1.idnodetarget = n2.idnode)
 join link l2 on (n2.idnode = l2.idnodesource)
@@ -297,7 +297,7 @@ and (n1.id = '{$idPool}')
         try {
             $command = "
 select distinct n1.id r1, l1.relation, n2.id pool1, l2.relation, n3.id c, l3.relation, n4.id pool2, l4.relation, n5.id r2
-from node n1
+from C5Node n1
 join link l1 on (n1.idnode = l1.idnodesource)
 join node n2 on (l1.idnodetarget = n2.idnode)
 join link l2 on (n2.idnode = l2.idnodesource)
@@ -332,7 +332,7 @@ and (n5.id IN ({$list}))
         try {
             $command = "
 select distinct n1.id v, l1.relation, n2.id r, l2.relation, n3.id pool, l3.relation, n4.id feature
-from node n1
+from C5Node n1
 join link l1 on (n1.idnode = l1.idnodesource)
 join node n2 on (l1.idnodetarget = n2.idnode)
 join link l2 on (n2.idnode = l2.idnodesource)

@@ -22,9 +22,12 @@ class ConceptNetwork extends \Mesh\Element\Network\TokenNetwork
         $this->typeNetwork = $typeNetwork;
     }
 
-    public function build($cxn)
+    public function build($idCxn)
     {
-        $baseNode = $this->typeNetwork->getNodeByName($cxn);
+        //$baseNode = $this->typeNetwork->getNodeByName($cxn);
+        $idCxn = 'node_' . $idCxn;
+        mdump($idCxn);
+        $baseNode = $this->typeNetwork->getNode($idCxn);
         $idBaseNode = $baseNode->getId();
 
         $next = [$idBaseNode];
@@ -134,11 +137,13 @@ class ConceptNetwork extends \Mesh\Element\Network\TokenNetwork
      * Activation
      */
 
-    public function activate($cxn)
+    public function activate($idCxn)
     {
         $this->currentLayer = 0;
         $this->currentPhase = 'feature';
-        $baseNode = $this->typeNetwork->getNodeByName($cxn);
+        //$baseNode = $this->typeNetwork->getNodeByName($cxn);
+        $idCxn = 'node_' . $idCxn;
+        $baseNode = $this->typeNetwork->getNode($idCxn);
         $idBaseNode = $baseNode->getId();
         $baseToken = $this->tokens[$idBaseNode];
         $baseToken->status = 'active';

@@ -1,60 +1,56 @@
 <?php
 
-class GrapherController extends MController
+class MainController extends MController
 {
 
     private $idLanguage;
 
     public function init()
     {
-        Manager::checkLogin(false);
-        $this->idLanguage = Manager::getConf('fnbr.lang');
-        $msgDir = Manager::getAppPath('conf/report');
-        Manager::$msg->file = 'messages.' . $this->idLanguage . '.php';
-        Manager::$msg->addMessages($msgDir);
+        parent::init();
+        $this->idLanguage = Manager::getSession()->idLanguage;
     }
 
-    public function main()
+    public function cxnTree()
+    {
+        $structure = Manager::getAppService('structurecxn');
+        if ($this->data->id == '') {
+            $children = $structure->listCxnLanguage($this->data);
+            $data = (object) [
+                'id' => 'root',
+                'state' => 'open',
+                'text' => 'Constructions',
+                'children' => $children
+            ];
+            $json = json_encode([$data]);
+        } elseif ($this->data->id{0} == 'l') {
+            $json = $structure->listCxnLanguage($this->data, substr($this->data->id, 1));
+        } elseif ($this->data->id{0} == 'c') {
+            $json = $structure->listCEsConstraintsEvokesCX(substr($this->data->id, 1), $this->idLanguage);
+        } elseif ($this->data->id{0} == 'e') {
+            $json = $structure->listConstraintsEvokesCE(substr($this->data->id, 1), $this->idLanguage);
+        } elseif ($this->data->id{0} == 'x') {
+            $json = $structure->listConstraintsCN(substr($this->data->id, 1), $this->idLanguage);
+        } elseif ($this->data->id{0} == 'n') {
+            $json = $structure->listConstraintsCNCN(substr($this->data->id, 1), $this->idLanguage);
+        }
+        $this->renderJson($json);
+    }
+
+    public function grapher()
     {
         $this->data->isMaster = Manager::checkAccess('MASTER', A_EXECUTE) ? 'true' : 'false';
-        $grapher = Manager::getAppService('grapher');
-        Manager::getSession()->idDomain = $this->data->idDomain;
-        $this->data->relationData = $grapher->getRelationData();
-        $this->data->relationEntry = MUtil::php2js($this->data->relationData);
+        $domain = new fnbr\models\Domain();
+        $this->data->domain = $domain->gridDataAsJson($domain->listForSelection(), true);
         $this->render();
     }
 
-    public function frameTree()
+    public function query()
     {
-        $this->data->idDomain = Manager::getSession()->idDomain;
-        $grapher = Manager::getAppService('grapher');
-        if ($this->data->id == '') {
-            $children = $grapher->listFrames($this->data, $this->idLanguage);
-            $data = (object)[
-                'id' => 'root',
-                'state' => 'open',
-                'text' => 'Frames',
-                'children' => $children
-            ];
-            $json = json_encode([$data]);
-        }
-        $this->renderJson($json);
+        $this->data->isMaster = Manager::checkAccess('MASTER', A_EXECUTE) ? 'true' : 'false';
+        $domain = new fnbr\models\Domain();
+        $this->data->domain = $domain->gridDataAsJson($domain->listForSelection(), true);
+        $this->render();
     }
-    
-    public function cxnTree()
-    {
-        $grapher = Manager::getAppService('grapher');
-        if ($this->data->id == '') {
-            $children = $grapher->listCxns($this->data, $this->idLanguage);
-            $data = (object)[
-                'id' => 'root',
-                'state' => 'open',
-                'text' => 'CxNs',
-                'children' => $children
-            ];
-            $json = json_encode([$data]);
-        }
-        $this->renderJson($json);
-    }    
-    
+
 }

@@ -62,6 +62,10 @@ return [
             'importFrames' => ['Import Frames', 'utils/import/formImportFrames', 'fa fa-upload fa16px', 'ADMIN', A_ACCESS, []],
             'exportCxnFS' => ['Export Cxn as FS', 'utils/export/formExportCxnFS', 'fa fa-download fa16px', 'ADMIN', A_ACCESS, []],
         ]],
+        'c5' => ['C5', 'main/c5', 'fa fa-arrows fa16px', 'MASTER', A_ACCESS, [
+            'c5grapher' => ['Grapher', 'c5/main/grapher', 'fa fa-list-alt fa16px', 'MASTER', A_ACCESS, []],
+            'c5query' => ['Query', 'c5/main/query', 'fa fa-list-alt fa16px', 'MASTER', A_ACCESS, []],
+        ]],
         'language' => ['Language', 'main/language', 'fa fa-flag-checkered fa16px', '', A_ACCESS, [
             '--' => ['Entry', 'main/changeLanguage/--', 'fnbrFlag--', '', A_ACCESS, []],
             'en' => ['English', 'main/changeLanguage/en', 'fnbrFlagEn', '', A_ACCESS, []],

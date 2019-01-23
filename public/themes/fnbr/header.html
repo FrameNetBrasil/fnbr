@@ -27,6 +27,10 @@
         {{foreach $lines as $line}}
             {{var $line = trim($line)}}
             {{if $line && $line[0] != ';'}}
+                {{if strpos($line, ".jsw", strlen($line) - strlen(".jsw")) !== FALSE}}
+                    {{var $line = substr($line,0,-1)}}
+                    <script type="javascript/worker" src="{{$manager->getStaticURL($manager->getApp(), $line)}}"></script>
+                {{/if}}
                 {{if strpos($line, ".js", strlen($line) - strlen(".js")) !== FALSE}}
         <script type="text/javascript" src="{{$manager->getStaticURL($manager->getApp(), $line)}}"></script>
                 {{/if}}
