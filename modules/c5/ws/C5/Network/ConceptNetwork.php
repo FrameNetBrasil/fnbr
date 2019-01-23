@@ -54,6 +54,9 @@ class ConceptNetwork extends \Mesh\Element\Network\TokenNetwork
                             if (($typeNode->type == 'Cxn') && ($nextNode->type == 'Constraint')) {
                                 $ok = $baseToken->isQuery;
                             }
+                            if (($typeNode->type == 'Concept') && ($nextNode->type == 'Concept')) {
+                                $ok = false;
+                            }
                             $this->dump("## out " . $typeNode->name .':'. $nextNode->name .'  '.  $link->getLabel(). '  '.  $typeNode->type . ':' . $nextNode->type . '  ok = ' . ($ok ? 'true' : 'false'));
                             if ($ok) {
                                 if (!isset($this->tokens[$idNextNode])) {
@@ -81,6 +84,9 @@ class ConceptNetwork extends \Mesh\Element\Network\TokenNetwork
                             }
                             if (($typeNode->type == 'Constraint') && ($nextNode->type == 'CE')) {
                                 $ok = false;
+                            }
+                            if (($typeNode->type == 'Concept') && ($nextNode->type == 'Concept')) {
+                                $ok = true;
                             }
                             $this->dump("## in " . $typeNode->name .':'. $nextNode->name . '  '.  $link->getLabel(). '  ' . $typeNode->type . ':' . $nextNode->type . '  ok = ' . ($ok ? 'true' : 'false'));
                             if ($ok) {

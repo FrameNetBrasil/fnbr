@@ -66,6 +66,12 @@ where relationType = 'rel_elementof'
 and (idEntity1 in (select idEntity from C5Node))
 and (idEntity2 in (select idEntity from C5Node))
 UNION
+select idEntity1 idSource, idEntity2 idTarget, relationType
+from view_relation 
+where relationType = 'rel_subtypeof'
+and (idEntity1 in (select idEntity from C5Node))
+and (idEntity2 in (select idEntity from C5Node))
+UNION
 select idEntity2 idSource, idEntity3 idTarget, relationType
 from view_relation 
 where relationType = 'rel_constraint_udrelation'
