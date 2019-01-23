@@ -53,7 +53,7 @@ class NodeC5 extends \Mesh\Element\Node\TokenNode
     {
         $sta = -1 * $this->a;
         $this->o = (1 - exp(5 * $sta)) / (1 + exp(2 * $sta));
-        $this->a = $this->o;
+        //$this->a = $this->o;
         //$this->o = $this->a * $this->w;
     }
 

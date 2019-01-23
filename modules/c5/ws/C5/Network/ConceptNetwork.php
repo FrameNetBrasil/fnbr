@@ -201,6 +201,7 @@ class ConceptNetwork extends \Mesh\Element\Network\TokenNetwork
         $regions = [];
         ksort($this->nodes);
         foreach ($this->nodes as $node) {
+            mdump($node->getName() . ' a = ' . $node->a);
             $validNodes[$node->getId()] = 1;
             $cola[$node->getId()] = $node->getId();
             $structure->nodes[$i] = [
@@ -255,6 +256,21 @@ class ConceptNetwork extends \Mesh\Element\Network\TokenNetwork
         return $structure;
     }
 
+    public function getCxnNodes()
+    {
+        $cxnNodes = [];
+        foreach ($this->nodes as $node) {
+            $type = $node->getType();
+            if ($type == 'Cxn') {
+                $idEntity = str_replace('_1','', str_replace('node_', '',$node->getId()));
+                $cxnNodes[] = [
+                    'idEntity' => $idEntity,
+                    'a' => $node->a
+                ];
+            }
+        }
+        return $cxnNodes;
+    }
 
 }
 

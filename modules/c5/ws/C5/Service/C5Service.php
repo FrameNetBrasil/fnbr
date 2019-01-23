@@ -214,5 +214,35 @@ class C5Service
         }
     }
 
+    public function fullActivationQuery($idCxn)
+    {
+        if ($idCxn != '') {
+            try {
+                $this->loadFullNetwork();
+                $this->manager->setLogLevel(2);
+                $this->currentPhase = 1;
+                $this->idCxn = $idCxn;
+                $this->manager->dump($this->cxn);
+                $this->conceptNetwork = $this->manager->createConceptNetwork();
+                $this->conceptNetwork->setTypeNetwork($this->fullNetwork);
+                $this->conceptNetwork->build($idCxn);
+                $end = $this->conceptNetwork->activate($idCxn);
+                while (!$end) {
+                    $end = $this->conceptNetwork->activateNext();
+                    if ($end) {
+                        $data = $this->conceptNetwork->getCxnNodes();
+                    }
+                }
+                return $data;
+            } catch (\Exception $e) {
+                print_r($e->getMessage());
+                print_r($e->getTrace());
+                return '';
+            }
+        } else {
+            return '';
+        }
+    }
+
 
 }
