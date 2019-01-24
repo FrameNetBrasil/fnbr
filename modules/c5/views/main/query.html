@@ -88,9 +88,11 @@
                 if (structure.nodeSelected == null) {
                     $.messager.alert('C5', 'Select Cxn!','error');
                 } else {
-                    $('#resultGrid').datagrid({
-                        data: []
-                    });
+
+                    var rows = $('#resultGrid').datagrid('getRows');
+                    console.log(rows);
+                    structure.result = [];
+
                     var idCxn = structure.nodeSelected.id.substr(1);
                     console.log('node selected = ' + idCxn);
                     var checkedConcepts = $('#conceptsTree').tree('getChecked');

@@ -38,7 +38,7 @@
             fit:true
         });
         grapher.instance = new grapher.graph("grapherArea");
- 
+
         grapher.reload = function () {
             $('#grapherCenterPane').html('');
             $('#frameTree').tree('reload');
@@ -46,6 +46,7 @@
         }
 
         grapher.show = function (idEntity, update) {
+            console.log('show...');
             var isUpdate = (typeof update !== undefined) ? update : false;
             grapher.currentEntity = idEntity;
             var chosen = {};
@@ -60,6 +61,7 @@
                 if (!isUpdate) {
                     grapher.instance.clear();
                 }
+                //grapher.instance.clearLinks();
                 $.each(links, function(index, link) {
                     //console.log(link);
                     if (chosen[link.type]) {

@@ -39,9 +39,9 @@ mdump($cxnNodes);
 
         $idEntity  = array_column($cxnNodes, 'idEntity');
         $a = array_column($cxnNodes, 'a');
-/*
+
         array_multisort($a, SORT_DESC, $idEntity, SORT_ASC, $cxnNodes);
-*/
+
         $result = [];
         foreach($cxnNodes as $cxnNode) {
             $cxn->getByIdEntity($cxnNode['idEntity']);

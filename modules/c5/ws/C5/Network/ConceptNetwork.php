@@ -263,9 +263,15 @@ class ConceptNetwork extends \Mesh\Element\Network\TokenNetwork
             $type = $node->getType();
             if ($type == 'Cxn') {
                 $idEntity = str_replace('_1','', str_replace('node_', '',$node->getId()));
+                if ($node->isQuery) {
+                    $a = 1;
+                } else {
+                    $sta = -1 * $node->a;
+                    $a = (1 - exp(5 * $sta)) / (1 + exp(2 * $sta));
+                }
                 $cxnNodes[] = [
                     'idEntity' => $idEntity,
-                    'a' => $node->a
+                    'a' => $a
                 ];
             }
         }
