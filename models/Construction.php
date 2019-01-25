@@ -279,9 +279,9 @@ HERE;
         $cmd = <<<HERE
 
         
-SELECT entry, name, nick, idEntity, idFrame, frameEntry
+SELECT entry, name, nick, idEntity, idFrame, frameEntry, type
 FROM (        
-        SELECT RelationType.entry, entry_relatedFrame.name, entry_relatedFrame.nick, relatedFrame.idEntity, relatedFrame.idFrame, relatedFrame.entry as frameEntry
+        SELECT RelationType.entry, entry_relatedFrame.name, entry_relatedFrame.nick, relatedFrame.idEntity, relatedFrame.idFrame, relatedFrame.entry as frameEntry, entity2.type
         FROM Construction
             INNER JOIN Entity entity1
                 ON (Construction.idEntity = entity1.idEntity)
@@ -300,7 +300,7 @@ FROM (
                 'rel_evokes'))
            AND (entry_relatedFrame.idLanguage = {$idLanguage} )
         UNION
-        SELECT RelationType.entry, entry_relatedConcept.name, entry_relatedConcept.nick, relatedConcept.idEntity, relatedConcept.idConcept idFrame, relatedConcept.entry as frameEntry
+        SELECT RelationType.entry, entry_relatedConcept.name, entry_relatedConcept.nick, relatedConcept.idEntity, relatedConcept.idConcept idFrame, relatedConcept.entry as frameEntry, entity2.type
         FROM Construction
             INNER JOIN Entity entity1
                 ON (Construction.idEntity = entity1.idEntity)

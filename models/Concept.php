@@ -139,7 +139,7 @@ class Concept extends map\ConceptMap
     {
         $criteria = $this->getCriteria()->select('idConcept, entry, idEntity, entries.name as name')->orderBy('entries.name');
         if ($filter->name) {
-            $criteria->where("entries.name LIKE '@{$filter->name}%'");
+            $criteria->where("entries.name LIKE '{$filter->name}%'");
         }
         Base::entryLanguage($criteria);
         return $criteria;

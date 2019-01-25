@@ -5,6 +5,10 @@ Manager::import("fnbr\models\*");
 class GrapherService extends MService
 {
 
+    /*
+     * Relation Data
+     */
+
     public function getRelationData()
     {
         $relation = new \fnbr\models\RelationType();
@@ -68,6 +72,125 @@ class GrapherService extends MService
         return $result;
     }
 
+    public function getRelationDataCCN()
+    {
+        $relation = new \fnbr\models\RelationType();
+        $result = new \StdClass;
+        $relations = $relation->listByFilter((object)['group' => 'rgp_cxn_relations'])->asQuery()->getResult();
+        foreach ($relations as $row) {
+            $id = $row['entry'];
+            $node = array();
+            $node['id'] = $id;
+            $node['label'] = $row['name'];
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
+            $node['idType'] = 'rgp_cxn_relations';
+            $node['default'] = true;
+            $result->$id = $node;
+        }
+        $relations = $relation->listByFilter((object)['entry' => 'rel_evokes'])->asQuery()->getResult();
+        foreach ($relations as $row) {
+            $id = $row['entry'];
+            $node = array();
+            $node['id'] = $id;
+            $node['label'] = $row['name'];
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
+            $node['idType'] = 'rel_evokes';
+            $node['default'] = true;
+            $result->$id = $node;
+        }
+        $relations = $relation->listByFilter((object)['entry' => 'rel_elementof'])->asQuery()->getResult();
+        foreach ($relations as $row) {
+            $id = $row['entry'];
+            $node = array();
+            $node['id'] = $id;
+            $node['label'] = $row['name'];
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
+            $node['idType'] = 'rel_elementof';
+            $node['default'] = false;
+            $result->$id = $node;
+        }
+        return $result;
+    }
+
+    public function getDomainRelationData()
+    {
+        $relation = new \fnbr\models\RelationType();
+        $result = new \StdClass;
+        $relations = $relation->listByFilter((object)['group' => 'rgp_frame_relations'])->asQuery()->getResult();
+        foreach ($relations as $row) {
+            $id = $row['entry'];
+            if ($id != 'rel_see_also') {
+                $node = array();
+                $node['id'] = $id;
+                $node['label'] = $row['name'];
+                $node['color'] = Manager::getConf("fnbr.color.{$id}");
+                $node['idType'] = 'rgp_frame_relations';
+                $node['default'] = (($id == 'rel_inheritance') || ($id == 'rel_subframe') || ($id == 'rel_using'));
+                $result->$id = $node;
+            }
+        }
+        $relations = $relation->listByFilter((object)['entry' => 'rel_evokes'])->asQuery()->getResult();
+        foreach ($relations as $row) {
+            $id = $row['entry'];
+            $node = array();
+            $node['id'] = $id;
+            $node['label'] = $row['name'];
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
+            $node['idType'] = 'rel_evokes';
+            $node['default'] = true;
+            $result->$id = $node;
+        }
+        $relations = $relation->listByFilter((object)['entry' => 'rel_hassemtype'])->asQuery()->getResult();
+        foreach ($relations as $row) {
+            $id = $row['entry'];
+            $node = array();
+            $node['id'] = $id;
+            $node['label'] = $row['name'];
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
+            $node['idType'] = 'rel_hassemtype';
+            $node['default'] = false;
+            $result->$id = $node;
+        }
+        $relations = $relation->listByFilter((object)['entry' => 'rel_elementof'])->asQuery()->getResult();
+        foreach ($relations as $row) {
+            $id = $row['entry'];
+            $node = array();
+            $node['id'] = $id;
+            $node['label'] = $row['name'];
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
+            $node['idType'] = 'rel_elementof';
+            $node['default'] = false;
+            $result->$id = $node;
+        }
+        $relations = $relation->listByFilter((object)['group' => 'rgp_qualia'])->asQuery()->getResult();
+        foreach ($relations as $row) {
+            $id = $row['entry'];
+            $node = array();
+            $node['id'] = $id;
+            $node['label'] = $row['name'];
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
+            $node['idType'] = 'rgp_frame_relations';
+            $node['default'] = true;
+            $result->$id = $node;
+        }
+        $relations = $relation->listByFilter((object)['entry' => 'rel_constraint_frame'])->asQuery()->getResult();
+        foreach ($relations as $row) {
+            $id = $row['entry'];
+            $node = array();
+            $node['id'] = $id;
+            $node['label'] = $row['name'];
+            $node['color'] = Manager::getConf("fnbr.color.{$id}");
+            $node['idType'] = 'rel_constraint_fe';
+            $node['default'] = true;
+            $result->$id = $node;
+        }
+        return $result;
+    }
+
+    /*
+     *  Frames
+     */
+
     public function listFrames($data, $idLanguage = '')
     {
         $frame = new \fnbr\models\ViewFrame();
@@ -76,13 +199,13 @@ class GrapherService extends MService
         $result = array();
         foreach ($frames as $row) {
             //if (strpos($row['name'], '#') === false) {
-                $node = array();
-                $node['id'] = 'f' . $row['idEntity'];
-                $node['text'] = $row['name'];
-                $node['state'] = 'open';
-                $node['iconCls'] = 'icon-blank fa fa-square fa16px entity_frame';
-                $node['entry'] = $row['entry'];
-                $result[] = $node;
+            $node = array();
+            $node['id'] = 'f' . $row['idEntity'];
+            $node['text'] = $row['name'];
+            $node['state'] = 'open';
+            $node['iconCls'] = 'icon-blank fa fa-square fa16px entity_frame';
+            $node['entry'] = $row['entry'];
+            $result[] = $node;
             //}
         }
         return $result;
@@ -95,6 +218,10 @@ class GrapherService extends MService
         $result = $frame->listByFilter($filter)->asQuery()->getResult();
         return json_encode($result[0]);
     }
+
+    /*
+     * Constructions
+     */
 
     public function listCxns($data, $idLanguage = '')
     {
@@ -124,6 +251,10 @@ class GrapherService extends MService
         return json_encode($result[0]);
     }
 
+    /*
+     * Entity Relations
+     */
+
     public function getRelations($idEntity, $chosen, $level = 1)
     {
         $relations = [];
@@ -132,13 +263,51 @@ class GrapherService extends MService
                 $relations = $this->getEntityRelationsById($idEntity, $chosen);
             } else if ($l == 2) {
                 $base = $relations;
+                $added = [];
                 foreach ($base as $rel) {
                     if ($rel['source']->id == $idEntity) {
                         $idTarget = $rel['target']->id;
                         $add = $this->getEntityDirectRelations($idTarget, $chosen);
                         $relations = array_merge($relations, $add);
+                        $added = array_merge($added, $add);
+                    }
+                    if ($rel['type'] == 'rel_inheritance_cxn') {
+                        if ($rel['target']->id == $idEntity) {
+                            $idSource = $rel['source']->id;
+                            $add = $this->getEntityInverseRelations($idSource, $chosen);
+                            $relations = array_merge($relations, $add);
+                            $added = array_merge($added, $add);
+                        }
+                    }
+                    if ($rel['type'] == 'rel_elementof') {
+                        if ($rel['target']->id == $idEntity) {
+                            $idSource = $rel['source']->id;
+                            $add = $this->getEntityDirectRelations($idSource, $chosen);
+                            $relations = array_merge($relations, $add);
+                            $added = array_merge($added, $add);
+                            $add = $this->getEntityInverseRelations($idSource, $chosen);
+                            $relations = array_merge($relations, $add);
+                            $added = array_merge($added, $add);
+                        }
                     }
                 }
+
+                $base = $added;
+                foreach ($base as $rel) {
+                    if ($rel['type'] == 'rel_inheritance_cxn') {
+                            $idSource = $rel['source']->id;
+                            $add = $this->getEntityInverseRelations($idSource, $chosen);
+                            $relations = array_merge($relations, $add);
+                    }
+                    if ($rel['type'] == 'rel_elementof') {
+                            $idSource = $rel['source']->id;
+                            //$add = $this->getEntityDirectRelations($idSource, $chosen);
+                            //$relations = array_merge($relations, $add);
+                            $add = $this->getEntityInverseRelations($idSource, $chosen);
+                            $relations = array_merge($relations, $add);
+                    }
+                }
+
             }
         }
         return json_encode($relations);
@@ -146,9 +315,10 @@ class GrapherService extends MService
 
     public function getEntityRelationsById($idEntity, $chosen)
     {
+        $entity = new \fnbr\models\Entity($idEntity);
         $relations = array_merge($this->getEntityDirectRelations($idEntity, $chosen), $this->getEntityInverseRelations($idEntity, $chosen));
+
         if (count($relations == 0)) {
-            $entity = new \fnbr\models\Entity($idEntity);
             $node = (object)[
                 'id' => $idEntity,
                 'type' => $entity->getTypeNode(),
@@ -209,6 +379,10 @@ class GrapherService extends MService
         }
         return $relations;
     }
+
+    /*
+     * Two Entities Relations
+     */
 
     public function getEntitiesRelations($idEntity1, $idEntity2, $type)
     {
@@ -277,6 +451,38 @@ class GrapherService extends MService
         return $relations;
     }
 
+    /*
+     *  Frame Relations
+     */
+
+    public function getFrameRelations($id, $chosen, $level = 1)
+    {
+        $relations = [];
+        for ($l = 1; $l <= $level; $l++) {
+            if ($l == 1) {
+                $relations = $this->getFrameRelationsByFrame($id, $chosen);
+            } else if ($l == 2) {
+                $base = $relations;
+                foreach ($base as $rel) {
+                    if ($rel['source']->idFrame == $id) {
+                        $idFrame = $rel['target']->idFrame;
+                        $frame = new \fnbr\models\Frame($idFrame);
+                        $add = $this->getDirectRelations($frame, $chosen);
+                        $relations = array_merge($relations, $add);
+                    }
+                }
+            }
+        }
+        return $relations;
+    }
+
+    public function getFrameRelationsByFrame($idFrame, $chosen)
+    {
+        $frame = new \fnbr\models\Frame($idFrame);
+        $relations = array_merge($this->getDirectRelations($frame, $chosen), $this->getInverseRelations($frame, $chosen));
+        return $relations;
+    }
+
     public function getDirectRelations($frame, $chosen)
     {
         $relations = [];
@@ -327,30 +533,56 @@ class GrapherService extends MService
         return $relations;
     }
 
-    public function getFrameRelationsByFrame($idFrame, $chosen)
-    {
-        $frame = new \fnbr\models\Frame($idFrame);
-        $relations = array_merge($this->getDirectRelations($frame, $chosen), $this->getInverseRelations($frame, $chosen));
-        return $relations;
-    }
+    /*
+     * Cxn Relations
+     */
 
-    public function getFrameRelations($id, $chosen, $level = 1)
+    public function getCxnRelations($id, $chosen, $level = 1)
     {
         $relations = [];
         for ($l = 1; $l <= $level; $l++) {
             if ($l == 1) {
-                $relations = $this->getFrameRelationsByFrame($id, $chosen);
+                $relations = $this->getCxnRelationsByCxn($id, $chosen);
             } else if ($l == 2) {
                 $base = $relations;
                 foreach ($base as $rel) {
-                    if ($rel['source']->idFrame == $id) {
-                        $idFrame = $rel['target']->idFrame;
-                        $frame = new \fnbr\models\Frame($idFrame);
-                        $add = $this->getDirectRelations($frame, $chosen);
+                    if ($rel['source']->idCxn == $id) {
+                        $idCxn = $rel['target']->idCxn;
+                        $cxn = new \fnbr\models\Construction($idCxn);
+                        $add = $this->getDirectRelationsCxn($cxn, $chosen);
                         $relations = array_merge($relations, $add);
                     }
                 }
             }
+        }
+        return json_encode($relations);
+    }
+
+    public function getCxnRelationsByCxn($idCxn, $chosen)
+    {
+        $cxn = new \fnbr\models\Construction($idCxn);
+        $relations = array_merge($this->getCECxn($cxn), $this->getDirectRelationsCxn($cxn, $chosen), $this->getInverseRelationsCxn($cxn, $chosen), $this->getEvokesRelationsCxn($cxn, $chosen));
+        return $relations;
+    }
+
+    public function getCECxn($cxn)
+    {
+        $relations = [];
+        $node0 = (object)[
+            'id' => $cxn->getIdEntity(),
+            'idCxn' => $cxn->getId(),
+            'type' => 'cxn',
+            'name' => $cxn->getName()
+        ];
+        $ces = $cxn->listCE()->asQuery()->getResult();
+        foreach ($ces as $r) {
+            $node1 = (object)[
+                'id' => $r['idEntity'],
+                'idCE' => $r['idConstructionElement'],
+                'type' => 'ce',
+                'name' => $r['name']
+            ];
+            $relations[] = ['source' => $node0, 'type' => 'rel_elementof', 'target' => $node1];
         }
         return $relations;
     }
@@ -425,44 +657,20 @@ class GrapherService extends MService
                 $node1 = (object)[
                     'id' => $r['idEntity'],
                     'idCxn' => $r['idFrame'],
-                    'type' => 'frame',
+                    'type' => ($r['type'] == 'FR') ? 'frame' : 'concept',
                     'name' => $r['name']
                 ];
                 if ($chosen[$entry]) {
-                    $relations[] = ['source' => $node1, 'type' => $entry, 'target' => $node0];
+                    $relations[] = ['source' => $node0, 'type' => $entry, 'target' => $node1];
                 }
             }
         }
         return $relations;
     }
 
-    public function getCxnRelationsByCxn($idCxn, $chosen)
-    {
-        $cxn = new \fnbr\models\Construction($idCxn);
-        $relations = array_merge($this->getDirectRelationsCxn($cxn, $chosen), $this->getInverseRelationsCxn($cxn, $chosen), $this->getEvokesRelationsCxn($cxn, $chosen));
-        return $relations;
-    }
-
-    public function getCxnRelations($id, $chosen, $level = 1)
-    {
-        $relations = [];
-        for ($l = 1; $l <= $level; $l++) {
-            if ($l == 1) {
-                $relations = $this->getCxnRelationsByCxn($id, $chosen);
-            } else if ($l == 2) {
-                $base = $relations;
-                foreach ($base as $rel) {
-                    if ($rel['source']->idCxn == $id) {
-                        $idCxn = $rel['target']->idCxn;
-                        $cxn = new \fnbr\models\Construction($idCxn);
-                        $add = $this->getDirectRelationsCxn($cxn, $chosen);
-                        $relations = array_merge($relations, $add);
-                    }
-                }
-            }
-        }
-        return $relations;
-    }
+    /*
+     * Cxn Structure
+     */
 
     public function getCxnStructure($idCxn, $chosen, $level = 1)
     {
@@ -479,9 +687,24 @@ class GrapherService extends MService
         return $this->getRelations($construction->getIdEntity(), $chosen, $level);
     }
 
-    ///
-    /// Domain
-    ///
+    /*
+     * Domain
+     */
+
+    public function getDomainRelations($frames, $chosen, $idDomain = 1)
+    {
+        $relations = [];
+        $entities = [];
+        foreach ($frames as $idNode) {
+            if ($idNode{0} == 'f') {
+                $entities[] = substr($idNode, 1);
+            }
+        }
+        if (count($entities)) {
+            $relations = $this->getEntityDomainRelationsById($entities, $chosen, $idDomain);
+        }
+        return $relations;
+    }
 
     public function getEntityDomainRelationsById($entities, $chosen, $idDomain)
     {
@@ -552,6 +775,24 @@ class GrapherService extends MService
                 'name' => $row['entityName']
             ];
             $relations[] = ['source' => $node0, 'type' => 'rel_none', 'target' => $node0];
+        }
+        return $relations;
+    }
+
+    /*
+     *  Constraint Relations
+     */
+
+
+    public function getConstraintRelations($frames, $chosen, $idDomain = 1)
+    {
+        $relations = [];
+        foreach ($frames as $idNode) {
+            if ($idNode{0} == 'f') {
+                $idEntity = substr($idNode, 1);
+                $r = $this->getConstraintRelationsByFrame($idEntity, $chosen);
+                $relations = array_merge($relations, $r);
+            }
         }
         return $relations;
     }
@@ -641,107 +882,5 @@ class GrapherService extends MService
         return $relations;
     }
 
-    public function getDomainRelationData()
-    {
-        $relation = new \fnbr\models\RelationType();
-        $result = new \StdClass;
-        $relations = $relation->listByFilter((object)['group' => 'rgp_frame_relations'])->asQuery()->getResult();
-        foreach ($relations as $row) {
-            $id = $row['entry'];
-            if ($id != 'rel_see_also') {
-                $node = array();
-                $node['id'] = $id;
-                $node['label'] = $row['name'];
-                $node['color'] = Manager::getConf("fnbr.color.{$id}");
-                $node['idType'] = 'rgp_frame_relations';
-                $node['default'] = (($id == 'rel_inheritance') || ($id == 'rel_subframe') || ($id == 'rel_using'));
-                $result->$id = $node;
-            }
-        }
-        $relations = $relation->listByFilter((object)['entry' => 'rel_evokes'])->asQuery()->getResult();
-        foreach ($relations as $row) {
-            $id = $row['entry'];
-            $node = array();
-            $node['id'] = $id;
-            $node['label'] = $row['name'];
-            $node['color'] = Manager::getConf("fnbr.color.{$id}");
-            $node['idType'] = 'rel_evokes';
-            $node['default'] = true;
-            $result->$id = $node;
-        }
-        $relations = $relation->listByFilter((object)['entry' => 'rel_hassemtype'])->asQuery()->getResult();
-        foreach ($relations as $row) {
-            $id = $row['entry'];
-            $node = array();
-            $node['id'] = $id;
-            $node['label'] = $row['name'];
-            $node['color'] = Manager::getConf("fnbr.color.{$id}");
-            $node['idType'] = 'rel_hassemtype';
-            $node['default'] = false;
-            $result->$id = $node;
-        }
-        $relations = $relation->listByFilter((object)['entry' => 'rel_elementof'])->asQuery()->getResult();
-        foreach ($relations as $row) {
-            $id = $row['entry'];
-            $node = array();
-            $node['id'] = $id;
-            $node['label'] = $row['name'];
-            $node['color'] = Manager::getConf("fnbr.color.{$id}");
-            $node['idType'] = 'rel_elementof';
-            $node['default'] = false;
-            $result->$id = $node;
-        }
-        $relations = $relation->listByFilter((object)['group' => 'rgp_qualia'])->asQuery()->getResult();
-        foreach ($relations as $row) {
-            $id = $row['entry'];
-            $node = array();
-            $node['id'] = $id;
-            $node['label'] = $row['name'];
-            $node['color'] = Manager::getConf("fnbr.color.{$id}");
-            $node['idType'] = 'rgp_frame_relations';
-            $node['default'] = true;
-            $result->$id = $node;
-        }
-        $relations = $relation->listByFilter((object)['entry' => 'rel_constraint_frame'])->asQuery()->getResult();
-        foreach ($relations as $row) {
-            $id = $row['entry'];
-            $node = array();
-            $node['id'] = $id;
-            $node['label'] = $row['name'];
-            $node['color'] = Manager::getConf("fnbr.color.{$id}");
-            $node['idType'] = 'rel_constraint_fe';
-            $node['default'] = true;
-            $result->$id = $node;
-        }
-        return $result;
-    }
-
-    public function getDomainRelations($frames, $chosen, $idDomain = 1)
-    {
-        $relations = [];
-        $entities = [];
-        foreach ($frames as $idNode) {
-            if ($idNode{0} == 'f') {
-                $entities[] = substr($idNode, 1);
-            }
-        }
-        if (count($entities)) {
-            $relations = $this->getEntityDomainRelationsById($entities, $chosen, $idDomain);
-        }
-        return $relations;
-    }
-
-    public function getConstraintRelations($frames, $chosen, $idDomain = 1)
-    {
-        $relations = [];
-        foreach ($frames as $idNode) {
-            if ($idNode{0} == 'f') {
-                $idEntity = substr($idNode, 1);
-                $r = $this->getConstraintRelationsByFrame($idEntity, $chosen);
-                $relations = array_merge($relations, $r);
-            }
-        }
-        return $relations;
-    }
 
 }

@@ -41,6 +41,7 @@ return [
         'grapher' => ['Grapher', 'main/grapher', 'fa fa-share-alt fa16px', '', '', [
             'fullgrapher' => ['Frames & CxN', 'grapher/grapher/main', 'fa fa-link fa16px', '', '', []],
             'domaingrapher' => ['Frames by Domain', 'grapher/domain/main', 'fa fa-link fa16px', '', '', []],
+            'ccngrapher' => ['Constructicon', 'grapher/ccn/main', 'fa fa-link fa16px', '', '', []],
         ]],
         'editor' => ['Editor', 'main/visualeditor', 'fa fa-arrows fa16px', 'MASTER', A_ACCESS, [
             'frameeditor' => ['Frame Relation', 'visualeditor/frame/main', 'fa fa-list-alt fa16px', 'MASTER', A_ACCESS, []],
@@ -61,6 +62,10 @@ return [
             'exportFrames' => ['Export Frames', 'utils/export/formExportFrames', 'fa fa-download fa16px', 'ADMIN', A_ACCESS, []],
             'importFrames' => ['Import Frames', 'utils/import/formImportFrames', 'fa fa-upload fa16px', 'ADMIN', A_ACCESS, []],
             'exportCxnFS' => ['Export Cxn as FS', 'utils/export/formExportCxnFS', 'fa fa-download fa16px', 'ADMIN', A_ACCESS, []],
+        ]],
+        'c5' => ['C5', 'main/c5', 'fa fa-arrows fa16px', 'MASTER', A_ACCESS, [
+            'c5grapher' => ['Grapher', 'c5/main/grapher', 'fa fa-list-alt fa16px', 'MASTER', A_ACCESS, []],
+            'c5query' => ['Query', 'c5/main/query', 'fa fa-list-alt fa16px', 'MASTER', A_ACCESS, []],
         ]],
         'language' => ['Language', 'main/language', 'fa fa-flag-checkered fa16px', '', A_ACCESS, [
             '--' => ['Entry', 'main/changeLanguage/--', 'fnbrFlag--', '', A_ACCESS, []],

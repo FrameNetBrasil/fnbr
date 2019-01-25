@@ -29,7 +29,7 @@
 </div>
 {{include $manager->getThemePath('css/graph.css')}}
 
-{{include 'grapher.js'}}
+{{include 'grapher_d3_v5.js'}}
 
 <script type="text/javascript">
 
@@ -37,8 +37,8 @@
         $('#grapherLayout').layout({
             fit:true
         });
-        grapher.instance = new grapher.graph("grapherArea", grapher.relations);
- 
+        grapher.instance = new grapher.graph("grapherArea");
+
         grapher.reload = function () {
             $('#grapherCenterPane').html('');
             $('#frameTree').tree('reload');
@@ -46,6 +46,7 @@
         }
 
         grapher.show = function (idEntity, update) {
+            console.log('show...');
             var isUpdate = (typeof update !== undefined) ? update : false;
             grapher.currentEntity = idEntity;
             var chosen = {};
@@ -58,15 +59,16 @@
                 //console.log(data);
                 var links = JSON.parse(data);
                 if (!isUpdate) {
-                    grapher.instance.clearLink();
-                    grapher.instance.clearNode();
+                    grapher.instance.clear();
                 }
+                //grapher.instance.clearLinks();
                 $.each(links, function(index, link) {
                     //console.log(link);
                     if (chosen[link.type]) {
                        grapher.instance.addLink(link);
                     }
                 });
+                grapher.instance.update();
             }, {idEntity: idEntity, chosen: chosen, level: level});
         }
 
