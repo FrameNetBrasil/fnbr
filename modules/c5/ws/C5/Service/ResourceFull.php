@@ -49,24 +49,36 @@ class ResourceFull extends Resource
         $this->graphService->execute("delete from C5Node");
     }
 
-    public function loadFull()
+    public function loadFull($idConcepts = [])
     {
         try {
             $nodes = $this->dataService->getAllNodes();
             $i = 0;
             foreach ($nodes as $node) {
-                $id = 'node_' . $node['idEntity'];
-                $this->graphService->createNode([
-                    'id' => $id,
-                    'name' => $node['name'],
-                    'idEntity' => $node['idEntity'],
-                    'type' => $this->nodeType[$node['type']],
-                    'class' => 'node',
-                    'category' => 'node',
-                    'region' => 'node'
-                ]);
-                if ((++$i % 200) == 0) {
-                    $this->dump('Nodes = ' . $i);
+                $type = $node['type'];
+                $idEntity = $node['idEntity'];
+                $ok = true;
+                if ($type == 'CP') {
+                    if (count($idConcepts) > 0) {
+                        if (!in_array($idEntity, $idConcepts)) {
+                            $ok = false;
+                        }
+                    }
+                }
+                if ($ok) {
+                    $id = 'node_' . $node['idEntity'];
+                    $this->graphService->createNode([
+                        'id' => $id,
+                        'name' => $node['name'],
+                        'idEntity' => $node['idEntity'],
+                        'type' => $this->nodeType[$node['type']],
+                        'class' => 'node',
+                        'category' => 'node',
+                        'region' => 'node'
+                    ]);
+                    if ((++$i % 200) == 0) {
+                        $this->dump('Nodes = ' . $i);
+                    }
                 }
             }
             $relations = $this->dataService->getAllLinks();

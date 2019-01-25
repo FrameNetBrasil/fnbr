@@ -20,6 +20,7 @@ class Entity extends map\EntityMap
     public static $entityModel = [
         'AS' => 'typeinstance', // annotation status
         'CE' => 'constructionelement',
+        'CP' => 'concept',
         'CT' => 'typeinstance', // core type
         'CX' => 'construction',
         'FE' => 'frameelement',
@@ -73,6 +74,7 @@ class Entity extends map\EntityMap
             'FR' => 'frame',
             'FE' => 'fe',
             'CX' => 'cxn',
+            'CP' => 'concept',
             'ST' => 'st'
         ];
         return $typeNode[$this->getType()];
@@ -112,6 +114,7 @@ HERE;
 		   UNION select entry, idEntity, 'cxn' as type from Construction
 		   UNION select entry, idEntity, 'ce' as type from ConstructionElement
 		   UNION select entry, idEntity, 'st' as type from SemanticType
+		   UNION select entry, idEntity, 'concept' as type from Concept
 		) model on (entity2.idEntity = model.idEntity)
             INNER JOIN Entry 
                 ON (model.entry = entry.entry)
@@ -156,6 +159,7 @@ HERE;
 		   UNION select entry, idEntity, 'cxn' as type from Construction
 		   UNION select entry, idEntity, 'ce' as type from ConstructionElement
 		   UNION select entry, idEntity, 'st' as type from SemanticType
+		   UNION select entry, idEntity, 'concept' as type from Concept
 		) model on (entity1.idEntity = model.idEntity)
             INNER JOIN Entry 
                 ON (model.entry = entry.entry)

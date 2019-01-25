@@ -60,7 +60,7 @@ class C5Service
         $this->resourceFull->clean();
         $this->manager->dump('count nodes = ' . $this->resourceFull->countNodes());
         $this->manager->dump('**** loadFull');
-        $this->resourceFull->loadFull();
+        $this->resourceFull->loadFull($this->idConcepts);
         $this->manager->dump('count nodes = ' . $this->resourceFull->countNodes());
         $this->manager->dump('*************************************************************');
         $this->manager->dump("'***** End Generate Full Network");

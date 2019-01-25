@@ -501,7 +501,7 @@ class GraphViz extends \Mesh\Infra\GraphViz
             ],
         ];
         $this->graphAttributes = [
-            'rankdir' => 'TB',
+            'rankdir' => 'LR',
             'ranksep' => '0.50', //'0.3', //'0.75',
             //'rank' => 'source',
             'layout' => 'dot',

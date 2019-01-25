@@ -41,6 +41,7 @@ return [
         'grapher' => ['Grapher', 'main/grapher', 'fa fa-share-alt fa16px', '', '', [
             'fullgrapher' => ['Frames & CxN', 'grapher/grapher/main', 'fa fa-link fa16px', '', '', []],
             'domaingrapher' => ['Frames by Domain', 'grapher/domain/main', 'fa fa-link fa16px', '', '', []],
+            'ccngrapher' => ['Constructicon', 'grapher/ccn/main', 'fa fa-link fa16px', '', '', []],
         ]],
         'editor' => ['Editor', 'main/visualeditor', 'fa fa-arrows fa16px', 'MASTER', A_ACCESS, [
             'frameeditor' => ['Frame Relation', 'visualeditor/frame/main', 'fa fa-list-alt fa16px', 'MASTER', A_ACCESS, []],

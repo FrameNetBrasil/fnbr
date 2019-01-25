@@ -34,7 +34,7 @@ grapher.graph = function (element) {
         fe: {symbol: d3.symbolCircle, size:80},
         ce: {symbol: d3.symbolCircle, size:80},
         st: {symbol: d3.symbolTriangle, size:100},
-        cp: {symbol: d3.symbolTriangle, size:100}
+        concept: {symbol: d3.symbolTriangle, size:100}
     };
     
     var svg = this.svg = d3.select($element[0]).append("svg")

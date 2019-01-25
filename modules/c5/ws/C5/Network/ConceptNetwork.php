@@ -201,35 +201,39 @@ class ConceptNetwork extends \Mesh\Element\Network\TokenNetwork
         $regions = [];
         ksort($this->nodes);
         foreach ($this->nodes as $node) {
-            mdump($node->getName() . ' a = ' . $node->a);
-            $validNodes[$node->getId()] = 1;
-            $cola[$node->getId()] = $node->getId();
-            $structure->nodes[$i] = [
-                'index' => $i,
-                'id' => $node->getId(),
-                'name' => $node->getName(),
-                'position' => $node->index,
-                'activation' => $node->a, //round($node->getA(), 5),
-                'type' => $node->getType(),
-                'class' => $node->getClass(),
-                'status' => $node->status,
-                'phase' => $node->phase,
-                'region' => $node->region,
-                'logic' => $node->logic,
-                'idHead' => $node->idHead,
-                'wordIndex' => $node->wordIndex,
-                'h' => $node->h,
-                'd' => $node->d,
-                'w' => $node->w,
-                'strSlots' => substr($node->getSlotsStr(), 1),
-                'slots' => $node->getSlots(),
-                'isQuery' => $node->isQuery,
-                'layer' => $node->layer,
-                'group' => $node->group
-            ];
-            $this->statusMemory[$node->getId()] = $node->status;
-            $regions[$node->region] = $node->region;
-            $i++;
+            $type = $node->getType();
+            $sitesOut = $this->siteList->getOutputSites($node->id);
+            if ((count($sitesOut) > 0) || ($type == 'Cxn')) {
+                mdump($node->getName() . ' a = ' . $node->a);
+                $validNodes[$node->getId()] = 1;
+                $cola[$node->getId()] = $node->getId();
+                $structure->nodes[$i] = [
+                    'index' => $i,
+                    'id' => $node->getId(),
+                    'name' => $node->getName(),
+                    'position' => $node->index,
+                    'activation' => $node->a, //round($node->getA(), 5),
+                    'type' => $node->getType(),
+                    'class' => $node->getClass(),
+                    'status' => $node->status,
+                    'phase' => $node->phase,
+                    'region' => $node->region,
+                    'logic' => $node->logic,
+                    'idHead' => $node->idHead,
+                    'wordIndex' => $node->wordIndex,
+                    'h' => $node->h,
+                    'd' => $node->d,
+                    'w' => $node->w,
+                    'strSlots' => substr($node->getSlotsStr(), 1),
+                    'slots' => $node->getSlots(),
+                    'isQuery' => $node->isQuery,
+                    'layer' => $node->layer,
+                    'group' => $node->group
+                ];
+                $this->statusMemory[$node->getId()] = $node->status;
+                $regions[$node->region] = $node->region;
+                $i++;
+            }
         }
         foreach ($this->nodes as $node) {
             foreach ($this->siteList->getOutputSites($node->id) as $site) {

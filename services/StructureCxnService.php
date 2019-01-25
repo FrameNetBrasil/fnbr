@@ -68,6 +68,49 @@ class StructureCxnService extends MService
         return $result;
     }
 
+    public function listCxnLanguageEntity($data, $idLanguageFilter = '')
+    {
+        $listLanguages = Base::languagesDescription();
+        $cxn = new fnbr\models\ViewConstruction();
+        $filter = (object)['idDomain' => $data->idDomain, 'ce' => $data->ce, 'cxn' => $data->cxn, 'active' => $data->active, 'idLanguage' => $idLanguage];
+        $languages = $cxn->listByLanguageFilter($filter)->asQuery()->treeResult('idLanguage', 'idConstruction,name,entry,idEntity');
+        $result = [];
+        if ($idLanguageFilter == '') {
+            foreach ($languages as $idLanguage => $language) {
+                $nodes = [];
+                foreach ($language as $row) {
+                    $node = [];
+                    $node['id'] = 'c' . $row['idEntity'];
+                    $node['text'] = $row['name'];
+                    $node['state'] = 'closed';
+                    $node['entry'] = $row['entry'];
+                    $nodes[] = $node;
+                }
+                $lang = $listLanguages[$idLanguage];
+                $flag = 'fnbrFlag' . $lang[0]['description'];
+                $langNode = [
+                    'id' => 'l' . $idLanguage,
+                    'state' => 'closed',
+                    'text' => $lang[0]['description'],
+                    'iconCls' => "icon-blank {$flag}",
+                    'children' => $nodes
+                ];
+                $result[] = $langNode;
+            }
+        } else {
+            foreach ($languages[$idLanguageFilter] as $row) {
+                $node = [];
+                $node['id'] = 'c' . $row['idEntity'];
+                $node['text'] = $row['name'];
+                $node['state'] = 'closed';
+                $node['entry'] = $row['entry'];
+                $result[] = $node;
+            }
+            $result = json_encode($result);
+        }
+        return $result;
+    }
+
     public function listCEs($idCxn, $idLanguage)
     {
         $result = array();
