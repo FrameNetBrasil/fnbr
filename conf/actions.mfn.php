@@ -25,6 +25,7 @@ return [
         ]],
         'annotation' => ['Annotation', 'annotation/main', 'fa fa-align-justify fa16px', '', A_ACCESS, [
             'corpusAnnotation' => ['Corpus Mode', 'annotation/main/formCorpusAnnotation', 'fa fa-file-text fa16px', '', A_ACCESS, []],
+            'cnxAnnotation' => ['Construction Mode', 'annotation/main/formConstructionalAnnotation', 'fa fa-th fa16px', '', A_ACCESS, []],
             'layers' => ['Manage Layers', '^annotation/layer/formManager', 'fa fa-list fa16px', 'JUNIOR', A_ACCESS, []],
         ]],
         'reports' => ['Reports', 'main/reports', 'fa fa-newspaper-o fa16px', '', '', [
@@ -33,6 +34,7 @@ return [
         ]],
         'grapher' => ['Grapher', 'main/grapher', 'fa fa-share-alt fa16px', '', '', [
             'fullgrapher' => ['Frames & CxN', 'grapher/grapher/main', 'fa fa-link fa16px', '', '', []],
+            'ccngrapher' => ['Constructicon', 'grapher/ccn/main', 'fa fa-link fa16px', '', '', []],
         ]],
         'editor' => ['Editor', 'main/visualeditor', 'fa fa-arrows fa16px', 'ADMIN', A_ACCESS, [
             'frameeditor' => ['Frame Relation', 'visualeditor/frame/main', 'fa fa-list-alt fa16px', 'MASTER', A_ACCESS, []],
