@@ -77,5 +77,11 @@ HERE;
         return (object)$criteria->asQuery()->getResult()[0];
     }
 
+    public function listForExport($idCxn)
+    {
+        $criteria = $this->getCriteria()->select('idConstructionElement, entry, active, idEntity, idColor, optional, head, multiple')->orderBy('entry');
+        $criteria->where("idConstruction =  {$idCxn}");
+        return $criteria;
+    }
 }
 

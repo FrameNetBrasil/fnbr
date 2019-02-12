@@ -471,4 +471,30 @@ HERE;
         return $constraints;
     }
 
+    public function getChainForExport($idConstrained, &$chain)
+    {
+        $constraints = $this->getByIdConstrained($idConstrained);
+        foreach($constraints as $constraint) {
+            $chain[] = [
+                'idConstrained' => $idConstrained,//$constraint['idConstrained'],
+                'idConstrainedBy' => $constraint['idConstrainedBy'],
+                'idConstraint' => $constraint['idConstraint'],
+                'name' => $constraint['name'],
+                'entry' => $constraint['entry'],
+                'nick' => $constraint['nick'],
+                'type' => $constraint['type'],
+                'relationType' => $constraint['relationType']
+            ];
+            $this->getChainForExport($constraint['idConstraint'], $chain);
+        }
+    }
+
+    public function getChainForExportByIdConstrained($idConstrained)
+    {
+        $chain = [];
+        $this->getChainForExport($idConstrained, $chain);
+        mdump($chain);
+        return $chain;
+    }
+
 }

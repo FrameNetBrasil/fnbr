@@ -84,6 +84,14 @@ class ConstructionElement extends map\ConstructionElementMap {
         return $criteria;
     }
 
+
+    public function listForExport($idCxn)
+    {
+        $view = new ViewConstructionElement();
+        $criteria = $view->listForExport($idCxn);
+        return $criteria;
+    }
+
     public function listSiblingsCE()
     {
         $view = new ViewConstructionElement();
@@ -95,6 +103,37 @@ class ConstructionElement extends map\ConstructionElementMap {
     {
         $constraint = new ViewConstraint();
         return $constraint->getByIdConstrained($this->getIdEntity());
+    }
+
+    public function listDirectRelations()
+    {
+        $idLanguage = \Manager::getSession()->idLanguage;
+        $cmd = <<<HERE
+
+        SELECT RelationType.entry, entry_relatedCE.name, relatedCE.idEntity, relatedCE.idConstructionElement, entry_relatedCE.entry as ceEntry
+        FROM ConstructionElement
+            INNER JOIN Entity entity1
+                ON (ConstructionElement.idEntity = entity1.idEntity)
+            INNER JOIN EntityRelation
+                ON (entity1.idEntity = EntityRelation.idEntity1)
+            INNER JOIN RelationType 
+                ON (EntityRelation.idRelationType = RelationType.idRelationType)
+            INNER JOIN Entity entity2
+                ON (EntityRelation.idEntity2 = entity2.idEntity)
+            INNER JOIN ConstructionElement relatedCE
+                ON (entity2.idEntity = relatedCE.idEntity)
+            INNER JOIN Entry entry_relatedCE
+                ON (relatedCE.entry = entry_relatedCE.entry)
+        WHERE (ConstructionElement.idConstructionElement = {$this->getId()})
+            AND (RelationType.entry in (
+                'rel_inheritance_cxn', 'rel_inhibits'))
+           AND (entry_relatedCE.idLanguage = {$idLanguage} )
+        ORDER BY RelationType.entry, entry_relatedCE.name
+            
+HERE;
+        $result = $this->getDb()->getQueryCommand($cmd)->treeResult('entry', 'name,idEntity,idConstructionElement,ceEntry');
+        return $result;
+
     }
 
     public function listEvokesRelations()
@@ -250,6 +289,28 @@ HERE;
             $transaction->rollback();
             throw new \Exception($e->getMessage());
         }
-    }    
+    }
+
+
+    public function createFromData($data)
+    {
+        $this->setPersistent(false);
+        $this->setEntry($data->entry);
+        $this->setActive($data->active);
+        $this->setIdEntity($data->idEntity);
+        $this->setIdColor($data->idColor);
+        $this->setOptional($data->optional);
+        $this->setHead($data->head);
+        $this->setMultiple($data->multiple);
+        parent::save();
+    }
+
+    public function createRelationsFromData($data)
+    {
+        if ($data->idConstruction) {
+            $cxn = new Construction($data->idConstruction);
+            Base::createEntityRelation($this->getIdEntity(), 'rel_elementof', $cxn->getIdEntity());
+        }
+    }
 }
 

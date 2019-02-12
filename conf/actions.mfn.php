@@ -25,7 +25,6 @@ return [
         ]],
         'annotation' => ['Annotation', 'annotation/main', 'fa fa-align-justify fa16px', '', A_ACCESS, [
             'corpusAnnotation' => ['Corpus Mode', 'annotation/main/formCorpusAnnotation', 'fa fa-file-text fa16px', '', A_ACCESS, []],
-            'cnxAnnotation' => ['Construction Mode', 'annotation/main/formConstructionalAnnotation', 'fa fa-th fa16px', '', A_ACCESS, []],
             'layers' => ['Manage Layers', '^annotation/layer/formManager', 'fa fa-list fa16px', 'JUNIOR', A_ACCESS, []],
         ]],
         'reports' => ['Reports', 'main/reports', 'fa fa-newspaper-o fa16px', '', '', [
@@ -47,6 +46,8 @@ return [
             'importLexWf' => ['Import Wf-Lexeme', 'utils/import/formImportLexWf', 'fa fa-upload fa16px', 'MASTER', A_ACCESS, []],
             'wflex' => ['Search Wf-Lexeme', 'admin/wflex/main', 'fa fa-cog fa16px', '', A_ACCESS, []],
             'importFullText' => ['Import FullText', 'utils/import/formImportFullText', 'fa fa-upload fa16px', 'ADMIN', A_ACCESS, []],
+            'exportCxnJson' => ['Export Cxn', 'utils/export/formExportCxn', 'fa fa-download fa16px', 'ADMIN', A_ACCESS, []],
+            'importCxnJson' => ['Import Cxn', 'utils/import/formImportCxn', 'fa fa-upload fa16px', 'ADMIN', A_ACCESS, []],
         ]],
         'language' => ['Language', 'main/language', 'fa fa-flag-checkered fa16px', '', A_ACCESS, [
             'sq' => ['Albanian', 'main/changeLanguage/sq', 'fnbrFlagSq', '', A_ACCESS, []],

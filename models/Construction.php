@@ -42,6 +42,13 @@ class Construction extends map\ConstructionMap
         return $data;
     }
 
+    public function getByEntry($entry)
+    {
+        $criteria = $this->getCriteria()->select('*');
+        $criteria->where("entry = '{$entry}'");
+        $this->retrieveFromCriteria($criteria);
+    }
+
     public function getEntryObject()
     {
         $criteria = $this->getCriteria()->select('entries.name, entries.description, entries.nick');
@@ -111,6 +118,13 @@ class Construction extends map\ConstructionMap
         Base::entryLanguage($criteria);
         $name = (strlen($name) > 1) ? $name : 'none';
         $criteria->where("upper(entries.name) LIKE upper('{$name}%')");
+        return $criteria;
+    }
+
+    public function listForExport($idCxns)
+    {
+        $criteria = $this->getCriteria()->select('idConstruction, entry, abstract, active, idEntity, language.language')->orderBy('entry');
+        $criteria->where("idConstruction", "in", $idCxns);
         return $criteria;
     }
 
@@ -185,7 +199,7 @@ HERE;
         $idLanguage = \Manager::getSession()->idLanguage;
         $cmd = <<<HERE
 
-        SELECT RelationType.entry, entry_relatedCxn.name, relatedCxn.idEntity, relatedCxn.idConstruction
+        SELECT RelationType.entry, entry_relatedCxn.name, relatedCxn.idEntity, relatedCxn.idConstruction, entry_relatedCxn.entry as cxnEntry
         FROM Construction
             INNER JOIN Entity entity1
                 ON (Construction.idEntity = entity1.idEntity)
@@ -206,7 +220,7 @@ HERE;
         ORDER BY RelationType.entry, entry_relatedCxn.name
             
 HERE;
-        $result = $this->getDb()->getQueryCommand($cmd)->treeResult('entry', 'name,idEntity,idConstruction');
+        $result = $this->getDb()->getQueryCommand($cmd)->treeResult('entry', 'name,idEntity,idConstruction,cxnEntry');
         return $result;
 
     }
@@ -216,7 +230,7 @@ HERE;
         $idLanguage = \Manager::getSession()->idLanguage;
         $cmd = <<<HERE
 
-        SELECT RelationType.entry, entry_relatedCxn.name, relatedCxn.idEntity, relatedCxn.idConstruction
+        SELECT RelationType.entry, entry_relatedCxn.name, relatedCxn.idEntity, relatedCxn.idConstruction, entry_relatedCxn.entry as cxnEntry
         FROM Construction
             INNER JOIN Entity entity2
                 ON (Construction.idEntity = entity2.idEntity)
@@ -237,7 +251,7 @@ HERE;
         ORDER BY RelationType.entry, entry_relatedCxn.name
             
 HERE;
-        $result = $this->getDb()->getQueryCommand($cmd)->treeResult('entry', 'name,idEntity,idConstruction');
+        $result = $this->getDb()->getQueryCommand($cmd)->treeResult('entry', 'name,idEntity,idConstruction,cxnEntry');
         return $result;
 
     }
@@ -553,6 +567,43 @@ HERE;
         } catch (\Exception $e) {
             $transaction->rollback();
             throw new \Exception($e->getMessage());
+        }
+    }
+
+    public function createFromData($data)
+    {
+        $this->setPersistent(false);
+        $this->setEntry($data->entry);
+        $this->setActive($data->active);
+        $this->setIdEntity($data->idEntity);
+        $this->setIdLanguage(Base::getIdLanguage($data->language));
+        parent::save();
+    }
+
+    public function createRelationsFromData($data)
+    {
+        if ($data->evokes) {
+            $frame = new Frame();
+            foreach($data->evokes as $frameEntry) {
+                $frame->getByEntry($frameEntry);
+                Base::createEntityRelation($this->getIdEntity(), 'rel_evokes', $frame->getIdEntity());
+            }
+        }
+        if ($data->relations) {
+            $cxnRelated = new Construction();
+            foreach($data->relations as $relation) {
+                $cxnRelated->getByEntry($relation[1]);
+                Base::deleteEntityRelation($this->getIdEntity(), $relation[0], $cxnRelated->getIdEntity());
+                Base::createEntityRelation($this->getIdEntity(), $relation[0], $cxnRelated->getIdEntity());
+            }
+        }
+        if ($data->inverse) {
+            $cxnRelated = new Construction();
+            foreach($data->inverse as $relation) {
+                $cxnRelated->getByEntry($relation[1]);
+                Base::deleteEntityRelation($cxnRelated->getIdEntity(), $relation[0], $this->getIdEntity());
+                Base::createEntityRelation($cxnRelated->getIdEntity(), $relation[0], $this->getIdEntity());
+            }
         }
     }
 

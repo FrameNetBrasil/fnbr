@@ -224,4 +224,142 @@ class DataService extends MService
         return json_encode($fs);
     }
 
+    public function exportCxnToJSON($idCxns)
+    {
+        $cxnModel = new fnbr\models\Construction();
+        $cxns = $cxnModel->listForExport($idCxns)->asQuery()->getResult();
+        $ceModel = new fnbr\models\ConstructionElement();
+        $entry = new fnbr\models\Entry();
+        $cnModel = new fnbr\models\ViewConstraint();
+        $result = [];
+        foreach ($cxns as $i => $cxn) {
+            $cxnModel->getById($cxn['idConstruction']);
+            $entity = new fnbr\models\Entity($cxn['idEntity']);
+            $result[$i]['data'] = $cxn;
+            $result[$i]['entity'] = [
+                'idEntity' => $entity->getId(),
+                'alias' => $entity->getAlias(),
+                'type' => $entity->getType(),
+                'idOld' => $entity->getIdOld()
+            ];
+            $result[$i]['ces'] = [];
+            $ces = $ceModel->listForExport($cxn['idConstruction'])->asQuery()->getResult();
+            foreach ($ces as $j => $ce) {
+                $ceModel->getById($ce['idConstructionElement']);
+                $result[$i]['ces'][$j]['data'] = $ce;
+                $entityCe = new fnbr\models\Entity($ce['idEntity']);
+                $result[$i]['ces'][$j]['entity'] = [
+                    'idEntity' => $entityCe->getId(),
+                    'alias' => $entityCe->getAlias(),
+                    'type' => $entityCe->getType(),
+                    'idOld' => $entityCe->getIdOld()
+                ];
+                $entries = $entry->listForExport($ce['entry'])->asQuery()->getResult();
+                foreach ($entries as $n => $e) {
+                    $result[$i]['ces'][$j]['entries'][] = $e;
+                }
+                $treeEvokes = $ceModel->listEvokesRelations();
+                foreach($treeEvokes as $evokes) {
+                    foreach($evokes as $evoke) {
+                        $result[$i]['ces'][$j]['evokes'][] = $evoke['frameEntry'];
+                    }
+                }
+                $treeRelations = $ceModel->listDirectRelations();
+                foreach($treeRelations as $relationEntry => $relations) {
+                    foreach($relations as $relation) {
+                        $result[$i]['ces'][$j]['relations'][] = [$relationEntry, $relation['ceEntry']];
+                    }
+                }
+
+                $chain = $cnModel->getChainForExportByIdConstrained($ce['idEntity']);
+                $result[$i]['ces'][$j]['constraints']= $chain;
+            }
+            $entries = $entry->listForExport($cxn['entry'])->asQuery()->getResult();
+            foreach ($entries as $j => $e) {
+                $result[$i]['entries'][] = $e;
+            }
+            $treeEvokes = $cxnModel->listEvokesRelations();
+            foreach($treeEvokes as $evokes) {
+                foreach($evokes as $evoke) {
+                    $result[$i]['evokes'][] = $evoke['frameEntry'];
+                }
+            }
+            $treeRelations = $cxnModel->listDirectRelations();
+            foreach($treeRelations as $relationEntry => $relations) {
+                foreach($relations as $relation) {
+                    $result[$i]['relations'][] = [$relationEntry, $relation['cxnEntry']];
+                }
+            }
+            $treeRelations = $cxnModel->listInverseRelations();
+            foreach($treeRelations as $relationEntry => $relations) {
+                foreach($relations as $relation) {
+                    $result[$i]['inverse'][] = [$relationEntry, $relation['cxnEntry']];
+                }
+            }
+
+            $chain = $cnModel->getChainForExportByIdConstrained($cxn['idEntity']);
+            $result[$i]['constraints']= $chain;
+
+        }
+        $json = json_encode($result);
+        return $json;
+    }
+
+    public function importCxnFromJSON($json)
+    {
+        $cxns = json_decode($json);
+        $cxnModel = new fnbr\models\Construction();
+        $ceModel = new fnbr\models\ConstructionElement();
+        $entityModel = new fnbr\models\Entity();
+        $entryModel = new fnbr\models\Entry();
+        $transaction = $cxnModel->beginTransaction();
+        try {
+            foreach ($cxns as $cxnData) {
+                // create entries
+                $entries = $cxnData->entries;
+                foreach ($entries as $entryData) {
+                    $entryModel->createFromData($entryData);
+                }
+                // create entity
+                $entityModel->createFromData($cxnData->entity);
+                // craete cxn
+                $cxnData->data->idEntity = $entityModel->getId();
+                $cxnModel->createFromData($cxnData->data);
+                $cxnData->data->idConstruction = $cxnModel->getId();
+                // create ces
+                $ces = $cxnData->ces;
+                foreach ($ces as $ceData) {
+                    // create ce entries
+                    $entries = $ceData->entries;
+                    foreach ($entries as $entryData) {
+                        $entryModel->createFromData($entryData);
+                    }
+                    // create ce entity
+                    $entityModel->createFromData($ceData->entity);
+                    // craete ce
+                    $ceData->data->idEntity = $entityModel->getId();
+                    $ceData->data->idConstruction = $cxnModel->getId();
+                    $ceModel->createFromData($ceData->data);
+                    $ceData->data->idConstructionElement = $ceModel->getId();
+                }
+                // create ces relations (ces must be created before)
+                foreach ($ces as $ceData) {
+                    $ceModel->getById($ceData->data->idConstructionElement);
+                    $ceModel->createRelationsFromData($ceData->data);
+                }
+            }
+            // create cxns relations (cxns must be created before)
+            foreach ($cxns as $cxnData) {
+                $cxnModel->getById($cxnData->data->idConstruction);
+                $cxnModel->createRelationsFromData($cxnData);
+            }
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollback();
+            throw new \exception($e->getMessage());
+        }
+    }
+
+
+
 }

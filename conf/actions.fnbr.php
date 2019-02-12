@@ -62,6 +62,8 @@ return [
             'exportFrames' => ['Export Frames', 'utils/export/formExportFrames', 'fa fa-download fa16px', 'ADMIN', A_ACCESS, []],
             'importFrames' => ['Import Frames', 'utils/import/formImportFrames', 'fa fa-upload fa16px', 'ADMIN', A_ACCESS, []],
             'exportCxnFS' => ['Export Cxn as FS', 'utils/export/formExportCxnFS', 'fa fa-download fa16px', 'ADMIN', A_ACCESS, []],
+            'exportCxnJson' => ['Export Cxn', 'utils/export/formExportCxn', 'fa fa-download fa16px', 'ADMIN', A_ACCESS, []],
+            'importCxnJson' => ['Import Cxn', 'utils/import/formImportCxn', 'fa fa-upload fa16px', 'ADMIN', A_ACCESS, []],
         ]],
         'c5' => ['C5', 'main/c5', 'fa fa-arrows fa16px', 'MASTER', A_ACCESS, [
             'c5grapher' => ['Grapher', 'c5/main/grapher', 'fa fa-list-alt fa16px', 'MASTER', A_ACCESS, []],

@@ -79,4 +79,30 @@ class ExportController extends MController
         }
     }
 
+    public function formExportCxn()
+    {
+        $this->data->query = Manager::getAppURL('', 'utils/export/gridDataCxn');
+        $this->data->action = '@utils/export/exportCxn';
+        $this->render();
+    }
+
+    public function gridDataCxn()
+    {
+        $model = new fnbr\models\Construction();
+        $criteria = $model->listByFilter($this->data->filter);
+        $this->renderJSON($model->gridDataAsJSON($criteria));
+    }
+
+    public function exportCxn(){
+        try {
+            $service = Manager::getAppService('data');
+            $json = $service->exportCxnToJSON($this->data->gridExportCxn->data->checked);
+            $fileName = $this->data->fileName . '.json';
+            $mfile = MFile::file($json, false, $fileName);
+            $this->renderFile($mfile);
+        } catch (EMException $e) {
+            $this->renderPrompt('error',$e->getMessage());
+        }
+    }
+
 }
