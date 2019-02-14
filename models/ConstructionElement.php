@@ -309,7 +309,9 @@ HERE;
     {
         if ($data->idConstruction) {
             $cxn = new Construction($data->idConstruction);
-            Base::createEntityRelation($this->getIdEntity(), 'rel_elementof', $cxn->getIdEntity());
+            if ($cxn->getIdEntity()) {
+                Base::createEntityRelation($this->getIdEntity(), 'rel_elementof', $cxn->getIdEntity());
+            }
         }
     }
 }
