@@ -586,23 +586,29 @@ HERE;
             $frame = new Frame();
             foreach($data->evokes as $frameEntry) {
                 $frame->getByEntry($frameEntry);
-                Base::createEntityRelation($this->getIdEntity(), 'rel_evokes', $frame->getIdEntity());
+                if ($frame->getIdEntity()) {
+                    Base::createEntityRelation($this->getIdEntity(), 'rel_evokes', $frame->getIdEntity());
+                }
             }
         }
         if ($data->relations) {
             $cxnRelated = new Construction();
             foreach($data->relations as $relation) {
                 $cxnRelated->getByEntry($relation[1]);
-                Base::deleteEntityRelation($this->getIdEntity(), $relation[0], $cxnRelated->getIdEntity());
-                Base::createEntityRelation($this->getIdEntity(), $relation[0], $cxnRelated->getIdEntity());
+                if ($cxnRelated->getIdEntity()) {
+                    Base::deleteEntityRelation($this->getIdEntity(), $relation[0], $cxnRelated->getIdEntity());
+                    Base::createEntityRelation($this->getIdEntity(), $relation[0], $cxnRelated->getIdEntity());
+                }
             }
         }
         if ($data->inverse) {
             $cxnRelated = new Construction();
             foreach($data->inverse as $relation) {
                 $cxnRelated->getByEntry($relation[1]);
-                Base::deleteEntityRelation($cxnRelated->getIdEntity(), $relation[0], $this->getIdEntity());
-                Base::createEntityRelation($cxnRelated->getIdEntity(), $relation[0], $this->getIdEntity());
+                if ($cxnRelated->getIdEntity()) {
+                    Base::deleteEntityRelation($cxnRelated->getIdEntity(), $relation[0], $this->getIdEntity());
+                    Base::createEntityRelation($cxnRelated->getIdEntity(), $relation[0], $this->getIdEntity());
+                }
             }
         }
     }
