@@ -25,7 +25,7 @@ class ConstructionMap extends \MBusinessModel {
             'attributes' => array(
                 'idConstruction' => array('column' => 'idConstruction','key' => 'primary','idgenerator' => 'identity','type' => 'integer'),
                 'entry' => array('column' => 'entry','type' => 'string'),
-                'abstract' => array('column' => 'abstract','type' => 'boolean'),
+                'abstract' => array('column' => 'abstract','type' => 'integer'),
                 'active' => array('column' => 'active','type' => 'boolean'),
                 'idLanguage' => array('column' => 'idLanguage','type' => 'integer'),
                 'idEntity' => array('column' => 'idEntity','type' => 'integer'),
