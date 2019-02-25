@@ -327,7 +327,8 @@ class CxnController extends MController
 
     public function deleteConstraint() {
         try {
-            $model = fnbr\models\ConstraintInstance::create($this->data->id);
+            $model = fnbr\models\ConstraintInstance::create();
+            $model->getByIdConstraint($this->data->id);
             $model->delete();
             $this->renderPrompt('information', 'Constraint deleted.', "!structure.reloadCxnParent();");
         } catch (\Exception $e) {
