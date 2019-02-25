@@ -26,7 +26,19 @@ class ConstraintInstance extends map\ConstraintInstanceMap
         if ($filter->idConstraintType) {
             $criteria->where("idConstraintType = {$filter->idConstraintType}");
         }
+        if ($filter->idConstraint) {
+            $criteria->where("idConstraint = {$filter->idConstraint}");
+        }
         return $criteria;
+    }
+
+    public function getByIdConstraint($idConstraint)
+    {
+        $filter = (object)[
+            'idConstraint' => $idConstraint
+        ];
+        $criteria = $this->listByFilter($filter);
+        $this->retrieveFromCriteria($criteria);
     }
 
     public function delete()
@@ -34,7 +46,7 @@ class ConstraintInstance extends map\ConstraintInstanceMap
         $transaction = $this->beginTransaction();
         try {
             $view = new ViewConstraint();
-            $data = $view->getConstraintData($this->getId());
+            $data = $view->getConstraintData($this->getIdConstraint());
             mdump($data);
             if ($data->entry == 'rel_constraint_constraint') {
                 Base::deleteAllEntityRelation($data->idConstrainedBy);
