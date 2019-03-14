@@ -267,7 +267,7 @@ HERE;
 
         $cmd = <<<HERE
         SELECT r.idEntityRelation as idConstraint,
-            relatedLU.name  AS name, r.prefix, r.nameEntity2 type,
+            relatedLU.name  AS name, r.prefix, 
             r.relationtype  AS qualia,
             IFNULL(q.info,'-') AS qualiarelation
         FROM View_Relation r
@@ -281,7 +281,7 @@ HERE;
         $constraints = $query->getResult();
         foreach ($constraints as $i => $constraint) {
             $constraints[$i]['name'] = $constraint['prefix'] . '_' . $constraints[$i]['name'];
-            $constraints[$i]['type'] = $constraint['type'];
+            $constraints[$i]['type'] = $constraint['qualia'];
             $constraints[$i]['relation'] = $constraint['qualiarelation'];
         }
         return $constraints;
