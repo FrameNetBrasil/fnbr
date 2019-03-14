@@ -28,6 +28,7 @@ class ViewRelationMap extends \MBusinessModel {
                 'relationGroup' => array('column' => 'relationGroup','type' => 'string'),
                 'idRelationType' => array('column' => 'idRelationType','type' => 'integer'),
                 'relationType' => array('column' => 'relationType','type' => 'string'),
+                'prefix' => array('column' => 'prefix','type' => 'string'),
                 'idEntity1' => array('column' => 'idEntity1','type' => 'integer'),
                 'idEntity2' => array('column' => 'idEntity2','type' => 'integer'),
                 'idEntity3' => array('column' => 'idEntity3','type' => 'integer'),
