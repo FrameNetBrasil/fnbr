@@ -36,8 +36,11 @@ class ReportCorpusService extends MService
         $annotationSets = $as->getAnnotationSets($this->data->idSentence);
         foreach ($annotationSets as $annotationSet) {
             if ($annotationSet['type'] == 'lu') {
+                list($frame, $lu) = explode('.', $annotationSet['name']);
                 $annotation = $viewAS->listFECEByAS($annotationSet['idAnnotationSet']);
                 $node = array();
+                $node['frame'] = $frame;
+                $node['lu'] = $lu;
                 $node['idAnnotationSet'] = $annotationSet['idAnnotationSet'];
                 $node['idSentence'] = $this->data->idSentence;
                 if ($annotation[$this->data->idSentence]) {
