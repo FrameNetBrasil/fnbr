@@ -48,8 +48,8 @@ class ReportCorpusService extends MService
                     $node['text'] = $sentence->getText();
                     $node['fes'] = [];
                 }
-                $node['status'] = $annotation['annotationStatus'];
-                $node['rgbBg'] = $annotation['rgbBg'];
+                $node['status'] = $annotation['annotationStatus'] ?: "";
+                $node['rgbBg'] = $annotation['rgbBg'] ?: "";
                 $result[] = $node;
             }
         }
@@ -104,7 +104,7 @@ class ReportCorpusService extends MService
                 $class = 'fe_' . $entry;
                 $fes[] = [
                     'entry' => $entry,
-                    'name' => $label['feName'],
+                    'name' => $label['feName'] ?: "Target",
                     'bg' => $label['rgbBg'],
                     'color' => $label['rgbFg']
                 ];
