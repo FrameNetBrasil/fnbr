@@ -93,7 +93,11 @@
 
     function addAnnotationSets(idSentence) {
         manager.doAjax({{$manager->getURL('api/reportcorpus/getAnnotationSets')}}, function (data) {
-            var sentences = JSON.parse(data);
+            if (typeof data === 'string' || data instanceof String) {
+                var sentences = JSON.parse(data);
+            } else {
+                var sentences = data;
+            }
             console.log(sentences);
             $.each(sentences, function(index, sentence ) {
                 //console.log(sentences.fes);
