@@ -72,13 +72,15 @@ HERE;
             $condition = "(idAnnotationSet = {$idAnnotationSet})";
         }
         $cmd = <<<HERE
-        SELECT l.idSentence, l.startChar, l.endChar, l.rgbFg, l. rgbBg, l.instantiationType, fe.entry as feEntry, layerTypeEntry
+        SELECT l.idSentence, l.startChar, l.endChar, l.rgbFg, l. rgbBg, l.instantiationType, fe.entry as feEntry, e.name feName, layerTypeEntry
         FROM view_labelfecetarget l left join view_frameelement fe on (l.idFrameElement = fe.idFrameElement)
-        WHERE {$condition} AND (idLanguage = {$idLanguage} )
+        LEFT JOIN entry e on (fe.entry = e.entry)
+        WHERE {$condition} AND (l.idLanguage = {$idLanguage} )
+        AND ((e.idLanguage = {$idLanguage}) OR (e.idLanguage is null))
         ORDER BY idSentence,startChar
 
 HERE;
-        $result = $this->getDb()->getQueryCommand($cmd)->treeResult('idSentence', 'startChar,endChar,rgbFg,rgbBg,instantiationType,feEntry,layerTypeEntry');
+        $result = $this->getDb()->getQueryCommand($cmd)->treeResult('idSentence', 'startChar,endChar,rgbFg,rgbBg,instantiationType,feEntry,feName,layerTypeEntry');
         return $result;
     }
 

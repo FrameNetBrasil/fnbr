@@ -15,13 +15,14 @@
     </div>
 </div>
 <div id="menuReportRootCorpus" style="display:none, width:120px;">
-<div onclick="reportCorpus.reloadCorpus()" data-options="iconCls:'icon-reload'">{{_'Reload Corpus'}}</div>
+    <div onclick="reportCorpus.reloadCorpus()" data-options="iconCls:'icon-reload'">{{_'Reload Corpus'}}</div>
 </div>
 <div id="menuReportCorpus" style="display:none, width:120px;">
-<div onclick="reportCorpus.reportCorpus()" data-options="iconCls:'fa fa-table fa16px'">{{_'Report Corpus'}}</div>
+    <div onclick="reportCorpus.reportCorpus()" data-options="iconCls:'fa fa-table fa16px'">{{_'Report Corpus'}}</div>
 </div>
 <div id="menuReportDocument" style="display:none, width:120px;">
-<div onclick="reportCorpus.reportDocument()" data-options="iconCls:'fa fa-table fa16px'">{{_'Report Document'}}</div>
+    <div onclick="reportCorpus.reportDocument()" data-options="iconCls:'fa fa-table fa16px'">{{_'Report Document'}}</div>
+    <div onclick="reportCorpus.reportAnnotation()" data-options="iconCls:'fa fa-table fa16px'">{{_'Report Annotation'}}</div>
 </div>
 
 <script type="text/javascript">
@@ -51,6 +52,13 @@
                 id = reportCorpus.node.id.substr(1);
             }
             manager.doGet({{$manager->getURL('report/corpus/reportDocument')}} + '/' + id,'reportCorpusCenterPane');
+        }
+
+        reportCorpus.reportAnnotation = function (id) {
+            if ($.type(id) === "undefined") {
+                id = reportCorpus.node.id.substr(1);
+            }
+            manager.doGet({{$manager->getURL('report/corpus/reportAnnotation')}} + '/' + id,'reportCorpusCenterPane');
         }
 
         reportCorpus.contextReportMenu = function(e, node) {
