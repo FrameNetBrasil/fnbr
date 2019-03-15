@@ -50,7 +50,11 @@ class CorpusController extends MController
             $this->renderPrompt('warning', 'No SubCorpus for this Document.');
         } else {
             $this->data->title = $document->getCorpus()->getName() . ' : ' . $document->getName();
-            $this->data->userLanguage = fnbr\models\Base::languages()[fnbr\models\Base::getCurrentUser()->getConfigData('fnbrIdLanguage')];
+            if ((MUtil::getBooleanValue(Manager::$conf['login']['check']))) {
+                $this->data->userLanguage = fnbr\models\Base::languages()[fnbr\models\Base::getCurrentUser()->getConfigData('fnbrIdLanguage')];
+            } else {
+                $this->data->userLanguage = fnbr\models\Base::languages()[Manager::getSession()->idLanguage];
+            }
             $this->render();
         }
     }

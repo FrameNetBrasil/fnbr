@@ -75,7 +75,10 @@
 
     function addFESentences(feEntry) {
         manager.doAjax({{$manager->getURL('api/reportlu/getSentences')}}, function (data) {
-            var sentences = JSON.parse(data);
+            if (typeof data === 'string' || data instanceof String)
+                var sentences = JSON.parse(data);
+            else
+                var sentences = data;
             $.each(sentences, function(index, sentence ) {
                 var id = "sentence" + sentence.idSentence;
                 if ($('#' + id).length) {
