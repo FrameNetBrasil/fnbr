@@ -109,20 +109,20 @@
                 if ($('#' + id + '_on').length) {
                     //$(sentence.text).replaceAll('#' + id);
                 } else {
-                    addSentence(id, sentence.text);
+                    addSentence(id, sentence.text, sentence.frame);
                 }
             });
 
         }, {idSentence: idSentence});
     }
 
-    function addSentence(id, text) {
+    function addSentence(id, text, frame) {
         var ban = "<div class=\"ban\"><a href=\"#\" onclick=\"javascript:removeSentence('" + id + "')\"><span class=\"fa12px fa fa-ban\"></span></a></div>";
         $("#divSentencesColorOn").append( "<div class='sentence' id='" + id + "_on'>" + ban + text + "</div>");
         var regex = /<span class="fe_([^"]*)"([^>]*)>([^<]*)<\/span>/g;
         wbText = text.replace(regex, "<span class=\"none\">[<sub>$1</sub>$3]<\/span>");
         wbText = wbText.replace(/(\[(<sub>target<\/sub>)([^\]]*)\])/g, function target(x0, x1, x2, x3) {
-            return x3.toUpperCase() + "<sup>Target</sup>";
+            return x3.toUpperCase() + "<sup>"+frame+"</sup>";
         });
         for(fe in fes) {
             wbText = wbText.replace(new RegExp(fe, 'g'), fes[fe].name);
