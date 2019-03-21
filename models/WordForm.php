@@ -54,11 +54,13 @@ class WordForm extends map\WordFormMap
         $lus = $criteria->asQuery()->chunkResult('idLU', 'idLU');
         if (count($lus) > 0) {
             $lu = new LU();
-            $criteria = $lu->getCriteria()->select("idLU, concat(frame.entries.name,'.',name) as fullName, locate(' ', name) as mwe");
+            //$criteria = $lu->getCriteria()->select("idLU, concat(frame.entries.name,'.',name) as fullName, locate(' ', name) as mwe");
+            $criteria = $lu->getCriteria()->select("idLU, concat(frame.entries.name,'.',name) as fullName, count(lemma.lexemeentries.idLexemeEntry)-1 as mwe");
             Base::relation($criteria, 'LU', 'Frame frame', 'rel_evokes');
             Base::entryLanguage($criteria, 'frame');
             $criteria->where("idLU", "IN", $lus);
             $criteria->where("lemma.idLanguage", "=", "frame.entries.idLanguage");
+            $criteria->groupBy("idLU, concat(entry.name,'.',lu.name)");
             //return $criteria->asQuery()->chunkResult('idLU', 'fullName');
             return $criteria->asQuery()->asObjectArray();
         } else {
