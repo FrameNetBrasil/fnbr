@@ -100,5 +100,85 @@ HERE;
     }
 
 
+    public function listLUCountByLanguage()
+    {
+        $cmd = <<<HERE
+select lu.idlanguage, l.language, count(distinct lu.name) as n
+from view_annotationset a
+join view_subcorpuslu slu on (a.idSubcorpus = slu.idSubCorpus)
+join view_lu lu on (slu.idLu = lu.idLU)
+join language l on (lu.idLanguage = l.idLanguage)
+group by lu.idlanguage, l.language
+order by 2
+
+HERE;
+        $result = $this->getDb()->getQueryCommand($cmd)->getResult();
+        return $result;
+    }
+
+    public function listASCountByLanguage()
+    {
+        $cmd = <<<HERE
+select lu.idlanguage, l.language, count(distinct a.idAnnotationSet) as n
+from view_annotationset a
+join view_subcorpuslu slu on (a.idSubcorpus = slu.idSubCorpus)
+join view_lu lu on (slu.idLu = lu.idLU)
+join language l on (lu.idLanguage = l.idLanguage)
+group by lu.idlanguage, l.language
+order by 2
+
+HERE;
+        $result = $this->getDb()->getQueryCommand($cmd)->getResult();
+        return $result;
+    }
+
+    public function listCountTargetInTextByLanguage()
+    {
+        $result = [];
+        // count words in document by language
+        $cmd = <<<HERE
+select idLanguage, language
+from language
+order by language
+
+HERE;
+        $languages = $this->getDb()->getQueryCommand($cmd)->getResult();
+        foreach($languages as $language) {
+            $idLanguage = $language['idLanguage'];
+            $cmd = <<<HERE
+select text
+from view_sentence
+where idLanguage = {$idLanguage}
+
+HERE;
+            $wordCount = 0;
+            $sentences = $this->getDb()->getQueryCommand($cmd)->getResult();
+            foreach ($sentences as $sentence) {
+                $text = $sentence['text'];
+                $words = explode(' ', $text);
+                $wordCount += count($words);
+            }
+            $asCount = 0;
+            $cmd = <<<HERE
+select count(distinct a.idAnnotationSet) as n
+from view_annotationset a
+join view_subcorpuslu slu on (a.idSubcorpus = slu.idSubCorpus)
+join view_lu lu on (slu.idLu = lu.idLU)
+where lu.idLanguage = {$idLanguage}
+
+HERE;
+            $as = $this->getDb()->getQueryCommand($cmd)->getResult();
+            $asCount = $as[0]['n'];
+            if ($asCount > 0) {
+                $result[] = [
+                    'idLanguage' => $idLanguage,
+                    'language' => $language['language'],
+                    'n' => ($asCount / $wordCount)
+                ];
+            }
+        }
+        return $result;
+    }
+
 }
 
