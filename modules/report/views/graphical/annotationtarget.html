@@ -27,41 +27,6 @@
     <div class="container">
         <div class="row">
             <div class="col-md-2 col-lg-2"></div>
-            <h2># Annotated LU/Language</h2>
-            <div class="col-md-8 col-lg-8">
-                {{foreach $data->resultLUs as $lus}}
-                <div class="barWrapper">
-                    <span class="progressText"><B>{{$lus['language']}}</B></span>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" aria-valuenow={{$lus['percent']}} aria-valuemin="0" aria-valuemax="100">
-                            <span class="popOver" data-toggle="tooltip" data-placement="top" title={{$lus['n']}}> </span>
-                        </div>
-                    </div>
-                </div>
-                {{/foreach}}
-                <div class="col-md-2 col-lg-2"></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2 col-lg-2"></div>
-            <h2># AnnotationSets/Language</h2>
-            <div class="col-md-8 col-lg-8">
-                {{foreach $data->resultASs as $as}}
-                <div class="barWrapper">
-                    <span class="progressText"><B>{{$as['language']}}</B></span>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" aria-valuenow={{$as['percent']}} aria-valuemin="0" aria-valuemax="100">
-                            <span class="popOver" data-toggle="tooltip" data-placement="top" title={{$as['n']}}> </span>
-                        </div>
-                    </div>
-                </div>
-                {{/foreach}}
-                <div class="col-md-2 col-lg-2"></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2 col-lg-2"></div>
-            <h2># Targets/Words</h2>
             <div class="col-md-8 col-lg-8">
                 {{foreach $data->resultTargets as $target}}
                 <div class="barWrapper">
