@@ -41,6 +41,7 @@ scripts/trumbowyg/trumbowyg.min.js
 scripts/jsplumb/jsplumb.js
 scripts/d3-graphviz/node_modules/viz.js/viz.jsw
 scripts/d3-graphviz/node_modules/d3-graphviz/build/d3-graphviz.js
+scripts/bootstrap-3.2.0-dist/js/bootstrap.min.js
 
 ;Carrega os scripts usados pelo painter.php
 scripts/theme/extensions.js
