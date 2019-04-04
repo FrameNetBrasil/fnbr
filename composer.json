@@ -1,6 +1,19 @@
 {
-  "name": "FrameNet Brasil WebTool",
+  "name": "FrameNetBrasil/fnbr",
   "description": "FrameNet Brasil Web Annotation Tool",
+  "license": "GPLv3",
+  "keywords": [
+    "framenet",
+    "annotation",
+    "frames",
+    "constructions"
+  ],
+  "authors": [
+    {
+      "name": "Ely Matos",
+      "email": "admin@ematos.net"
+    }
+  ],
   "require": {
     "easyrdf/easyrdf": "*",
     "ml/json-ld" : "~1.0",

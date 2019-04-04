@@ -23,15 +23,11 @@ return [
     'ui' => [
         'actions' => 'actions.fnbr.php',
     ],
-/* Google
-Client ID: 504765666583-2b71hdracgsv4nj6ecqom8fuk3th68ho.apps.googleusercontent.com
-Client Secret key: puU86vzlOcRpvI4s7UXf_1xx
-*/
     'login' => [
         'handler' => 'auth0',
-        'AUTH0_CLIENT_ID' => 'UorLBpOPNNMP6HF7wfqQMOxFg3YqKzEk',
+        'AUTH0_CLIENT_ID' => '',
         'AUTH0_DOMAIN' => 'framenetbr.auth0.com',
-        'AUTH0_CLIENT_SECRET' => 'FKqctCzv0QILbPXgerC_mdfRxzWNHdeUchxwQAYePrhngLwC4cVCe2QFWpY-vvU9',
+        'AUTH0_CLIENT_SECRET' => '',
         'AUTH0_CALLBACK_URL' => 'http://kenobi.cpd.ufjf.br/auth0/callback.php',
         'logout' => 'https://framenetbr.auth0.com/v2/logout?returnTo=',
     ],
